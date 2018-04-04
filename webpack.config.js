@@ -10,9 +10,7 @@ module.exports = {
     libraryTarget: 'umd'
   },
   externals: {
-    vue: 'vue',
-    ayaxCommonAuth: 'ayax-common-auth',
-    ayaxCommonCache: 'ayax-common-cache'
+    vue: 'vue'
   },
   module: {
     rules: [
