@@ -2,13 +2,22 @@
   "name": "ayax-common-vue-assets",
   "version": "1.0.0",
   "main": "dist/bundle.js",
+  "description": "Ayax Common Vue Assets package for Vue Typescript projects",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rimraf ./dist && webpack --config ./webpack.config.js",
     "prepublish": "npm run build"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayaxdeveloper/ayax-common-vue-assets.git"
+  },
+  "author": "ayaxdeveloper",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ayaxdeveloper/ayax-common-vue-assets/issues"
+  },
+  "homepage": "https://github.com/ayaxdeveloper/ayax-common-vue-assets#readme",
   "dependencies": {
     "ayax-common-auth": "0.0.2",
     "ayax-common-cache": "0.0.3",
