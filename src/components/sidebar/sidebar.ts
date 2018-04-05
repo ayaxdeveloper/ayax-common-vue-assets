@@ -4,6 +4,7 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 @Component
 export default class SidebarComponent extends Vue {
     @Prop() items:SidebarComponentItem[];
+    @Prop({default: true}) darkTheme: Boolean;
     mini: boolean = false;
     @Watch('mini')
     onStateChanged(val: boolean, oldVal: boolean) { 
@@ -16,7 +17,13 @@ export default class SidebarComponent extends Vue {
     }
 
     toogleList(item:SidebarComponentItem) {
-        item.expanded == false ? item.expanded = true : item.expanded = false;
+        this.items.forEach(element => {
+            if(element != item){
+                element.expanded = false;
+                element.arrowDirection = "keyboard_arrow_down";    
+            } 
+        })
+        item.expanded = !item.expanded;
         item.arrowDirection == "keyboard_arrow_down" ? item.arrowDirection = "keyboard_arrow_up" : item.arrowDirection = "keyboard_arrow_down";
     }
 
@@ -30,7 +37,7 @@ export default class SidebarComponent extends Vue {
                 window.open(item.route);
             }else{
                 // this.mini = true;
-                this.$router.push({name: item.route});
+                this.$router.push({path: item.route});
             }
         }else if(item.href != null){
             if(item.newTab){
