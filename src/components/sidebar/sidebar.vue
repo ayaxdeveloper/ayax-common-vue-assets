@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer app :dark="darkTheme" :mini-variant.sync="mini" mini-variant-width="60" permanent absolute width=300>
+    <v-navigation-drawer app :dark="darkTheme" :mini-variant.sync="mini" mini-variant-width="60" permanent absolute :width="width">
         <v-layout row>
             <v-flex style="max-width:60px">
                 <v-btn class="collapseBtn" icon @click.native.stop="mini = !mini" title="Меню">
