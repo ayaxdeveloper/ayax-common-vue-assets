@@ -5,7 +5,7 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 export default class SidebarComponent extends Vue {
     @Prop() items:SidebarComponentItem[];
     @Prop({default: true}) darkTheme: boolean;
-    @Prop({default: 300}) width: number | string;
+    @Prop({default: 300}) width: number;
     @Prop({default: false}) mini: boolean;
     @Watch('mini')
     onStateChanged(val: boolean, oldVal: boolean) { 
