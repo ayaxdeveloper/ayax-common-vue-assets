@@ -1,6 +1,6 @@
 {
   "name": "ayax-common-vue-assets",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "dist/bundle.js",
   "description": "Ayax Common Vue Assets package for Vue Typescript projects",
   "scripts": {
