@@ -6,7 +6,8 @@ export default class SidebarComponent extends Vue {
     @Prop() items:SidebarComponentItem[];
     @Prop({default: true}) darkTheme: boolean;
     @Prop({default: 300}) width: number;
-    @Prop({default: false}) mini: boolean;
+    @Prop({default: false}) miniProp: boolean;
+    mini = this.miniProp;
     @Watch('mini')
     onStateChanged(val: boolean, oldVal: boolean) { 
         if(val == true){
