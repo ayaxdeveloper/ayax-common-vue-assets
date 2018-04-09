@@ -30,5 +30,6 @@ export * from "./components/table/table-action";
 export * from "./components/table/table-header";
 export * from "./components/table-filter/table-filter-item";
 export * from "./components/sidebar/sidebar-item";
+export * from "./providers/notification/notification-provider"
 
 export { FastFilterComponent, TableComponent, TableFilterComponent, FormComponent, NotificationComponent, FormControlComponent, SidebarComponent };
