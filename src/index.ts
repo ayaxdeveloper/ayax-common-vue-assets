@@ -8,6 +8,7 @@ import FormComponent from './components/form/form.vue';
 import NotificationComponent from './components/notification/notification.vue';
 import FormControlComponent from './components/form/form-control.vue';
 import SidebarComponent from './components/sidebar/sidebar.vue';
+import ListDialogComponent from './components/list-dialog/list-dialog.vue'
 
 Vue.use(Vuetify);
 
@@ -20,6 +21,7 @@ export default {
         Vue.component('a-notification', NotificationComponent);
         Vue.component('a-fast-filter', FastFilterComponent);
         Vue.component('a-sidebar', SidebarComponent);
+        Vue.component('a-list-dialog', ListDialogComponent);
     }
 }
 
@@ -32,4 +34,4 @@ export * from "./components/table-filter/table-filter-item";
 export * from "./components/sidebar/sidebar-item";
 export * from "./providers/notification/notification-provider"
 
-export { FastFilterComponent, TableComponent, TableFilterComponent, FormComponent, NotificationComponent, FormControlComponent, SidebarComponent };
+export { FastFilterComponent, TableComponent, TableFilterComponent, FormComponent, NotificationComponent, FormControlComponent, SidebarComponent, ListDialogComponent };

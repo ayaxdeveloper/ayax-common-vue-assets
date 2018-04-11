@@ -59,6 +59,6 @@
     </v-card>
 </template>
 
-<script src='./list-dialog.ts'>
+<script lang="ts" src="./list-dialog.ts">
     
 </script>
