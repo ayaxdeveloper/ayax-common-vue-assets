@@ -15,6 +15,7 @@
             </v-toolbar-items>
       </v-toolbar>
         <v-container fluid>
+          <a-breadcrumbs :breadcrumbsNames="breadcrumbsNames"></a-breadcrumbs>
         </v-container>
       </v-content>
     </v-app>

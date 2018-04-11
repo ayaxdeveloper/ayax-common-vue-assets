@@ -12,6 +12,45 @@ export default class App extends Vue {
     notificationSettings:  INotificationSettings = this.appSettings.Notification();
     notificationProvider: INotificationProvider = new NotificationProvider(this.notificationSettings, EventBus); 
 
+    breadcrumbsNames = {
+        "": {name: "Главная", route: "home"},
+        "switcher": {name: "Вертушка", route: "switcher-list"},
+        "route": {name: "Маршруты", route: "route"},
+        "contacttype": {name: "Типы контактов", route: "contacttype-list"},
+        "config": {name: "Настройки" },
+        "help": {name: "Помощь", route: "help" },
+        "dictionary": {name: "Справочники"},
+        "list": {name: "Список"},
+        "board": {name: "Доска"},
+        "edit": {name: "Редактирование"},
+        "card": {name: "Карточка"}
+    };
+
+    sidebarItems: SidebarComponentItem[] = [
+        new SidebarComponentItem({
+            title: "CALL CENTER",
+            icon: "contact_phone",
+            href: "/",
+            isSystem: true
+        }),
+        new SidebarComponentItem({title: "НОВЫЙ ЗВОНОК", icon: "add", route: "/lead/add"}),
+        new SidebarComponentItem({title: "ЗВОНКИ", icon: "mdi-inbox", route: "/lead/list"}),
+        new SidebarComponentItem({
+            title: "НАСТРОЙКИ",
+            icon: "build",
+            subItems: [
+                new SidebarComponentItem({title: "Вертушка", route: "/switcher/list"}),
+                new SidebarComponentItem({title: "Маршруты", route: "/route"}),
+                new SidebarComponentItem({title: "Источники", route: "/infosource"}),
+                new SidebarComponentItem({title: "Темы обращений", route: "/leadtype"}),
+                new SidebarComponentItem({title: "Типы объектов", route: "/objecttype"}),
+                new SidebarComponentItem({title: "Номера операторов", route: "/operatornumber/list"}),
+                new SidebarComponentItem({title: "Номера подразделений", route: "/divisionredirect"}),
+                new SidebarComponentItem({title: "Параметры", route: "/preference"})
+            ]
+        })
+    ];
+
     castNotification(type: string) {
         switch(type){
             case 'success':{
@@ -32,29 +71,4 @@ export default class App extends Vue {
             break;
         }
     }
-
-    sidebarItems: SidebarComponentItem[] = [
-        new SidebarComponentItem({
-            title: "CALL CENTER",
-            icon: "contact_phone",
-            href: "/",
-            isSystem: true
-        }),
-        new SidebarComponentItem({title: "НОВЫЙ ЗВОНОК", icon: "add", route: "/lead/add"}),
-        new SidebarComponentItem({title: "ЗВОНКИ", icon: "mdi-inbox", route: "/lead/list"}),
-        new SidebarComponentItem({
-            title: "НАСТРОЙКИ",
-            icon: "build",
-            subItems: [
-                new SidebarComponentItem({title: "Вертушка", route: "/switcher/list"}),
-                new SidebarComponentItem({title: "Маршруты", route: "/route/list"}),
-                new SidebarComponentItem({title: "Источники", route: "/infosource/list"}),
-                new SidebarComponentItem({title: "Темы обращений", route: "/leadtype/list"}),
-                new SidebarComponentItem({title: "Типы объектов", route: "/objecttype/list"}),
-                new SidebarComponentItem({title: "Номера операторов", route: "/operatornumber/list"}),
-                new SidebarComponentItem({title: "Номера подразделений", route: "/divisionredirect"}),
-                new SidebarComponentItem({title: "Параметры", route: "/preference/list"})
-            ]
-        })
-    ];
 }
