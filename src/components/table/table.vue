@@ -4,6 +4,7 @@
         <v-data-table
         v-bind:headers="headers"
         v-bind:items="items"
+        :total-items="totalItems"
         :loading="loading"
         select-all
         no-data-text="Нет данных"

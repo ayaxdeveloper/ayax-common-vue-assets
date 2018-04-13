@@ -27,6 +27,7 @@ export default class TableComponent extends Vue {
     @Prop() pagination: IPagination;
     @Prop() selected: any[];
     innerSelected: any[] = [];
+    totalItems = 1;
 
     created() {
         if(this.selected) {
