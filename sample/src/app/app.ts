@@ -28,13 +28,14 @@ export default class App extends Vue {
 
     sidebarItems: SidebarComponentItem[] = [
         new SidebarComponentItem({
-            title: "CALL CENTER",
+            title: "Главная",
             icon: "contact_phone",
             href: "/",
             isSystem: true
         }),
-        new SidebarComponentItem({title: "НОВЫЙ ЗВОНОК", icon: "add", route: "/lead/add"}),
-        new SidebarComponentItem({title: "ЗВОНКИ", icon: "mdi-inbox", route: "/lead/list"}),
+        new SidebarComponentItem({title: "LIST", icon: "list", route: "/lead/add"}),
+        new SidebarComponentItem({title: "EDIT", icon: "edit", route: "/lead/list"}),
+        new SidebarComponentItem({title: "LIST-DIALOG", icon: "mdi-inbox", route: "/lead/list"}),
         new SidebarComponentItem({
             title: "НАСТРОЙКИ",
             icon: "build",

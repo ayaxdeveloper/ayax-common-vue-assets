@@ -7,6 +7,9 @@ import NotificationComponent from './notification/notification.vue';
 import FormControlComponent from './form/form-control.vue';
 import SidebarComponent from './sidebar/sidebar.vue';
 import BreadcrumbsComponent from './breadcrumbs/breadcrumbs.vue';
+import ListComponent from './list/list.vue'
+import EditComponent from './edit/edit.vue'
+import ListDialogComponent from './list-dialog/list-dialog.vue'
 
 Vue.component('a-table', TableComponent);
 Vue.component('a-table-filter', TableFilterComponent);
@@ -16,3 +19,6 @@ Vue.component('a-notification', NotificationComponent);
 Vue.component('a-fast-filter', FastFilterComponent);
 Vue.component('a-sidebar', SidebarComponent);
 Vue.component('a-breadcrumbs', BreadcrumbsComponent);
+Vue.component('a-list', ListComponent);
+Vue.component('a-edit', EditComponent);
+Vue.component('a-list-dialog', ListDialogComponent);
