@@ -27,7 +27,7 @@
             @apply-filter="load"
             ></a-table>
             <v-layout row justify-center>
-                <v-dialog v-model="editDialog" persistent max-width="500px">
+                <v-dialog v-model="editDialog" persistent max-width="600px">
                     <v-card>
                     <v-card-title>
                             <slot name="edit-head"></slot>
