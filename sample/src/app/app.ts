@@ -1,9 +1,9 @@
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import { NotificationProvider } from '../../../src/providers/notification/notification-provider';
 import { INotificationProvider, INotificationSettings, IAppSettings } from 'ayax-common-types';
-import { SidebarComponentItem } from '../components/sidebar/sidebar-item';
 import { AppSettings } from '../settings';
 import { EventBus } from '../event-bus';
+import { SidebarComponentItem } from '../../../src';
 
 @Component
 export default class App extends Vue {

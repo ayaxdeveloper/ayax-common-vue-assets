@@ -10,11 +10,15 @@ import FormControlComponent from './components/form/form-control.vue';
 import SidebarComponent from './components/sidebar/sidebar.vue';
 import ListDialogComponent from './components/list-dialog/list-dialog.vue'
 import BreadcrumbsComponent from './components/breadcrumbs/breadcrumbs.vue'
-
+import { DatePicker } from 'element-ui';
+import lang from 'element-ui/lib/locale/lang/ru-RU';
+import locale from 'element-ui/lib/locale';
+locale.use(lang);
 Vue.use(Vuetify);
 
 export default {
     install(Vue) {
+        Vue.component(DatePicker.name, DatePicker)
         Vue.component('a-table', TableComponent);
         Vue.component('a-table-filter', TableFilterComponent);
         Vue.component('a-form', FormComponent);

@@ -1,8 +1,8 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { FormComponentItem } from './form-item';
 import { HtmlElementType } from 'ayax-common-types';
-import { DateHelper } from 'ayax-common-helpers';
 import * as moment from 'moment';
+import { DateHelper } from 'ayax-common-helpers';
 @Component
 export default class FormControlComponent extends Vue {
     @Prop() field: FormComponentItem;
@@ -15,19 +15,13 @@ export default class FormControlComponent extends Vue {
     password = HtmlElementType.password;
     textarea = HtmlElementType.textarea;
     hidden = HtmlElementType.hidden;
-    menu: boolean = false;
-    dateFormatted: string;
-    show: boolean = true;
+    datePicker: boolean = false;
+    dateString: string = "";
+    dateISOString: string = "";
+    dateObject: Date = new Date();
+    dateStringForPicker: string = "";
 
     created() {
-        if(this.field.type == this.date) {
-            if(!this.field.model) {
-                this.dateFormatted = moment().startOf('day').format('DD.MM.YYYY');
-            } else {
-                this.dateFormatted = this.formatDate(this.field.model);
-            }
-            this.field.model = this.parseDate(this.dateFormatted);
-        }
         if(this.field.required) {
             if(this.field.rules) {
                 this.field.rules.push(v=> !!v || "Обязателное поле для заполнения");
@@ -37,33 +31,50 @@ export default class FormControlComponent extends Vue {
         } 
     }
 
-    @Watch('field.model')
-    onModelChanges(model) {
+    private dateTypeInit() {
         if(this.field.type == this.date) {
-            // console.log(this.formatDate(this.field.model));
-            this.dateFormatted = this.formatDate(this.field.model);
-            // this.refresh();
+            this.dateObject = this.field.model ? DateHelper.ToDate(this.field.model) : moment().startOf('day').toDate();
+            this.dateString = DateHelper.ToString(this.dateObject);
+            this.dateISOString = DateHelper.ToStringISO(this.dateObject);
+            this.dateStringForPicker = DateHelper.ToString(this.dateObject,"YYYY-MM-DD");
         }
     }
 
+    @Watch("field.model")
+    onFieldModelChange(model: any) {
+        this.dateTypeInit();
+    }
+
+
+    @Watch("datePicker") 
+    onDateStringChange() {
+        if(this.dateString && this.dateString != "") {
+            this.field.model = DateHelper.ToStringISO(DateHelper.ToDate(this.dateString, "DD.MM.YYYY"));
+        }
+    }
+
+    @Watch("dateStringForPicker")
+    onPickerDateChange(val) {
+        if(val) {
+            this.field.model = this.dateStringForPicker;
+        }
+    }
+
+    dateFieldOnClick() {
+        this.datePicker = true;
+    }
+
     datePickerCancel(name) {
-        this.field.model=null;
-        this.menu = false;
+        this.datePicker = false;
     }
     datePickerOk(name) {
-        this.menu = false;
+        this.datePicker = false;
     }
-    formatDate (date: any) {
-        return DateHelper.formatDate(date);
-    };
-    parseDate (date: any) {
-        return DateHelper.parseDate(date);
-    };
 
-    refresh() {
-        this.show = false;
+    refreshDatePicker() {
+        this.datePicker = !this.datePicker;
         this.$nextTick(() => {
-            this.show = true;
+            this.datePicker = !this.datePicker;
         })
     }
 }

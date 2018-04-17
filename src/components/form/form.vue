@@ -1,7 +1,7 @@
 <template>
-    <v-container fluid>
+    <div>
         <v-layout row wrap v-for="(row, rowIndex) in computedRows" :key="rowIndex">
-            <v-flex v-for="(field, fieldIndex) in row" :key="fieldIndex" class="ma-1">
+            <v-flex v-for="(field, fieldIndex) in row" :key="fieldIndex" class="pa-1">
                 <template v-if="field.dense">
                     <a-form-control
                     :field="field"></a-form-control>
@@ -17,7 +17,7 @@
                 </template>
             </v-flex>
         </v-layout>
-    </v-container>
+    </div>
 </template>
 
 <script lang="ts" src="./form.ts">

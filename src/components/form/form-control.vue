@@ -1,4 +1,4 @@
-<template v-if="show">
+<template>
     <input type='hidden' :name="field.name" :value="field.model" v-if="field.type == hidden">
     <v-text-field v-else-if="field.type == input"
     :name="field.name"
@@ -9,6 +9,7 @@
     :disabled="field.disabled"
     :return-masked-value="field.returnMaskedValue"
     :hint="field.hint"
+    :hide-details="!field.hint"
     :rules="field.rules"
     >
     </v-text-field>
@@ -25,46 +26,17 @@
     :rules="field.rules"
     >
     </v-text-field>
-    <div v-else-if="field.type == date">
-        <v-menu
-            class="datepicker-menu"
-            lazy
-            :close-on-content-click="false"
-            v-model="menu"
-            transition="scale-transition"
-            offset-y
-            full-width
-            :nudge-right="40"
-            max-width="290px"
-            min-width="290px"
-        >
-            <v-text-field
-            slot="activator"
-            :label="field.dense ? field.title : null"
-            v-model="dateFormatted"
-            return-masked-value
-            @blur="field.model = parseDate(dateFormatted)"
-            @input="field.model = parseDate(dateFormatted)"
-            mask="##.##.####"
-            :rules="field.rules"
-            :disabled="field.disabled"
-            ></v-text-field>
-            <v-date-picker 
-            v-model="field.model" 
-            @input="dateFormatted = formatDate($event); menu = false"
-            no-title
-            locale="ru-ru" 
-            
-            actions>
-            <template slot-scope="{ save, cancel }">
-                <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn flat color="primary" @click="datePickerCancel(field.name)">Отмена</v-btn>
-                <v-btn flat color="primary" @click="datePickerOk(field.name)">OK</v-btn>
-                </v-card-actions>
-            </template>
-            </v-date-picker>
-        </v-menu>
+    <div v-else-if="field.type == date"> 
+        <label class="label">{{field.dense ? field.title : null}}</label>
+        <el-date-picker
+        v-model="field.model"
+        format="dd.MM.yyyy"
+        :disabled="field.disabled"
+        size="small"
+        clearable
+        :picker-options="{firstDayOfWeek: 1}"
+        />
+ 
     </div>
     <v-select
     v-else-if="field.type == select"
@@ -76,9 +48,10 @@
     :disabled="field.disabled"
     :hint="field.hint"
     bottom
+    :hide-details="!field.hint"
     autocomplete
-    :rules="field.rules"
     clearable
+    :rules="field.rules"
     > 
     ></v-select>
     <v-checkbox
@@ -96,6 +69,24 @@
 <script lang="ts" src="./form-control.ts">
 </script>
 
-<style>
-
+<style scoped>
+.label {
+    display: inline-block;
+    font-size: 12px;
+    line-height: 24px;
+    height: 24px;
+    max-width: 90%;
+    min-width: 0;
+    overflow: hidden;
+    pointer-events: none;
+    text-align: left;
+    text-overflow: ellipsis;
+    -webkit-transform-origin: top left;
+    transform-origin: top left;
+    transition: .4s cubic-bezier(.25,.8,.25,1);
+    white-space: nowrap;
+    width: 100%;
+    z-index: 0;
+    color: rgba(0,0,0,.54);
+}
 </style>
