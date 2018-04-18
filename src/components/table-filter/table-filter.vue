@@ -22,22 +22,47 @@
             :hint="getHint()"></v-text-field>
         </template>
         <template v-else-if="header.filter.type == filterTypes['InputRange']">
-            <v-flex xs6>
-                <v-text-field 
-                @input="applyFilterButton = header.filter.values[0]" 
-                :name="header.filter.name" 
-                single-line 
-                hint="Начало" 
-                persistent-hint 
-                class="table-filter-input" 
-                return-masked-value 
-                :mask="getMask()" 
+            <template v-if="header.type == headerTypes['date']">
+                <el-date-picker
+                class="date-range"
+                v-model="header.filter.values"
+                type="daterange"
+                format="dd.MM.yyyy"
+                size="small"
                 clearable
-                v-model="header.filter.values[0]"></v-text-field>
-            </v-flex>
-            <v-flex xs6>
-                <v-text-field @input="applyFilterButton = filter.values[1]" :name="header.filter.name" single-line hint="Конец" persistent-hint class="table-filter-input" return-masked-value :mask="getMask()" v-model="header.filter.values[1]"></v-text-field>
-            </v-flex>
+                :picker-options="{firstDayOfWeek: 1}"
+                align="right"
+                start-placeholder="Начало"
+                end-placeholder="Конец">
+                </el-date-picker>
+            </template>
+            <template v-else>
+                <v-flex xs6>
+                    <v-text-field 
+                    @input="applyFilterButton = header.filter.values[0]" 
+                    :name="header.filter.name" 
+                    single-line 
+                    hint="Начало" 
+                    persistent-hint 
+                    class="table-filter-input" 
+                    return-masked-value 
+                    :mask="getMask()" 
+                    clearable
+                    v-model="header.filter.values[0]"/>
+                </v-flex>
+                <v-flex xs6>
+                    <v-text-field
+                    @input="applyFilterButton = filter.values[1]" 
+                    :name="header.filter.name" 
+                    single-line 
+                    hint="Конец" 
+                    persistent-hint 
+                    class="table-filter-input" 
+                    return-masked-value 
+                    :mask="getMask()" 
+                    v-model="header.filter.values[1]"/>
+                </v-flex>
+            </template>
         </template>
         <template v-else-if="header.filter.type == filterTypes['SelectSingle']">
             <v-select 
@@ -83,8 +108,6 @@
 .filter .input-group {
     padding: 0px;
 }
-
-
 .table-filter-apply-btn {
     position: absolute;
     top: -24px;

@@ -10,7 +10,16 @@ module.exports = {
     libraryTarget: 'umd'
   },
   externals: {
-    vue: 'vue'
+    vue: 'vue',
+    vuetify: 'vuetify',
+    moment: 'moment',
+    "element-ui": 'element-ui',
+    "vue-shortkey": "vue-shortkey",
+    "ayax-common-auth": "ayax-common-auth",
+    "ayax-common-cache": "ayax-common-cache",
+    "ayax-common-helpers": "ayax-common-helpers",
+    "ayax-common-services": "ayax-common-services",
+    "ayax-common-types": "ayax-common-types"
   },
   module: {
     rules: [

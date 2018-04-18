@@ -7,11 +7,11 @@ import VueRouter from 'vue-router'
 import Vuetify from 'vuetify';
 import App from './app/app.vue'
 import {routes} from './routes';
+import AyaxCommonVueassets from '../../src/index';
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
-
-require('./components/component-registration');
+Vue.use(AyaxCommonVueassets);
 
 new Vue({
   el: '#app',

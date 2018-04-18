@@ -1,9 +1,5 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { FormComponentItem } from './form-item';
-import { HtmlElementType } from 'ayax-common-types';
-import * as moment from 'moment';
-import { DateHelper } from 'ayax-common-helpers';
-import { SelectItem } from 'ayax-common-types';
 
 @Component
 export default class FormComponent extends Vue {
@@ -23,19 +19,24 @@ export default class FormComponent extends Vue {
 
     get computedRows() {
         let rows: {[rowId: number]: FormComponentItem[]} = {};
-        let cnt = 0;
+        let cnt = 1;
         this.fields.forEach(x=> {
-            if(x.row == 0) {
-                if(!rows[cnt]) {
-                    rows[cnt] = [];
-                }
-                rows[cnt].push(x);
-                cnt++;
+            rows[0] = [];
+            if(x.hidden) {
+                rows[0].push(x);
             } else {
-                if(!rows[x.row]) {
-                    rows[x.row] = [];
+                if(x.row == 0) {
+                    if(!rows[cnt]) {
+                        rows[cnt] = [];
+                    }
+                    rows[cnt].push(x);
+                    cnt++;
+                } else {
+                    if(!rows[x.row]) {
+                        rows[x.row] = [];
+                    }
+                    rows[x.row].push(x);
                 }
-                rows[x.row].push(x);
             }
         });
         return rows;
