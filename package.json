@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rimraf ./dist && webpack --config ./webpack.config.js",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot --config ./webpack.config.sample.js",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -20,17 +21,22 @@
   "homepage": "https://github.com/ayaxdeveloper/ayax-common-vue-assets#readme",
   "dependencies": {
     "ayax-common-auth": "^1.5.1",
-    "ayax-common-cache": "^1.0.1",
+    "ayax-common-cache": "^2.0.1",
     "ayax-common-helpers": "^2.2.1",
-    "ayax-common-services": "^1.4.1",
-    "ayax-common-types": "^1.4.2",
+    "ayax-common-services": "^2.0.0",
+    "ayax-common-types": "^2.0.1",
     "element-ui": "2.2.0",
+    "file-loader": "^1.1.11",
+    "mdi": "^2.2.43",
     "moment": "^2.20.1",
+    "url-loader": "^1.0.1",
     "vue-shortkey": "^3.1.0",
     "vuetify": "^1.0.3"
   },
   "devDependencies": {
     "@types/webpack-env": "^1.13.3",
+    "axios-mock-adapter": "^1.15.0",
+    "cross-env": "^5.0.5",
     "css-loader": "^0.28.8",
     "node-sass": "^4.7.2",
     "sass-loader": "^6.0.6",
@@ -39,11 +45,12 @@
     "ts-loader": "^3.5.0",
     "typescript": "^2.8.1",
     "vue": "^2.5.13",
+    "vue-class-component": "^6.2.0",
     "vue-loader": "^14.2.2",
     "vue-property-decorator": "^6.0.0",
     "vue-router": "^3.0.1",
     "vue-template-compiler": "^2.5.13",
-    "vue-class-component": "^6.2.0",
-    "webpack": "^3.8.1"
+    "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.1"
   }
 }

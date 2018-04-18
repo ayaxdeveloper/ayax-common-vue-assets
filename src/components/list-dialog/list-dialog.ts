@@ -1,6 +1,7 @@
 import { Component, Vue, Prop, Inject, Watch, Emit } from 'vue-property-decorator';
 import { TableComponentHeader } from '../table/table-header';
-import { IPagination, IEntity, IClientSettings, INotificationProvider, Pagination, IOperationService, Dictionary, SearchResponse } from 'ayax-common-types';
+import { IPagination, IEntity, IClientSettings, INotificationProvider, Pagination, Dictionary, SearchResponse } from 'ayax-common-types';
+import { IOperationService } from 'ayax-common-services'
 import { TableComponentAction } from '../table/table-action';
 import { FormComponentItem } from '../form/form-item';
 import { ICacheService } from 'ayax-common-cache';
@@ -69,22 +70,23 @@ export default class ListDialogComponent extends Vue {
             page: 1,
             perPage: this._search.method == "post" ? this.clientSettings.listRowsPerpage : 100
         }
-        try {
-            let headersWithDictionaries = this.headers.filter(x=>x.dictionary && !x.items);
-            Promise.all(headersWithDictionaries.map(x=>{
-                return new Promise((resolve) => {
-                    this.cacheService.List(x.dictionary)
-                    .then(z=> {
-                        x.items = z;
-                        resolve();
-                    });
-                });
-            })).then(()=> {
-                this.load();
-            });
-        } catch(e) {
-            this.notificationProvider.Error(e);
-        }
+        // try {
+        //     let headersWithDictionaries = this.headers.filter(x=>x.dictionary && !x.items);
+        //     Promise.all(headersWithDictionaries.map(x=>{
+        //         return new Promise((resolve) => {
+        //             this.cacheService.List(x.dictionary)
+        //             .then(z=> {
+        //                 x.items = z;
+        //                 resolve();
+        //             });
+        //         });
+        //     })).then(()=> {
+        //         this.load();
+        //     });
+        // } catch(e) {
+        //     this.notificationProvider.Error(e);
+        // }
+        this.load();
     };
 
     @Watch('pagination.page')
@@ -150,7 +152,7 @@ export default class ListDialogComponent extends Vue {
     async edit(item) {
         try {
             // console.log(`${this._getUrl}/${item.id}`);
-            let fetch = (await this.operationService.get(`${this._getUrl}/${item.id}`)).data;
+            let fetch = (await this.operationService.get(`${this._getUrl}/${item.id}`));
             if(fetch.status == 0) {
                 this.mapModelToFields(fetch.result);
                 this.editDialog = true;
@@ -167,8 +169,8 @@ export default class ListDialogComponent extends Vue {
         try {
             let model = this.getModelFromFields();
             let operation = +model.id > 0 
-            ? (await this.operationService.put(`${this._updateUrl}/${+model.id}`, model)).data
-            : (await this.operationService.post(`${this._addUrl}`, model)).data;
+            ? (await this.operationService.put(`${this._updateUrl}/${+model.id}`, model))
+            : (await this.operationService.post(`${this._addUrl}`, model));
             if(operation.status == 0) {
                 this.notificationProvider.Success("Успешно сохранено");
                 this.editDialog = false;
@@ -198,7 +200,7 @@ export default class ListDialogComponent extends Vue {
                 this.notificationProvider.Error('Удаляемый объект не существует')
                 return;
             }
-            let operation = (await this.operationService.delete(`${this._deleteUrl}/${this.itemForRemove.id}`)).data;
+            let operation = (await this.operationService.delete(`${this._deleteUrl}/${this.itemForRemove.id}`));
             if(operation.status == 0) {
                 this.notificationProvider.Success("Удалено");
                 this.load();
@@ -220,7 +222,7 @@ export default class ListDialogComponent extends Vue {
         try {
             this.loading = true;
             if(this._search.method == "post") {
-                let operation = (await this.operationService.post<SearchResponse<any[]>>(`${this._search.url}`,this.AddFilter(this.request))).data;
+                let operation = (await this.operationService.post<SearchResponse<any[]>>(`${this._search.url}`,this.AddFilter(this.request)));
                 if(operation.status === 0) {
                     this.items =  operation.result.data;
                     this.pagination.totalItems = operation.result.total;
@@ -230,7 +232,7 @@ export default class ListDialogComponent extends Vue {
                 }
                 this.loading = false;
             } else {
-                let operation = (await this.operationService.get<any[]>(`${this._search.url}`)).data;
+                let operation = (await this.operationService.get<any[]>(`${this._search.url}`));
                 if(operation.status === 0) {
                     this.items =  operation.result;
                     this.pagination.totalItems = this.items.length;

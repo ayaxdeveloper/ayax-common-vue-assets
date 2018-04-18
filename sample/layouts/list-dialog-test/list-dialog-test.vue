@@ -1,6 +1,6 @@
 <template>
     <a-list-dialog
-    entity="list-dialog-test"
+    entity="listdialogtest"
     title="list-dialog-test"
     :headers="headers"
     :pagination="pagination"

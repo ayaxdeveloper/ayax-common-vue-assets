@@ -1,17 +1,13 @@
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
-import { NotificationProvider } from '../../../src/providers/notification/notification-provider';
-import { INotificationProvider, INotificationSettings, IAppSettings } from 'ayax-common-types';
+import { Component, Vue, Prop, Watch, Inject } from 'vue-property-decorator';
+import { INotificationProvider } from 'ayax-common-types';
+import { VueInjection } from '../injection';
 import { AppSettings } from '../settings';
 import { EventBus } from '../event-bus';
-import { SidebarComponentItem } from '../../../src';
+import { SidebarComponentItem } from '../../src/components/sidebar/sidebar-item';
 
 @Component
-export default class App extends Vue {
+export default class App extends VueInjection {
     
-    appSettings: IAppSettings = new AppSettings();
-    notificationSettings:  INotificationSettings = this.appSettings.Notification();
-    notificationProvider: INotificationProvider = new NotificationProvider(this.notificationSettings, EventBus); 
-
     breadcrumbsNames = {
         "": {name: "Главная", route: "home"},
         "switcher": {name: "Вертушка", route: "switcher-list"},

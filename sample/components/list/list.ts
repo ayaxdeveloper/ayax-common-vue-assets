@@ -1,11 +1,9 @@
 import { Component, Vue, Prop, Inject, Watch, Emit } from 'vue-property-decorator';
 import { IHttpService, Pagination, ISearchDataService, IListDataService, IClientSettings, INotificationProvider, IPagination, IEntity, ICrudDataService, IDataService, Dictionary } from 'ayax-common-types';
 import { DataService, CrudDataService } from 'ayax-common-services';
-import { PrefSummary } from '../../models/pref/pref-summary';
-import TableComponent from '../../assets/components/table/table.vue';
-import { TableComponentHeader } from '../table/table-header';
-import { FastFilterComponentItem } from '../fast-filter/fast-filter-item';
-import { TableComponentAction } from '../table/table-action';
+import { TableComponentHeader } from '../../../../src/components/table/table-header';
+import { FastFilterComponentItem } from '../../../../src/components/fast-filter/fast-filter-item';
+import { TableComponentAction } from '../../../../src/components/table/table-action';
 import { Route } from 'vue-router';
 import { ICacheService } from 'ayax-common-cache';
 

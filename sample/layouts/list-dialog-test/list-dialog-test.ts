@@ -1,11 +1,11 @@
 import { Vue, Component, Inject, Watch } from 'vue-property-decorator';
 import BaseListLayout from '../base/base-list/base-list-layout';
-import { TableComponentHeader } from '../../components/table/table-header';
+import { TableComponentHeader } from '../../../src/components/table/table-header';
 import { Route } from 'vue-router';
 import { ISecurityService } from 'ayax-common-auth';
-
-import { IHttpService, IOperationService, INotificationSettings, INotificationProvider, SelectItem } from 'ayax-common-types';
-import { FormComponentItem } from '../../components/form/form-item';
+import { INotificationSettings, INotificationProvider, SelectItem } from 'ayax-common-types';
+import { IHttpService, IOperationService } from 'ayax-common-services';
+import { FormComponentItem } from '../../../src/components/form/form-item';
 import { TestModel } from '../../models/test/test-model';
 
 @Component

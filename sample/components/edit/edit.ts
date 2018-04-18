@@ -1,18 +1,11 @@
 import { Component, Vue, Inject, Prop, Emit, } from 'vue-property-decorator';
-import FieldLayoutComponent from './field-layout.vue';
 import { SelectItem, INotificationProvider, IHttpService, ICrudDataService } from 'ayax-common-types';
 import { HttpService } from '../../services/base/http/http-service';
 import { CrudDataService } from 'ayax-common-services';
-import { FormComponentItem } from '../form/form-item';
-import FormComponent from '../form/form.vue';
+import { FormComponentItem } from '../../../../src/components/form/form-item';
 import { ICacheService } from 'ayax-common-cache';
-import RefreshableComponent from '../../assets/base/refreshable';
 
-@Component({
-    components: {
-        'a-form': FormComponent
-    }
-})
+@Component
 export default class EditComponent extends Vue {
     @Inject() httpService: IHttpService;
     @Inject() notificationProvider: INotificationProvider;
