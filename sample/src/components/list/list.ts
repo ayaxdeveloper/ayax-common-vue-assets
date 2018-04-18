@@ -3,9 +3,9 @@ import { IHttpService, Pagination, ISearchDataService, IListDataService, IClient
 import { DataService, CrudDataService } from 'ayax-common-services';
 import { PrefSummary } from '../../models/pref/pref-summary';
 import TableComponent from '../../assets/components/table/table.vue';
-import { TableComponentHeader } from 'ayax-common-vue-assets';
-import { FastFilterComponentItem } from 'ayax-common-vue-assets';
-import { TableComponentAction } from 'ayax-common-vue-assets';
+import { TableComponentHeader } from '../table/table-header';
+import { FastFilterComponentItem } from '../fast-filter/fast-filter-item';
+import { TableComponentAction } from '../table/table-action';
 import { Route } from 'vue-router';
 import { ICacheService } from 'ayax-common-cache';
 

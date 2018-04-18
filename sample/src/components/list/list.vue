@@ -44,5 +44,5 @@
     </div>
 </template>
 
-<script src='./list.ts'>
+<script lang="ts" src='./list.ts'>
 </script>

@@ -19,6 +19,6 @@
     </v-form>
 </template>
 
-<script src="./edit.ts">
+<script lang="ts" src="./edit.ts">
     
 </script>

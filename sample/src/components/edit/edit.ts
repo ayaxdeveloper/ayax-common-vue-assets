@@ -3,8 +3,8 @@ import FieldLayoutComponent from './field-layout.vue';
 import { SelectItem, INotificationProvider, IHttpService, ICrudDataService } from 'ayax-common-types';
 import { HttpService } from '../../services/base/http/http-service';
 import { CrudDataService } from 'ayax-common-services';
-import { FormComponentItem } from 'ayax-common-vue-assets';
-import FormComponent from 'ayax-common-vue-assets';
+import { FormComponentItem } from '../form/form-item';
+import FormComponent from '../form/form.vue';
 import { ICacheService } from 'ayax-common-cache';
 import RefreshableComponent from '../../assets/base/refreshable';
 

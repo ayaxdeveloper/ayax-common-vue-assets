@@ -35,7 +35,7 @@ export default class App extends Vue {
         }),
         new SidebarComponentItem({title: "LIST", icon: "list", route: "/lead/add"}),
         new SidebarComponentItem({title: "EDIT", icon: "edit", route: "/lead/list"}),
-        new SidebarComponentItem({title: "LIST-DIALOG", icon: "mdi-inbox", route: "/lead/list"}),
+        new SidebarComponentItem({title: "LIST-DIALOG", icon: "mdi-inbox", route: "/list-dialog-test"}),
         new SidebarComponentItem({
             title: "НАСТРОЙКИ",
             icon: "build",

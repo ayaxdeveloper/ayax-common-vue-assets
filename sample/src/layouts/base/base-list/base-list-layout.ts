@@ -1,6 +1,6 @@
 import { Pagination, IClientSettings } from "ayax-common-types";
 import { Inject, Vue } from "vue-property-decorator";
-import { TableComponentAction } from 'ayax-common-vue-assets';
+import { TableComponentAction } from '../../../components/table/table-action';
 
 export default abstract class BaseListLayout extends Vue {
     @Inject() clientSettings: IClientSettings;
