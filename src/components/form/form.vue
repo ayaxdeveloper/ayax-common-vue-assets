@@ -1,9 +1,6 @@
 <template>
     <div>
-        <div class="hidden" v-for="(row, rowIndex) in computedRows.filter(x => x == 0)" :key="rowIndex">
-            <a-form-control v-for="(field, fieldIndex) in row" :key="fieldIndex" :field="field" />
-        </div>
-        <v-layout row wrap v-for="(row, rowIndex) in computedRows.filter(x => x > 0)" :key="rowIndex">
+        <v-layout row wrap v-for="(row, rowIndex) in computedRows" :key="rowIndex" :class="{hidden : row == 0}">
             <v-flex v-for="(field, fieldIndex) in row" :key="fieldIndex" class="pa-1">
                 <template v-if="field.dense">
                     <a-form-control
