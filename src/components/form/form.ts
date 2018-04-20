@@ -20,8 +20,9 @@ export default class FormComponent extends Vue {
     get computedRows() {
         let rows: {[rowId: number]: FormComponentItem[]} = {};
         let cnt = 1;
+        rows[0] = [];
         this.fields.forEach(x=> {
-            rows[0] = [];
+            
             if(x.hidden) {
                 rows[0].push(x);
             } else {
