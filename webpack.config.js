@@ -13,13 +13,20 @@ module.exports = {
     vue: 'vue',
     vuetify: 'vuetify',
     moment: 'moment',
-    "element-ui": 'element-ui',
+    ajv: 'ajv',
+    mdi: 'mdi',
+    mime: 'mime',
+    "element-ui": "element-ui",
     "vue-shortkey": "vue-shortkey",
     "ayax-common-auth": "ayax-common-auth",
     "ayax-common-cache": "ayax-common-cache",
     "ayax-common-helpers": "ayax-common-helpers",
     "ayax-common-services": "ayax-common-services",
-    "ayax-common-types": "ayax-common-types"
+    "ayax-common-types": "ayax-common-types",
+    "file-loader": "file-loader",
+    "url-loader": "url-loader",
+    "schema-utils": "schema-utils",
+    "vue-shortkey": "vue-shortkey"
   },
   module: {
     rules: [
