@@ -25,12 +25,17 @@ export default class FormComponent extends Vue {
             if(x.hidden) {
                 rows[0].push(x);
             } else {
-                if(!rows[x.row + 1]) {
-                    rows[x.row + 1] = [];
-                }
-                rows[x.row].push(x);
                 if(x.row == 0) {
+                    if(!rows[cnt+1]) {
+                        rows[cnt+1] = [];
+                    }
+                    rows[cnt+1].push(x);
                     cnt++;
+                } else {
+                    if(!rows[x.row+1]) {
+                        rows[x.row+1] = [];
+                    }
+                    rows[x.row+1].push(x);
                 }
             }
         });
