@@ -32,11 +32,9 @@
                     <v-card-title>
                             <slot name="edit-head"></slot>
                     </v-card-title>
-
                     <v-card-text>
                         <a-form :fields="fields" :model="defaultModel"></a-form>
                     </v-card-text>
-
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color=" lighten-2" flat @click.native="editOk">ОК</v-btn>
