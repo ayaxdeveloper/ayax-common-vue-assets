@@ -28,10 +28,17 @@ export default class TableComponent extends Vue {
     @Prop() selected: any[];
     innerSelected: any[] = [];
     totalItems = 1;
+    showFilters = true;
+    
 
     created() {
         if(this.selected) {
             this.innerSelected = this.selected;
+        }
+        if(localStorage.getItem(`${this.$route.name}_list_show-filters`) != 'false'){
+            this.showFilters = true;
+        }else {
+            this.showFilters = false;
         }
     }
 
@@ -41,6 +48,16 @@ export default class TableComponent extends Vue {
             this.$emit("onSelect", newVal.map((item) => {
                 return item.id
             }));
+        }
+    }
+
+    toggleFilters() {
+        if(this.showFilters){
+            this.showFilters = false;
+            localStorage.setItem(`${this.$route.name}_list_show-filters`, 'false');
+        }else {
+            this.showFilters = true;
+            localStorage.setItem(`${this.$route.name}_list_show-filters`, 'true');
         }
     }
 

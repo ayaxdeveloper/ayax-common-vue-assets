@@ -3,7 +3,6 @@ import { EventBus } from '../../../event-bus';
 import { IAppSettings } from 'ayax-common-types';
 import { IHttpService } from 'ayax-common-services';
 import { AppSettings } from '../../../settings';
-import { TokenService } from '../../token/token-service';
 
 require('../../../mock-adapter');
 

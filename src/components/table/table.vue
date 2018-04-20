@@ -40,8 +40,13 @@
                         <v-icon v-if="header.sortable">mdi-arrow-up</v-icon>
                         <strong>{{ header.text }}</strong>
                     </th>
+                    <th v-if="FiltersExist" class="text-xs-center action" width="10">
+                        <v-btn class="toggleFiltersBtn" small icon title="Скрыть/показать фильтры" @click="toggleFilters">
+                                <v-icon>settings</v-icon>
+                        </v-btn>
+                    </th>
                 </tr>
-                <tr v-if="FiltersExist" class="filter-row">
+                <tr v-if="FiltersExist && showFilters" class="filter-row">
                     <th v-if='selectable' class="selectable"></th>
                     <th v-if="actions" class="action">
                     </th>
@@ -57,6 +62,7 @@
                             ></a-table-filter>
                         </template>
                     </th>
+                    <th v-if="FiltersExist"></th>
                 </tr>
             </template>
             <template slot="items" slot-scope="props">
@@ -123,7 +129,7 @@
                             
                         </template>
                     </td>
-                    
+                    <td v-if="FiltersExist"></td>
                 </tr>   
             </template>
         </v-data-table>
@@ -198,5 +204,9 @@
         width: 100%;
         height: 100%;
         background-color: rgba(0,0,0,0.1);
+    }
+    .toggleFiltersBtn {
+        height: 26px;
+        width: 26px;
     }
 </style>

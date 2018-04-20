@@ -6,7 +6,7 @@ import EditTestLayout from './layouts/list-test-layout/edit-test/edit-test.vue';
 
 
 export const routes = [
-    { path: '/list-dialog-test', component: ListDialogTestLayout},
-    { path: '/list-test/list', component: ListTestLayout},
+    { path: '/list-dialog-test', name: 'list-dialog-test', component: ListDialogTestLayout},
+    { path: '/list-test/list', name: 'list-test', component: ListTestLayout},
     { path: "/list-test/edit/:id", name: "testentity-edit", component: EditTestLayout},
 ];

@@ -94,7 +94,6 @@ export default class ListComponent extends Vue {
         } else {
             this._deleteUrl = this.deleteUrl;
         }
-        this.operationService = new OperationService(this.httpService, `/${this.entity}`);
         if(!this.pagination) {
             this.pagination = Pagination.Default(this.clientSettings.listRowsPerpage);
         }

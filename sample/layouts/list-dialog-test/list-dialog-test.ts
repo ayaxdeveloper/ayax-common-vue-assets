@@ -17,16 +17,12 @@ export default class ListDialogTestLayout extends BaseListLayout {
     defaultModel = new TestModel();
     fields: FormComponentItem[] = [];
     created() {
-        this.init();
-    }
-
-    async init() {
         this.fields = [
             FormComponentItem.Hidden({name: "id"}),
             FormComponentItem.Input({title: "Наименование", name: "title"}),
             FormComponentItem.Input({title: "Код", name: "code"}),
             FormComponentItem.Date({title: "Дата создания", name: "created"}),
             
-        ]
+        ];
     }
 }

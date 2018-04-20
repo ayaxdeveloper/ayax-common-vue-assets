@@ -2,7 +2,7 @@
     <div>
         <div style="position:relative">
             <v-fab-transition>
-            <v-btn
+            <!-- <v-btn
             color="primary"
             dark
             fab
@@ -12,7 +12,7 @@
             @click="add"
             >
             <v-icon>add</v-icon>
-            </v-btn>
+            </v-btn> -->
         </v-fab-transition>
         </div>
         <a-table 

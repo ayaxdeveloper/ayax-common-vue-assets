@@ -1,7 +1,7 @@
 <template>
     <a-list-dialog
     entity="testentity"
-    title="list-dialog-test"
+    title="Test List-Dialog Component "
     :headers="headers"
     :pagination="pagination"
     :actions="actions"

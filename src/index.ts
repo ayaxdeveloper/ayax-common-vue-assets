@@ -10,8 +10,9 @@ import FormControlComponent from './components/form/form-control.vue';
 import SidebarComponent from './components/sidebar/sidebar.vue';
 import ListComponent from './components/list/list.vue';
 import EditComponent from './components/edit/edit.vue';
-import ListDialogComponent from './components/list-dialog/list-dialog.vue'
-import BreadcrumbsComponent from './components/breadcrumbs/breadcrumbs.vue'
+import ListDialogComponent from './components/list-dialog/list-dialog.vue';
+import BreadcrumbsComponent from './components/breadcrumbs/breadcrumbs.vue';
+import UserProfileComponent from './components/user-profile/user-profile.vue';
 import { DatePicker } from 'element-ui';
 import lang from 'element-ui/lib/locale/lang/ru-RU';
 import locale from 'element-ui/lib/locale';
@@ -32,6 +33,7 @@ export default {
         Vue.component('a-breadcrumbs', BreadcrumbsComponent);
         Vue.component('a-list', ListComponent);
         Vue.component('a-edit', EditComponent);
+        Vue.component('a-user-profile', UserProfileComponent);
     }
 }
 
@@ -56,5 +58,6 @@ export {
     ListComponent,
     EditComponent,
     ListDialogComponent,
-    BreadcrumbsComponent
+    BreadcrumbsComponent,
+    UserProfileComponent
 };
