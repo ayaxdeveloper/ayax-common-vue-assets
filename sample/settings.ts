@@ -17,7 +17,7 @@ export class AppSettings implements IAppSettings {
     Client(): IClientSettings {
         return new ClientSettings({
             clientCacheExpiresAfter: 20,
-            listRowsPerpage: 20,
+            listRowsPerpage: 5,
             systemCode: "cc"
         });
     };

@@ -1,9 +1,9 @@
 import { Component, Vue, Prop, Inject, Watch, Emit } from 'vue-property-decorator';
-import { IHttpService, Pagination, ISearchDataService, IListDataService, IClientSettings, INotificationProvider, IPagination, IEntity, ICrudDataService, IDataService, Dictionary } from 'ayax-common-types';
-import { DataService, CrudDataService } from 'ayax-common-services';
-import { TableComponentHeader } from '../../../../src/components/table/table-header';
-import { FastFilterComponentItem } from '../../../../src/components/fast-filter/fast-filter-item';
-import { TableComponentAction } from '../../../../src/components/table/table-action';
+import { Pagination, IClientSettings, INotificationProvider, IPagination, IEntity, Dictionary, SearchResponse } from 'ayax-common-types';
+import { IHttpService, OperationService, IOperationService } from 'ayax-common-services';
+import { TableComponentHeader } from '../table/table-header';
+import { FastFilterComponentItem } from '../fast-filter/fast-filter-item';
+import { TableComponentAction } from '../table/table-action';
 import { Route } from 'vue-router';
 import { ICacheService } from 'ayax-common-cache';
 
@@ -13,6 +13,9 @@ export default class ListComponent extends Vue {
     @Inject() notificationProvider: INotificationProvider;
     @Inject() cacheService: ICacheService;
     @Inject() clientSettings: IClientSettings;
+    @Inject() operationService: IOperationService;
+    @Prop() search: {url: string, method: string};
+    @Prop() deleteUrl: string;
     @Prop() headers: TableComponentHeader[];
     @Prop() entity: string;
     @Prop() title: string;
@@ -32,7 +35,6 @@ export default class ListComponent extends Vue {
     }
 
     localHeaders: TableComponentHeader[];
-    dataService: IDataService;
 
     request = {
         page: 1,
@@ -43,6 +45,8 @@ export default class ListComponent extends Vue {
     selected = [];
     removeDialog = false;
     loading = true;
+    _search: {url: string, method: string};
+    _deleteUrl: string;
 
     @Emit()
     onRowAction(item: IEntity, name: string) {
@@ -75,12 +79,22 @@ export default class ListComponent extends Vue {
         this.headers.filter(x=>x.sortBy).forEach((header)=> {
             filteredRequest[`${header.value}sort`] = header.sortBy;
         });
-        console.log(`filteredRequest ${JSON.stringify(filteredRequest)}`);
+        //console.log(`filteredRequest ${JSON.stringify(filteredRequest)}`);
         return filteredRequest; 
     }
 
     created() {
-        this.dataService = new DataService(this.httpService, `/${this.entity}`);
+        if(this.entity && !this.search) {
+            this._search = {url: `/${this.entity}/search`, method : 'post'};
+        } else {
+            this._search = this.search;
+        }
+        if(this.entity && !this.deleteUrl) {
+            this._deleteUrl = `/${this.entity}/delete`;
+        } else {
+            this._deleteUrl = this.deleteUrl;
+        }
+        this.operationService = new OperationService(this.httpService, `/${this.entity}`);
         if(!this.pagination) {
             this.pagination = Pagination.Default(this.clientSettings.listRowsPerpage);
         }
@@ -137,9 +151,9 @@ export default class ListComponent extends Vue {
             this.notificationProvider.Error('Удаляемый объект не существует');
             return;
         }
-        this.dataService.delete(this.itemForRemove.id).then((response) => {
+        this.operationService.delete(`${this._deleteUrl}/${this.itemForRemove.id}`).then((response) => {
             this.loading = true;
-            let operation = response.data;
+            let operation = response;
             if (operation.status === 0) {
                 this.notificationProvider.Success("Объект удален");
                 this.load()
@@ -164,8 +178,8 @@ export default class ListComponent extends Vue {
 
     public async load() {
         try {
-            let response =  await this.dataService.search<any>(this.AddFilter(this.request));
-            let operation = response.data;
+            let response =  await this.operationService.post<SearchResponse<any[]>>(`${this._search.url}`, this.AddFilter(this.request));
+            let operation = response;
             if(operation.status === 0) {
                 this.items =  operation.result.data;
                 this.pagination.totalItems = operation.result.total

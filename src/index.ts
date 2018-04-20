@@ -8,6 +8,8 @@ import FormComponent from './components/form/form.vue';
 import NotificationComponent from './components/notification/notification.vue';
 import FormControlComponent from './components/form/form-control.vue';
 import SidebarComponent from './components/sidebar/sidebar.vue';
+import ListComponent from './components/list/list.vue';
+import EditComponent from './components/edit/edit.vue';
 import ListDialogComponent from './components/list-dialog/list-dialog.vue'
 import BreadcrumbsComponent from './components/breadcrumbs/breadcrumbs.vue'
 import { DatePicker } from 'element-ui';
@@ -28,6 +30,8 @@ export default {
         Vue.component('a-sidebar', SidebarComponent);
         Vue.component('a-list-dialog', ListDialogComponent);
         Vue.component('a-breadcrumbs', BreadcrumbsComponent);
+        Vue.component('a-list', ListComponent);
+        Vue.component('a-edit', EditComponent);
     }
 }
 
@@ -49,6 +53,8 @@ export {
     NotificationComponent, 
     FormControlComponent, 
     SidebarComponent, 
+    ListComponent,
+    EditComponent,
     ListDialogComponent,
     BreadcrumbsComponent
 };

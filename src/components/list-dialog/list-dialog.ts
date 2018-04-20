@@ -70,23 +70,22 @@ export default class ListDialogComponent extends Vue {
             page: 1,
             perPage: this._search.method == "post" ? this.clientSettings.listRowsPerpage : 100
         }
-        // try {
-        //     let headersWithDictionaries = this.headers.filter(x=>x.dictionary && !x.items);
-        //     Promise.all(headersWithDictionaries.map(x=>{
-        //         return new Promise((resolve) => {
-        //             this.cacheService.List(x.dictionary)
-        //             .then(z=> {
-        //                 x.items = z;
-        //                 resolve();
-        //             });
-        //         });
-        //     })).then(()=> {
-        //         this.load();
-        //     });
-        // } catch(e) {
-        //     this.notificationProvider.Error(e);
-        // }
-        this.load();
+        try {
+            let headersWithDictionaries = this.headers.filter(x=>x.dictionary && !x.items);
+            Promise.all(headersWithDictionaries.map(x=>{
+                return new Promise((resolve) => {
+                    this.cacheService.List(x.dictionary)
+                    .then(z=> {
+                        x.items = z;
+                        resolve();
+                    });
+                });
+            })).then(()=> {
+                this.load();
+            });
+        } catch(e) {
+            this.notificationProvider.Error(e);
+        }
     };
 
     @Watch('pagination.page')

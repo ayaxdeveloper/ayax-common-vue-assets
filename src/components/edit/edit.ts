@@ -1,8 +1,7 @@
 import { Component, Vue, Inject, Prop, Emit, } from 'vue-property-decorator';
-import { SelectItem, INotificationProvider, IHttpService, ICrudDataService } from 'ayax-common-types';
-import { HttpService } from '../../services/base/http/http-service';
-import { CrudDataService } from 'ayax-common-services';
-import { FormComponentItem } from '../../../../src/components/form/form-item';
+import { SelectItem, INotificationProvider } from 'ayax-common-types';
+import { IOperationService, IHttpService } from 'ayax-common-services';
+import { FormComponentItem } from '../form/form-item';
 import { ICacheService } from 'ayax-common-cache';
 
 @Component
@@ -10,6 +9,10 @@ export default class EditComponent extends Vue {
     @Inject() httpService: IHttpService;
     @Inject() notificationProvider: INotificationProvider;
     @Inject() cacheService: ICacheService;
+    @Inject() operationService: IOperationService; 
+    @Prop() getUrl: string;
+    @Prop() updateUrl: string;
+    @Prop() addUrl: string;
     @Prop() title: string;
     @Prop() fields: FormComponentItem[];
     @Prop() entity: string;
@@ -17,15 +20,31 @@ export default class EditComponent extends Vue {
     $refs: {
         form: HTMLFormElement
     }
-    crudDataService: ICrudDataService;
     id: number;
     model: any;
     valid: boolean = true;
+    _getUrl: string;
+    _updateUrl: string;
+    _addUrl: string;
 
     async created() {
-        this.id = +this.$route.params.id,
-        this.model = this.defaultModel
-        this.crudDataService = new CrudDataService(this.httpService, `/${this.entity}`);
+        if(this.entity && !this.getUrl) {
+            this._getUrl = `/${this.entity}/get`;
+        } else {
+            this._getUrl = this.getUrl;
+        }
+        if(this.entity && !this.updateUrl) {
+            this._updateUrl = `/${this.entity}/update`;
+        } else {
+            this._updateUrl = this.updateUrl;
+        }
+        if(this.entity && !this.addUrl) {
+            this._addUrl = `/${this.entity}/add`;
+        } else {
+            this._addUrl = this.addUrl;
+        }
+        this.id = +this.$route.params.id;
+        this.model = this.defaultModel;
         this.fields.filter(x=>x.dictionary!=null && !x.items).forEach((field) => {
             this.cacheService.List(field.dictionary).then((items) => {
                 field.items = items.map(x=> new SelectItem({text: x.name, value: x.id}));
@@ -72,8 +91,8 @@ export default class EditComponent extends Vue {
 
     save(data) {
         let method = this.id !== null && this.id > 0
-        ? this.crudDataService.update(this.id, data)
-        : this.crudDataService.add(data);
+        ? this.operationService.put(`${this._updateUrl}/${this.id}`, data)
+        : this.operationService.post(`${this._addUrl}`, data);
 
         method
             .then((response) => {
@@ -88,11 +107,11 @@ export default class EditComponent extends Vue {
             if (this.id === 0) {
                 return
             }
-            let response = await this.crudDataService.get(this.id);
-            if (response.data.status === 0) {
-                this.model = response.data.result;
+            let response = await this.operationService.get(`${this._getUrl}/${this.id}`);
+            if (response.status === 0) {
+                this.model = response.result;
             } else {
-                this.notificationProvider.Error(response.data.message);
+                this.notificationProvider.Error(response.message);
                 this.model = this.defaultModel();
             }
         } catch(e) {

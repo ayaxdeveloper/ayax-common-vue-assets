@@ -13,13 +13,7 @@ export class HttpService implements IHttpService {
     private _clientSettings = new AppSettings().Client();
     constructor(apiUrl? :string) {
         this.baseUrl = apiUrl ? apiUrl : `${this._serverSettings.baseUrl}${this._serverSettings.apiPrefix}`;
-    }
-
-    test = [
-        { id: 1, code: '123', title: 'Alpha', created: new Date()}
-    ];
-
-    
+    } 
 
     async post(relativeUrl: string, data: any) {
         return (await axios.post(`${this.baseUrl}${relativeUrl}`, data)).data;

@@ -12,6 +12,7 @@ import AyaxCommonVueAssets from '../src/index';
 Vue.use(Vuetify);
 Vue.use(VueRouter);
 Vue.use(AyaxCommonVueAssets);
+Vue.use(require('vue-shortkey'));
 
 new Vue({
     el: '#app',
