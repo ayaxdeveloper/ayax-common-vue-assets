@@ -26,7 +26,7 @@
     :rules="field.rules"
     >
     </v-text-field>
-    <div v-else-if="field.type == date"> 
+    <div v-else-if="field.type == date" style="display: inline-grid; width: 100%"> 
         <label class="label">{{field.dense ? field.title : null}}</label>
         <el-date-picker
         v-model="field.model"
@@ -36,7 +36,6 @@
         clearable
         :picker-options="{firstDayOfWeek: 1}"
         />
- 
     </div>
     <v-select
     v-else-if="field.type == select"
@@ -88,5 +87,8 @@
     width: 100%;
     z-index: 0;
     color: rgba(0,0,0,.54);
+}
+.el-date-editor {
+    width: 100%;
 }
 </style>

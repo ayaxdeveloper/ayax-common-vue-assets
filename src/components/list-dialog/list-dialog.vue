@@ -29,9 +29,9 @@
             <v-layout row justify-center>
                 <v-dialog v-model="editDialog" persistent max-width="600px">
                     <v-card>
-                    <v-card-title>
+                    <!-- <v-card-title>
                             <slot name="edit-head"></slot>
-                    </v-card-title>
+                    </v-card-title> -->
                     <v-card-text>
                         <a-form :fields="fields" :model="defaultModel"></a-form>
                     </v-card-text>
