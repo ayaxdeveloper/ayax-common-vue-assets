@@ -11,6 +11,7 @@
         v-model="innerSelected"
         hide-actions
         item-key="id"
+        no-results-text="Ничего не найдено"
         class="elevation-1 table-block">
             <template slot="headers" slot-scope="props">
                 <tr class="header-row">
