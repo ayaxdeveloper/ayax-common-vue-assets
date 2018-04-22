@@ -1,5 +1,6 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { FormComponentItem } from './form-item';
+import { HtmlElementType } from 'ayax-common-types';
 
 @Component
 export default class FormComponent extends Vue {
@@ -23,7 +24,7 @@ export default class FormComponent extends Vue {
         rows[0] = [];
         this.fields.forEach(x=> {
             
-            if(x.hidden) {
+            if(x.hidden || x.type == HtmlElementType.hidden) {
                 rows[0].push(x);
             } else {
                 if(x.row == 0) {
@@ -40,6 +41,7 @@ export default class FormComponent extends Vue {
                 }
             }
         });
+        console.log(JSON.stringify(rows));
         return rows;
     }
 }
