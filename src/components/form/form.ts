@@ -41,7 +41,6 @@ export default class FormComponent extends Vue {
                 }
             }
         });
-        console.log(JSON.stringify(rows));
         return rows;
     }
 }
