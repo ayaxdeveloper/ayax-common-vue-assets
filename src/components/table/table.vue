@@ -1,8 +1,48 @@
 <template>
     <div>
+        <slot name="table-head">
+            <v-toolbar flat dense dark class="secondary" style="line-height: 48px">
+            <v-toolbar-title v-if="title">
+                {{title}}
+                <v-chip title="Количество записей" label small v-if="pagination.totalItems">{{ pagination.totalItems }}</v-chip>
+            </v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+                <slot name="head-items"></slot>
+                <!-- <v-btn flat @click.native.stop="add">
+                    <v-icon left>mdi-plus</v-icon>
+                    Добавить
+                </v-btn> -->
+                <v-menu bottom offset-y left offset-x :close-on-content-click="false" :value="isTableMenuVisible">
+                    <v-btn flat style="height: 30px; width: 30px" small icon title="Настройки таблицы" slot="activator" @click="isTableMenuVisible=true">
+                        <v-icon>settings</v-icon>
+                    </v-btn>
+                    <v-list dense>
+                        <v-list-tile v-if="FiltersExist" @click="toggleFilters">
+                            <v-list-tile-title>{{ showFiltersMessage }}</v-list-tile-title>
+                        </v-list-tile>
+                        <v-divider></v-divider>
+                        <draggable :list="editableHeaders" @update="onUpdateDraggable">
+                            <v-list-tile v-for="header in editableHeaders" :key="header.text" @click="">
+                                <v-list-tile-action>
+                                    <v-checkbox v-if="header.hiddenable" v-model="header.isVisible" @change="onChangeVisible(header)"></v-checkbox>
+                                    <v-checkbox v-else input-value="true" disabled></v-checkbox>
+                                </v-list-tile-action>
+                                <v-list-tile-title>{{ header.text }}</v-list-tile-title>
+                            </v-list-tile>
+                        </draggable>
+                        <v-divider></v-divider>
+                            <v-list-tile @click="resetTableSettings">
+                            <v-list-tile-title>Сбросить настройки таблицы</v-list-tile-title>
+                        </v-list-tile>
+                    </v-list>
+                </v-menu>
+            </v-toolbar-items>  
+        </v-toolbar>
+        </slot>
         <v-progress-circular v-if="loading" indeterminate fixed class="table-loading" color="primary" size="50"></v-progress-circular>
         <v-data-table
-        v-bind:headers="headers"
+        v-bind:headers="editableHeaders"
         v-bind:items="items"
         :total-items="totalItems"
         :loading="loading"
@@ -27,8 +67,8 @@
                     <th class="text-xs-center action" v-if="actions" :width="configActionsWidth">
                         ...
                     </th>
-                    <th v-for="header in props.headers"
-                        v-if="!header.hidden" 
+                    <th v-for="header in editableHeaders"
+                        v-if="header.isVisible" 
                         :key="header.value"
                         :class="[
                             'column', header.sortable ? 'sortable' : '', header.sortBy && header.sortBy.isdesc ? 'desc' : 'asc', 
@@ -41,18 +81,13 @@
                         <v-icon v-if="header.sortable">mdi-arrow-up</v-icon>
                         <strong>{{ header.text }}</strong>
                     </th>
-                    <th v-if="FiltersExist" class="text-xs-center action" width="10">
-                        <v-btn class="toggleFiltersBtn" small icon title="Скрыть/показать фильтры" @click="toggleFilters">
-                                <v-icon>settings</v-icon>
-                        </v-btn>
-                    </th>
                 </tr>
                 <tr v-if="FiltersExist && showFilters" class="filter-row">
                     <th v-if='selectable' class="selectable"></th>
                     <th v-if="actions" class="action">
                     </th>
-                    <th v-for="header in props.headers"
-                        v-if="!header.hidden" 
+                    <th v-for="header in editableHeaders"
+                        v-if="header.isVisible" 
                         :key="header.value"
                         class="column"
                     >
@@ -63,7 +98,6 @@
                             ></a-table-filter>
                         </template>
                     </th>
-                    <th v-if="FiltersExist"></th>
                 </tr>
             </template>
             <template slot="items" slot-scope="props">
@@ -110,8 +144,8 @@
                         </div>
                     </td>
                     <td
-                        v-for="(header, index) in headers" :key="index"
-                        v-if="!header.hidden" 
+                        v-for="(header, index) in editableHeaders" :key="index"
+                        v-if="header.isVisible" 
                         :class="[
                             header.align == 'right' ? 'text-xs-right' : 'text-xs-left'
                         , 'column']"
@@ -120,17 +154,16 @@
                     >
                         <template 
                                 v-for="propertyname in Object.keys(props.item)" 
-                                v-if="propertyname == headers[index].value"
+                                v-if="propertyname == editableHeaders[index].value"
                         >
-                            <template v-if="headers[index].items"
-                            >{{getFromDictionary(headers[index], props.item[propertyname])}}</template>
+                            <template v-if="editableHeaders[index].items"
+                            >{{getFromDictionary(editableHeaders[index], props.item[propertyname])}}</template>
                             <template v-else>
                                 {{applyFormatterIfExists(header, props.item[propertyname])}}                            
                             </template>
                             
                         </template>
                     </td>
-                    <td v-if="FiltersExist"></td>
                 </tr>   
             </template>
         </v-data-table>
@@ -205,9 +238,5 @@
         width: 100%;
         height: 100%;
         background-color: rgba(0,0,0,0.1);
-    }
-    .toggleFiltersBtn {
-        height: 26px;
-        width: 26px;
     }
 </style>

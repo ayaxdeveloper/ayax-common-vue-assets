@@ -8,10 +8,12 @@ import { TableFilterComponentShortkey } from '../table-filter/table-filter-item'
 import { SortableField } from 'ayax-common-types';
 import { IEntity } from 'ayax-common-types';
 import { TableComponentAction } from './table-action';
+import draggable from 'vuedraggable';
 
 @Component({
     components: {
-        'a-table-filter': TableFilterComponent
+        'a-table-filter': TableFilterComponent,
+        'draggable': draggable
     }
 })
 export default class TableComponent extends Vue {
@@ -26,12 +28,19 @@ export default class TableComponent extends Vue {
     @Prop({ default: false }) loading: boolean;
     @Prop() pagination: IPagination;
     @Prop() selected: any[];
+    @Prop() title: string;
     innerSelected: any[] = [];
     totalItems = 1;
+    isTableMenuVisible = false;
     showFilters = true;
+    showFiltersMessage = 'Скрыть фильтры';
+    editableHeaders = [];
+    headerSettings = [];
     
-
     created() {
+        this.headers.forEach(el => {
+            this.editableHeaders.push(el);
+        });
         if(this.selected) {
             this.innerSelected = this.selected;
         }
@@ -39,6 +48,28 @@ export default class TableComponent extends Vue {
             this.showFilters = true;
         }else {
             this.showFilters = false;
+            this.showFiltersMessage = 'Показать фильтры'
+        }
+        if(localStorage.getItem(`${this.$route.name}_table_settings`) != null){
+            let data = JSON.parse(localStorage.getItem(`${this.$route.name}_table_settings`));
+            data.forEach(settingsElement => {
+                this.editableHeaders.forEach(headerElement => {
+                    if(settingsElement.value == headerElement.value) {
+                        headerElement.isVisible = settingsElement.isVisible;
+                        headerElement.order = settingsElement.order;
+                    }
+                })
+            });
+            this.headerSettings = data;
+            this.editableHeaders.sort(function(a, b){return a.order - b.order});
+        }else {
+            this.editableHeaders.forEach(el => {
+                let newItem = {value: '', isVisible: true, order: 0};
+                newItem.value = el.value;
+                newItem.isVisible = el.isVisible;
+                newItem.order = el.order;
+                this.headerSettings.push(newItem);
+            })
         }
     }
 
@@ -52,13 +83,50 @@ export default class TableComponent extends Vue {
     }
 
     toggleFilters() {
+        this.isTableMenuVisible = false;
         if(this.showFilters){
             this.showFilters = false;
             localStorage.setItem(`${this.$route.name}_list_show-filters`, 'false');
+            this.showFiltersMessage = 'Показать фильтры'
         }else {
             this.showFilters = true;
             localStorage.setItem(`${this.$route.name}_list_show-filters`, 'true');
+            this.showFiltersMessage = 'Скрыть фильтры'
         }
+    }
+
+    onChangeVisible(item) {
+        this.headerSettings.forEach(el => {
+            if(el.value == item.value){
+                el.isVisible = item.isVisible;
+            }
+        })
+        localStorage.setItem(`${this.$route.name}_table_settings`, JSON.stringify(this.headerSettings));
+    }
+
+    onUpdateDraggable() {
+        for(var i = 0; i < this.editableHeaders.length; i++){
+            this.editableHeaders[i].order = i;
+            this.headerSettings.forEach(el => {
+                if(el.value == this.editableHeaders[i].value){
+                    el.order = this.editableHeaders[i].order;
+                }
+            })
+        }
+        localStorage.setItem(`${this.$route.name}_table_settings`, JSON.stringify(this.headerSettings));
+    }
+
+    resetTableSettings() {
+        localStorage.removeItem(`${this.$route.name}_table_settings`);
+        localStorage.removeItem(`${this.$route.name}_list_show-filters`);
+        this.showFilters = true;
+        this.isTableMenuVisible = false;
+        this.showFiltersMessage = 'Скрыть фильтры';
+        this.editableHeaders = [];
+        this.headers.forEach(el => {
+            el.isVisible = true;
+            this.editableHeaders.push(el);       
+        });
     }
 
     getFromDictionary(header: TableComponentHeader, id: number) {
@@ -104,7 +172,7 @@ export default class TableComponent extends Vue {
         else this.innerSelected = this.items.slice();
     };
     changeSort (headerValue: string) {
-        this.headers.forEach((item)=>{
+        this.editableHeaders.forEach((item)=>{
             if(item.value == headerValue && item.sortable) {
                 if(!item.sortBy) {
                     item.sortBy = new SortableField();
@@ -118,7 +186,7 @@ export default class TableComponent extends Vue {
     };
 
     get FiltersExist() {
-        return this.headers.filter(x => x.filter != null).length > 0;
+        return this.editableHeaders.filter(x => x.filter != null).length > 0;
     }
 
     @Emit()

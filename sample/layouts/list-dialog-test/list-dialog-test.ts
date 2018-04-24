@@ -9,7 +9,7 @@ import { TableFilterComponentItem } from '../../../src';
 @Component
 export default class ListDialogTestLayout extends BaseListLayout {
     headers = [
-        TableComponentHeader.String({value: "id", text: "Id"}),
+        TableComponentHeader.String({value: "id", text: "Id", hiddenable: false}),
         TableComponentHeader.String({value: "code", text: "Код"}),
         TableComponentHeader.String({value: "title", text: "Наименование", filter: TableFilterComponentItem.Input("titlefilter"), sortable: true}),
         TableComponentHeader.Date({value: "created", text: "Дата создания"})
@@ -24,7 +24,6 @@ export default class ListDialogTestLayout extends BaseListLayout {
             FormComponentItem.Date({title: "Дата создания", name: "created", row: 3}),
             FormComponentItem.Date({title: "Дата создания", name: "created", row: 3}),
             FormComponentItem.Date({title: "Дата создания", name: "created", row: 3}),
-            
         ];
     }
 }

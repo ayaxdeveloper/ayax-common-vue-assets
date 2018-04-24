@@ -1,21 +1,9 @@
 <template>
     <div>
         <div style="position:relative">
-            <v-fab-transition>
-            <!-- <v-btn
-            color="primary"
-            dark
-            fab
-            absolute
-            top
-            right
-            @click="add"
-            >
-            <v-icon>add</v-icon>
-            </v-btn> -->
-        </v-fab-transition>
         </div>
         <a-table 
+        :title="title"
         :headers="headers" 
         :pagination="pagination" 
         :selectable = "true"

@@ -8,7 +8,8 @@ export class TableComponentHeader {
     text: string;
     dictionary: string;
     items: Dictionary[];
-    hidden: boolean = false;
+    isVisible: boolean = true;
+    hiddenable: boolean = true;
     filter: TableFilterComponentItem;
     width?: number;
     formatter: (value: any) => void;
@@ -16,6 +17,7 @@ export class TableComponentHeader {
     sortable: boolean = false;
     mask: string;
     type: TableComponentHeaderType = TableComponentHeaderType.string;
+    order: number;
     constructor(init?: Partial<TableComponentHeader>) {
         if (init) {
             Object.assign(this, init);
