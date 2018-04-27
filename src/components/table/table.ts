@@ -9,26 +9,33 @@ import { SortableField } from 'ayax-common-types';
 import { IEntity } from 'ayax-common-types';
 import { TableComponentAction } from './table-action';
 import draggable from 'vuedraggable';
+import { ResizeObserver } from 'vue-resize';
 
 @Component({
     components: {
         'a-table-filter': TableFilterComponent,
-        'draggable': draggable
+        'draggable': draggable,
+        'resize-observer': ResizeObserver
     }
 })
 export default class TableComponent extends Vue {
     configActionsWidth = 50;
     configSelectableWidth = 50;
-
+    
     @Prop() headers: TableComponentHeader[];
     @Prop() actions: TableComponentAction[];
     @Prop() items: any[];
-    @Prop({ default: false}) selectable: boolean; 
+    @Prop({ default: true}) selectable: boolean; 
     @Prop({ default: false}) selectableSingle: boolean; 
     @Prop({ default: false }) loading: boolean;
     @Prop() pagination: IPagination;
     @Prop() selected: any[];
     @Prop() title: string;
+    @Prop({default: ''}) entity: string;
+    @Prop({default: 'secondary'}) topbarColor: string;
+    @Prop({default: 'primary'}) actionbarColor: string;
+    @Prop({default: true}) topbarIsDark: boolean;
+    @Prop({default: true}) actionbarIsDark: boolean;
     innerSelected: any[] = [];
     totalItems = 1;
     isTableMenuVisible = false;
@@ -36,22 +43,33 @@ export default class TableComponent extends Vue {
     showFiltersMessage = 'Скрыть фильтры';
     editableHeaders = [];
     headerSettings = [];
-    
+    tableContainer;
+    actionbar;
+    itemSelected = false;
+ 
+    mounted() {
+        this.tableContainer = document.getElementsByClassName('tableContainer');
+        this.actionbar = document.getElementsByClassName('actionbar');
+    }
+
     created() {
+        if(this.actions){
+           this.addWindowEvents(); 
+        }
         this.headers.forEach(el => {
             this.editableHeaders.push(el);
         });
         if(this.selected) {
             this.innerSelected = this.selected;
         }
-        if(localStorage.getItem(`${this.$route.name}_list_show-filters`) != 'false'){
+        if(localStorage.getItem(`${this.title}_${this.entity}_list_show-filters`) != 'false'){
             this.showFilters = true;
         }else {
             this.showFilters = false;
             this.showFiltersMessage = 'Показать фильтры'
         }
-        if(localStorage.getItem(`${this.$route.name}_table_settings`) != null){
-            let data = JSON.parse(localStorage.getItem(`${this.$route.name}_table_settings`));
+        if(localStorage.getItem(`${this.title}_${this.entity}_table_settings`) != null){
+            let data = JSON.parse(localStorage.getItem(`${this.title}_${this.entity}_table_settings`));
             data.forEach(settingsElement => {
                 this.editableHeaders.forEach(headerElement => {
                     if(settingsElement.value == headerElement.value) {
@@ -73,6 +91,59 @@ export default class TableComponent extends Vue {
         }
     }
 
+    addWindowEvents() {
+        window.onresize = () => {
+            this.actionbarSize();
+        }
+        window.onscroll = () => {
+            [].forEach.call(this.tableContainer, elem => {
+                this.toggleActionbar(elem);
+            })
+        }
+    }
+
+    isElementInViewPort(el) {
+        var rect = el.getBoundingClientRect();
+        return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document. documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document. documentElement.clientWidth)
+      );
+    }
+
+    isPartOfElementInViewPort(el) {
+        var top = el.offsetTop;
+        var left = el.offsetLeft;
+        var width = el.offsetWidth;
+        var height = el.offsetHeight;
+        while(el.offsetParent) {
+            el = el.offsetParent;
+            top += el.offsetTop;
+            left += el.offsetLeft;
+        }
+        return (
+            top < (window.pageYOffset + window.innerHeight) &&
+            left < (window.pageXOffset + window.innerWidth) &&
+            (top + height) > window.pageYOffset &&
+            (left + width) > window.pageXOffset
+        );
+    }
+
+    actionbarSize() {
+        [].forEach.call(this.actionbar, el => {
+            el.style.width = this.tableContainer[0].offsetWidth.toString() + 'px';
+        })
+    }
+
+    toggleActionbar(elem) {
+        if(this.isPartOfElementInViewPort(elem.querySelector('.tableAnchor')) && !this.isElementInViewPort(elem.querySelector('.actionbarAnchor'))) {
+            elem.querySelector('.actionbar').classList.add('actionbarFixed');
+        }else {
+            elem.querySelector('.actionbar').classList.remove('actionbarFixed');
+        }
+    }
+
     @Watch('innerSelected')
     onSelectChanged(newVal, oldVal) {
         if(newVal != oldVal) {
@@ -80,17 +151,22 @@ export default class TableComponent extends Vue {
                 return item.id
             }));
         }
+        if(this.innerSelected.length > 0) {
+            this.itemSelected = true;
+        } else {
+            this.itemSelected = false;
+        }
     }
 
     toggleFilters() {
         this.isTableMenuVisible = false;
         if(this.showFilters){
             this.showFilters = false;
-            localStorage.setItem(`${this.$route.name}_list_show-filters`, 'false');
+            localStorage.setItem(`${this.title}_${this.entity}_list_show-filters`, 'false');
             this.showFiltersMessage = 'Показать фильтры'
         }else {
             this.showFilters = true;
-            localStorage.setItem(`${this.$route.name}_list_show-filters`, 'true');
+            localStorage.setItem(`${this.title}_${this.entity}_list_show-filters`, 'true');
             this.showFiltersMessage = 'Скрыть фильтры'
         }
     }
@@ -101,7 +177,7 @@ export default class TableComponent extends Vue {
                 el.isVisible = item.isVisible;
             }
         })
-        localStorage.setItem(`${this.$route.name}_table_settings`, JSON.stringify(this.headerSettings));
+        localStorage.setItem(`${this.title}_${this.entity}_table_settings`, JSON.stringify(this.headerSettings));
     }
 
     onUpdateDraggable() {
@@ -113,12 +189,12 @@ export default class TableComponent extends Vue {
                 }
             })
         }
-        localStorage.setItem(`${this.$route.name}_table_settings`, JSON.stringify(this.headerSettings));
+        localStorage.setItem(`${this.title}_${this.entity}_table_settings`, JSON.stringify(this.headerSettings));
     }
 
     resetTableSettings() {
-        localStorage.removeItem(`${this.$route.name}_table_settings`);
-        localStorage.removeItem(`${this.$route.name}_list_show-filters`);
+        localStorage.removeItem(`${this.title}_${this.entity}_table_settings`);
+        localStorage.removeItem(`${this.title}_${this.entity}_list_show-filters`);
         this.showFilters = true;
         this.isTableMenuVisible = false;
         this.showFiltersMessage = 'Скрыть фильтры';
@@ -154,6 +230,7 @@ export default class TableComponent extends Vue {
     get GetTotalPages() {
         return this.pagination.rowsPerPage ? Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage) : 1
     }
+
     selectClick(props) {
         if(this.selectableSingle) {
             if(props.selected) {
@@ -162,15 +239,19 @@ export default class TableComponent extends Vue {
                 props.selected = true;
                 this.innerSelected = [props.item];
             }
-
         } else {
             props.selected = !props.selected
         }
     };
+
     toggleAll () {
-        if (this.innerSelected.length) this.innerSelected = [];
-        else this.innerSelected = this.items.slice();
+        if (this.innerSelected.length) {
+            this.innerSelected = [];
+        } else {
+            this.innerSelected = this.items.slice();
+        }
     };
+
     changeSort (headerValue: string) {
         this.editableHeaders.forEach((item)=>{
             if(item.value == headerValue && item.sortable) {
@@ -191,6 +272,9 @@ export default class TableComponent extends Vue {
 
     @Emit()
     onRowAction(item: IEntity, name: string) {}
+
+    @Emit()
+    onBarAction(items: any[], name: string) {}
 
     firstAction(item: IEntity) {
         if(this.actions) {

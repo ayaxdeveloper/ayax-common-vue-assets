@@ -25,7 +25,13 @@ export default class ListComponent extends Vue {
     @Prop() addRoute: Route;
     @Prop() editRoute: Route;
     @Prop() showRoute: Route;
-
+    @Prop({ default: true}) selectable: boolean; 
+    @Prop({ default: false}) selectableSingle: boolean; 
+    @Prop({default: 'secondary'}) topbarColor: string;
+    @Prop({default: 'primary'}) actionbarColor: string;
+    @Prop({default: true}) topbarIsDark: boolean;
+    @Prop({default: true}) actionbarIsDark: boolean;
+    
     @Watch('pagination.page')
     PageChanged(newVal, oldVal) {
         if(newVal!==oldVal) {
@@ -41,9 +47,11 @@ export default class ListComponent extends Vue {
         perPage: this.clientSettings.listRowsPerpage
     };
     itemForRemove: IEntity | null;
+    itemsForRemove: any[] | null;
     items: any[] = [];
     selected = [];
     removeDialog = false;
+    removeSelectedDialog = false;
     loading = true;
     _search: {url: string, method: string};
     _deleteUrl: string;
@@ -65,6 +73,18 @@ export default class ListComponent extends Vue {
             break;
         }
         return true;
+    }
+
+    @Emit()
+    onBarAction(items: any[], name: string) {
+        switch(name) {
+            case 'add':
+            this.add();
+            break;
+            case 'removeSelected':
+            this.removeSelected(items);
+            break;
+        }
     }
 
     private AddFilter(request) {
@@ -145,6 +165,14 @@ export default class ListComponent extends Vue {
         this.itemForRemove = item;
         this.removeDialog = true;
     };
+
+    removeSelected(items) {
+        if(items.length > 0) {
+            this.itemsForRemove = items;
+        }
+        this.removeSelectedDialog = true;
+    }
+
     removeOk() {
         if (!this.itemForRemove) {
             this.notificationProvider.Error('Удаляемый объект не существует');
@@ -170,9 +198,32 @@ export default class ListComponent extends Vue {
                 this.removeDialog = false;
             });
     };
+
+    async removeSelectedOk() {
+        try {
+            if (!this.itemsForRemove) {
+                this.notificationProvider.Error('Удаляемые объекты не существуют')
+                return;
+            }
+            let operation = (await this.operationService.post(`${this._deleteUrl}/bulkdelete`, this.itemsForRemove));
+            if(operation.status == 0) {
+                this.notificationProvider.Success("Объект удален");
+                this.load();
+            } else {
+                this.notificationProvider.Error(`Ошибка удаления объекта: ${operation.message}`);
+            }
+            this.removeSelectedDialog = false;
+            this.itemsForRemove = null;
+        } catch(e) {
+            this.notificationProvider.Error(`Ошибка удаления объекта: ${e}`);
+        }
+    };
+
     removeCancel() {
         this.itemForRemove = null;
         this.removeDialog = false;
+        this.itemsForRemove = null;
+        this.removeSelectedDialog = false;
     };
 
     public async load() {

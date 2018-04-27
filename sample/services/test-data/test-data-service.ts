@@ -58,6 +58,12 @@ export default class TestDataService extends Vue {
         }
     }
 
+    bulkDelete(items) {
+        items.forEach(element => {
+            this.remove(element.id)
+        });
+    }
+
     sortData(data, isdesc: boolean) {
         if(!isdesc) {
             return data.sort(function(a,b){

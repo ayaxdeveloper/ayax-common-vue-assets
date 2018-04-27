@@ -4,7 +4,7 @@
       <a-sidebar :items="sidebarItems"></a-sidebar>
       <v-content>
         <a-notification :notificationProvider="notificationProvider"></a-notification>
-        <v-toolbar dark light dense>
+        <v-toolbar dark light dense fixed>
           <v-toolbar-title>Title</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
@@ -14,7 +14,7 @@
               <v-btn small color="warning" @click="castNotification('warning')">notification</v-btn>
             </v-toolbar-items>
       </v-toolbar>
-        <v-container fluid>
+        <v-container class="mt-5" fluid>
           <a-breadcrumbs :breadcrumbsNames="breadcrumbsNames"></a-breadcrumbs>
           <router-view></router-view>
         </v-container>

@@ -24,12 +24,20 @@ export default class ListDialogComponent extends Vue {
     @Prop() getUrl: string;
     @Prop() deleteUrl: string;
     @Prop() title: string;
+    @Prop({ default: true}) selectable: boolean; 
+    @Prop({ default: false}) selectableSingle: boolean; 
+    @Prop({default: 'secondary'}) topbarColor: string;
+    @Prop({default: 'primary'}) actionbarColor: string;
+    @Prop({default: true}) topbarIsDark: boolean;
+    @Prop({default: true}) actionbarIsDark: boolean;
     editDialog: boolean = false;
     request: any;
     itemForRemove: IEntity | null;
+    itemsForRemove: any[] | null;
     items: any[] = [];
     selected = [];
     removeDialog = false;
+    removeSelectedDialog = false;
     loading = true;
     _search: {url: string, method: string};
     _updateUrl: string;
@@ -110,6 +118,18 @@ export default class ListDialogComponent extends Vue {
             break;
         }
         return name;
+    }
+
+    @Emit()
+    onBarAction(items: any[], name: string) {
+        switch(name) {
+            case 'add':
+            this.add();
+            break;
+            case 'removeSelected':
+            this.removeSelected(items);
+            break;
+        }
     }
 
     private AddFilter(request) {
@@ -193,6 +213,13 @@ export default class ListDialogComponent extends Vue {
         this.itemForRemove = item;
         this.removeDialog = true;
     };
+
+    removeSelected(items) {
+        if(items.length > 0) {
+            this.itemsForRemove = items;
+        }
+        this.removeSelectedDialog = true;
+    }
     async removeOk() {
         try {
             if (!this.itemForRemove) {
@@ -212,9 +239,32 @@ export default class ListDialogComponent extends Vue {
             this.notificationProvider.Error(e);
         }
     };
+
+    async removeSelectedOk() {
+        try {
+            if (!this.itemsForRemove) {
+                this.notificationProvider.Error('Удаляемые объекты не существуют')
+                return;
+            }
+            let operation = (await this.operationService.post(`${this._deleteUrl}/bulkdelete`, this.itemsForRemove));
+            if(operation.status == 0) {
+                this.notificationProvider.Success("Удалено");
+                this.load();
+            } else {
+                this.notificationProvider.Error(operation.message);
+            }
+            this.removeSelectedDialog = false;
+            this.itemsForRemove = null;
+        } catch(e) {
+            this.notificationProvider.Error(e);
+        }
+    };
+
     removeCancel() {
         this.itemForRemove = null;
         this.removeDialog = false;
+        this.itemsForRemove = null;
+        this.removeSelectedDialog = false;
     };
 
     public async load() {

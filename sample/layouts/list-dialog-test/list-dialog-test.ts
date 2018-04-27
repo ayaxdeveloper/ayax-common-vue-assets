@@ -22,8 +22,6 @@ export default class ListDialogTestLayout extends BaseListLayout {
             FormComponentItem.Input({title: "Наименование", name: "title"}),
             FormComponentItem.Input({title: "Код", name: "code"}),
             FormComponentItem.Date({title: "Дата создания", name: "created", row: 3}),
-            FormComponentItem.Date({title: "Дата создания", name: "created", row: 3}),
-            FormComponentItem.Date({title: "Дата создания", name: "created", row: 3}),
         ];
     }
 }

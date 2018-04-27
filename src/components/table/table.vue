@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="tableContainer mb-4" style="position: relative">
         <slot name="table-head">
-            <v-toolbar flat dense dark class="secondary" style="line-height: 48px">
+            <v-toolbar flat dense :dark="topbarIsDark" :class="topbarColor" style="line-height: 48px">
             <v-toolbar-title v-if="title">
                 {{title}}
                 <v-chip title="Количество записей" label small v-if="pagination.totalItems">{{ pagination.totalItems }}</v-chip>
@@ -9,10 +9,6 @@
             <v-spacer></v-spacer>
             <v-toolbar-items>
                 <slot name="head-items"></slot>
-                <!-- <v-btn flat @click.native.stop="add">
-                    <v-icon left>mdi-plus</v-icon>
-                    Добавить
-                </v-btn> -->
                 <v-menu bottom offset-y left offset-x :close-on-content-click="false" :value="isTableMenuVisible">
                     <v-btn flat style="height: 30px; width: 30px" small icon title="Настройки таблицы" slot="activator" @click="isTableMenuVisible=true">
                         <v-icon>settings</v-icon>
@@ -52,7 +48,7 @@
         hide-actions
         item-key="id"
         no-results-text="Ничего не найдено"
-        class="elevation-1 table-block">
+        class="elevation-1 table-block tableAnchor">
             <template slot="headers" slot-scope="props">
                 <tr class="header-row">
                     <th v-if='selectable' class="selectable" :width="configSelectableWidth">
@@ -111,9 +107,10 @@
                     </td>
                     <td class="text-xs-right action" v-if="actions">
                         <div class="text-xs-center">
-                            <v-menu offset-x>
+                            <v-menu :disabled="itemSelected" offset-x>
                                 <v-btn 
                                 color="primary" 
+                                :disabled="itemSelected"
                                 dark 
                                 flat
                                 slot="activator"
@@ -129,7 +126,7 @@
                                     <v-list-tile 
                                     v-for="action in actions" 
                                     :key="action.name"
-
+                                    v-if="action.single"
                                     @click="onRowAction(props.item, action.name)">
                                         <v-list-tile-action
                                         v-if="action.icon">
@@ -161,16 +158,43 @@
                             <template v-else>
                                 {{applyFormatterIfExists(header, props.item[propertyname])}}                            
                             </template>
-                            
                         </template>
                     </td>
                 </tr>   
             </template>
         </v-data-table>
+        <div class="actionbarAnchor"></div>
+        <div v-if="actions" class="actionbar">
+            <v-toolbar :dark="actionbarIsDark" :class="actionbarColor" dense>
+                <v-toolbar-items class="hidden-sm-and-down">
+                    <template v-for="action in actions" v-if="!action.single">
+                        <v-btn v-if="!action.children" :key="action.name" 
+                        :disabled="action.needSelectedItem && !itemSelected" flat @click="onBarAction(innerSelected, action.name)">
+                            <v-icon left v-if="action.icon">{{action.icon}}</v-icon>
+                            {{action.title}}
+                        </v-btn>
+                        <v-menu top offset-y :disabled="action.needSelectedItem && !itemSelected" v-if="action.children" :key="action.name">
+                            <v-btn slot="activator" :key="action.name" 
+                            :disabled="action.needSelectedItem && !itemSelected" flat>
+                            <v-icon left v-if="action.icon">{{action.icon}}</v-icon>
+                            {{action.title}}
+                        </v-btn>
+                        <v-list dense>
+                            <v-list-tile v-for="children in action.children" :key="children.name"  @click="children.action">
+                                <v-list-tile-action v-if="children.icon"><v-icon>{{children.icon}}</v-icon></v-list-tile-action>
+                                <v-list-tile-title>{{children.title}}</v-list-tile-title>
+                            </v-list-tile>
+                         </v-list>
+                        </v-menu>
+                    </template>
+                </v-toolbar-items>
+            </v-toolbar>
+        </div>
         <div class="text-xs-center pt-2">
             <v-pagination v-if="pagination" total-visible="10" v-model="pagination.page" :length="GetTotalPages"></v-pagination>
         </div>
-        <div v-if="loading" class="loading-fade"></div>
+        <div :class="{'loading-fade':loading}"></div>
+        <resize-observer v-if="actions" @notify="actionbarSize"></resize-observer>
     </div>
 </template>
 
@@ -238,5 +262,9 @@
         width: 100%;
         height: 100%;
         background-color: rgba(0,0,0,0.1);
+    }
+    .actionbarFixed {
+       position: fixed;
+       bottom: 0;
     }
 </style>
