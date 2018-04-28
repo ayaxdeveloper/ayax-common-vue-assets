@@ -245,8 +245,13 @@
     .table-block >>> tbody td.selectable {
         padding: 0 8px !important;
     }
-    .sortable i {
-        float: right;
+    .datatable thead th.column {
+        position: relative;
+    }
+    .datatable thead th.column.sortable i {
+        /* font-size: 12px; */
+        position: absolute;
+        right: 0px;
     }
     .table-block >>> tbody td {
         height: 32px !important;
