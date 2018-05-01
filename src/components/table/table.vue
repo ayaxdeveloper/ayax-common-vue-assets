@@ -124,9 +124,8 @@
                                 dark
                                 dense>
                                     <v-list-tile 
-                                    v-for="action in actions" 
+                                    v-for="action in actions.filter(action => action.single)" 
                                     :key="action.name"
-                                    v-if="action.single"
                                     @click="onRowAction(props.item, action.name)">
                                         <v-list-tile-action
                                         v-if="action.icon">
@@ -141,8 +140,7 @@
                         </div>
                     </td>
                     <td
-                        v-for="(header, index) in editableHeaders" :key="index"
-                        v-if="header.isVisible" 
+                        v-for="(header, index) in editableHeaders.filter(header => header.isVisible)" :key="index"
                         :class="[
                             header.align == 'right' ? 'text-xs-right' : 'text-xs-left'
                         , 'column']"
@@ -150,8 +148,7 @@
                         v-on:dblclick="firstAction(props.item)"
                     >
                         <template 
-                                v-for="propertyname in Object.keys(props.item)" 
-                                v-if="propertyname == editableHeaders[index].value"
+                                v-for="propertyname in Object.keys(props.item).filter(x => x == editableHeaders[index].value)" 
                         >
                             <template v-if="editableHeaders[index].items"
                             >{{getFromDictionary(editableHeaders[index], props.item[propertyname])}}</template>
@@ -167,7 +164,7 @@
         <div v-if="actions" class="actionbar">
             <v-toolbar :dark="actionbarIsDark" :class="actionbarColor" dense>
                 <v-toolbar-items class="hidden-sm-and-down">
-                    <template v-for="action in actions" v-if="!action.single">
+                    <template v-for="action in actions.filter(action => !action.single)">
                         <v-btn v-if="!action.children" :key="action.name" 
                         :disabled="action.needSelectedItem && !itemSelected" flat @click="onBarAction(innerSelected, action.name)">
                             <v-icon left v-if="action.icon">{{action.icon}}</v-icon>
