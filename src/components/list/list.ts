@@ -234,11 +234,11 @@ export default class ListComponent extends Vue {
                 this.items =  operation.result.data;
                 this.pagination.totalItems = operation.result.total
             } else {
-                console.log(operation.message);
+                this.notificationProvider.Error(operation.message);
             }
             this.loading = false;
         } catch(e) {
-            console.log(e);
+            this.notificationProvider.Error(e);
             this.loading = false;
         } 
     }
