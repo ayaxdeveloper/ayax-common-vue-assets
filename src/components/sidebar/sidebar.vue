@@ -1,16 +1,15 @@
 <template>
     <v-navigation-drawer app :dark="darkTheme" :mini-variant.sync="mini" mini-variant-width="60" permanent fixed :width="width">
         <v-layout row>
-            <v-flex style="max-width:60px">
+            <v-flex class="sidebar-switcher">
                 <v-btn class="collapseBtn" icon @click.native.stop="mini = !mini" title="Меню">
                     <v-icon>mdi-menu</v-icon>
                 </v-btn>
             </v-flex>
-            <v-flex>
-                <v-list style="margin-left: 3px" dense>
-                    <v-list-group v-for="item in items" 
+            <v-flex class="sidebar-content">
+                <v-list dense>
+                    <v-list-group v-for="item in items.filter(x=>x.isSystem && x.visible)" 
                     :key="item.title" 
-                    v-if="item.isSystem && item.visible"
                     append-icon=""
                     :value="item.expanded"  @click.stop="moveTo(item)">
                         <v-list-tile slot="activator">
@@ -26,8 +25,8 @@
                                 </v-btn>
                             </v-list-tile-action>
                         </v-list-tile>
-                        <v-list-tile v-if="subItem.visible && item.subItems.length > 0" 
-                            v-for="subItem in item.subItems" :key="subItem.title" @click="moveTo(subItem)">
+                        <v-list-tile v-if="item.subItems.length > 0"
+                            v-for="subItem in item.subItems.filter(subItem => subItem.visible)" :key="subItem.title" @click="moveTo(subItem)">
                             <v-list-tile-action>
                                 <v-icon>{{ subItem.icon }}</v-icon>
                             </v-list-tile-action>
@@ -41,10 +40,9 @@
         </v-layout>
         <v-divider></v-divider>
         <v-list dense>
-            <v-list-group v-for="item in items" 
+            <v-list-group v-for="item in items.filter(item => !item.isSystem && item.visible)" 
             :key="item.title" 
             :prepend-icon="item.icon"
-            v-if="!item.isSystem && item.visible"
             append-icon=""
             :value="item.expanded"  @click.stop="moveTo(item)">
                 <v-list-tile slot="activator">
@@ -74,6 +72,12 @@
 </script>
 
 <style scoped>
+    .sidebar-switcher {
+        max-width:60px;
+    }
+    .sidebar-content {
+        margin-left:3px;
+    }
     .list__tile__action {
         min-width: 32px !important;
     }
