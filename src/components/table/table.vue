@@ -165,7 +165,7 @@
             </template>
         </v-data-table>
         <div class="actionbarAnchor"></div>
-        <div v-if="actions.filter(el => !el.single).length" class="actionbar">
+        <div v-if="actions && actions.filter(el => !el.single).length" class="actionbar">
             <v-toolbar :dark="actionbarIsDark" :class="actionbarColor" dense>
                 <v-toolbar-items class="hidden-sm-and-down">
                     <template v-for="action in actions" v-if="!action.single">
