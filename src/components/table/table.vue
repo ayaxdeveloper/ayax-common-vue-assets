@@ -90,6 +90,7 @@
                         <template v-if="header.filter">
                             <a-table-filter
                             @apply-filter="applyFilter"
+                            :applyFilterButtonVisibility="applyFilterButtonVisibility"
                             :header = "header"
                             ></a-table-filter>
                         </template>

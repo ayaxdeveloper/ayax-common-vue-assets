@@ -36,6 +36,7 @@ export default class TableComponent extends Vue {
     @Prop({default: 'primary'}) actionbarColor: string;
     @Prop({default: true}) topbarIsDark: boolean;
     @Prop({default: true}) actionbarIsDark: boolean;
+    applyFilterButtonVisibility = true;
     innerSelected: any[] = [];
     totalItems = 1;
     isTableMenuVisible = false;
@@ -97,20 +98,24 @@ export default class TableComponent extends Vue {
         if(!(Object.keys(this.$route.query).length === 0 && this.$route.query.constructor === Object)) {
             if(this.$route.query[`${this.tableIdentifier}`] !== undefined) {
                 JSON.parse(this.$route.query[`${this.tableIdentifier}`]).forEach(el => {
-                this.editableHeaders.forEach(header => {
-                    if(el.name == header.value){
-                        if(header.sortable && el.isdesc != null) {
-                            if(!header.sortBy) {
-                                header.sortBy = new SortableField();
+                    this.editableHeaders.forEach(header => {
+                        if(el.name == header.value){
+                            if(header.sortable) {
+                                if(!header.sortBy) {
+                                    header.sortBy = new SortableField();
+                                }
+                                if(el.isdesc == null) {
+                                    header.sortBy = undefined;
+                                }else {
+                                    header.sortBy.isdesc = el.isdesc;
+                                }
                             }
-                            header.sortBy.isdesc = el.isdesc;
+                            if(header.filter && el.values.length > 0) {
+                                header.filter.values = el.values;
+                            }
                         }
-                        if(header.filter && el.values.length > 0) {
-                            header.filter.values = el.values;
-                        }
-                    }
+                    })
                 })
-            })
             }
         }
     }
@@ -120,7 +125,19 @@ export default class TableComponent extends Vue {
         if(!(Object.keys(this.$route.query).length === 0 && this.$route.query.constructor === Object)) {
             this.applyQuery();
             this.applyFilter();
-        }
+        }else {
+            this.editableHeaders.forEach(header => {
+                if(header.sortable) {
+                    if(header.sortBy) {
+                        header.sortBy = undefined;
+                    }
+                }
+                if(header.filter) {
+                    header.filter.values = [];
+                }
+            })
+            this.applyFilter();
+        }    
     }
 
 
@@ -264,6 +281,7 @@ export default class TableComponent extends Vue {
             query[`${this.tableIdentifier}`] = JSON.stringify(headers);
             this.$router.push({path: this.$route.path, query: query}); 
         }
+        this.applyFilterButtonVisibility = false;
     }
 
     applyFormatterIfExists(header: TableComponentHeader, value) {
