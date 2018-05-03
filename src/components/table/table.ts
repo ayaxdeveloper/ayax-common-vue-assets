@@ -30,7 +30,7 @@ export default class TableComponent extends Vue {
     @Prop({ default: false }) loading: boolean;
     @Prop() pagination: IPagination;
     @Prop() selected: any[];
-    @Prop() title: string;
+    @Prop({default: ''}) title: string;
     @Prop({default: ''}) entity: string;
     @Prop({default: 'secondary'}) topbarColor: string;
     @Prop({default: 'primary'}) actionbarColor: string;
@@ -46,10 +46,12 @@ export default class TableComponent extends Vue {
     tableContainer;
     actionbar;
     itemSelected = false;
+    tableIdentifier = `${this.title}_${this.entity}`.replace(/\s+/g, '_').replace('-', '_');
  
     mounted() {
         this.tableContainer = document.getElementsByClassName('tableContainer');
         this.actionbar = document.getElementsByClassName('actionbar');
+        this.applyQuery();
     }
 
     created() {
@@ -62,14 +64,14 @@ export default class TableComponent extends Vue {
         if(this.selected) {
             this.innerSelected = this.selected;
         }
-        if(localStorage.getItem(`${this.title}_${this.entity}_list_show-filters`) != 'false'){
+        if(localStorage.getItem(this.tableIdentifier + `_list_show-filters`) != 'false'){
             this.showFilters = true;
         }else {
             this.showFilters = false;
             this.showFiltersMessage = 'Показать фильтры'
         }
-        if(localStorage.getItem(`${this.title}_${this.entity}_table_settings`) != null){
-            let data = JSON.parse(localStorage.getItem(`${this.title}_${this.entity}_table_settings`));
+        if(localStorage.getItem(this.tableIdentifier + `_table_settings`) != null){
+            let data = JSON.parse(localStorage.getItem(this.tableIdentifier + `_table_settings`));
             data.forEach(settingsElement => {
                 this.editableHeaders.forEach(headerElement => {
                     if(settingsElement.value == headerElement.value) {
@@ -90,6 +92,37 @@ export default class TableComponent extends Vue {
             })
         }
     }
+
+    applyQuery() {
+        if(!(Object.keys(this.$route.query).length === 0 && this.$route.query.constructor === Object)) {
+            if(this.$route.query[`${this.tableIdentifier}`] !== undefined) {
+                JSON.parse(this.$route.query[`${this.tableIdentifier}`]).forEach(el => {
+                this.editableHeaders.forEach(header => {
+                    if(el.name == header.value){
+                        if(header.sortable && el.isdesc != null) {
+                            if(!header.sortBy) {
+                                header.sortBy = new SortableField();
+                            }
+                            header.sortBy.isdesc = el.isdesc;
+                        }
+                        if(header.filter && el.values.length > 0) {
+                            header.filter.values = el.values;
+                        }
+                    }
+                })
+            })
+            }
+        }
+    }
+
+    @Watch('$route.query')
+    onQueryChange() {
+        if(!(Object.keys(this.$route.query).length === 0 && this.$route.query.constructor === Object)) {
+            this.applyQuery();
+            this.applyFilter();
+        }
+    }
+
 
     addWindowEvents() {
         window.onresize = () => {
@@ -177,7 +210,7 @@ export default class TableComponent extends Vue {
                 el.isVisible = item.isVisible;
             }
         })
-        localStorage.setItem(`${this.title}_${this.entity}_table_settings`, JSON.stringify(this.headerSettings));
+        localStorage.setItem(this.tableIdentifier + `_table_settings`, JSON.stringify(this.headerSettings));
     }
 
     onUpdateDraggable() {
@@ -189,12 +222,12 @@ export default class TableComponent extends Vue {
                 }
             })
         }
-        localStorage.setItem(`${this.title}_${this.entity}_table_settings`, JSON.stringify(this.headerSettings));
+        localStorage.setItem(this.tableIdentifier + `_table_settings`, JSON.stringify(this.headerSettings));
     }
 
     resetTableSettings() {
-        localStorage.removeItem(`${this.title}_${this.entity}_table_settings`);
-        localStorage.removeItem(`${this.title}_${this.entity}_list_show-filters`);
+        localStorage.removeItem(this.tableIdentifier + `_table_settings`);
+        localStorage.removeItem(this.tableIdentifier + `_list_show-filters`);
         this.showFilters = true;
         this.isTableMenuVisible = false;
         this.showFiltersMessage = 'Скрыть фильтры';
@@ -217,7 +250,21 @@ export default class TableComponent extends Vue {
     }
 
     @Emit()
-    applyFilter() {}
+    applyFilter() {
+        let query = {};
+        let headers = [];
+        this.editableHeaders.forEach(el => {
+            if(el.sortable || el.filter) {
+                if(el.sortBy || el.filter.values.length > 0){
+                    headers.push({name: el.value, isdesc: el.sortBy ? el.sortBy.isdesc : null, values: el.filter.values});
+                }
+            }
+        })
+        if(headers.length > 0) {
+            query[`${this.tableIdentifier}`] = JSON.stringify(headers);
+            this.$router.push({path: this.$route.path, query: query}); 
+        }
+    }
 
     applyFormatterIfExists(header: TableComponentHeader, value) {
         if(header.formatter) {

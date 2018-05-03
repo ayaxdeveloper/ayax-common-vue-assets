@@ -2,7 +2,7 @@
     <div>
         <a-list-dialog
         entity="testentity"
-        title="Test List-Dialog Component "
+        title="Test List-Dialog Component"
         :headers="headers"
         :pagination="pagination"
         :actions="actions"

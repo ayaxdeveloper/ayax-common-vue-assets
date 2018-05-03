@@ -1,6 +1,7 @@
 import 'vuetify/dist/vuetify.min.css'
 import 'element-ui/lib/theme-chalk/index.css';
 import '../node_modules/mdi/css/materialdesignicons.css';
+import '../node_modules/material-design-icons-iconfont/dist/material-design-icons.css';
 
 import Vue from 'vue';
 import VueRouter from 'vue-router'
