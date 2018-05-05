@@ -5,18 +5,22 @@ import { INotificationSettings, INotificationProvider, SelectItem } from 'ayax-c
 import { FormComponentItem } from '../../../src/components/form/form-item';
 import { TestModel } from '../../models/test/test-model';
 import { TableFilterComponentItem } from '../../../src';
+import { ICacheService } from 'ayax-common-cache';
 
 @Component
 export default class ListDialogTestLayout extends BaseListLayout {
-    headers = [
-        TableComponentHeader.String({value: "id", text: "Id", hiddenable: false}),
-        TableComponentHeader.String({value: "code", text: "Код"}),
-        TableComponentHeader.String({value: "title", text: "Наименование", filter: TableFilterComponentItem.Input("titlefilter"), sortable: true}),
-        TableComponentHeader.Date({value: "created", text: "Дата создания", filter: TableFilterComponentItem.InputRange("createdFilter")})
-    ];
+    @Inject() cacheService: ICacheService;
+    headers: TableComponentHeader[] = [];
     defaultModel = new TestModel();
     fields: FormComponentItem[] = [];
-    created() {
+    async created() {
+        this.headers  = [
+            TableComponentHeader.String({value: "id", text: "Id", hiddenable: false}),
+            TableComponentHeader.String({value: "code", text: "Код"}),
+            TableComponentHeader.String({value: "title", text: "Наименование", filter: TableFilterComponentItem.Input("titlefilter"), sortable: true}),
+            TableComponentHeader.Date({value: "created", text: "Дата создания", filter: TableFilterComponentItem.InputRange("createdFilter")}),
+            TableComponentHeader.String({value: "dictionaryId", text: "Из справочника", dictionary: 'dictionary'})
+        ];
         this.fields = [
             FormComponentItem.Hidden({name: "id"}),
             FormComponentItem.Input({title: "Наименование", name: "title"}),

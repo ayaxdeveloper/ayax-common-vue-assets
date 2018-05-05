@@ -7,6 +7,13 @@ var mock = new MockAdapter(axios);
 var testDataService = new TestDataService();
 var searchResponse = new SearchResponse<any[]>();
 
+mock.onGet('/api/dictionary/list').reply(({data}) => {
+    return [200, new OperationResult<any[]>({
+        status: 0,
+        result: testDataService.getDictionary()
+    })]
+});
+
 mock.onPost('/api/testentity/search').reply(({data}) => {
     searchResponse.total = testDataService.getData().length;
     data = JSON.parse(data);
