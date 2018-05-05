@@ -60,7 +60,7 @@
                                 :indeterminate="props.indeterminate"
                         ></v-checkbox>
                     </th>
-                    <th class="text-xs-center action" v-if="actions" :width="configActionsWidth">
+                    <th class="text-xs-center action" v-if="actions && actions.filter(x=>x.single).length" :width="configActionsWidth">
                         ...
                     </th>
                     <th v-for="header in editableHeaders"
@@ -80,7 +80,7 @@
                 </tr>
                 <tr v-if="FiltersExist && showFilters" class="filter-row">
                     <th v-if='selectable' class="selectable"></th>
-                    <th v-if="actions" class="action">
+                    <th v-if="actions && actions.filter(x=>x.single).length" class="action">
                     </th>
                     <th v-for="header in editableHeaders"
                         v-if="header.isVisible" 
@@ -106,7 +106,7 @@
                                 :input-value="props.selected"
                         ></v-checkbox>
                     </td>
-                    <td class="text-xs-right action" v-if="actions">
+                    <td class="text-xs-right action" v-if="actions && actions.filter(x=>x.single).length">
                         <div class="text-xs-center">
                             <v-menu :disabled="itemSelected" offset-x>
                                 <v-btn 
