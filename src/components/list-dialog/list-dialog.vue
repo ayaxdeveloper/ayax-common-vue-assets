@@ -17,6 +17,7 @@
             @on-row-action="onRowAction"
             @on-bar-action="onBarAction"
             @apply-filter="load"
+            :configure="configure"
             ></a-table>
             <v-layout row justify-center>
                 <v-dialog v-model="editDialog" max-width="600px">
