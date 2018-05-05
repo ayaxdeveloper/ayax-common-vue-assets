@@ -90,6 +90,7 @@
                         <template v-if="header.filter">
                             <a-table-filter
                             @apply-filter="applyFilter"
+                            :applyFilterButtonVisibility="applyFilterButtonVisibility"
                             :header = "header"
                             ></a-table-filter>
                         </template>
@@ -161,7 +162,7 @@
             </template>
         </v-data-table>
         <div class="actionbarAnchor"></div>
-        <div v-if="actions" class="actionbar">
+        <div v-if="actions && actions.filter(el => !el.single).length" class="actionbar">
             <v-toolbar :dark="actionbarIsDark" :class="actionbarColor" dense>
                 <v-toolbar-items class="hidden-sm-and-down">
                     <template v-for="action in actions.filter(action => !action.single)">

@@ -1,6 +1,6 @@
 {
   "name": "ayax-common-vue-assets",
-  "version": "2.0.14",
+  "version": "2.0.16",
   "main": "dist/bundle.js",
   "description": "Ayax Common Vue Assets package for Vue Typescript projects",
   "scripts": {
@@ -27,6 +27,7 @@
     "ayax-common-types": "^2.0.2",
     "element-ui": "2.2.0",
     "file-loader": "^1.1.11",
+    "material-design-icons-iconfont": "^3.0.3",
     "mdi": "^2.2.43",
     "moment": "^2.20.1",
     "url-loader": "^1.0.1",

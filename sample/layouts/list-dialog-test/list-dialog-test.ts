@@ -12,7 +12,7 @@ export default class ListDialogTestLayout extends BaseListLayout {
         TableComponentHeader.String({value: "id", text: "Id", hiddenable: false}),
         TableComponentHeader.String({value: "code", text: "Код"}),
         TableComponentHeader.String({value: "title", text: "Наименование", filter: TableFilterComponentItem.Input("titlefilter"), sortable: true}),
-        TableComponentHeader.Date({value: "created", text: "Дата создания"})
+        TableComponentHeader.Date({value: "created", text: "Дата создания", filter: TableFilterComponentItem.InputRange("createdFilter")})
     ];
     defaultModel = new TestModel();
     fields: FormComponentItem[] = [];

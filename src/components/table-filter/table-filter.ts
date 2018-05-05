@@ -7,7 +7,7 @@ import { TableComponentHeader, TableComponentHeaderType } from '../table/table-h
 export default class TableFilterComponent extends Vue {
     @Prop({required: true}) header: TableComponentHeader;
     @Prop() value: any;
-    
+    @Prop({default: true}) applyFilterButtonVisibility: boolean;
     focus: false;
     filterTypes: {[name: string]: TableFilterComponentItemType} = {};
     headerTypes: {[name: string]: TableComponentHeaderType} = {};
@@ -27,7 +27,9 @@ export default class TableFilterComponent extends Vue {
     @Watch('header.filter.values')
     onFilterValuesChange(newVal: any, oldVal: any) {
         if(newVal) {
-            this.applyFilterButton = true;
+            if(this.applyFilterButtonVisibility != false) {
+                this.applyFilterButton = true;
+            }
         } else {
             this.applyFilterButton = false;
         }
