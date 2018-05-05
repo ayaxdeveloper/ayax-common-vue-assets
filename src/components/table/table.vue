@@ -9,7 +9,7 @@
             <v-spacer></v-spacer>
             <v-toolbar-items>
                 <slot name="head-items"></slot>
-                <v-menu bottom offset-y left offset-x :close-on-content-click="false" :value="isTableMenuVisible">
+                <v-menu bottom offset-y left offset-x :close-on-content-click="false" :value="isTableMenuVisible" v-if="configure">
                     <v-btn flat style="height: 30px; width: 30px" small icon title="Настройки таблицы" slot="activator" @click="isTableMenuVisible=true">
                         <v-icon>settings</v-icon>
                     </v-btn>

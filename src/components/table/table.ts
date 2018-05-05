@@ -36,6 +36,7 @@ export default class TableComponent extends Vue {
     @Prop({default: 'primary'}) actionbarColor: string;
     @Prop({default: true}) topbarIsDark: boolean;
     @Prop({default: true}) actionbarIsDark: boolean;
+    @Prop({default: false}) configure: boolean;
     applyFilterButtonVisibility = true;
     innerSelected: any[] = [];
     totalItems = 1;
