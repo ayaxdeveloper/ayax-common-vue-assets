@@ -187,10 +187,14 @@ export default class TableComponent extends Vue {
     }
 
     toggleActionbar(elem) {
-        if(this.isPartOfElementInViewPort(elem.querySelector('.tableAnchor')) && !this.isElementInViewPort(elem.querySelector('.actionbarAnchor'))) {
-            elem.querySelector('.actionbar').classList.add('actionbarFixed');
+        let actionBarElement = elem.querySelector('.actionbar');
+        if(!actionBarElement) {
+            return;
+        }
+        if(this.isPartOfElementInViewPort(actionBarElement) && !this.isElementInViewPort(actionBarElement)) {
+            actionBarElement.classList.add('actionbarFixed');
         }else {
-            elem.querySelector('.actionbar').classList.remove('actionbarFixed');
+            actionBarElement.classList.remove('actionbarFixed');
         }
     }
 
