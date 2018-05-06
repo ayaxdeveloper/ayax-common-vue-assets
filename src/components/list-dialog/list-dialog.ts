@@ -276,19 +276,16 @@ export default class ListDialogComponent extends Vue {
                 if(operation.status === 0) {
                     this.items =  operation.result.data;
                     this.pagination.totalItems = operation.result.total;
-                    // this.notificationProvider.Success("Загружено");
                 } else {
                     this.notificationProvider.Error(operation.message);
                 }
-                this.loading = false;
+                this.loading = false;              
             } else {
                 let operation = (await this.operationService.get<any[]>(`${this._search.url}`));
                 if(operation.status === 0) {
                     this.items =  operation.result;
                     this.pagination.totalItems = this.items.length;
-                    // this.notificationProvider.Success("Загружено");
                 } else {
-                    console.log(`error loading post ${JSON.stringify(operation)}`);
                     this.notificationProvider.Error(operation.message);
                 }
                 this.loading = false;

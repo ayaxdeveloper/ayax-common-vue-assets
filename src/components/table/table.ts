@@ -273,6 +273,9 @@ export default class TableComponent extends Vue {
 
     @Emit()
     applyFilter() {
+        if(this.pagination.page > 1) {
+            this.pagination.page = 1;
+        }
         let query = {};
         let headers = [];
         this.editableHeaders.forEach(el => {
