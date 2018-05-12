@@ -8,6 +8,11 @@
         :actions="actions"
         :default-model="defaultModel"
         :fields="fields">
+        <template slot="toolbar-items">
+            <v-btn icon>
+                <v-icon>mdi-account-plus</v-icon>
+            </v-btn>
+        </template>
         </a-list-dialog>
     </div>
 </template>
