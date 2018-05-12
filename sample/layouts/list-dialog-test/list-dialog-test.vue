@@ -7,7 +7,8 @@
         :pagination="pagination"
         :actions="actions"
         :default-model="defaultModel"
-        :fields="fields"/>
+        :fields="fields">
+        </a-list-dialog>
     </div>
 </template>
 
