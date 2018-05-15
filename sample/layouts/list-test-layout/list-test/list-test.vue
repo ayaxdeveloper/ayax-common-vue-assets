@@ -5,7 +5,8 @@
             title="Test List Component"
             :selecteable="false"
             :pagination="pagination"
-            :actions="actions">
+            :actions="actions"
+            :tableFilters="tableFilters">
     Ошибка загрузки List Component
     </a-list>
 </template>

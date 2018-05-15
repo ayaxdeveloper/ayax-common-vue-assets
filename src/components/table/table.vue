@@ -1,20 +1,35 @@
 <template>
     <div class="tableContainer mb-4" style="position: relative">
         <slot name="table-head">
-            <v-toolbar flat dense :dark="topbarIsDark" :class="topbarColor" style="line-height: 48px">
+            <v-toolbar flat dense :dark="topbarIsDark" :class="topbarColor">
             <v-toolbar-title v-if="title">
                 {{title}}
                 <v-chip title="Количество записей" label small v-if="pagination.totalItems">{{ pagination.totalItems }}</v-chip>
             </v-toolbar-title>
+            <v-toolbar-items>
+                <v-layout row class="ml-4">
+                    <a-table-filter v-for="(topbarFilter, index) in topbarFilters" :key="topbarFilter.requestName"
+                    :applyFilterButtonVisibility="applyFilterButtonVisibility" 
+                    :filter="topbarFilter"
+                    :index="index" 
+                    @apply-filter="applyFilter">
+                    </a-table-filter>
+                </v-layout>
+            </v-toolbar-items>
             <v-spacer></v-spacer>
             <v-toolbar-items>
                 <slot name="head-items"></slot>
+                <v-btn small v-if="tableFilters.length > 0" :class="{'mr-3':configure}" flat @click="showAllFiltersBtn()">
+                    Все фильтры
+                    <v-icon v-if="!showAllFilters">mdi-menu-down</v-icon>
+                    <v-icon v-if="showAllFilters">mdi-menu-up</v-icon>
+                </v-btn>
                 <v-menu bottom offset-y left offset-x :close-on-content-click="false" :value="isTableMenuVisible" v-if="configure">
-                    <v-btn flat style="height: 30px; width: 30px" small icon title="Настройки таблицы" slot="activator" @click="isTableMenuVisible=true">
+                    <v-btn class="mt-2" flat style="height: 30px; width: 30px" small icon title="Настройки таблицы" slot="activator" @click="isTableMenuVisible=true">
                         <v-icon>settings</v-icon>
                     </v-btn>
                     <v-list dense>
-                        <v-list-tile v-if="FiltersExist" @click="toggleFilters">
+                        <v-list-tile v-if="tableFilters.length > 0" @click="toggleFilters">
                             <v-list-tile-title>{{ showFiltersMessage }}</v-list-tile-title>
                         </v-list-tile>
                         <v-divider></v-divider>
@@ -35,6 +50,18 @@
                 </v-menu>
             </v-toolbar-items>  
         </v-toolbar>
+        <transition name="slide">
+            <v-card v-if="showAllFilters" dark flat style="border-radius: 0">
+                <v-layout row wrap class="ml-3">
+                        <a-table-filter v-for="(filter, index) in allFilters" :key="filter.requestName"
+                        :applyFilterButtonVisibility="applyFilterButtonVisibility" 
+                        :filter="filter"
+                        :index="index" 
+                        @apply-filter="applyFilter">
+                        </a-table-filter>
+                    </v-layout>
+            </v-card>
+        </transition>
         </slot>
         <v-progress-circular v-if="loading" indeterminate fixed class="table-loading" color="primary" size="50"></v-progress-circular>
         <v-data-table
@@ -78,7 +105,7 @@
                         <strong>{{ header.text }}</strong>
                     </th>
                 </tr>
-                <tr v-if="FiltersExist && showFilters" class="filter-row">
+                <tr v-if="tableFilters.length > 0 && showFilters" class="filter-row">
                     <th v-if='selectable' class="selectable"></th>
                     <th v-if="actions && actions.filter(x=>x.single).length" class="action">
                     </th>
@@ -87,11 +114,12 @@
                         :key="header.value"
                         class="column"
                     >
-                        <template v-if="header.filter">
+                        <template v-if="currentHeaderFilter(header.value)">
                             <a-table-filter
                             @apply-filter="applyFilter"
                             :applyFilterButtonVisibility="applyFilterButtonVisibility"
-                            :header = "header"
+                            :header="header"
+                            :filter="currentHeaderFilter(header.value)"
                             ></a-table-filter>
                         </template>
                     </th>
@@ -269,5 +297,12 @@
     .actionbarFixed {
        position: fixed;
        bottom: 0;
+    }
+    .slide-enter-active, .slide-leave-active {
+        transition: all .3s ease;
+    }
+    .slide-enter, .slide-leave-to {
+        transform: translateY(-5px);
+        opacity: 0;
     }
 </style>

@@ -1,30 +1,37 @@
 import { Vue, Component, Prop, Emit, Inject, Watch } from 'vue-property-decorator';
-import { TableFilterComponentItem, TableFilterComponentItemType, TableFilterComponentShortkey } from './table-filter-item';
+import { TableFilterComponentItem, TableFilterComponentItemType, TableFilterComponentShortkey, TableFilterComponentItemInputType } from './table-filter-item';
 import { SelectItem } from 'ayax-common-types';
 import { TableComponentHeader, TableComponentHeaderType } from '../table/table-header';
 
 @Component
 export default class TableFilterComponent extends Vue {
-    @Prop({required: true}) header: TableComponentHeader;
+    @Prop({default: null}) header: TableComponentHeader;
+    @Prop({required: true}) filter: TableFilterComponentItem;
     @Prop() value: any;
+    @Prop({default: 0}) index: number;
     @Prop({default: true}) applyFilterButtonVisibility: boolean;
+    @Prop({default: "grey lighten-1"}) color: string;
     focus: false;
     filterTypes: {[name: string]: TableFilterComponentItemType} = {};
     headerTypes: {[name: string]: TableComponentHeaderType} = {};
+    filterInputTypes: {[name: string]: TableFilterComponentItemInputType} = {};
     searchInput: Function;
     applyFilterButton: boolean = false;
     selectItems: SelectItem[] = [];
 
     created() {
-
         Object.keys(TableFilterComponentItemType).forEach(item => {
             this.filterTypes[item] = TableFilterComponentItemType[item];
         });
         Object.keys(TableComponentHeaderType).forEach(item => {
             this.headerTypes[item] = TableComponentHeaderType[item];
         });
+        Object.keys(TableFilterComponentItemInputType).forEach(item => {
+            this.filterInputTypes[item] = TableFilterComponentItemInputType[item];
+        });
     }
-    @Watch('header.filter.values')
+
+    @Watch('filter.values')
     onFilterValuesChange(newVal: any, oldVal: any) {
         if(newVal) {
             if(this.applyFilterButtonVisibility != false) {
@@ -33,6 +40,19 @@ export default class TableFilterComponent extends Vue {
         } else {
             this.applyFilterButton = false;
         }
+        if(this.filter.inputType == this.filterInputTypes['Date']) {
+            if(!this.filter.values) {
+                this.filter.values = [];
+            }
+            this.applyFilter();
+        }
+    }
+
+    @Watch('applyFilterButtonVisibility')
+    onApplyButtonChange(value) {
+       if(!value) {
+           this.applyFilterButton = false;
+       }
     }
 
     getMask() {
@@ -40,7 +60,7 @@ export default class TableFilterComponent extends Vue {
     }
 
     getHint() {
-        switch(this.header.filter.type) {
+        switch(this.filter.requestType) {
             case TableFilterComponentItemType.InputEq:
             return "Точное совпадение";
             case TableFilterComponentItemType.InputLike:

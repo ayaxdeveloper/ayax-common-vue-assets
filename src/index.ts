@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify';
 import VueRouter from "vue-router";
-import FastFilterComponent from './components/fast-filter/fast-filter.vue';
 import TableComponent from './components/table/table.vue';
 import TableFilterComponent from './components/table-filter/table-filter.vue';
 import FormComponent from './components/form/form.vue';
@@ -27,7 +26,6 @@ export default {
         Vue.component('a-form', FormComponent);
         Vue.component('a-form-control', FormControlComponent);
         Vue.component('a-notification', NotificationComponent);
-        Vue.component('a-fast-filter', FastFilterComponent);
         Vue.component('a-sidebar', SidebarComponent);
         Vue.component('a-list-dialog', ListDialogComponent);
         Vue.component('a-breadcrumbs', BreadcrumbsComponent);
@@ -38,7 +36,6 @@ export default {
 }
 
 export * from "./helpers/form-component-helper";
-export * from "./components/fast-filter/fast-filter-item";
 export * from "./components/form/form-item";
 export * from "./components/table/table-action";
 export * from "./components/table/table-header";
@@ -48,7 +45,6 @@ export * from "./components/breadcrumbs/breadcrumb-item"
 export * from "./providers/notification/notification-provider"
 
 export { 
-    FastFilterComponent, 
     TableComponent, 
     TableFilterComponent, 
     FormComponent, 

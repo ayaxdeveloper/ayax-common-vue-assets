@@ -5,6 +5,7 @@ import { IOperationService } from 'ayax-common-services'
 import { TableComponentAction } from '../table/table-action';
 import { FormComponentItem } from '../form/form-item';
 import { ICacheService } from 'ayax-common-cache';
+import { TableFilterComponentItem } from '../table-filter/table-filter-item';
 
 @Component
 export default class ListDialogComponent extends Vue {
@@ -14,6 +15,7 @@ export default class ListDialogComponent extends Vue {
     @Inject() cacheService: ICacheService;
     @Prop() headers: TableComponentHeader[];
     @Prop({required: true}) pagination: IPagination;
+    @Prop() tableFilters: TableFilterComponentItem[];
     @Prop() actions: TableComponentAction[];
     @Prop() entity: string;
     @Prop() defaultModel: any;
@@ -135,11 +137,11 @@ export default class ListDialogComponent extends Vue {
 
     private AddFilter(request) {
         let filteredRequest = {...request};
-        this.headers.filter(x=> x.filter && x.filter.values)
-        .forEach((header) => {           
-            let filters = header.filter.FormRequestFilters();
+        this.tableFilters.filter(x => x.values.length > 0)
+        .forEach((filter) => {           
+            let filters = filter.FormRequestFilters();
             if(filters) {
-                filteredRequest[header.filter.name] = filters;
+                filteredRequest[filter.requestName] = filters;
             }
         });
         this.headers.filter(x=>x.sortBy).forEach((header)=> {

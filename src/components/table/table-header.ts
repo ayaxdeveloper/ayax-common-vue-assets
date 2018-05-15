@@ -10,7 +10,6 @@ export class TableComponentHeader {
     items: Dictionary[];
     isVisible: boolean = true;
     hiddenable: boolean = true;
-    filter: TableFilterComponentItem;
     width?: number;
     formatter: (value: any) => void;
     sortBy?: SortableField;

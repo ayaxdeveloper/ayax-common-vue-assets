@@ -46,48 +46,25 @@ export enum FilterOperation {
 }
 
 export class TableFilterComponentItem {
-    name: string;
-    type: TableFilterComponentItemType;
+    name?: string;
+    appearance: TableFilterComponentItemAppearance;
+    requestName: string;
+    requestType: TableFilterComponentItemType;
+    inputType?: TableFilterComponentItemInputType;
+    label?: String;
+    icon?: String;
+    hint?: String;
+    placeholder?: String;
     selectItems?: SelectItem[];
     selectItemsFromDictionary: string;
     values: any[] = [];
     private term: string;
-    constructor(init?: Partial<TableFilterComponentItem>) {
-        if(init) {
-            Object.assign(this, init);
-        }
+    constructor(init: Partial<TableFilterComponentItem>) {
+        Object.assign(this, init);
     }
-    public static Input(name: string, equals?: boolean): TableFilterComponentItem {
-        return new TableFilterComponentItem({ 
-            name: name, 
-            type: equals ? TableFilterComponentItemType.InputEq : TableFilterComponentItemType.InputLike
-        });
-    }
-    public static InputRange(name: string): TableFilterComponentItem {
-        return new TableFilterComponentItem({ 
-            name: name, 
-            type: TableFilterComponentItemType.InputRange,
-        });
-    }
-
-    public static Select(name: string, selectItems: SelectItem[], multiple?: boolean) {
-        return new TableFilterComponentItem({
-            name: name,
-            selectItems: selectItems,
-            type: multiple ? TableFilterComponentItemType.SelectMultiple : TableFilterComponentItemType.SelectSingle
-        });
-    }
-
-    public static SelectFromDictonary(name: string, dictionary: string, multiple?: boolean) {
-        return new TableFilterComponentItem({
-            name: name,
-            selectItemsFromDictionary: dictionary,
-            type: multiple ? TableFilterComponentItemType.SelectMultiple : TableFilterComponentItemType.SelectSingle
-        });
-    }
-
+    
     public FormRequestFilters(): Filter[] | Filter | null {
-        switch(this.type) {
+        switch(this.requestType) {
             case TableFilterComponentItemType.InputEq:
                 if(this.values[0]) {
                     return new Filter({term: "eq", val: new FilterValue({ value: this.values[0] })});
@@ -134,4 +111,12 @@ export enum TableFilterComponentItemType {
 
 export enum TableFilterComponentShortkey {
     applyFilter
+}
+
+export enum TableFilterComponentItemAppearance {
+    Header, Topbar, TopbarHeader, AllFilters
+}
+
+export enum TableFilterComponentItemInputType {
+    Date
 }

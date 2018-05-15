@@ -2,7 +2,7 @@ import { Component, Vue, Prop, Inject, Watch, Emit } from 'vue-property-decorato
 import { Pagination, IClientSettings, INotificationProvider, IPagination, IEntity, Dictionary, SearchResponse } from 'ayax-common-types';
 import { IHttpService, OperationService, IOperationService } from 'ayax-common-services';
 import { TableComponentHeader } from '../table/table-header';
-import { FastFilterComponentItem } from '../fast-filter/fast-filter-item';
+import { TableFilterComponentItem } from '../table-filter/table-filter-item';
 import { TableComponentAction } from '../table/table-action';
 import { Route } from 'vue-router';
 import { ICacheService } from 'ayax-common-cache';
@@ -17,10 +17,10 @@ export default class ListComponent extends Vue {
     @Prop() search: {url: string, method: string};
     @Prop() deleteUrl: string;
     @Prop() headers: TableComponentHeader[];
+    @Prop() tableFilters: TableFilterComponentItem[];
     @Prop() entity: string;
     @Prop() title: string;
     @Prop({required: true}) pagination: IPagination;
-    @Prop() fastFilters: FastFilterComponentItem[];
     @Prop() actions: TableComponentAction[];
     @Prop() addRoute: Route;
     @Prop() editRoute: Route;
@@ -90,11 +90,11 @@ export default class ListComponent extends Vue {
 
     private AddFilter(request) {
         let filteredRequest = {...request};
-        this.headers.filter(x=> x.filter && x.filter.values)
-        .forEach((header) => {           
-            let filters = header.filter.FormRequestFilters();
+        this.tableFilters.filter(x => x.values.length > 0)
+        .forEach((filter) => {           
+            let filters = filter.FormRequestFilters();
             if(filters) {
-                filteredRequest[header.filter.name] = filters;
+                filteredRequest[filter.requestName] = filters;
             }
         });
         this.headers.filter(x=>x.sortBy).forEach((header)=> {
