@@ -17,6 +17,7 @@
                 </v-layout>
             </v-toolbar-items>
             <v-spacer></v-spacer>
+            <slot name="toolbar-items"></slot>
             <v-toolbar-items>
                 <slot name="head-items"></slot>
                 <v-btn small v-if="tableFilters.length > 0" :class="{'mr-3':configure}" flat @click="showAllFiltersBtn()">

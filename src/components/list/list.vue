@@ -20,9 +20,9 @@
         @on-bar-action="onBarAction"
         @apply-filter="load"
         :configure="configure"
-        :tableFilters="tableFilters"
-        ></a-table>
-        
+        :tableFilters="tableFilters">
+        <template slot="toolbar-items"><slot name="toolbar-items"></slot></template>
+        </a-table>
         <v-layout row justify-center>
             <v-dialog v-model="removeDialog" max-width="600px">
                 <v-card>

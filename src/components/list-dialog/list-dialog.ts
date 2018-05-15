@@ -109,6 +109,11 @@ export default class ListDialogComponent extends Vue {
 
     @Emit()
     onRowAction(item: IEntity, name: string) {
+        let tableAction = this.actions.find(x=>x.name == name);
+        if(tableAction && tableAction.action) {
+            tableAction.action(item);
+            return name;
+        }
         if(!item) {
             return false;
         }
@@ -125,6 +130,11 @@ export default class ListDialogComponent extends Vue {
 
     @Emit()
     onBarAction(items: any[], name: string) {
+        let tableAction = this.actions.find(x=>x.name == name);
+        if(tableAction && tableAction.action) {
+            tableAction.action(items);
+            return name;
+        }
         switch(name) {
             case 'add':
             this.add();
@@ -133,6 +143,7 @@ export default class ListDialogComponent extends Vue {
             this.removeSelected(items);
             break;
         }
+        return name;
     }
 
     private AddFilter(request) {
