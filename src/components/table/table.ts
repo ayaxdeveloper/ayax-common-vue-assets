@@ -24,7 +24,7 @@ export default class TableComponent extends Vue {
     
     @Prop() headers: TableComponentHeader[];
     @Prop() actions: TableComponentAction[];
-    @Prop({default: []}) tableFilters: TableFilterComponentItem[];
+    @Prop({default: () => []}) tableFilters: TableFilterComponentItem[];
     @Prop() items: any[];
     @Prop({ default: true}) selectable: boolean; 
     @Prop({ default: false}) selectableSingle: boolean; 
