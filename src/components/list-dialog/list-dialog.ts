@@ -15,7 +15,7 @@ export default class ListDialogComponent extends Vue {
     @Inject() cacheService: ICacheService;
     @Prop() headers: TableComponentHeader[];
     @Prop({required: true}) pagination: IPagination;
-    @Prop() tableFilters: TableFilterComponentItem[];
+    @Prop({default: () => []}) tableFilters: TableFilterComponentItem[];
     @Prop() actions: TableComponentAction[];
     @Prop() entity: string;
     @Prop() defaultModel: any;

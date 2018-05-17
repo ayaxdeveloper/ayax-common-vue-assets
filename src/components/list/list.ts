@@ -17,7 +17,7 @@ export default class ListComponent extends Vue {
     @Prop() search: {url: string, method: string};
     @Prop() deleteUrl: string;
     @Prop() headers: TableComponentHeader[];
-    @Prop() tableFilters: TableFilterComponentItem[];
+    @Prop({default: () => []}) tableFilters: TableFilterComponentItem[];
     @Prop() entity: string;
     @Prop() title: string;
     @Prop({required: true}) pagination: IPagination;
