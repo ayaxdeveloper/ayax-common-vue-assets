@@ -35,7 +35,7 @@
                         </v-list-tile>
                         <v-divider></v-divider>
                         <draggable :list="editableHeaders" @update="onUpdateDraggable">
-                            <v-list-tile v-for="header in editableHeaders" :key="header.text" @click="">
+                            <v-list-tile v-for="header in editableHeaders" :key="header.value" @click="">
                                 <v-list-tile-action>
                                     <v-checkbox v-if="header.hiddenable" v-model="header.isVisible" @change="onChangeVisible(header)"></v-checkbox>
                                     <v-checkbox v-else input-value="true" disabled></v-checkbox>
