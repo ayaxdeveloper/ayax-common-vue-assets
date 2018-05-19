@@ -41,7 +41,7 @@ export default class ListDialogComponent extends Vue {
     selected = [];
     removeDialog = false;
     removeSelectedDialog = false;
-    loading = true;
+    loading = true;  
     _search: {url: string, method: string};
     _updateUrl: string;
     _addUrl: string;
@@ -162,6 +162,9 @@ export default class ListDialogComponent extends Vue {
     }
 
     mapModelToFields(model: any) {
+        this.fields.forEach(element => {
+            element.model = null;
+        });
         Object.keys(model).forEach(x=> {
             let field = this.fields.find(f=>f.name == x);
             if(field) {
