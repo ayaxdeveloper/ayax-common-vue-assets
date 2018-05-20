@@ -135,7 +135,7 @@
                                 :input-value="props.selected"
                         ></v-checkbox>
                     </td>
-                    <td class="text-xs-right action" v-if="actions && actions.filter(x=>x.single).length">
+                    <td class="text-xs-right action" v-if="actions && actions.filter(x=>x.single && x.active).length">
                         <div class="text-xs-center">
                             <v-menu :disabled="itemSelected" offset-x>
                                 <v-btn 
@@ -154,7 +154,7 @@
                                 dark
                                 dense>
                                     <v-list-tile 
-                                    v-for="action in actions.filter(action => action.single)" 
+                                    v-for="action in actions.filter(action => action.single && x.active)" 
                                     :key="action.name"
                                     @click="onRowAction(props.item, action.name)">
                                         <v-list-tile-action
@@ -191,10 +191,11 @@
             </template>
         </v-data-table>
         <div class="actionbarAnchor"></div>
-        <div v-if="actions && actions.filter(el => !el.single).length" class="actionbar">
+        <div v-if="actions && actions.filter(el => !el.single && x.active).length" class="actionbar">
             <v-toolbar :dark="actionbarIsDark" :class="actionbarColor" dense>
                 <v-toolbar-items class="hidden-sm-and-down">
-                    <template v-for="action in actions.filter(action => !action.single)">
+                    <template v-for="action in actions.filter(action => !action.single && x.active
+                        )">
                         <v-btn v-if="!action.children" :key="action.name" 
                         :disabled="action.needSelectedItem && !itemSelected" flat @click="onBarAction(innerSelected, action.name)">
                             <v-icon left v-if="action.icon">{{action.icon}}</v-icon>

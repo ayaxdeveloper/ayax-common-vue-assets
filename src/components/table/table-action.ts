@@ -6,6 +6,7 @@ export class TableComponentAction {
     children: TableComponentAction[];
     action: Function;
     needSelectedItem: boolean;
+    active = true;
     constructor(init?: Partial<TableComponentAction>) {
         if(init) {
             Object.assign(this, init)
