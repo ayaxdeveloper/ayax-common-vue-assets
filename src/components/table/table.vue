@@ -284,6 +284,11 @@
     .table-block >>> tbody td {
         height: 32px !important;
     }
+
+    .table-block >>> tbody td.column {
+        line-height: 20px;
+    }
+
     .table-loading {
         position: absolute;
         left: 50%;
