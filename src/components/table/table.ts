@@ -42,7 +42,7 @@ export default class TableComponent extends Vue {
     innerSelected: any[] = [];
     totalItems = 1;
     isTableMenuVisible = false;
-    showFilters = true;
+    showFilters = false;
     showFiltersMessage = 'Скрыть фильтры';
     showAllFilters = false;
     editableHeaders = [];
