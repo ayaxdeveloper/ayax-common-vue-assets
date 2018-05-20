@@ -407,8 +407,8 @@ export default class TableComponent extends Vue {
     onBarAction(items: any[], name: string) {}
 
     firstAction(item: IEntity) {
-        if(this.actions) {
-            this.onRowAction(item, this.actions[0].name);
+        if(this.actions && this.actions.filter(x=>x.single && x.active).length > 0) {
+            this.onRowAction(item, this.actions.filter(x=>x.single && x.active)[0].name);
         }
     }
 }
