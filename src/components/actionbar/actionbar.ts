@@ -82,4 +82,12 @@ export default class ActionbarComponent extends Vue{
             actionBarElement.classList.remove('actionbarFixed');
         }
     }
+
+    executeAction(action: TableComponentAction) {
+        if(action.action) {
+            action.action();
+        } else {
+            this.onBarAction(this.innerSelected, action.name);
+        }
+    }
 }

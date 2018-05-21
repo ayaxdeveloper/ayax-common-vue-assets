@@ -4,7 +4,7 @@
             <v-toolbar-items class="hidden-sm-and-down">
                 <template v-for="action in actions">
                     <v-btn v-if="!action.children" :key="action.name" 
-                    :disabled="action.needSelectedItem && !itemSelected" flat @click="onBarAction(innerSelected, action.name)">
+                    :disabled="action.needSelectedItem && !itemSelected" flat @click="executeAction(action)">
                         <v-icon left v-if="action.icon">{{action.icon}}</v-icon>
                         {{action.title}}
                     </v-btn>
@@ -15,9 +15,9 @@
                         {{action.title}}
                     </v-btn>
                     <v-list dense>
-                        <v-list-tile v-for="children in action.children" :key="children.name"  @click="children.action">
-                            <v-list-tile-action v-if="children.icon"><v-icon>{{children.icon}}</v-icon></v-list-tile-action>
-                            <v-list-tile-title>{{children.title}}</v-list-tile-title>
+                        <v-list-tile v-for="child in action.children" :key="child.name"  @click="executeAction(child)">
+                            <v-list-tile-action v-if="child.icon"><v-icon>{{child.icon}}</v-icon></v-list-tile-action>
+                            <v-list-tile-title>{{ child.title }}</v-list-tile-title>
                         </v-list-tile>
                         </v-list>
                     </v-menu>
