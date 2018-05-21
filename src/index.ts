@@ -16,6 +16,7 @@ import ActionbarComponent from './components/actionbar/actionbar.vue';
 import { DatePicker } from 'element-ui';
 import lang from 'element-ui/lib/locale/lang/ru-RU';
 import locale from 'element-ui/lib/locale';
+import { ResizeObserver } from 'vue-resize';
 locale.use(lang);
 Vue.use(Vuetify);
 
@@ -45,6 +46,7 @@ export * from "./components/table-filter/table-filter-item";
 export * from "./components/sidebar/sidebar-item";
 export * from "./components/breadcrumbs/breadcrumb-item"
 export * from "./providers/notification/notification-provider"
+export * from "vue-resize";
 
 export { 
     TableComponent, 

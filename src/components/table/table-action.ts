@@ -2,7 +2,7 @@ export class TableComponentAction {
     name: string;
     title: string;
     icon: string;
-    single: boolean = true;
+    single: boolean = false;
     children: TableComponentAction[];
     action: Function;
     needSelectedItem: boolean;
