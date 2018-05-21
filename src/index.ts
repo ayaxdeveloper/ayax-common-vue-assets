@@ -12,6 +12,7 @@ import EditComponent from './components/edit/edit.vue';
 import ListDialogComponent from './components/list-dialog/list-dialog.vue';
 import BreadcrumbsComponent from './components/breadcrumbs/breadcrumbs.vue';
 import UserProfileComponent from './components/user-profile/user-profile.vue';
+import ActionbarComponent from './components/actionbar/actionbar.vue';
 import { DatePicker } from 'element-ui';
 import lang from 'element-ui/lib/locale/lang/ru-RU';
 import locale from 'element-ui/lib/locale';
@@ -32,6 +33,7 @@ export default {
         Vue.component('a-list', ListComponent);
         Vue.component('a-edit', EditComponent);
         Vue.component('a-user-profile', UserProfileComponent);
+        Vue.component('a-actionbar', ActionbarComponent);
     }
 }
 
@@ -55,5 +57,6 @@ export {
     EditComponent,
     ListDialogComponent,
     BreadcrumbsComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    ActionbarComponent
 };
