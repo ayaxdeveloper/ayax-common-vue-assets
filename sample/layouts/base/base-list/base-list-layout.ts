@@ -9,7 +9,7 @@ export default abstract class BaseListLayout extends Vue {
         new TableComponentAction({name: "add", title: "Добавить", icon: "mdi-plus"}),
         new TableComponentAction({name: "removeSelected", title: "Удалить выбранные", icon: "delete", needSelectedItem: true}),
         new TableComponentAction({name: "edit", title: "Редактировать", icon: "mode_edit", single: true}),
-        new TableComponentAction({name: "remove", title: "Удалить", icon: "delete"}),
+        new TableComponentAction({name: "remove", title: "Удалить", icon: "delete", single: true}),
         new TableComponentAction({
             name: "export", 
             title: "Экспорт", 

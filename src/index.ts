@@ -13,13 +13,11 @@ import ListDialogComponent from './components/list-dialog/list-dialog.vue';
 import BreadcrumbsComponent from './components/breadcrumbs/breadcrumbs.vue';
 import UserProfileComponent from './components/user-profile/user-profile.vue';
 import ActionbarComponent from './components/actionbar/actionbar.vue';
-import VueResize from 'vue-resize';
 import { DatePicker } from 'element-ui';
 import lang from 'element-ui/lib/locale/lang/ru-RU';
 import locale from 'element-ui/lib/locale';
 locale.use(lang);
 Vue.use(Vuetify);
-Vue.use(VueResize);
 
 export default {
     install(Vue) {
