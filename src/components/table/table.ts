@@ -9,13 +9,13 @@ import { SortableField } from 'ayax-common-types';
 import { IEntity } from 'ayax-common-types';
 import { TableComponentAction } from './table-action';
 import draggable from 'vuedraggable';
-import { ResizeObserver } from 'vue-resize';
+import ActionbarComponent from '../actionbar/actionbar.vue';
 
 @Component({
     components: {
         'a-table-filter': TableFilterComponent,
-        'draggable': draggable,
-        'resize-observer': ResizeObserver
+        'a-actionbar': ActionbarComponent,
+        'draggable': draggable
     }
 })
 export default class TableComponent extends Vue {
@@ -47,8 +47,6 @@ export default class TableComponent extends Vue {
     showAllFilters = false;
     editableHeaders = [];
     headerSettings = [];
-    tableContainer;
-    actionbar;
     itemSelected = false;
     tableIdentifier = `${this.title}_${this.entity}`.replace(/\s+/g, '_').replace('-', '_');
     headerFilters: TableFilterComponentItem[] = [];
@@ -56,15 +54,7 @@ export default class TableComponent extends Vue {
     allFilters: TableFilterComponentItem[] = [];
     lastQuery: string;
     
-    mounted() {
-        this.tableContainer = document.getElementsByClassName('tableContainer');
-        this.actionbar = document.getElementsByClassName('actionbar');
-    }
-
     created() {
-        if(this.actions && this.actions.filter(el => !el.single).length > 0){
-           this.addWindowEvents(); 
-        }
         this.headers.forEach(el => {
             this.editableHeaders.push(el);
         });
@@ -180,63 +170,6 @@ export default class TableComponent extends Vue {
             })
             this.applyFilter();
         }   
-    }
-
-    addWindowEvents() {
-        window.onresize = () => {
-            this.actionbarSize();
-        }
-        window.onscroll = () => {
-            [].forEach.call(this.tableContainer, elem => {
-                this.toggleActionbar(elem);
-            })
-        }
-    }
-
-    isElementInViewPort(el) {
-        var rect = el.getBoundingClientRect();
-        return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document. documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document. documentElement.clientWidth)
-      );
-    }
-
-    isPartOfElementInViewPort(el) {
-        var top = el.offsetTop;
-        var left = el.offsetLeft;
-        var width = el.offsetWidth;
-        var height = el.offsetHeight;
-        while(el.offsetParent) {
-            el = el.offsetParent;
-            top += el.offsetTop;
-            left += el.offsetLeft;
-        }
-        return (
-            top < (window.pageYOffset + window.innerHeight) &&
-            left < (window.pageXOffset + window.innerWidth) &&
-            (top + height) > window.pageYOffset &&
-            (left + width) > window.pageXOffset
-        );
-    }
-
-    actionbarSize() {
-        [].forEach.call(this.actionbar, el => {
-            el.style.width = this.tableContainer[0].offsetWidth.toString() + 'px';
-        })
-    }
-
-    toggleActionbar(elem) {
-        let actionBarElement = elem.querySelector('.actionbar');
-        if(!actionBarElement) {
-            return;
-        }
-        if(this.isPartOfElementInViewPort(actionBarElement) && !this.isElementInViewPort(actionBarElement)) {
-            actionBarElement.classList.add('actionbarFixed');
-        }else {
-            actionBarElement.classList.remove('actionbarFixed');
-        }
     }
 
     @Watch('innerSelected')
