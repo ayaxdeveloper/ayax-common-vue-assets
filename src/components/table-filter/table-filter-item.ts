@@ -57,6 +57,7 @@ export class TableFilterComponentItem {
     placeholder?: String;
     selectItems?: SelectItem[];
     selectItemsFromDictionary: string;
+    selectItemsFromPromise: Promise<SelectItem[]>;
     values: any[] = [];
     private term: string;
     constructor(init: Partial<TableFilterComponentItem>) {

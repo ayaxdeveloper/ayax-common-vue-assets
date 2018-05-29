@@ -3,7 +3,7 @@
         <div style="position: relative">
             <v-btn 
             v-if="applyFilterButton"
-            class="table-filter-apply-btn"
+            :class="[header == null ? 'table-filter-apply-btn_topbar' : 'table-filter-apply-btn_header']"
             color="blue darken-1" small
             @click="applyFilter">
                 Применить
@@ -68,7 +68,7 @@
             <template v-else-if="filter.requestType == filterTypes['SelectSingle']">
                 <v-select 
                 :name="filter.requestName" 
-                :items="selectItems" 
+                :items="filter.selectItems" 
                 class="table-filter-select" 
                 v-model="filter.values[0]" 
                 :hint="getHint()" 
@@ -77,15 +77,14 @@
                 dense
                 autocomplete
                 no-data-text="Нет совпадений"
-                @input="reloadSelectItems(); applyFilterButton = filter.values[0]"
-                @click.native="reloadSelectItems"
+                @input="applyFilterButton = filter.values[0]"
                 append-icon="mdi-menu-down"
                 ></v-select>
             </template>
             <template v-else-if="filter.requestType == filterTypes['SelectMultiple']">
                 <v-select 
                 :name="filter.requestName" 
-                :items="selectItems" 
+                :items="filter.selectItems" 
                 multiple 
                 class="table-filter-select" 
                 v-model="filter.values" 
@@ -94,8 +93,7 @@
                 dense
                 autocomplete
                 no-data-text="Нет совпадений"
-                @input="reloadSelectItems(); applyFilterButton = true"
-                @click.native="reloadSelectItems"
+                @input="applyFilterButton = true"
                 append-icon="mdi-menu-down"
                 clearable></v-select>
             </template>
@@ -202,7 +200,14 @@
 .filter .input-group {
     padding: 0px;
 }
-.table-filter-apply-btn {
+.table-filter-apply-btn_header {
+    position: absolute;
+    top: -24px;
+    height: 20px !important;
+    left: 0;
+}
+
+.table-filter-apply-btn_topbar {
     position: absolute;
     top: -24px;
     height: 20px !important;

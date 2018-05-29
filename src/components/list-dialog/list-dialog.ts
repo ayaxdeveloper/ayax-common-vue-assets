@@ -47,6 +47,7 @@ export default class ListDialogComponent extends Vue {
     _addUrl: string;
     _getUrl: string;
     _deleteUrl: string;
+    tableVisible: boolean = false;
 
     async created() {
         if(this.entity && !this.search) {
@@ -81,22 +82,48 @@ export default class ListDialogComponent extends Vue {
             page: 1,
             perPage: this._search.method == "post" ? this.clientSettings.listRowsPerpage : 100
         }
-        try {
-            let headersWithDictionaries = this.headers.filter(x=>x.dictionary && !x.items);
-            Promise.all(headersWithDictionaries.map(x=>{
-                return new Promise((resolve) => {
-                    this.cacheService.List(x.dictionary)
-                    .then(z=> {
-                        x.items = z;
-                        resolve();
-                    });
+        await Promise.all(this.headers.filter(x=>x.dictionary && !x.items).map(x=>{
+            return new Promise((resolve) => {
+                this.cacheService.List(x.dictionary)
+                .then(z=> {
+                    x.items = z;
+                    resolve();
                 });
-            })).then(()=> {
-                this.load();
             });
-        } catch(e) {
-            this.notificationProvider.Error(e);
-        }
+        }));
+
+        await Promise.all(this.headers.filter(x=>x.dictionaryPromise && !x.items).map(x=>{
+            return new Promise((resolve) => {
+                x.dictionaryPromise
+                .then(z=> {
+                    x.items = z;
+                    resolve();
+                });
+            });
+        }));
+
+        await Promise.all(this.tableFilters.filter(x => !x.selectItems && x.selectItemsFromDictionary).map(x => {
+            return new Promise((resolve) => {
+                this.cacheService.ListAsSelectItems(x.selectItemsFromDictionary)
+                .then(z => {
+                    x.selectItems = z;
+                    resolve();
+                })
+            }) 
+        }));
+
+        await Promise.all(this.tableFilters.filter(x => !x.selectItems && x.selectItemsFromPromise).map(x => {
+            return new Promise((resolve) => {
+                x.selectItemsFromPromise
+                .then(z => {
+                    x.selectItems = z;
+                    resolve();
+                })
+            }) 
+        }));
+
+        this.tableVisible = true;
+        this.load();
     };
 
     @Watch('pagination.page')

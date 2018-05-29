@@ -42,8 +42,8 @@ export default class TableComponent extends Vue {
     innerSelected: any[] = [];
     totalItems = 1;
     isTableMenuVisible = false;
-    showFilters = true;
-    showFiltersMessage = 'Скрыть фильтры';
+    showFilters = false;
+    showFiltersMessage = 'Показать фильтры';
     showAllFilters = false;
     editableHeaders = [];
     headerSettings = [];
@@ -79,11 +79,11 @@ export default class TableComponent extends Vue {
         if(this.selected) {
             this.innerSelected = this.selected;
         }
-        if(localStorage.getItem(`${this.tableIdentifier}_list_show-filters`) != 'false'){
-            this.showFilters = true;
-        }else {
+        if(localStorage.getItem(`${this.tableIdentifier}_list_show-filters`) != 'true'){
             this.showFilters = false;
-            this.showFiltersMessage = 'Показать фильтры'
+        } else {
+            this.showFilters = true;
+            this.showFiltersMessage = 'Скрыть фильтры'
         }
         if(JSON.parse(localStorage.getItem(`${this.tableIdentifier}_list_show-all-filters`))) {
             this.showAllFilters = true;
@@ -230,7 +230,7 @@ export default class TableComponent extends Vue {
         localStorage.removeItem(`${this.tableIdentifier}_list_show-filters`);
         this.showFilters = true;
         this.isTableMenuVisible = false;
-        this.showFiltersMessage = 'Скрыть фильтры';
+        this.showFiltersMessage = 'Показать фильтры';
         this.editableHeaders = [];
         this.headers.forEach(el => {
             el.isVisible = true;

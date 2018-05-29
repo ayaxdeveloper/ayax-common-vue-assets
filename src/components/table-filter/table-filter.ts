@@ -17,7 +17,6 @@ export default class TableFilterComponent extends Vue {
     filterInputTypes: {[name: string]: TableFilterComponentItemInputType} = {};
     searchInput: Function;
     applyFilterButton: boolean = false;
-    selectItems: SelectItem[] = [];
 
     created() {
         Object.keys(TableFilterComponentItemType).forEach(item => {
@@ -94,13 +93,13 @@ export default class TableFilterComponent extends Vue {
     applyFilter() {
         this.applyFilterButton = false;
     }
-    reloadSelectItems() {
-        const from = this.header.items;
-        this.$forceUpdate();
-        // console.log(JSON.stringify(this.header.items));
-        if(this.header.dictionary && from) {
-            this.selectItems = from.map(x=> new SelectItem({value: x.id, text: x.name}));
-        }
+    // reloadSelectItems() {
+    //     const from = this.header.items;
+    //     this.$forceUpdate();
+    //     // console.log(JSON.stringify(this.header.items));
+    //     if(this.header.dictionary && from) {
+    //         this.selectItems = from.map(x=> new SelectItem({value: x.id, text: x.name}));
+    //     }
         
-    }
+    // }
 }

@@ -13,8 +13,7 @@ export default class ListDialogTestLayout extends BaseListLayout {
     headers: TableComponentHeader[] = [];
     defaultModel = new TestModel();
     fields: FormComponentItem[] = [];
-
-    tableFilters: TableFilterComponentItem[] = [
+    tableFilters: TableFilterComponentItem[] = this.tableFilters = [
         new TableFilterComponentItem({
             requestName: 'titlefilter', 
             appearance: TableFilterComponentItemAppearance.TopbarHeader, 
@@ -29,6 +28,16 @@ export default class ListDialogTestLayout extends BaseListLayout {
             requestType: TableFilterComponentItemType.InputRange,
             icon: 'mdi-calendar',
             inputType: TableFilterComponentItemInputType.Date
+        }),
+        new TableFilterComponentItem({
+            requestName: 'dictionaryfilter', 
+            appearance: TableFilterComponentItemAppearance.Header, 
+            name: 'dictionaryId',
+            requestType: TableFilterComponentItemType.SelectMultiple,
+            placeholder: 'Справочник',
+            selectItemsFromPromise: this.cacheService.ListAsSelectItems("dictionary")
+            // selectItemsFromDictionary: "dictionary"
+            // selectItems: dictionary
         }),
         new TableFilterComponentItem({
             requestName: 'qqfilter', 
@@ -61,12 +70,13 @@ export default class ListDialogTestLayout extends BaseListLayout {
     ];
 
     created() {
+        
         this.headers  = [
             TableComponentHeader.String({value: "id", text: "Id", hiddenable: false}),
             TableComponentHeader.String({value: "code", text: "Код"}),
             TableComponentHeader.String({value: "title", text: "Наименование", sortable: true}),
             TableComponentHeader.Date({value: "created", text: "Дата создания" }),
-            TableComponentHeader.String({value: "dictionaryId", text: "Из справочника", dictionary: 'dictionary'})
+            TableComponentHeader.String({value: "dictionaryId", text: "Из справочника", dictionaryPromise: this.cacheService.List("dictionary")})
         ];
         this.fields = [
             FormComponentItem.Hidden({name: "id"}),
