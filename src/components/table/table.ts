@@ -38,12 +38,13 @@ export default class TableComponent extends Vue {
     @Prop({default: true}) topbarIsDark: boolean;
     @Prop({default: true}) actionbarIsDark: boolean;
     @Prop({default: false}) configure: boolean;
+    @Prop({default: false}) showHeaderFiltersByDefault: boolean;
     applyFilterButtonVisibility = true;
     innerSelected: any[] = [];
     totalItems = 1;
     isTableMenuVisible = false;
-    showFilters = false;
-    showFiltersMessage = 'Показать фильтры';
+    showFilters = this.showHeaderFiltersByDefault;
+    showFiltersMessage = this.showHeaderFiltersByDefault ? 'Показать фильтры' : 'Скрыть фильтры';
     showAllFilters = false;
     editableHeaders = [];
     headerSettings = [];

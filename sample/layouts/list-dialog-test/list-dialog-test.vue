@@ -9,7 +9,8 @@
         :default-model="defaultModel"
         :fields="fields"
         :configure="true"
-        :tableFilters="tableFilters">
+        :tableFilters="tableFilters"
+        :showHeaderFiltersByDefault="true">
         <template slot="toolbar-items">
             <v-btn icon>
                 <v-icon>person_add</v-icon>
