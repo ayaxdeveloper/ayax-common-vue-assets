@@ -52,15 +52,15 @@
             </v-toolbar-items>  
         </v-toolbar>
         <transition name="slide">
-            <v-card v-if="showAllFilters" dark flat style="border-radius: 0">
-                <v-layout row wrap class="ml-3">
-                        <a-table-filter v-for="(filter, index) in allFilters" :key="filter.requestName"
-                        :applyFilterButtonVisibility="applyFilterButtonVisibility" 
-                        :filter="filter"
-                        :index="index" 
-                        @apply-filter="applyFilter">
-                        </a-table-filter>
-                    </v-layout>
+            <v-card class="pa-3" v-if="showAllFilters" dark flat style="border-radius: 0">
+                <v-layout row wrap>
+                    <a-table-filter v-for="(filter, index) in allFilters" :key="filter.requestName"
+                    :applyFilterButtonVisibility="applyFilterButtonVisibility" 
+                    :filter="filter"
+                    :index="index" 
+                    @apply-filter="applyFilter">
+                    </a-table-filter>
+                </v-layout>
             </v-card>
         </transition>
         </slot>

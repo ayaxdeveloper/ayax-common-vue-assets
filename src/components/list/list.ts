@@ -32,6 +32,7 @@ export default class ListComponent extends Vue {
     @Prop({default: true}) topbarIsDark: boolean;
     @Prop({default: true}) actionbarIsDark: boolean;
     @Prop({default: false}) configure: boolean;
+    tableVisible = false;
     
     @Watch('pagination.page')
     PageChanged(newVal, oldVal) {
@@ -115,7 +116,7 @@ export default class ListComponent extends Vue {
         return filteredRequest; 
     }
 
-    created() {
+    async created() {
         if(this.entity && !this.search) {
             this._search = {url: `/${this.entity}/search`, method : 'post'};
         } else {
@@ -129,22 +130,48 @@ export default class ListComponent extends Vue {
         if(!this.pagination) {
             this.pagination = Pagination.Default(this.clientSettings.listRowsPerpage);
         }
-        try {
-            let headersWithDictionaries = this.headers.filter(x=>x.dictionary && !x.items);
-            Promise.all(headersWithDictionaries.map(x=>{
-                return new Promise((resolve) => {
-                    this.cacheService.List(x.dictionary)
-                    .then(z=> {
-                        x.items = z;
-                        resolve();
-                    });
+        await Promise.all(this.headers.filter(x=>x.dictionary && !x.items).map(x=>{
+            return new Promise((resolve) => {
+                this.cacheService.List(x.dictionary)
+                .then(z=> {
+                    x.items = z;
+                    resolve();
                 });
-            })).then(()=> {
-                this.load();
             });
-        } catch(e) {
-            this.notificationProvider.Error(e);
-        }
+        }));
+
+        await Promise.all(this.headers.filter(x=>x.dictionaryPromise && !x.items).map(x=>{
+            return new Promise((resolve) => {
+                x.dictionaryPromise
+                .then(z=> {
+                    x.items = z;
+                    resolve();
+                });
+            });
+        }));
+
+        await Promise.all(this.tableFilters.filter(x => !x.selectItems && x.selectItemsFromDictionary).map(x => {
+            return new Promise((resolve) => {
+                this.cacheService.ListAsSelectItems(x.selectItemsFromDictionary)
+                .then(z => {
+                    x.selectItems = z;
+                    resolve();
+                })
+            }) 
+        }));
+
+        await Promise.all(this.tableFilters.filter(x => !x.selectItems && x.selectItemsFromPromise).map(x => {
+            return new Promise((resolve) => {
+                x.selectItemsFromPromise
+                .then(z => {
+                    x.selectItems = z;
+                    resolve();
+                })
+            }) 
+        }));
+
+        this.tableVisible = true;
+        this.load();
     };
 
     add() {

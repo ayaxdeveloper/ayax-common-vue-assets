@@ -1,12 +1,14 @@
 import { SelectItem, SortableField, Dictionary } from "ayax-common-types";
 import { TableFilterComponentItem } from "../table-filter/table-filter-item";
 import { DateHelper } from "ayax-common-helpers";
+import { CacheItem } from "ayax-common-cache";
 
 export class TableComponentHeader {
     align: string = "left";
     value: string;
     text: string;
-    dictionary: string;
+    dictionary?: string;
+    dictionaryPromise?: Promise<CacheItem[]>
     items: Dictionary[];
     isVisible: boolean = true;
     hiddenable: boolean = true;
@@ -39,8 +41,7 @@ export class TableComponentHeader {
     }
 
     public static Boolean(init: Partial<TableComponentHeader>) {
-        init.formatter = (value: boolean) => { 
-
+        init.formatter = (value: boolean) => {
             return value == true ? 'Да' : 'Нет' 
         };
         init.type = TableComponentHeaderType.boolean;

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="tableVisible">
         <a-table 
             :title="title"
             :headers="headers" 

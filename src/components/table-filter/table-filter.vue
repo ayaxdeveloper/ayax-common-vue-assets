@@ -3,7 +3,7 @@
         <div style="position: relative">
             <v-btn 
             v-if="applyFilterButton"
-            class="table-filter-apply-btn"
+            :class="[header == null ? 'table-filter-apply-btn_topbar' : 'table-filter-apply-btn_header']"
             color="blue darken-1" small
             @click="applyFilter">
                 Применить
@@ -68,7 +68,7 @@
             <template v-else-if="filter.requestType == filterTypes['SelectSingle']">
                 <v-select 
                 :name="filter.requestName" 
-                :items="selectItems" 
+                :items="filter.selectItems" 
                 class="table-filter-select" 
                 v-model="filter.values[0]" 
                 :hint="getHint()" 
@@ -77,15 +77,14 @@
                 dense
                 autocomplete
                 no-data-text="Нет совпадений"
-                @input="reloadSelectItems(); applyFilterButton = filter.values[0]"
-                @click.native="reloadSelectItems"
+                @input="applyFilterButton = filter.values[0]"
                 append-icon="mdi-menu-down"
                 ></v-select>
             </template>
             <template v-else-if="filter.requestType == filterTypes['SelectMultiple']">
                 <v-select 
                 :name="filter.requestName" 
-                :items="selectItems" 
+                :items="filter.selectItems" 
                 multiple 
                 class="table-filter-select" 
                 v-model="filter.values" 
@@ -94,8 +93,7 @@
                 dense
                 autocomplete
                 no-data-text="Нет совпадений"
-                @input="reloadSelectItems(); applyFilterButton = true"
-                @click.native="reloadSelectItems"
+                @input="applyFilterButton = true"
                 append-icon="mdi-menu-down"
                 clearable></v-select>
             </template>
@@ -103,9 +101,9 @@
 
 
         <template v-if="header == null">
-            <v-flex class="action mt-2" v-if="filter.requestType == filterTypes['InputEq'] || filter.requestType == filterTypes['InputLike']">
+            <v-flex class="action mt-2 pl-2 pr-2" v-if="filter.requestType == filterTypes['InputEq'] || filter.requestType == filterTypes['InputLike']">
                 <v-text-field
-                :class="['topbar-item', {'ml-3': index > 0}]"
+                :class="['topbar-item']"
                 @input="applyFilterButton = filter.values[0]" 
                 :name="filter.requestName" 
                 :placeholder="filter.placeholder"
@@ -117,9 +115,9 @@
                 </v-text-field>
             </v-flex>
             <template v-else-if="filter.requestType == filterTypes['InputRange']">
-            <v-flex class="action mt-2" v-if="filter.inputType == filterInputTypes['Date']">
+            <v-flex class="action mt-2 pl-2 pr-2" v-if="filter.inputType == filterInputTypes['Date']">
                 <el-date-picker
-                :class="['date-range', {'ml-3': index > 0}]"
+                :class="['date-range']"
                 style="width: 290px"
                 v-model="filter.values"
                 type="daterange"
@@ -133,36 +131,36 @@
                 </el-date-picker>
             </v-flex>
             <template v-else>
-                <v-flex class="action mt-2" xs6>
+                <v-flex class="action mt-2 pl-2 pr-2" xs6>
                     <v-text-field 
                     @input="applyFilterButton = filter.values[0]" 
                     :name="filter.requestName" 
                     single-line 
                     placeholder="Начало" 
-                    :class="['topbar-item', {'ml-3': index > 0}]"
+                    :class="['topbar-item']"
                     return-masked-value 
                     :mask="getMask()" 
                     clearable
                     v-model="filter.values[0]"/>
                 </v-flex>
-                <v-flex class="action mt-2" xs6>
+                <v-flex class="action mt-2 pl-2 pr-2" xs6>
                     <v-text-field
                     @input="applyFilterButton = filter.values[1]" 
                     :name="filter.requestName" 
                     single-line 
                     placeholder="Конец" 
-                    :class="['topbar-item', {'ml-3': index > 0}]"
+                    :class="['topbar-item']"
                     return-masked-value 
                     :mask="getMask()" 
                     v-model="filter.values[1]"/>
                 </v-flex>
             </template>
             </template>
-            <v-flex class="action mt-2" v-else-if="filter.requestType == filterTypes['SelectSingle']">
+            <v-flex class="action mt-2 pl-2 pr-2" v-else-if="filter.requestType == filterTypes['SelectSingle']">
                 <v-select 
                 :name="filter.requestName" 
                 :items="filter.selectItems" 
-                :class="['topbar-item', {'ml-3': index > 0}]"
+                :class="['topbar-item']"
                 v-model="filter.values[0]"
                 :prepend-icon="filter.icon"
                 clearable
@@ -174,11 +172,11 @@
                 @input="applyFilterButton = filter.values[0]"
                 ></v-select>
             </v-flex>
-            <v-flex class="action mt-2" v-else-if="filter.requestType == filterTypes['SelectMultiple']">
+            <v-flex class="action mt-2 pl-2 pr-2" v-else-if="filter.requestType == filterTypes['SelectMultiple']">
                 <v-select 
                 :name="filter.requestName" 
                 :items="filter.selectItems" 
-                :class="['topbar-item', {'ml-3': index > 0}]"
+                :class="['topbar-item']"
                 v-model="filter.values"
                 :prepend-icon="filter.icon"
                 clearable
@@ -202,7 +200,14 @@
 .filter .input-group {
     padding: 0px;
 }
-.table-filter-apply-btn {
+.table-filter-apply-btn_header {
+    position: absolute;
+    top: -24px;
+    height: 20px !important;
+    left: 0;
+}
+
+.table-filter-apply-btn_topbar {
     position: absolute;
     top: -24px;
     height: 20px !important;

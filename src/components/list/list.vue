@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="tableVisible">
         <div style="position:relative">
         </div>
         <a-table 
