@@ -7,7 +7,6 @@
             :pagination="pagination"
             :actions="actions"
             :tableFilters="tableFilters">
-    Ошибка загрузки List Component
     </a-list>
 </template>
 

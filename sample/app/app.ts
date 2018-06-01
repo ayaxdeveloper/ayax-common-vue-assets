@@ -30,7 +30,7 @@ export default class App extends VueInjection {
             isSystem: true
         }),
         new SidebarComponentItem({title: "LIST", icon: "list", route: "/list-test/list"}),
-        new SidebarComponentItem({title: "LIST-DIALOG", icon: "mdi-inbox", route: "/list-dialog-test"}),
+        new SidebarComponentItem({title: "LIST-DIALOG", icon: "inbox", route: "/list-dialog-test"}),
         new SidebarComponentItem({
             title: "НАСТРОЙКИ",
             icon: "build",

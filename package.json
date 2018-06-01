@@ -28,7 +28,6 @@
     "element-ui": "2.2.0",
     "file-loader": "^1.1.11",
     "material-design-icons-iconfont": "^3.0.3",
-    "mdi": "^2.2.43",
     "moment": "^2.20.1",
     "url-loader": "^1.0.1",
     "vue-resize": "^0.4.4",

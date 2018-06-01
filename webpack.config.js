@@ -14,7 +14,6 @@ module.exports = {
     vuetify: 'vuetify',
     moment: 'moment',
     ajv: 'ajv',
-    mdi: 'mdi',
     mime: 'mime',
     "element-ui": "element-ui",
     "vue-shortkey": "vue-shortkey",
@@ -26,7 +25,9 @@ module.exports = {
     "file-loader": "file-loader",
     "url-loader": "url-loader",
     "schema-utils": "schema-utils",
-    "vue-shortkey": "vue-shortkey"
+    "material-design-icons-iconfont": "material-design-icons-iconfont",
+    "vue-resize": "vue-resize",
+    "vuedraggable": "vuedraggable"
   },
   module: {
     rules: [

@@ -12,7 +12,7 @@
         :tableFilters="tableFilters">
         <template slot="toolbar-items">
             <v-btn icon>
-                <v-icon>mdi-account-plus</v-icon>
+                <v-icon>person_add</v-icon>
             </v-btn>
         </template>
         </a-list-dialog>

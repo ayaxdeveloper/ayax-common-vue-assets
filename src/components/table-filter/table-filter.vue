@@ -78,7 +78,7 @@
                 autocomplete
                 no-data-text="Нет совпадений"
                 @input="applyFilterButton = filter.values[0]"
-                append-icon="mdi-menu-down"
+                append-icon="arrow_drop_down"
                 ></v-select>
             </template>
             <template v-else-if="filter.requestType == filterTypes['SelectMultiple']">
@@ -94,7 +94,7 @@
                 autocomplete
                 no-data-text="Нет совпадений"
                 @input="applyFilterButton = true"
-                append-icon="mdi-menu-down"
+                append-icon="arrow_drop_down"
                 clearable></v-select>
             </template>
         </template>
