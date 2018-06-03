@@ -245,7 +245,7 @@ export default class TableComponent extends Vue {
         }
         let val = header.items.find(x=>x.id == id);
         if(val) {
-            return val.name;
+            return val.name ? val.name : val.title;
         }
         return "Нет";
     }

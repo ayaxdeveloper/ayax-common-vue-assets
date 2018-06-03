@@ -27,9 +27,9 @@ export default class TestDataService extends Vue {
 
     getDictionary() {
         return [
-            {id: 0, name: "Не указана", order: 0, isActive: true},
-            {id: 1, name: "Значение 1", order: 1, isActive: true},
-            {id: 2, name: "Значение 2", order: 2, isActive: true}
+            {id: 0, title: "Не указана", order: 0, isActive: true},
+            {id: 1, title: "Значение 1", order: 1, isActive: true},
+            {id: 2, title: "Значение 2", order: 2, isActive: true}
         ];
     }
 
