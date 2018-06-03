@@ -240,7 +240,7 @@ export default class TableComponent extends Vue {
     }
 
     getFromDictionary(header: TableComponentHeader, id: number) {
-        if(!header || !header.items) {
+        if(!header || !header.items || header.items.length == 0) {
             return "Нет";
         }
         let val = header.items.find(x=>x.id == id);
