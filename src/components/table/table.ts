@@ -38,12 +38,13 @@ export default class TableComponent extends Vue {
     @Prop({default: true}) topbarIsDark: boolean;
     @Prop({default: true}) actionbarIsDark: boolean;
     @Prop({default: false}) configure: boolean;
+    @Prop({default: false}) showHeaderFiltersByDefault: boolean;
     applyFilterButtonVisibility = true;
     innerSelected: any[] = [];
     totalItems = 1;
     isTableMenuVisible = false;
-    showFilters = false;
-    showFiltersMessage = 'Показать фильтры';
+    showFilters = this.showHeaderFiltersByDefault;
+    showFiltersMessage = this.showHeaderFiltersByDefault ? 'Показать фильтры' : 'Скрыть фильтры';
     showAllFilters = false;
     editableHeaders = [];
     headerSettings = [];
@@ -239,12 +240,12 @@ export default class TableComponent extends Vue {
     }
 
     getFromDictionary(header: TableComponentHeader, id: number) {
-        if(!header || !header.items) {
+        if(!header || !header.items || header.items.length == 0) {
             return "Нет";
         }
         let val = header.items.find(x=>x.id == id);
         if(val) {
-            return val.name;
+            return val.name ? val.name : val.title;
         }
         return "Нет";
     }

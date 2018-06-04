@@ -9,7 +9,7 @@ export class TableComponentHeader {
     text: string;
     dictionary?: string;
     dictionaryPromise?: Promise<CacheItem[]>
-    items: Dictionary[];
+    items: CacheItem[];
     isVisible: boolean = true;
     hiddenable: boolean = true;
     width?: number;

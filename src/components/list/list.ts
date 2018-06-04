@@ -130,7 +130,7 @@ export default class ListComponent extends Vue {
         if(!this.pagination) {
             this.pagination = Pagination.Default(this.clientSettings.listRowsPerpage);
         }
-        await Promise.all(this.headers.filter(x=>x.dictionary && !x.items).map(x=>{
+        await Promise.all(this.headers.filter(x=>x.dictionary && (!x.items || x.items.length == 0)).map(x=>{
             return new Promise((resolve) => {
                 this.cacheService.List(x.dictionary)
                 .then(z=> {
@@ -140,7 +140,7 @@ export default class ListComponent extends Vue {
             });
         }));
 
-        await Promise.all(this.headers.filter(x=>x.dictionaryPromise && !x.items).map(x=>{
+        await Promise.all(this.headers.filter(x=>x.dictionaryPromise && (!x.items || x.items.length == 0)).map(x=>{
             return new Promise((resolve) => {
                 x.dictionaryPromise
                 .then(z=> {
@@ -150,7 +150,7 @@ export default class ListComponent extends Vue {
             });
         }));
 
-        await Promise.all(this.tableFilters.filter(x => !x.selectItems && x.selectItemsFromDictionary).map(x => {
+        await Promise.all(this.tableFilters.filter(x => x.selectItemsFromDictionary && (!x.selectItems || x.selectItems.length == 0)).map(x => {
             return new Promise((resolve) => {
                 this.cacheService.ListAsSelectItems(x.selectItemsFromDictionary)
                 .then(z => {
@@ -160,7 +160,7 @@ export default class ListComponent extends Vue {
             }) 
         }));
 
-        await Promise.all(this.tableFilters.filter(x => !x.selectItems && x.selectItemsFromPromise).map(x => {
+        await Promise.all(this.tableFilters.filter(x => x.selectItemsFromPromise && (!x.selectItems || x.selectItems.length == 0)).map(x => {
             return new Promise((resolve) => {
                 x.selectItemsFromPromise
                 .then(z => {

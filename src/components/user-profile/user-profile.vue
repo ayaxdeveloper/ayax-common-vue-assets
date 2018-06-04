@@ -20,7 +20,7 @@
         <v-list
         dark>
             <v-list-tile @click="logout()">
-                <v-list-tile-action><v-icon>mdi-logout</v-icon></v-list-tile-action>
+                <v-list-tile-action><v-icon>rowing</v-icon></v-list-tile-action>
                 <v-list-tile-title>Выйти</v-list-tile-title>
             </v-list-tile>
         </v-list>
