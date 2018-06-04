@@ -18,6 +18,7 @@
             @on-bar-action="onBarAction"
             @apply-filter="load"
             :configure="configure"
+            :showHeaderFiltersByDefault="showHeaderFiltersByDefault"
             :tableFilters="tableFilters">
             <template slot="toolbar-items"><slot name="toolbar-items"></slot></template>
             </a-table>
