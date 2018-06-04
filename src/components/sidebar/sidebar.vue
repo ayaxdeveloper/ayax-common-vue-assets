@@ -65,6 +65,7 @@
                 </v-list-tile>
             </v-list-group>
         </v-list>
+        <slot></slot>
     </v-navigation-drawer>
 </template>
 

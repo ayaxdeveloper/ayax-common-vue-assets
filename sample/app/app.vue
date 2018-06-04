@@ -1,7 +1,16 @@
 <template>
   <div id="app">
     <v-app>
-      <a-sidebar :items="sidebarItems"></a-sidebar>
+      <a-sidebar :items="sidebarItems">
+            <v-divider></v-divider>
+            <v-list dense>
+                <v-list-tile>
+                    <v-list-tile-content>
+                        <v-list-tile-title>slot in sidebar</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+            </v-list>
+      </a-sidebar>
       <v-content>
         <a-notification :notificationProvider="notificationProvider"></a-notification>
         <v-toolbar dark light dense fixed>
