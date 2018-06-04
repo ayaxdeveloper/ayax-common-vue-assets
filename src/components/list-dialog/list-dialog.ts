@@ -33,6 +33,7 @@ export default class ListDialogComponent extends Vue {
     @Prop({default: true}) topbarIsDark: boolean;
     @Prop({default: true}) actionbarIsDark: boolean;
     @Prop({default: false}) configure: boolean;
+    @Prop({default: false}) showHeaderFiltersByDefault: boolean;
     editDialog: boolean = false;
     request: any;
     itemForRemove: IEntity | null;
