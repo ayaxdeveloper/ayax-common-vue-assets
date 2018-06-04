@@ -73,7 +73,7 @@ export class TableFilterComponentItem {
                 break;
             case TableFilterComponentItemType.InputLike:
                 if(this.values[0]) {
-                    return new Filter({term: "like", val: new FilterValue({ value: `%${this.values[0]}%`})});
+                    return new Filter({term: "like", val: new FilterValue({ value: `${this.values[0]}`})});
                 }
                 break;
             case TableFilterComponentItemType.InputRange:
