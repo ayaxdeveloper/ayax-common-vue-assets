@@ -43,6 +43,11 @@ export class FormComponentItem {
         init.type = HtmlElementType.checkbox;
         return new FormComponentItem(init);
     }
+
+    public static TextArea(init: Partial<FormComponentItem>) {
+        init.type = HtmlElementType.textarea;
+        return new FormComponentItem(init);
+    }
     public static Hidden(init: Partial<FormComponentItem>) {
         init.type = HtmlElementType.hidden;
         return new FormComponentItem(init);

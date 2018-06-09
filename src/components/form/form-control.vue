@@ -13,6 +13,18 @@
     :rules="field.rules"
     >
     </v-text-field>
+    <v-text-field v-else-if="field.type == textarea"
+    :name="field.name"
+    :label="field.dense ? field.title : null"
+    v-model="field.model"
+    :mask="field.mask"
+    :required="field.required"
+    multi-line
+    :disabled="field.disabled"
+    :return-masked-value="field.returnMaskedValue"
+    :hint="field.hint"
+    :hide-details="!field.hint"
+    :rules="field.rules"/>
     <v-text-field v-else-if="field.type == password"
     type="password"
     :name="field.name"
