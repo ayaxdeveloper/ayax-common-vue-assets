@@ -23,6 +23,9 @@
         :showHeaderFiltersByDefault="showHeaderFiltersByDefault"
         :tableFilters="tableFilters">
         <template slot="toolbar-items"><slot name="toolbar-items"></slot></template>
+        <template v-for="header in headers.filter(x => x.custom)" :slot="header.value" slot-scope="{item}">
+            <slot :name="header.value" :item="item"></slot>
+        </template>
         </a-table>
         <v-layout row justify-center>
             <v-dialog v-model="removeDialog" max-width="600px">

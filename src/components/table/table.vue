@@ -4,7 +4,7 @@
             <v-toolbar flat dense :dark="topbarIsDark" :class="topbarColor">
             <v-toolbar-title v-if="title">
                 {{title}}
-                <v-chip title="Количество записей" label small v-if="pagination.totalItems">{{ pagination.totalItems }}</v-chip>
+                <v-chip title="Количество записей" label small disabled v-if="pagination.totalItems">{{ pagination.totalItems }}</v-chip>
             </v-toolbar-title>
             <v-toolbar-items>
                 <v-layout row class="ml-4">
@@ -20,7 +20,7 @@
             <slot name="toolbar-items"></slot>
             <v-toolbar-items>
                 <slot name="head-items"></slot>
-                <v-btn small v-if="tableFilters.length > 0" :class="{'mr-3':configure}" flat @click="showAllFiltersBtn()">
+                <v-btn small v-if="allFilters.length > 0" :class="{'mr-3':configure}" flat @click="showAllFiltersBtn()">
                     Все фильтры
                     <v-icon v-if="!showAllFilters">arrow_drop_down</v-icon>
                     <v-icon v-if="showAllFilters">arrow_drop_up</v-icon>
@@ -86,6 +86,7 @@
                                 @click.native="toggleAll"
                                 :input-value="props.all"
                                 :indeterminate="props.indeterminate"
+                                color="primary"
                         ></v-checkbox>
                     </th>
                     <th class="text-xs-center action" v-if="actions && actions.filter(x => x.single && x.active).length > 0" :width="configActionsWidth">
@@ -133,6 +134,7 @@
                                 primary
                                 hide-details
                                 :input-value="props.selected"
+                                color="primary"
                         ></v-checkbox>
                     </td>
                     <td class="text-xs-right action" v-if="actions && actions.filter(x=>x.single && x.active).length > 0">
@@ -177,15 +179,16 @@
                         @click="selectClick(props)"
                         v-on:dblclick="firstAction(props.item)"
                     >
-                        <template 
-                                v-for="propertyname in Object.keys(props.item).filter(x => x == editableHeaders[index].value)" 
-                        >
-                            <template v-if="editableHeaders[index].items"
-                            >{{getFromDictionary(editableHeaders[index], props.item[propertyname])}}</template>
-                            <template v-else>
-                                {{applyFormatterIfExists(header, props.item[propertyname])}}                            
+                        <slot :name="header.value" :item="props.item">
+                            <template v-for="propertyname in Object.keys(props.item).filter(x => x == editableHeaders[index].value)">
+                                <template v-if="editableHeaders[index].items">
+                                    {{getFromDictionary(editableHeaders[index], props.item[propertyname])}}
+                                </template>
+                                <template v-else>
+                                    {{applyFormatterIfExists(header, props.item[propertyname])}}
+                                </template>
                             </template>
-                        </template>
+                        </slot>
                     </td>
                 </tr>   
             </template>

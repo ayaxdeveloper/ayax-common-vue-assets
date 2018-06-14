@@ -19,6 +19,7 @@ export class TableComponentHeader {
     mask: string;
     type: TableComponentHeaderType = TableComponentHeaderType.string;
     order: number;
+    custom: boolean = false;
     constructor(init?: Partial<TableComponentHeader>) {
         if (init) {
             Object.assign(this, init);

@@ -33,6 +33,7 @@ export default class ListComponent extends Vue {
     @Prop({default: true}) actionbarIsDark: boolean;
     @Prop({default: false}) configure: boolean;
     @Prop({default: false}) showHeaderFiltersByDefault: boolean;
+    @Prop({default: null}) toggledItemSlot;
     tableVisible = false;
     
     @Watch('pagination.page')
@@ -40,6 +41,19 @@ export default class ListComponent extends Vue {
         if(newVal!==oldVal) {
             this.request.page = newVal;
             this.load();
+        }
+    }
+
+    @Watch('toggledItemSlot')
+    onChange() {
+        if(this.headers.filter(x => x.custom).length > 0) {
+            if(this.toggledItemSlot) {
+                this.items.forEach(item => {
+                    if(item.indexForSlot == this.toggledItemSlot.indexForSlot) {
+                        item.toggleForSlot = this.toggledItemSlot.toggleForSlot;
+                    }
+                })
+            }
         }
     }
 
@@ -271,8 +285,17 @@ export default class ListComponent extends Vue {
             let response =  await this.operationService.post<SearchResponse<any[]>>(`${this._search.url}`, this.AddFilter(this.request));
             let operation = response;
             if(operation.status === 0) {
-                this.items =  operation.result.data;
+                this.items = operation.result.data;
                 this.pagination.totalItems = operation.result.total
+
+                if(this.headers.filter(x => x.custom).length > 0) {
+                    let index = 0;
+                    this.items.forEach(item => {
+                        item['toggleForSlot'] = false;
+                        item['indexForSlot'] = index;
+                        index++;
+                    })
+                }
             } else {
                 this.notificationProvider.Error(operation.message);
             }
