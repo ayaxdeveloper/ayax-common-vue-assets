@@ -50,7 +50,6 @@ export default class ListDialogTestLayout extends BaseListLayout {
                 new SelectItem ({value: 4, text: 'Район 4'}),
                 new SelectItem ({value: 5, text: 'Район 5'}),
             ],
-            icon: 'mdi-city',
             placeholder: 'Выбор района'
         }),
         new TableFilterComponentItem({
@@ -64,7 +63,6 @@ export default class ListDialogTestLayout extends BaseListLayout {
                 new SelectItem ({value: 4, text: 'Район 4'}),
                 new SelectItem ({value: 5, text: 'Район 5'}),
             ],
-            icon: 'mdi-earth',
             placeholder: 'Выбор районов'
         })
     ];

@@ -87,7 +87,7 @@ export default class ActionbarComponent extends Vue{
         if(action.action) {
             action.action();
         } else {
-            this.onBarAction(this.innerSelected, action.name);
+            this.onBarAction(this.innerSelected.map(x => x.id), action.name);
         }
     }
 }

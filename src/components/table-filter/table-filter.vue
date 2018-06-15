@@ -176,7 +176,7 @@
                 <v-select 
                 :name="filter.requestName" 
                 :items="filter.selectItems" 
-                :class="['topbar-item']"
+                class="topbar-item selectFilter selectMultiple"
                 v-model="filter.values"
                 :prepend-icon="filter.icon"
                 clearable
@@ -187,7 +187,11 @@
                 autocomplete
                 no-data-text="Нет совпадений"
                 @input="applyFilterButton = filter.values[0]"
-                ></v-select>
+                >
+                <template slot="selection" slot-scope="data">
+                    {{ data.item.text }}
+                </template>
+                </v-select>
             </v-flex>
         </template>
     </div>
@@ -236,5 +240,14 @@
 }
 .topbar-item {
     width: 230px;
+}
+.selectFilter {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: clip;
+    white-space: nowrap;
+}
+.selectMultiple >>> .input-group__selections {
+    color: white;
 }
 </style>

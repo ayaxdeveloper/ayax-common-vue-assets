@@ -68,7 +68,7 @@ export default class TestDataService extends Vue {
 
     bulkDelete(items) {
         items.forEach(element => {
-            this.remove(element.id)
+            this.remove(element)
         });
     }
 
