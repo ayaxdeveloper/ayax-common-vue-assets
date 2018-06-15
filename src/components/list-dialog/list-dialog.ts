@@ -25,6 +25,7 @@ export default class ListDialogComponent extends Vue {
     @Prop() addUrl: string;
     @Prop() getUrl: string;
     @Prop() deleteUrl: string;
+    @Prop() bulkDeleteUrl: string;
     @Prop() title: string;
     @Prop({ default: true}) selectable: boolean; 
     @Prop({ default: false}) selectableSingle: boolean; 
@@ -49,6 +50,7 @@ export default class ListDialogComponent extends Vue {
     _addUrl: string;
     _getUrl: string;
     _deleteUrl: string;
+    _bulkDeleteUrl: string;
     tableVisible: boolean = false;
 
     async created() {
@@ -76,6 +78,11 @@ export default class ListDialogComponent extends Vue {
             this._deleteUrl = `/${this.entity}/delete`;
         } else {
             this._deleteUrl = this.deleteUrl;
+        }
+        if(this.entity && !this.bulkDeleteUrl) {
+            this._bulkDeleteUrl = `/${this.entity}/bulkdelete`;
+        } else {
+            this._bulkDeleteUrl = this.bulkDeleteUrl;
         }
         if(!this.pagination) {
             this.pagination = Pagination.Default(this.clientSettings.listRowsPerpage);
@@ -305,7 +312,7 @@ export default class ListDialogComponent extends Vue {
                 this.notificationProvider.Error('Удаляемые объекты не существуют')
                 return;
             }
-            let operation = (await this.operationService.post(`${this._deleteUrl}/bulkdelete`, this.itemsForRemove));
+            let operation = (await this.operationService.post(`${this._bulkDeleteUrl}`, this.itemsForRemove));
             if(operation.status == 0) {
                 this.notificationProvider.Success("Удалено");
                 this.load();
