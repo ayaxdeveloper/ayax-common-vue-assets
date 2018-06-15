@@ -63,7 +63,7 @@ mock.onDelete(/\/api\/testentity\/delete\/\d+/).reply((config) => {
     return [200, new OperationResult({ status: 0 })];
 });
 
-mock.onPost('/api/testentity/delete/bulkdelete').reply(({data}) => {
+mock.onPost('/api/testentity/bulkdelete').reply(({data}) => {
     testDataService.bulkDelete(JSON.parse(data));
     return [200, new OperationResult({ status: 0 })];
 });
