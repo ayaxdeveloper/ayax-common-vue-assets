@@ -131,8 +131,8 @@ export default class ListDialogComponent extends Vue {
             }) 
         }));
 
+        await this.load();
         this.tableVisible = true;
-        this.load();
     };
 
     @Watch('pagination.page')

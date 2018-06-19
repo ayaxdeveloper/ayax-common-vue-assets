@@ -185,8 +185,8 @@ export default class ListComponent extends Vue {
             }) 
         }));
 
+        await this.load();
         this.tableVisible = true;
-        this.load();
     };
 
     add() {
