@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-layout v-if="!tableVisible" fill-height row justify-center>
-            <v-progress-circular style="position: absolute; top: 40%" :size="150" :width="10" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular style="position: absolute; top: 40%" :size="150" :width="3" indeterminate color="primary"></v-progress-circular>
         </v-layout>
         <a-table v-else 
             :title="title"
