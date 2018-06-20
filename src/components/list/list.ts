@@ -266,7 +266,7 @@ export default class ListComponent extends Vue {
                 this.notificationProvider.Error('Удаляемые объекты не существуют')
                 return;
             }
-            let operation = (await this.operationService.post(`${this._bulkDeleteUrl}`, this.itemsForRemove));
+            let operation = (await this.operationService.delete(`${this._bulkDeleteUrl}`, this.itemsForRemove));
             if(operation.status == 0) {
                 this.notificationProvider.Success("Объект удален");
                 this.load();
