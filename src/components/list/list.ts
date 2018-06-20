@@ -16,6 +16,7 @@ export default class ListComponent extends Vue {
     @Inject() operationService: IOperationService;
     @Prop() search: {url: string, method: string};
     @Prop() deleteUrl: string;
+    @Prop() bulkDeleteUrl: string;
     @Prop() headers: TableComponentHeader[];
     @Prop({default: () => []}) tableFilters: TableFilterComponentItem[];
     @Prop() entity: string;
@@ -72,6 +73,7 @@ export default class ListComponent extends Vue {
     loading = true;
     _search: {url: string, method: string};
     _deleteUrl: string;
+    _bulkDeleteUrl: string;
 
     @Emit()
     onRowAction(item: IEntity, name: string) {
@@ -141,6 +143,11 @@ export default class ListComponent extends Vue {
             this._deleteUrl = `/${this.entity}/delete`;
         } else {
             this._deleteUrl = this.deleteUrl;
+        }
+        if(this.entity && !this.bulkDeleteUrl) {
+            this._bulkDeleteUrl = `/${this.entity}/bulkdelete`;
+        } else {
+            this._bulkDeleteUrl = this.bulkDeleteUrl;
         }
         if(!this.pagination) {
             this.pagination = Pagination.Default(this.clientSettings.listRowsPerpage);
@@ -259,7 +266,7 @@ export default class ListComponent extends Vue {
                 this.notificationProvider.Error('Удаляемые объекты не существуют')
                 return;
             }
-            let operation = (await this.operationService.post(`${this._deleteUrl}/bulkdelete`, this.itemsForRemove));
+            let operation = (await this.operationService.post(`${this._bulkDeleteUrl}`, this.itemsForRemove));
             if(operation.status == 0) {
                 this.notificationProvider.Success("Объект удален");
                 this.load();
