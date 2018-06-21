@@ -1,7 +1,8 @@
 import MockAdapter from 'axios-mock-adapter'
 import axios from 'axios'
-import { SearchResponse, OperationResult } from 'ayax-common-types';
+import { SearchResponse } from 'ayax-common-types';
 import TestDataService from './services/test-data/test-data-service';
+import { OperationResult } from 'ayax-common-operation';
 
 var mock = new MockAdapter(axios);
 var testDataService = new TestDataService();

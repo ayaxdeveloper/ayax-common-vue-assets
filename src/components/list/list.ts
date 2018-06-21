@@ -1,15 +1,14 @@
 import { Component, Vue, Prop, Inject, Watch, Emit } from 'vue-property-decorator';
 import { Pagination, IClientSettings, INotificationProvider, IPagination, IEntity, Dictionary, SearchResponse } from 'ayax-common-types';
-import { IHttpService, OperationService, IOperationService } from 'ayax-common-services';
 import { TableComponentHeader } from '../table/table-header';
 import { TableFilterComponentItem } from '../table-filter/table-filter-item';
 import { TableComponentAction } from '../table/table-action';
 import { Route } from 'vue-router';
 import { ICacheService } from 'ayax-common-cache';
+import { IOperationService } from 'ayax-common-operation';
 
 @Component
 export default class ListComponent extends Vue {
-    @Inject() httpService: IHttpService;
     @Inject() notificationProvider: INotificationProvider;
     @Inject() cacheService: ICacheService;
     @Inject() clientSettings: IClientSettings;
@@ -234,30 +233,21 @@ export default class ListComponent extends Vue {
         this.removeSelectedDialog = true;
     }
 
-    removeOk() {
+    async removeOk() {
         if (!this.itemForRemove) {
             this.notificationProvider.Error('Удаляемый объект не существует');
             return;
         }
-        this.operationService.delete(`${this._deleteUrl}/${this.itemForRemove.id}`).then((response) => {
-            this.loading = true;
-            let operation = response;
-            if (operation.status === 0) {
-                this.notificationProvider.Success("Объект удален");
-                this.load()
-            } else {
-                this.notificationProvider.Error(`Ошибка удаления объекта: ${operation.message}`);
-            }
-            this.loading = false;
-            this.itemForRemove = null;
-            this.removeDialog = false;
-        })
-            .catch(e => {
-                this.notificationProvider.Error(`Ошибка удаления объекта: ${e}`);
-                this.loading = false;
-                this.itemForRemove = null;
-                this.removeDialog = false;
-            });
+        try {
+            (await this.operationService.delete(`${this._deleteUrl}/${this.itemForRemove.id}`)).ensureSuccess();
+            this.notificationProvider.Success("Объект удален");
+            this.load();
+        } catch (e) {
+            this.notificationProvider.Error(e);
+        }
+        this.loading = false;
+        this.itemForRemove = null;
+        this.removeDialog = false;
     };
 
     async removeSelectedOk() {
@@ -266,18 +256,15 @@ export default class ListComponent extends Vue {
                 this.notificationProvider.Error('Удаляемые объекты не существуют')
                 return;
             }
-            let operation = (await this.operationService.delete(`${this._bulkDeleteUrl}`, this.itemsForRemove));
-            if(operation.status == 0) {
-                this.notificationProvider.Success("Объект удален");
-                this.load();
-            } else {
-                this.notificationProvider.Error(`Ошибка удаления объекта: ${operation.message}`);
-            }
-            this.removeSelectedDialog = false;
-            this.itemsForRemove = null;
+            (await this.operationService.delete(`${this._bulkDeleteUrl}`, this.itemsForRemove)).ensureSuccess();
+            this.notificationProvider.Success("Объект удален");
+            this.load();            
         } catch(e) {
-            this.notificationProvider.Error(`Ошибка удаления объекта: ${e}`);
+            this.notificationProvider.Error(e);
         }
+
+        this.removeSelectedDialog = false;
+            this.itemsForRemove = null;
     };
 
     removeCancel() {
@@ -289,27 +276,20 @@ export default class ListComponent extends Vue {
 
     public async load() {
         try {
-            let response =  await this.operationService.post<SearchResponse<any[]>>(`${this._search.url}`, this.AddFilter(this.request));
-            let operation = response;
-            if(operation.status === 0) {
-                this.items = operation.result.data;
-                this.pagination.totalItems = operation.result.total
-
-                if(this.headers.filter(x => x.custom).length > 0) {
-                    let index = 0;
-                    this.items.forEach(item => {
-                        item['toggleForSlot'] = false;
-                        item['indexForSlot'] = index;
-                        index++;
-                    })
-                }
-            } else {
-                this.notificationProvider.Error(operation.message);
+            let response =  (await this.operationService.post<SearchResponse<any[]>>(`${this._search.url}`, this.AddFilter(this.request))).ensureSuccess();
+            this.items = response.data;
+            this.pagination.totalItems = response.total
+            if(this.headers.filter(x => x.custom).length > 0) {
+                let index = 0;
+                this.items.forEach(item => {
+                    item['toggleForSlot'] = false;
+                    item['indexForSlot'] = index;
+                    index++;
+                })
             }
-            this.loading = false;
         } catch(e) {
             this.notificationProvider.Error(e);
-            this.loading = false;
         } 
+        this.loading = false;
     }
 }

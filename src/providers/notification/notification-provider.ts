@@ -17,7 +17,12 @@ export class NotificationProvider implements INotificationProvider {
             title == null ? 'Ошибка' : title,
             dismissAfter != null ? dismissAfter : this._settings.errorDismiss
         ));
-        console.log('Error: ' + JSON.stringify(message));
+        if(message) {
+            console.error(`Error: ${message}`);
+        }
+        if(message && message.stack) {
+            console.error(`Stack: ${message.stack}`);
+        }
     }
 
     public Success(message?: any, title?: any, dismissAfter?: number) {

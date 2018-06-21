@@ -1,5 +1,4 @@
-import { SelectItem, SortableField, Dictionary } from "ayax-common-types";
-import { TableFilterComponentItem } from "../table-filter/table-filter-item";
+import { SortableField } from "ayax-common-types";
 import { DateHelper } from "ayax-common-helpers";
 import { CacheItem } from "ayax-common-cache";
 

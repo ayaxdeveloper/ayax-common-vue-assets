@@ -1,11 +1,11 @@
 import { Component, Vue, Prop, Inject, Watch, Emit } from 'vue-property-decorator';
 import { TableComponentHeader } from '../table/table-header';
-import { IPagination, IEntity, IClientSettings, INotificationProvider, Pagination, Dictionary, SearchResponse } from 'ayax-common-types';
-import { IOperationService } from 'ayax-common-services'
+import { IPagination, IEntity, IClientSettings, INotificationProvider, Pagination, SearchResponse } from 'ayax-common-types';
 import { TableComponentAction } from '../table/table-action';
 import { FormComponentItem } from '../form/form-item';
 import { ICacheService } from 'ayax-common-cache';
 import { TableFilterComponentItem } from '../table-filter/table-filter-item';
+import { IOperationService } from 'ayax-common-operation'; 
 
 @Component
 export default class ListDialogComponent extends Vue {
@@ -236,17 +236,10 @@ export default class ListDialogComponent extends Vue {
     };
     async edit(item) {
         try {
-            // console.log(`${this._getUrl}/${item.id}`);
-            let fetch = (await this.operationService.get(`${this._getUrl}/${item.id}`));
-            if(fetch.status == 0) {
-                this.mapModelToFields(fetch.result);
-                this.editDialog = true;
-            } else {
-                this.notificationProvider.Error(fetch.message);
-                this.editDialog = false;
-            }
-        } catch(e) {
-            this.notificationProvider.Error(e);
+            let entity = (await this.operationService.get(`${this._getUrl}/${item.id}`)).ensureSuccess();
+            this.mapModelToFields(entity);
+            this.editDialog = true;
+        } catch (e) {
             this.editDialog = false;
         }
     };
@@ -254,19 +247,15 @@ export default class ListDialogComponent extends Vue {
         try {
             let model = this.getModelFromFields();
             let operation = +model.id > 0 
-            ? (await this.operationService.put(`${this._updateUrl}/${+model.id}`, model))
-            : (await this.operationService.post(`${this._addUrl}`, model));
-            if(operation.status == 0) {
-                this.notificationProvider.Success("Успешно сохранено");
-                this.editDialog = false;
-                this.load();
-            } else {
-                this.notificationProvider.Error(operation.message);
-                this.editDialog = true;
-            }
+            ? (this.operationService.put(`${this._updateUrl}/${+model.id}`, model))
+            : (this.operationService.post(`${this._addUrl}`, model));
+            (await operation).ensureSuccess();
+            this.notificationProvider.Success("Успешно сохранено");
+            this.editDialog = false;
+            this.load();
         } catch (e) {
-            this.notificationProvider.Error(e);
             this.editDialog = true;
+            this.notificationProvider.Error(e);
         }
     }
 
@@ -287,43 +276,37 @@ export default class ListDialogComponent extends Vue {
         this.removeSelectedDialog = true;
     }
     async removeOk() {
+        if (!this.itemForRemove) {
+            this.notificationProvider.Error('Удаляемый объект не существует')
+            return;
+        }
         try {
-            if (!this.itemForRemove) {
-                this.notificationProvider.Error('Удаляемый объект не существует')
-                return;
-            }
-            let operation = (await this.operationService.delete(`${this._deleteUrl}/${this.itemForRemove.id}`));
-            if(operation.status == 0) {
-                this.notificationProvider.Success("Удалено");
-                this.load();
-            } else {
-                this.notificationProvider.Error(operation.message);
-            }
-            this.removeDialog = false;
-            this.itemForRemove = null;
-        } catch(e) {
+            (await this.operationService.delete(`${this._deleteUrl}/${this.itemForRemove.id}`)).ensureSuccess();
+            this.notificationProvider.Success("Удалено");
+            this.load();
+        } catch (e) {
             this.notificationProvider.Error(e);
         }
+        
+        this.removeDialog = false;
+        this.itemForRemove = null;
     };
 
     async removeSelectedOk() {
+        if (!this.itemsForRemove) {
+            this.notificationProvider.Error('Удаляемые объекты не существуют')
+            return;
+        }
         try {
-            if (!this.itemsForRemove) {
-                this.notificationProvider.Error('Удаляемые объекты не существуют')
-                return;
-            }
-            let operation = (await this.operationService.delete(`${this._bulkDeleteUrl}`, this.itemsForRemove));
-            if(operation.status == 0) {
-                this.notificationProvider.Success("Удалено");
-                this.load();
-            } else {
-                this.notificationProvider.Error(operation.message);
-            }
-            this.removeSelectedDialog = false;
-            this.itemsForRemove = null;
-        } catch(e) {
+            (await this.operationService.delete(`${this._bulkDeleteUrl}`, this.itemsForRemove)).ensureSuccess();
+            this.notificationProvider.Success("Удалено");
+            this.load();
+        } catch (e) {
             this.notificationProvider.Error(e);
         }
+
+        this.removeSelectedDialog = false;
+        this.itemsForRemove = null;
     };
 
     removeCancel() {
@@ -337,36 +320,25 @@ export default class ListDialogComponent extends Vue {
         try {
             this.loading = true;
             if(this._search.method == "post") {
-                let operation = (await this.operationService.post<SearchResponse<any[]>>(`${this._search.url}`,this.AddFilter(this.request)));
-                if(operation.status === 0) {
-                    this.items =  operation.result.data;
-                    this.pagination.totalItems = operation.result.total;
-
-                    if(this.headers.filter(x => x.custom).length > 0) {
-                        let index = 0;
-                        this.items.forEach(item => {
-                            item['toggleForSlot'] = false;
-                            item['indexForSlot'] = index;
-                            index++;
-                        })
-                    }
-                } else {
-                    this.notificationProvider.Error(operation.message);
-                }
-                this.loading = false;              
+                let response = (await this.operationService.post<SearchResponse<any[]>>(`${this._search.url}`,this.AddFilter(this.request))).ensureSuccess();
+                this.items =  response.data;
+                this.pagination.totalItems = response.total;
+                if(this.headers.filter(x => x.custom).length > 0) {
+                    let index = 0;
+                    this.items.forEach(item => {
+                        item['toggleForSlot'] = false;
+                        item['indexForSlot'] = index;
+                        index++;
+                    })
+                }          
             } else {
-                let operation = (await this.operationService.get<any[]>(`${this._search.url}`));
-                if(operation.status === 0) {
-                    this.items =  operation.result;
-                    this.pagination.totalItems = this.items.length;
-                } else {
-                    this.notificationProvider.Error(operation.message);
-                }
-                this.loading = false;
+                let response = (await this.operationService.get<any[]>(`${this._search.url}`)).ensureSuccess();
+                this.items = response;
+                this.pagination.totalItems = this.items.length;
             }
         } catch(e) {
             this.notificationProvider.Error(e);
-            this.loading = false;
         } 
+        this.loading = false;
     }
 }

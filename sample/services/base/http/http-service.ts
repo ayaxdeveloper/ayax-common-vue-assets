@@ -1,15 +1,12 @@
 import axios from 'axios';
-import { EventBus } from '../../../event-bus';
-import { IAppSettings } from 'ayax-common-types';
-import { IHttpService } from 'ayax-common-services';
 import { AppSettings } from '../../../settings';
+import { IHttpService } from 'ayax-common-types';
 
 require('../../../mock-adapter');
 
 export class HttpService implements IHttpService {
     baseUrl: string;
     private _serverSettings = new AppSettings().Server();
-    private _clientSettings = new AppSettings().Client();
     constructor(apiUrl? :string) {
         this.baseUrl = apiUrl ? apiUrl : `${this._serverSettings.baseUrl}${this._serverSettings.apiPrefix}`;
     } 

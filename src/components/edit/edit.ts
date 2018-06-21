@@ -1,12 +1,11 @@
 import { Component, Vue, Inject, Prop, Emit, } from 'vue-property-decorator';
 import { SelectItem, INotificationProvider } from 'ayax-common-types';
-import { IOperationService, IHttpService } from 'ayax-common-services';
 import { FormComponentItem } from '../form/form-item';
 import { ICacheService } from 'ayax-common-cache';
+import { IOperationService } from 'ayax-common-operation';
 
 @Component
 export default class EditComponent extends Vue {
-    @Inject() httpService: IHttpService;
     @Inject() notificationProvider: INotificationProvider;
     @Inject() cacheService: ICacheService;
     @Inject() operationService: IOperationService; 
@@ -89,37 +88,31 @@ export default class EditComponent extends Vue {
         this.backToList();
     };
 
-    save(data) {
-        let method = this.id !== null && this.id > 0
-        ? this.operationService.put(`${this._updateUrl}/${this.id}`, data)
-        : this.operationService.post(`${this._addUrl}`, data);
-
-        method
-            .then((response) => {
-                this.backToList();
-            })
-            .catch(e => {
-                this.notificationProvider.Error(e);
-            });
+    async save(data) {
+        try {
+            let operation = this.id !== null && this.id > 0
+            ? this.operationService.put(`${this._updateUrl}/${this.id}`, data)
+            : this.operationService.post(`${this._addUrl}`, data);
+            (await operation).ensureSuccess();
+            this.backToList();
+        } catch (e) {
+            this.notificationProvider.Error(e);
+        }
     }
     async load() {
         try {
             if (this.id === 0) {
                 return
             }
-            let response = await this.operationService.get(`${this._getUrl}/${this.id}`);
-            if (response.status === 0) {
-                this.model = response.result;
-            } else {
-                this.notificationProvider.Error(response.message);
-                this.model = this.defaultModel();
-            }
+            let response = (await this.operationService.get(`${this._getUrl}/${this.id}`)).ensureSuccess();
+            this.model = response;
         } catch(e) {
             this.notificationProvider.Error(e);
+            this.model = this.defaultModel();
         }
     };
     backToList() {
-        this.$router.go(-1);
+        this.$router.go(-1); 
         // this.$router.push({ name: `${this.entity}-list`});
     };
 }
