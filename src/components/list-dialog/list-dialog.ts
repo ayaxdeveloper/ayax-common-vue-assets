@@ -91,45 +91,44 @@ export default class ListDialogComponent extends Vue {
             page: 1,
             perPage: this._search.method == "post" ? this.clientSettings.listRowsPerpage : 100
         }
-        await Promise.all(this.headers.filter(x=>x.dictionary && !x.items).map(x=>{
+
+        const headerPromises = this.headers.filter(x=> (x.dictionary || x.dictionaryPromise) && !x.items).map(x=>{
             return new Promise((resolve) => {
-                this.cacheService.List(x.dictionary)
-                .then(z=> {
-                    x.items = z;
-                    resolve();
-                });
+                if(x.dictionary) {
+                    this.cacheService.List(x.dictionary)
+                    .then(z=> {
+                        x.items = z;
+                        resolve();
+                    });
+                } else if (x.dictionaryPromise) {
+                    x.dictionaryPromise
+                    .then(z=> {
+                        x.items = z;
+                        resolve();
+                    });
+                }
             });
-        }));
+        });
 
-        await Promise.all(this.headers.filter(x=>x.dictionaryPromise && !x.items).map(x=>{
+        const filterPromises = this.tableFilters.filter(x => !x.selectItems && (x.selectItemsFromDictionary || x.selectItemsFromPromise)).map(x => {
             return new Promise((resolve) => {
-                x.dictionaryPromise
-                .then(z=> {
-                    x.items = z;
-                    resolve();
-                });
-            });
-        }));
-
-        await Promise.all(this.tableFilters.filter(x => !x.selectItems && x.selectItemsFromDictionary).map(x => {
-            return new Promise((resolve) => {
-                this.cacheService.ListAsSelectItems(x.selectItemsFromDictionary)
-                .then(z => {
-                    x.selectItems = z;
-                    resolve();
-                })
+                if(x.selectItemsFromDictionary) {
+                    this.cacheService.ListAsSelectItems(x.selectItemsFromDictionary)
+                    .then(z => {
+                        x.selectItems = z;
+                        resolve();
+                    })
+                } else if (x.selectItemsFromPromise) {
+                    x.selectItemsFromPromise
+                    .then(z => {
+                        x.selectItems = z;
+                        resolve();
+                    })
+                }
             }) 
-        }));
+        });
 
-        await Promise.all(this.tableFilters.filter(x => !x.selectItems && x.selectItemsFromPromise).map(x => {
-            return new Promise((resolve) => {
-                x.selectItemsFromPromise
-                .then(z => {
-                    x.selectItems = z;
-                    resolve();
-                })
-            }) 
-        }));
+        await Promise.all([headerPromises, filterPromises]);
 
         await this.load();
         this.tableVisible = true;
@@ -236,12 +235,15 @@ export default class ListDialogComponent extends Vue {
     };
     async edit(item) {
         try {
+            this.loading = true;
             let entity = (await this.operationService.get(`${this._getUrl}/${item.id}`)).ensureSuccess();
             this.mapModelToFields(entity);
             this.editDialog = true;
         } catch (e) {
             this.editDialog = false;
         }
+
+        this.loading = false;
     };
     async editOk() {
         try {

@@ -6,6 +6,7 @@ export class FormComponentItem {
     title: string;
     type: HtmlElementType;
     items?: SelectItem[];
+    itemsFromPromise?: Promise<SelectItem[]>;
     dictionary: string;
     mask: string;
     returnMaskedValue: boolean = false;

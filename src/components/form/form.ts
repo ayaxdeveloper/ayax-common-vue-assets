@@ -6,8 +6,9 @@ import { HtmlElementType } from 'ayax-common-types';
 export default class FormComponent extends Vue {
     @Prop() fields: FormComponentItem[];
     @Prop() model: any;
+    formVisible = false;
 
-    created() {
+    async created() {
         if(this.model) {
             Object.keys(this.model).forEach(key => {
                 let field = this.fields.find(x=>x.name == key);
@@ -16,6 +17,19 @@ export default class FormComponent extends Vue {
                 }
             })
         }
+        const fieldsPromises = this.fields.filter(x => x.itemsFromPromise && !x.items).map(x => {
+            return new Promise((resolve) => {
+                x.itemsFromPromise
+                .then(z => {
+                    x.items = z;
+                    resolve();
+                })
+            })
+        });
+
+        await Promise.all(fieldsPromises);
+
+        this.formVisible = true;
     }
 
     get computedRows() {
