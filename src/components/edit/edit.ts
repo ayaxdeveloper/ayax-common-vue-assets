@@ -26,6 +26,28 @@ export default class EditComponent extends Vue {
     _updateUrl: string;
     _addUrl: string;
 
+    itemIsSaving = false;
+
+    shortkeys = {
+        save: ['enter'],
+        close: ['esc']
+    }
+
+    shortkeyHandler(key : any) {
+        if(!key || !key.srcKey) {
+            return;
+        }
+        switch(key.srcKey) {
+            case "save":
+                this.onOk();
+            break;
+
+            case "close":
+                this.onCancel();
+            break;
+        }
+    }
+
     async created() {
         if(this.entity && !this.getUrl) {
             this._getUrl = `/${this.entity}/get`;
@@ -89,6 +111,7 @@ export default class EditComponent extends Vue {
     };
 
     async save(data) {
+        this.itemIsSaving = true;
         try {
             let operation = this.id !== null && this.id > 0
             ? this.operationService.put(`${this._updateUrl}/${this.id}`, data)
@@ -98,6 +121,7 @@ export default class EditComponent extends Vue {
         } catch (e) {
             this.notificationProvider.Error(e);
         }
+        this.itemIsSaving = false;
     }
     async load() {
         try {

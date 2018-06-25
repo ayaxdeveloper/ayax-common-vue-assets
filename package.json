@@ -1,6 +1,6 @@
 {
   "name": "ayax-common-vue-assets",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "main": "dist/bundle.js",
   "description": "Ayax Common Vue Assets package for Vue Typescript projects",
   "scripts": {
@@ -31,7 +31,7 @@
     "moment": "^2.20.1",
     "url-loader": "^1.0.1",
     "vue-resize": "^0.4.4",
-    "vue-shortkey": "^3.1.2",
+    "vue-shortkey": "^3.1.6",
     "vuedraggable": "^2.16.0",
     "vuetify": "^1.0.17"
   },

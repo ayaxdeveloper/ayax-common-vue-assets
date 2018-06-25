@@ -6,8 +6,7 @@ import { HtmlElementType } from 'ayax-common-types';
 export default class FormComponent extends Vue {
     @Prop() fields: FormComponentItem[];
     @Prop() model: any;
-    formVisible = false;
-
+    formVisible = false;   
     async created() {
         if(this.model) {
             Object.keys(this.model).forEach(key => {

@@ -53,6 +53,28 @@ export default class ListDialogComponent extends Vue {
     _bulkDeleteUrl: string;
     tableVisible: boolean = false;
 
+    itemIsSaving = false;
+
+    editModalShortkeys = {
+        save: ['enter'],
+        close: ['esc']
+    }
+
+    editModelShortkeyHandler(key : any) {
+        if(!key || !key.srcKey) {
+            return;
+        }
+        switch(key.srcKey) {
+            case "save":
+                this.editOk();
+            break;
+
+            case "close":
+                this.editCancel();
+            break;
+        }
+    }
+
     async created() {
         if(this.entity && !this.search) {
             this._search = {url: `/${this.entity}/search`, method : 'post'};
@@ -246,7 +268,9 @@ export default class ListDialogComponent extends Vue {
         this.loading = false;
     };
     async editOk() {
+        this.itemIsSaving = true;
         try {
+            
             let model = this.getModelFromFields();
             let operation = +model.id > 0 
             ? (this.operationService.put(`${this._updateUrl}/${+model.id}`, model))
@@ -259,6 +283,7 @@ export default class ListDialogComponent extends Vue {
             this.editDialog = true;
             this.notificationProvider.Error(e);
         }
+        this.itemIsSaving = false;
     }
 
     editCancel() {

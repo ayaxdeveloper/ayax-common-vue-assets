@@ -34,12 +34,12 @@
                     <!-- <v-card-title>
                             <slot name="edit-head"></slot>
                     </v-card-title> -->
-                    <v-card-text>
-                        <a-form :fields="fields" :model="defaultModel"></a-form>
+                    <v-card-text v-shortkey.once="editModalShortkeys" @shortkey="editModelShortkeyHandler">
+                        <a-form :fields="fields" :model="defaultModel" ></a-form>
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color=" lighten-2" flat @click.native="editOk">ОК</v-btn>
+                        <v-btn color=" lighten-2" flat @click.native="editOk" :loading="itemIsSaving">ОК</v-btn>
                         <v-btn color="lighten-2" flat @click.native.stop="editCancel">Отмена</v-btn>
                     </v-card-actions>
                     </v-card>
