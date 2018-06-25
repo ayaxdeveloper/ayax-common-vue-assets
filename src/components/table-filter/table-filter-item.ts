@@ -86,7 +86,7 @@ export class TableFilterComponentItem {
                     filterValue.right = this.values[1];
                 }
                 if(this.values[0] || this.values[1]) {
-                    return new Filter({term: "from to", val: filterValue});
+                    return new Filter({term: "fromeq toeq", val: filterValue});
                 }
                 break;
             case TableFilterComponentItemType.SelectSingle:
