@@ -29,7 +29,7 @@
                     v-model="filter.values"
                     type="daterange"
                     format="dd.MM.yyyy"
-                    value-format="dd.MM.yyyy"
+                    value-format="yyyy.MM.dd"
                     size="small"
                     clearable
                     :picker-options="{firstDayOfWeek: 1}"
@@ -123,7 +123,7 @@
                 v-model="filter.values"
                 type="daterange"
                 format="dd.MM.yyyy"
-                value-format="dd.MM.yyyy"
+                value-format="yyyy.MM.dd"
                 size="small"
                 clearable
                 :picker-options="{firstDayOfWeek: 1}"
