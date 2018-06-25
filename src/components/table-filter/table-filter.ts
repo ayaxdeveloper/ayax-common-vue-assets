@@ -33,6 +33,9 @@ export default class TableFilterComponent extends Vue {
     @Watch('filter.values')
     onFilterValuesChange(newVal: any, oldVal: any) {
         if(newVal) {
+            if((newVal == [] || newVal == '') && oldVal != []) {
+                this.applyFilterButton = true;
+            }
             if(this.applyFilterButtonVisibility != false) {
                 this.applyFilterButton = true;
             }
