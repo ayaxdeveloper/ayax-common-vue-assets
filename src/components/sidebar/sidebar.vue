@@ -15,7 +15,7 @@
                     @click="click($event, subItem)"
                     @click.middle="clickMiddle($event, subItem)">
                         <v-list-tile slot="activator">
-                            <v-list-tile-action>
+                            <v-list-tile-action v-if="item.icon">
                                 <v-icon>{{ item.icon }}</v-icon>
                             </v-list-tile-action>
                             <v-list-tile-content>

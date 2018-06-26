@@ -1,15 +1,15 @@
 <template>
     <div class="actionbar">
         <v-toolbar :dark="actionbarIsDark" :class="actionbarColor" dense>
-            <v-toolbar-items class="hidden-sm-and-down">
-                <template v-for="action in actions">
-                    <v-btn v-if="!action.children" :key="action.name" 
+            <template v-for="action in actions">
+                <v-toolbar-items :key="action.name">
+                    <v-btn v-if="!action.children"
                     :disabled="action.needSelectedItem && !itemSelected" flat @click="executeAction(action)">
                         <v-icon left v-if="action.icon">{{action.icon}}</v-icon>
                         {{action.title}}
                     </v-btn>
-                    <v-menu top offset-y :disabled="action.needSelectedItem && !itemSelected" v-if="action.children" :key="action.name">
-                        <v-btn slot="activator" :key="action.name" 
+                    <v-menu top offset-y :disabled="action.needSelectedItem && !itemSelected" v-if="action.children">
+                        <v-btn slot="activator"
                         :disabled="action.needSelectedItem && !itemSelected" flat>
                         <v-icon left v-if="action.icon">{{action.icon}}</v-icon>
                         {{action.title}}
@@ -21,8 +21,9 @@
                         </v-list-tile>
                         </v-list>
                     </v-menu>
-                </template>
-            </v-toolbar-items>
+                </v-toolbar-items>
+                <v-spacer v-if="action.spaceNext" :key="action.name"></v-spacer>
+            </template>
         </v-toolbar>
         <resize-observer v-if="actions" @notify="actionbarSize"></resize-observer>
     </div>
@@ -37,4 +38,11 @@
         bottom: 0;
     }
 </style>
+
+<style>
+    .actionbar .toolbar__content>:not(.btn):not(.menu):first-child:not(:only-child) {
+        margin-left: 0px;
+    }
+</style>
+
 
