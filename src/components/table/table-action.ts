@@ -8,6 +8,7 @@ export class TableComponentAction {
     needSelectedItem: boolean;
     active = true;
     spaceNext = false;
+    loading = false;
     constructor(init?: Partial<TableComponentAction>) {
         if(init) {
             Object.assign(this, init)

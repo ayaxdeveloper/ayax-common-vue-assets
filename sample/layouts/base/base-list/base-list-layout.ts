@@ -19,6 +19,18 @@ export default abstract class BaseListLayout extends Vue {
             children: [
                 new TableComponentAction({name: "Excel", title: "Экспорт в Excel", icon: 'insert_chart', single: false, action: this.exportExcel})
             ]
+        }),
+        new TableComponentAction({
+            name: "loading", 
+            title: "Загрузка", 
+            single: false,
+            action: () => {
+                let action = this.actions.find(x=>x.name == "loading");
+                if(action) {
+                    action.loading = true;
+                    setTimeout(() => action.loading = false, 3000);
+                }
+            }
         })
     ];
 
