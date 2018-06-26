@@ -11,7 +11,9 @@
                     <v-list-group v-for="item in items.filter(x=>x.isSystem && x.visible)" 
                     :key="item.title" 
                     append-icon=""
-                    :value="item.expanded"  @click="click(subItem)" @click.ctrl="ctrlClick(item)">
+                    :value="item.expanded"  
+                    @click="click($event, subItem)"
+                    @click.middle="clickMiddle($event, subItem)">
                         <v-list-tile slot="activator">
                             <v-list-tile-action>
                                 <v-icon>{{ item.icon }}</v-icon>
@@ -26,7 +28,9 @@
                             </v-list-tile-action>
                         </v-list-tile>
                         <v-list-tile v-if="item.subItems.length > 0"
-                            v-for="subItem in item.subItems.filter(subItem => subItem.visible)" :key="subItem.title" @click="click(subItem)" @click.ctrl="ctrlClick(subItem)">
+                            v-for="subItem in item.subItems.filter(subItem => subItem.visible)" :key="subItem.title" 
+                            @click="click($event, subItem)"
+                            @click.middle="clickMiddle($event, subItem)">
                             <v-list-tile-action>
                                 <v-icon>{{ subItem.icon }}</v-icon>
                             </v-list-tile-action>
@@ -44,7 +48,9 @@
             :key="item.title" 
             :prepend-icon="item.icon"
             append-icon=""
-            :value="item.expanded"  @click.stop="click(item)" @click.ctrl="ctrlClick(item)">
+            :value="item.expanded"  
+            @click="click($event, item)"
+            @click.middle="clickMiddle($event, item)">
                 <v-list-tile slot="activator">
                     <v-list-tile-content>
                         <v-list-tile-title>{{ item.title }}</v-list-tile-title>
@@ -55,7 +61,9 @@
                         </v-btn>
                     </v-list-tile-action>
                 </v-list-tile>
-                <v-list-tile v-if="item.subItems.length > 0" v-for="subItem in item.subItems" :key="subItem.title" @click="click(subItem)" @click.ctrl="ctrlClick(subItem)">
+                <v-list-tile v-if="item.subItems.length > 0" v-for="subItem in item.subItems" :key="subItem.title" 
+                    @click="click($event, subItem)"
+                    @click.middle="clickMiddle($event, subItem)">
                     <v-list-tile-action>
                         <v-icon>{{ subItem.icon }}</v-icon>
                     </v-list-tile-action>
