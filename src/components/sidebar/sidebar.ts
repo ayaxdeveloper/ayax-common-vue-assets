@@ -31,18 +31,19 @@ export default class SidebarComponent extends mixins(OpenInNewWindowMixin) {
         item.arrowDirection == "keyboard_arrow_down" ? item.arrowDirection = "keyboard_arrow_up" : item.arrowDirection = "keyboard_arrow_down";
     }
 
-    click(item: SidebarComponentItem) {
+    click(e, item: SidebarComponentItem) {
+        e = e || window.event;
         if(item.route == null && item.href == null){
             this.toogleList(item);
             this.mini = false;
         }else if(item.route != null){
-            if(item.newTab){
+            if(item.newTab || e.ctrlKey || e.which == 2 || e.button == 4){
                 window.open(item.route);
             }else{
                 this.$router.push({path: item.route});
             }
         }else if(item.href != null){
-            if(item.newTab){
+            if(item.newTab || e.ctrlKey || e.which == 2 || e.button == 4){
                 window.open(item.href);
             }else{
                 location.href = item.href;
@@ -50,13 +51,16 @@ export default class SidebarComponent extends mixins(OpenInNewWindowMixin) {
         }
     }
 
-    ctrlClick(item: SidebarComponentItem) {
+    clickMiddle(e, item: SidebarComponentItem) {
+        e.preventDefault();
         if(item.route != null){
             window.open(item.route);
-        }else if(item.href != null){
+            return;
+        } else if(item.href != null){
             window.open(item.route);
+            return;
         }
-        this.click(item);
+        this.click(e, item);
     }
 
 
