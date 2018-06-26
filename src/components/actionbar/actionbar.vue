@@ -4,12 +4,14 @@
             <template v-for="action in actions">
                 <v-toolbar-items :key="action.name">
                     <v-btn v-if="!action.children"
-                    :disabled="action.needSelectedItem && !itemSelected" flat @click="executeAction(action)">
+                    :disabled="action.needSelectedItem && !itemSelected" flat @click="executeAction(action)"
+                    :loading="action.loading">
                         <v-icon left v-if="action.icon">{{action.icon}}</v-icon>
                         {{action.title}}
                     </v-btn>
                     <v-menu top offset-y :disabled="action.needSelectedItem && !itemSelected" v-if="action.children">
                         <v-btn slot="activator"
+                        :loading="action.loading"
                         :disabled="action.needSelectedItem && !itemSelected" flat>
                         <v-icon left v-if="action.icon">{{action.icon}}</v-icon>
                         {{action.title}}
