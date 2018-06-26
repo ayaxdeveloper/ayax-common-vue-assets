@@ -22,7 +22,7 @@
                         </v-list>
                     </v-menu>
                 </v-toolbar-items>
-                <v-spacer v-if="action.spaceNext" :key="action.name"></v-spacer>
+                <v-spacer v-if="action.spaceNext" :key="action.title"></v-spacer>
             </template>
         </v-toolbar>
         <resize-observer v-if="actions" @notify="actionbarSize"></resize-observer>
