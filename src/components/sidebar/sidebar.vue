@@ -11,7 +11,7 @@
                     <v-list-group v-for="item in items.filter(x=>x.isSystem && x.visible)" 
                     :key="item.title" 
                     append-icon=""
-                    :value="item.expanded"  @click.stop="moveTo(item)">
+                    :value="item.expanded"  @click="click(subItem)" @click.ctrl="ctrlClick(item)">
                         <v-list-tile slot="activator">
                             <v-list-tile-action>
                                 <v-icon>{{ item.icon }}</v-icon>
@@ -26,7 +26,7 @@
                             </v-list-tile-action>
                         </v-list-tile>
                         <v-list-tile v-if="item.subItems.length > 0"
-                            v-for="subItem in item.subItems.filter(subItem => subItem.visible)" :key="subItem.title" @click="moveTo(subItem)">
+                            v-for="subItem in item.subItems.filter(subItem => subItem.visible)" :key="subItem.title" @click="click(subItem)" @click.ctrl="ctrlClick(subItem)">
                             <v-list-tile-action>
                                 <v-icon>{{ subItem.icon }}</v-icon>
                             </v-list-tile-action>
@@ -44,7 +44,7 @@
             :key="item.title" 
             :prepend-icon="item.icon"
             append-icon=""
-            :value="item.expanded"  @click.stop="moveTo(item)">
+            :value="item.expanded"  @click.stop="click(item)" @click.ctrl="ctrlClick(item)">
                 <v-list-tile slot="activator">
                     <v-list-tile-content>
                         <v-list-tile-title>{{ item.title }}</v-list-tile-title>
@@ -55,7 +55,7 @@
                         </v-btn>
                     </v-list-tile-action>
                 </v-list-tile>
-                <v-list-tile v-if="item.subItems.length > 0" v-for="subItem in item.subItems" :key="subItem.title" @click="moveTo(subItem)">
+                <v-list-tile v-if="item.subItems.length > 0" v-for="subItem in item.subItems" :key="subItem.title" @click="click(subItem)" @click.ctrl="ctrlClick(subItem)">
                     <v-list-tile-action>
                         <v-icon>{{ subItem.icon }}</v-icon>
                     </v-list-tile-action>
