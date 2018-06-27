@@ -94,6 +94,13 @@ export default class TableFilterComponent extends Vue {
 
 @Emit()
     applyFilter() {
+        if(this.filter.requestType == this.filterTypes['InputRange'] && this.filter.inputType == this.filterInputTypes['Date']) {
+            if(this.filter.values.length >= 2) {
+                this.filter.values[1] = this.filter.values[1] + ' 23:59:59';
+            }
+        }
+        console.log(this.filter.values);
+        
         this.applyFilterButton = false;
     }
     // reloadSelectItems() {
