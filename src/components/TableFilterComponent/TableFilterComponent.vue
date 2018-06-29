@@ -1,6 +1,6 @@
 <template>
     <div v-shortkey.once="{applyFilter: ['enter']}" @shortkey="shortkeyHandler">
-        <div v-if="filter.appearance != filterAppearance['AllFilters']" style="position: relative">
+        <div v-if="filter.appearance != filterAppearance['AllFilters'] || filter.inputType == filterInputTypes['Button']" style="position: relative">
             <v-btn 
             v-if="applyFilterButton"
             :class="[header == null ? 'table-filter-apply-btn_topbar' : 'table-filter-apply-btn_header']"
