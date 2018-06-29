@@ -19,7 +19,7 @@
                                 <v-icon>{{ item.icon }}</v-icon>
                             </v-list-tile-action>
                             <v-list-tile-content>
-                                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                                <v-list-tile-title :title="item.title">{{ item.title }}</v-list-tile-title>
                             </v-list-tile-content>
                             <v-list-tile-action>
                                 <v-btn v-if="item.subItems.length > 0" icon @click.stop="toogleList(item)">
@@ -35,7 +35,7 @@
                                 <v-icon>{{ subItem.icon }}</v-icon>
                             </v-list-tile-action>
                             <v-list-tile-content>
-                                <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
+                                <v-list-tile-title :title="subItem.title">{{ subItem.title }}</v-list-tile-title>
                             </v-list-tile-content>
                         </v-list-tile>
                     </v-list-group>
@@ -53,7 +53,7 @@
             @click.middle="clickMiddle($event, item)">
                 <v-list-tile slot="activator">
                     <v-list-tile-content>
-                        <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                        <v-list-tile-title :title="item.title">{{ item.title }}</v-list-tile-title>
                     </v-list-tile-content>
                     <v-list-tile-action>
                         <v-btn v-if="item.subItems.length > 0" icon @click.stop="toogleList(item)">
@@ -68,7 +68,7 @@
                         <v-icon>{{ subItem.icon }}</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
-                        <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
+                        <v-list-tile-title :title="subItem.title">{{ subItem.title }}</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
             </v-list-group>
