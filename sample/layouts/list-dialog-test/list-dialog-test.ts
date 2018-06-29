@@ -69,17 +69,7 @@ export default class ListDialogTestLayout extends BaseListLayout {
             label: 'Дата создания'
 
         }),
-        new TableFilterComponentItem({
-            requestName: 'dictionaryfilter', 
-            appearance: TableFilterComponentItemAppearance.Header, 
-            name: 'dictionaryId',
-            requestType: TableFilterComponentItemType.In,
-            inputType: TableFilterComponentItemInputType.Select,
-            placeholder: 'Справочник',
-            selectItemsFromPromise: this.cacheService.ListAsSelectItems("dictionary")
-            // selectItemsFromDictionary: "dictionary"
-            // selectItems: dictionary
-        }),
+       
         new TableFilterComponentItem({
             requestName: 'qqfilter', 
             appearance: TableFilterComponentItemAppearance.Topbar, 

@@ -32,10 +32,10 @@
                         <v-icon>settings</v-icon>
                     </v-btn>
                     <v-list dense>
-                        <v-list-tile v-if="tableFilters.length > 0" @click="toggleFilters">
+                        <v-list-tile v-if="headerFilters.length > 0" @click="toggleFilters">
                             <v-list-tile-title>{{ showFiltersMessage }}</v-list-tile-title>
                         </v-list-tile>
-                        <v-divider></v-divider>
+                        <v-divider v-if="headerFilters.length > 0"></v-divider>
                         <draggable :list="editableHeaders" @update="onUpdateDraggable">
                             <v-list-tile v-for="header in editableHeaders" :key="header.value" @click="">
                                 <v-list-tile-action>
@@ -122,7 +122,7 @@
                         <strong>{{ header.text }}</strong>
                     </th>
                 </tr>
-                <tr v-if="tableFilters.length > 0 && showFilters" class="filter-row">
+                <tr v-if="headerFilters.length > 0 && showFilters" class="filter-row">
                     <th v-if='selectable' class="selectable"></th>
                     <th v-if="actions && actions.filter(x=>x.single && x.active).length > 0" class="action">
                     </th>
