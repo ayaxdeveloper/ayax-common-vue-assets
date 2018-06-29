@@ -8,11 +8,13 @@
             </v-toolbar-title>
             <v-toolbar-items>
                 <v-layout row>
-                    <a-table-filter class="ml-3" style="width: 180px" v-for="(topbarFilter, index) in topbarFilters" :key="topbarFilter.requestName"
-                    :applyFilterButtonVisibility="applyFilterButtonVisibility" 
-                    :filter="topbarFilter"
-                    :index="index" 
-                    @apply-filter="applyFilter">
+                    <a-table-filter class="ml-3" 
+                        :style="{width: topbarFilter.inputType == filterInputTypes['Button'] ? 'initial' : '180px'}" 
+                        v-for="(topbarFilter, index) in topbarFilters" :key="topbarFilter.requestName"
+                        :applyFilterButtonVisibility="applyFilterButtonVisibility" 
+                        :filter="topbarFilter"
+                        :index="index" 
+                        @apply-filter="applyFilter">
                     </a-table-filter>
                 </v-layout>
             </v-toolbar-items>

@@ -9,6 +9,7 @@ import { TableComponentAction } from './table-action';
 import draggable from 'vuedraggable';
 import ActionbarComponent from '../actionbar/actionbar.vue';
 import { TableFilterComponentItemAppearance } from '../TableFilterComponent/TableFilterComponentItemAppearance';
+import { TableFilterComponentItemInputType } from '../TableFilterComponent/TableFilterComponentItemInputType';
 
 @Component({
     components: {
@@ -53,8 +54,12 @@ export default class TableComponent extends Vue {
     topbarFilters: TableFilterComponentItem[] = [];
     allFilters: TableFilterComponentItem[] = [];
     lastQuery: string;
+    filterInputTypes: {[name: string]: TableFilterComponentItemInputType} = {};
     
     created() {
+        Object.keys(TableFilterComponentItemInputType).forEach(item => {
+            this.filterInputTypes[item] = TableFilterComponentItemInputType[item];
+        });
         this.headers.forEach(el => {
             this.editableHeaders.push(el);
         });
