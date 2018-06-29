@@ -1,7 +1,7 @@
 import { Component, Vue, Prop, Inject, Watch, Emit } from 'vue-property-decorator';
-import { Pagination, IClientSettings, INotificationProvider, IPagination, IEntity, Dictionary, SearchResponse } from 'ayax-common-types';
+import { Pagination, IClientSettings, INotificationProvider, IPagination, IEntity, SearchResponse } from 'ayax-common-types';
 import { TableComponentHeader } from '../table/table-header';
-import { TableFilterComponentItem } from '../table-filter/table-filter-item';
+import { TableFilterComponentItem } from '../TableFilterComponent/TableFilterComponentItem';
 import { TableComponentAction } from '../table/table-action';
 import { Route } from 'vue-router';
 import { ICacheService } from 'ayax-common-cache';

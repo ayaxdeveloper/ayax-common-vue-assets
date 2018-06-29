@@ -1,8 +1,7 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify';
-import VueRouter from "vue-router";
 import TableComponent from './components/table/table.vue';
-import TableFilterComponent from './components/table-filter/table-filter.vue';
+import TableFilterComponent from './components/TableFilterComponent/TableFilterComponent.vue';
 import FormComponent from './components/form/form.vue';
 import NotificationComponent from './components/notification/notification.vue';
 import FormControlComponent from './components/form/form-control.vue';
@@ -38,10 +37,13 @@ export * from "./helpers/form-component-helper";
 export * from "./components/form/form-item";
 export * from "./components/table/table-action";
 export * from "./components/table/table-header";
-export * from "./components/table-filter/table-filter-item";
+export * from "./components/TableFilterComponent/TableFilterComponentItem";
 export * from "./components/sidebar/sidebar-item";
-export * from "./components/breadcrumbs/breadcrumb-item"
-export * from "./providers/notification/notification-provider"
+export * from "./components/breadcrumbs/breadcrumb-item";
+export * from "./providers/notification/notification-provider";
+export * from "./components/TableFilterComponent/TableFilterComponentItemAppearance";
+export * from "./components/TableFilterComponent/TableFilterComponentItemInputType";
+export * from "./components/TableFilterComponent/TableFilterComponentItemType";
 
 export { 
     TableComponent, 

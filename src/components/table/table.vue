@@ -7,8 +7,8 @@
                 <v-chip title="Количество записей" label small disabled v-if="pagination.totalItems">{{ pagination.totalItems }}</v-chip>
             </v-toolbar-title>
             <v-toolbar-items>
-                <v-layout row class="ml-4">
-                    <a-table-filter v-for="(topbarFilter, index) in topbarFilters" :key="topbarFilter.requestName"
+                <v-layout row>
+                    <a-table-filter class="ml-3" style="width: 180px" v-for="(topbarFilter, index) in topbarFilters" :key="topbarFilter.requestName"
                     :applyFilterButtonVisibility="applyFilterButtonVisibility" 
                     :filter="topbarFilter"
                     :index="index" 
@@ -49,17 +49,30 @@
                         </v-list-tile>
                     </v-list>
                 </v-menu>
-            </v-toolbar-items>  
+            </v-toolbar-items>
         </v-toolbar>
         <transition name="slide">
-            <v-card class="pa-3" v-if="showAllFilters" dark flat style="border-radius: 0">
-                <v-layout row wrap>
-                    <a-table-filter v-for="(filter, index) in allFilters" :key="filter.requestName"
-                    :applyFilterButtonVisibility="applyFilterButtonVisibility" 
-                    :filter="filter"
-                    :index="index" 
-                    @apply-filter="applyFilter">
-                    </a-table-filter>
+            <v-card class="pa-2" v-if="showAllFilters" dark flat style="border-radius: 0">
+                <v-container fluid grid-list-md>
+                    <v-layout row wrap>
+                        <v-flex :xs6="filter.largeInput" :xs3="!filter.largeInput"  v-for="(filter, index) in allFilters" :key="filter.requestName">
+                            <a-table-filter
+                                :applyFilterButtonVisibility="applyFilterButtonVisibility" 
+                                :filter="filter"
+                                :index="index" 
+                                @apply-filter="applyFilter">
+                            </a-table-filter>
+                        </v-flex>
+                    </v-layout>
+                </v-container>
+                <v-layout>
+                    <v-spacer></v-spacer>
+                    <v-btn light @click="clearAllFilters()">
+                        Очистить
+                    </v-btn>
+                    <v-btn color="primary" @click="applyFilter()">
+                        Применить
+                    </v-btn>
                 </v-layout>
             </v-card>
         </transition>

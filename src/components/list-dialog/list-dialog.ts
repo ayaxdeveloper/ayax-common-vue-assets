@@ -4,7 +4,7 @@ import { IPagination, IEntity, IClientSettings, INotificationProvider, Paginatio
 import { TableComponentAction } from '../table/table-action';
 import { FormComponentItem } from '../form/form-item';
 import { ICacheService } from 'ayax-common-cache';
-import { TableFilterComponentItem } from '../table-filter/table-filter-item';
+import { TableFilterComponentItem } from '../TableFilterComponent/TableFilterComponentItem';
 import { IOperationService } from 'ayax-common-operation'; 
 
 @Component

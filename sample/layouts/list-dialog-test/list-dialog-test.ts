@@ -4,8 +4,11 @@ import { TableComponentHeader } from '../../../src/components/table/table-header
 import { SelectItem } from 'ayax-common-types';
 import { FormComponentItem } from '../../../src/components/form/form-item';
 import { TestModel } from '../../models/test/test-model';
-import { TableFilterComponentItem, TableFilterComponentItemAppearance, TableFilterComponentItemType, TableFilterComponentItemInputType } from '../../../src';
+import { TableFilterComponentItem } from '../../../src';
 import { ICacheService } from 'ayax-common-cache';
+import { TableFilterComponentItemAppearance } from '../../../src/components/TableFilterComponent/TableFilterComponentItemAppearance';
+import { TableFilterComponentItemType } from '../../../src/components/TableFilterComponent/TableFilterComponentItemType';
+import { TableFilterComponentItemInputType } from '../../../src/components/TableFilterComponent/TableFilterComponentItemInputType';
 
 @Component
 export default class ListDialogTestLayout extends BaseListLayout {
@@ -43,24 +46,35 @@ export default class ListDialogTestLayout extends BaseListLayout {
     tableFilters: TableFilterComponentItem[] = this.tableFilters = [
         new TableFilterComponentItem({
             requestName: 'titlefilter', 
-            appearance: TableFilterComponentItemAppearance.TopbarHeader, 
+            appearance: TableFilterComponentItemAppearance.AllFilters, 
             name:'title',
-            requestType: TableFilterComponentItemType.InputLike,
-            icon: 'search',
-            placeholder: 'Наименование...'
+            requestType: TableFilterComponentItemType.Like,
+            placeholder: 'Введите',
+            label: 'Название улицы',
+            largeInput: true
+        }),
+        new TableFilterComponentItem({
+            requestName: 'titlefilter', 
+            appearance: TableFilterComponentItemAppearance.Topbar, 
+            name:'title',
+            requestType: TableFilterComponentItemType.Like,
+            placeholder: 'Введите',
+            label: 'Наименование'
         }),
         new TableFilterComponentItem({
             requestName: 'datefilter', 
             appearance: TableFilterComponentItemAppearance.Topbar, 
-            requestType: TableFilterComponentItemType.InputRange,
-            icon: 'mdi-calendar',
-            inputType: TableFilterComponentItemInputType.Date
+            requestType: TableFilterComponentItemType.Range,
+            inputType: TableFilterComponentItemInputType.Date,
+            label: 'Дата создания'
+
         }),
         new TableFilterComponentItem({
             requestName: 'dictionaryfilter', 
             appearance: TableFilterComponentItemAppearance.Header, 
             name: 'dictionaryId',
-            requestType: TableFilterComponentItemType.SelectMultiple,
+            requestType: TableFilterComponentItemType.In,
+            inputType: TableFilterComponentItemInputType.Select,
             placeholder: 'Справочник',
             selectItemsFromPromise: this.cacheService.ListAsSelectItems("dictionary")
             // selectItemsFromDictionary: "dictionary"
@@ -69,7 +83,8 @@ export default class ListDialogTestLayout extends BaseListLayout {
         new TableFilterComponentItem({
             requestName: 'qqfilter', 
             appearance: TableFilterComponentItemAppearance.Topbar, 
-            requestType: TableFilterComponentItemType.SelectSingle,
+            requestType: TableFilterComponentItemType.Eq,
+            inputType: TableFilterComponentItemInputType.Select,
             selectItems: [
                 new SelectItem ({value: 1, text: 'Район 1'}),
                 new SelectItem ({value: 2, text: 'Район 2'}),
@@ -77,12 +92,14 @@ export default class ListDialogTestLayout extends BaseListLayout {
                 new SelectItem ({value: 4, text: 'Район 4'}),
                 new SelectItem ({value: 5, text: 'Район 5'}),
             ],
-            placeholder: 'Выбор района'
+            label: 'Выбор района',
+            placeholder: 'Выберите'
         }),
         new TableFilterComponentItem({
             requestName: 'wwfilter', 
             appearance: TableFilterComponentItemAppearance.AllFilters, 
-            requestType: TableFilterComponentItemType.SelectMultiple,
+            requestType: TableFilterComponentItemType.In,
+            inputType: TableFilterComponentItemInputType.Select,
             selectItems: [
                 new SelectItem ({value: 1, text: 'Район 1'}),
                 new SelectItem ({value: 2, text: 'Район 2'}),
@@ -90,7 +107,8 @@ export default class ListDialogTestLayout extends BaseListLayout {
                 new SelectItem ({value: 4, text: 'Район 4'}),
                 new SelectItem ({value: 5, text: 'Район 5'}),
             ],
-            placeholder: 'Выбор районов'
+            label: 'Выбор районов',
+            placeholder: 'Выберите'
         })
     ];
 

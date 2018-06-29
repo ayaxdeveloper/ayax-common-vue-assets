@@ -1,8 +1,11 @@
-import { Vue, Component, Inject, Watch } from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import BaseListLayout from '../../base/base-list/base-list-layout';
 import { TableComponentHeader } from '../../../../src/components/table/table-header';
-import { INotificationSettings, INotificationProvider, SelectItem } from 'ayax-common-types';
-import { TableFilterComponentItem, TableFilterComponentItemAppearance, TableFilterComponentItemType, TableFilterComponentItemInputType } from '../../../../src';
+import { SelectItem } from 'ayax-common-types';
+import { TableFilterComponentItem } from '../../../../src';
+import { TableFilterComponentItemAppearance } from '../../../../src/components/TableFilterComponent/TableFilterComponentItemAppearance';
+import { TableFilterComponentItemType } from '../../../../src/components/TableFilterComponent/TableFilterComponentItemType';
+import { TableFilterComponentItemInputType } from '../../../../src/components/TableFilterComponent/TableFilterComponentItemInputType';
 
 @Component
 export default class ListTestLayout extends BaseListLayout {
@@ -28,21 +31,21 @@ export default class ListTestLayout extends BaseListLayout {
             requestName: 'titlefilter', 
             appearance: TableFilterComponentItemAppearance.TopbarHeader, 
             name:'title',
-            requestType: TableFilterComponentItemType.InputLike,
+            requestType: TableFilterComponentItemType.Like,
             icon: 'search',
             placeholder: 'Наименование...'
         }),
         new TableFilterComponentItem({
             requestName: 'datefilter', 
             appearance: TableFilterComponentItemAppearance.Topbar, 
-            requestType: TableFilterComponentItemType.InputRange,
+            requestType: TableFilterComponentItemType.Range,
             icon: 'mdi-calendar',
             inputType: TableFilterComponentItemInputType.Date
         }),
         new TableFilterComponentItem({
             requestName: 'qqfilter', 
             appearance: TableFilterComponentItemAppearance.Topbar, 
-            requestType: TableFilterComponentItemType.SelectSingle,
+            requestType: TableFilterComponentItemType.Eq,
             selectItems: [
                 new SelectItem ({value: 1, text: 'Район 1'}),
                 new SelectItem ({value: 2, text: 'Район 2'}),

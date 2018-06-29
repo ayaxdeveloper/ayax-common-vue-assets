@@ -1,15 +1,14 @@
-import { Component, Vue, Prop, Watch, Inject, Emit } from 'vue-property-decorator';
-import { Pagination, IPagination } from 'ayax-common-types';
-import { TableComponentHeader, TableComponentHeaderType } from './table-header';
-import { SelectItem, guid } from 'ayax-common-types';
-import * as moment from 'moment';
-import TableFilterComponent from '../table-filter/table-filter.vue';
-import { TableFilterComponentShortkey, TableFilterComponentItem, TableFilterComponentItemAppearance, TableFilterComponentItemInputType } from '../table-filter/table-filter-item';
+import { Component, Vue, Prop, Watch, Emit } from 'vue-property-decorator';
+import { IPagination } from 'ayax-common-types';
+import { TableComponentHeader } from './table-header';
+import TableFilterComponent from '../TableFilterComponent/TableFilterComponent.vue';
+import { TableFilterComponentItem } from '../TableFilterComponent/TableFilterComponentItem';
 import { SortableField } from 'ayax-common-types';
 import { IEntity } from 'ayax-common-types';
 import { TableComponentAction } from './table-action';
 import draggable from 'vuedraggable';
 import ActionbarComponent from '../actionbar/actionbar.vue';
+import { TableFilterComponentItemAppearance } from '../TableFilterComponent/TableFilterComponentItemAppearance';
 
 @Component({
     components: {
@@ -63,7 +62,6 @@ export default class TableComponent extends Vue {
             switch(el.appearance) {
                 case TableFilterComponentItemAppearance.Header:
                     this.headerFilters.push(el);
-                    this.allFilters.push(el);
                     break;
                 case TableFilterComponentItemAppearance.Topbar:
                     this.topbarFilters.push(el);
@@ -248,6 +246,13 @@ export default class TableComponent extends Vue {
             return val.name ? val.name : val.title;
         }
         return "Нет";
+    }
+
+    clearAllFilters() {
+        this.allFilters.forEach(filter => {
+            filter.values = [];
+        })
+        this.applyFilter();
     }
 
     @Emit()
