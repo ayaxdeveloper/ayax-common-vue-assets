@@ -99,7 +99,13 @@ export default class ListDialogTestLayout extends BaseListLayout {
             ],
             label: 'Выбор районов',
             placeholder: 'Выберите'
-        })
+        }),
+        new TableFilterComponentItem({
+            requestName: '', 
+            appearance: TableFilterComponentItemAppearance.AllFilters, 
+            requestType: TableFilterComponentItemType.Range,
+            label: 'Комнат в доме'
+        }),
     ];
 
     created() {

@@ -148,8 +148,9 @@
                             :mask="getMask()"
                             v-model="filter.values[0]">
                         </v-text-field>
+                        <div class="pa-2">-</div>
                         <v-text-field
-                            class="filterInput filterInputRange ml-3"
+                            class="filterInput filterInputRange"
                             @input="applyFilterButton = filter.values[1]" 
                             :name="filter.requestName" 
                             single-line 
