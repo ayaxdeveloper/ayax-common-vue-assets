@@ -1,5 +1,5 @@
-import { Vue, Component, Inject, Prop } from 'vue-property-decorator';
-import { AuthUser, IAuthService, ITokenService } from 'ayax-common-auth';
+import { AuthUser, IAuthService, ITokenService } from "ayax-common-auth";
+import { Component, Inject, Prop, Vue } from "vue-property-decorator";
 
 @Component
 export default class UserProfileComponent extends Vue {
@@ -12,7 +12,7 @@ export default class UserProfileComponent extends Vue {
         this.currentUser = (await this.authService.GetAuthenticatedUser(this.modules));
     }
 
-    logout(){
-        this.eventBus.$emit('logout');
+    logout() {
+        this.eventBus.$emit("logout");
     }
 }

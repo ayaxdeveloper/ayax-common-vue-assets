@@ -1,8 +1,8 @@
-import { Component, Vue, Inject, Prop, Emit, } from 'vue-property-decorator';
-import { SelectItem, INotificationProvider } from 'ayax-common-types';
-import { FormComponentItem } from '../form/form-item';
-import { ICacheService } from 'ayax-common-cache';
-import { IOperationService } from 'ayax-common-operation';
+import { ICacheService } from "ayax-common-cache";
+import { IOperationService } from "ayax-common-operation";
+import { INotificationProvider, SelectItem } from "ayax-common-types";
+import { Component, Inject, Prop, Vue, } from "vue-property-decorator";
+import { FormComponentItem } from "../form/form-item";
 
 @Component
 export default class EditComponent extends Vue {
@@ -18,10 +18,10 @@ export default class EditComponent extends Vue {
     @Prop() defaultModel: any;
     $refs: {
         form: HTMLFormElement
-    }
+    };
     id: number;
     model: any;
-    valid: boolean = true;
+    valid = true;
     _getUrl: string;
     _updateUrl: string;
     _addUrl: string;
@@ -29,15 +29,15 @@ export default class EditComponent extends Vue {
     itemIsSaving = false;
 
     shortkeys = {
-        save: ['enter'],
-        close: ['esc']
-    }
+        save: ["enter"],
+        close: ["esc"]
+    };
 
     shortkeyHandler(key : any) {
-        if(!key || !key.srcKey) {
+        if (!key || !key.srcKey) {
             return;
         }
-        switch(key.srcKey) {
+        switch (key.srcKey) {
             case "save":
                 this.onOk();
             break;
@@ -45,46 +45,49 @@ export default class EditComponent extends Vue {
             case "close":
                 this.onCancel();
             break;
+
+            default:
+            break;
         }
     }
 
     async created() {
-        if(this.entity && !this.getUrl) {
+        if (this.entity && !this.getUrl) {
             this._getUrl = `/${this.entity}/get`;
         } else {
             this._getUrl = this.getUrl;
         }
-        if(this.entity && !this.updateUrl) {
+        if (this.entity && !this.updateUrl) {
             this._updateUrl = `/${this.entity}/update`;
         } else {
             this._updateUrl = this.updateUrl;
         }
-        if(this.entity && !this.addUrl) {
+        if (this.entity && !this.addUrl) {
             this._addUrl = `/${this.entity}/add`;
         } else {
             this._addUrl = this.addUrl;
         }
         this.id = +this.$route.params.id;
         this.model = this.defaultModel;
-        this.fields.filter(x=>x.dictionary!=null && !x.items).forEach((field) => {
+        this.fields.filter(x => x.dictionary != null && !x.items).forEach((field) => {
             this.cacheService.List(field.dictionary).then((items) => {
-                field.items = items.map(x=> new SelectItem({text: x.name, value: x.id}));
-            })
+                field.items = items.map(x => new SelectItem({text: x.name, value: x.id}));
+            });
         });
         
         await this.load();
         Object.keys(this.model).forEach(x => {
-            let field = this.fields.find(z => z.name && z.name == x);
-            if(field) {
+            const field = this.fields.find(z => z.name && z.name === x);
+            if (field) {
                 field.model = this.model[x];
             } 
         });
     }
 
     get fetchModel() {
-        let newModel = {};
-        this.fields.forEach(x=> {
-            if(x.name && x.model) {
+        const newModel = {};
+        this.fields.forEach(x => {
+            if (x.name && x.model) {
                 newModel[x.name] = x.model;
             }
         });
@@ -93,9 +96,9 @@ export default class EditComponent extends Vue {
 
     get actionTitle() {
         return this.id > 0
-            ? 'редактирование'
-            : 'добавление';
-    };
+            ? "редактирование"
+            : "добавление";
+    }
 
     onOk() {
         if (this.$refs.form.validate()) {
@@ -104,16 +107,16 @@ export default class EditComponent extends Vue {
             this.notificationProvider.Error("Проверьте данные");
         }
 
-    };
+    }
 
     onCancel() {
         this.backToList();
-    };
+    }
 
     async save(data) {
         this.itemIsSaving = true;
         try {
-            let operation = this.id !== null && this.id > 0
+            const operation = this.id !== null && this.id > 0
             ? this.operationService.put(`${this._updateUrl}/${this.id}`, data)
             : this.operationService.post(`${this._addUrl}`, data);
             (await operation).ensureSuccess();
@@ -126,17 +129,18 @@ export default class EditComponent extends Vue {
     async load() {
         try {
             if (this.id === 0) {
-                return
+                return;
             }
-            let response = (await this.operationService.get(`${this._getUrl}/${this.id}`)).ensureSuccess();
+            const response = (await this.operationService.get(`${this._getUrl}/${this.id}`)).ensureSuccess();
             this.model = response;
-        } catch(e) {
+        } catch (e) {
             this.notificationProvider.Error(e);
             this.model = this.defaultModel();
         }
-    };
+    }
+
     backToList() {
         this.$router.go(-1); 
         // this.$router.push({ name: `${this.entity}-list`});
-    };
+    }
 }

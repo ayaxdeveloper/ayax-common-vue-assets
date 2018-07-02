@@ -1,9 +1,9 @@
-import { Vue, Component, Prop, Emit, Watch } from 'vue-property-decorator';
-import { TableFilterComponentItem } from './TableFilterComponentItem';
-import { TableComponentHeader, TableComponentHeaderType } from '../table/table-header';
-import { TableFilterComponentItemType } from './TableFilterComponentItemType';
-import { TableFilterComponentItemInputType } from './TableFilterComponentItemInputType';
-import { TableFilterComponentItemAppearance } from './TableFilterComponentItemAppearance';
+import { Component, Emit, Prop, Vue, Watch } from "vue-property-decorator";
+import { TableComponentHeader, TableComponentHeaderType } from "../table/table-header";
+import { TableFilterComponentItem } from "./TableFilterComponentItem";
+import { TableFilterComponentItemAppearance } from "./TableFilterComponentItemAppearance";
+import { TableFilterComponentItemInputType } from "./TableFilterComponentItemInputType";
+import { TableFilterComponentItemType } from "./TableFilterComponentItemType";
 
 @Component
 export default class TableFilterComponent extends Vue {
@@ -19,8 +19,8 @@ export default class TableFilterComponent extends Vue {
     filterInputTypes: {[name: string]: TableFilterComponentItemInputType} = {};
     filterAppearance: {[name: string]: TableFilterComponentItemAppearance} = {};
     searchInput: Function;
-    applyFilterButton: boolean = false;
-    buttonText = '';
+    applyFilterButton = false;
+    buttonText = "";
 
     created() {
         Object.keys(TableFilterComponentItemType).forEach(item => {
@@ -35,7 +35,7 @@ export default class TableFilterComponent extends Vue {
         Object.keys(TableFilterComponentItemAppearance).forEach(item => {
             this.filterAppearance[item] = TableFilterComponentItemAppearance[item];
         });
-        if(this.filter.inputType == this.filterInputTypes['Button']) {
+        if (this.filter.inputType === this.filterInputTypes["Button"]) {
             this.filter.values[0] = false;
             this.buttonText = this.filter.buttonText;
         }
@@ -44,7 +44,7 @@ export default class TableFilterComponent extends Vue {
 
     changeBtnValue() {
         this.filter.values[0] = !this.filter.values[0];
-        if(this.filter.values[0] == true) {
+        if (this.filter.values[0] === true) {
             this.buttonText = this.filter.buttonClickedText;
         } else {
             this.buttonText = this.filter.buttonText;
@@ -52,29 +52,29 @@ export default class TableFilterComponent extends Vue {
         this.applyFilter();
     }
 
-    @Watch('filter.values')
+    @Watch("filter.values")
     onFilterValuesChange(newVal: any, oldVal: any) {
-        if(newVal) {
-            if((newVal == [] || newVal == '') && oldVal != []) {
+        if (newVal) {
+            if ((newVal === [] || newVal === "") && oldVal !== []) {
                 this.applyFilterButton = true;
             }
-            if(this.applyFilterButtonVisibility != false) {
+            if (this.applyFilterButtonVisibility !== false) {
                 this.applyFilterButton = true;
             }
         } else {
             this.applyFilterButton = false;
         }
-        if(this.filter.inputType == this.filterInputTypes['Date']) {
-            if(!this.filter.values) {
+        if (this.filter.inputType === this.filterInputTypes["Date"]) {
+            if (!this.filter.values) {
                 this.filter.values = [];
             }
             this.applyFilter();
         }
     }
 
-    @Watch('applyFilterButtonVisibility')
+    @Watch("applyFilterButtonVisibility")
     onApplyButtonChange(value) {
-       if(!value) {
+       if (!value) {
            this.applyFilterButton = false;
        }
     }
@@ -84,7 +84,7 @@ export default class TableFilterComponent extends Vue {
     }
 
     getHint() {
-        switch(this.filter.requestType) {
+        switch (this.filter.requestType) {
             case TableFilterComponentItemType.Eq:
             return "Точное совпадение";
             case TableFilterComponentItemType.Like:
@@ -97,26 +97,28 @@ export default class TableFilterComponent extends Vue {
     }
 
     shortkeyHandler(key : any) {
-        if(!key || !key.srcKey) {
+        if (!key || !key.srcKey) {
             return;
         }
-        switch(key.srcKey) {
+        switch (key.srcKey) {
             case "applyFilter":
                 this.applyFilter();
+            break;
+            default:
             break;
         }
     }
 
-    @Watch('header.dictionary')
+    @Watch("header.dictionary")
     onSelectItemsChange() {
         this.$forceUpdate();
     }
 
 @Emit()
     applyFilter() {
-        if(this.filter.requestType == this.filterTypes['Range'] && this.filter.inputType == this.filterInputTypes['Date']) {
-            if(this.filter.values.length >= 2) {
-                this.filter.values[1] = this.filter.values[1] + ' 23:59:59';
+        if (this.filter.requestType === this.filterTypes["Range"] && this.filter.inputType === this.filterInputTypes["Date"]) {
+            if (this.filter.values.length >= 2) {
+                this.filter.values[1] = this.filter.values[1] + " 23:59:59";
             }
         }
         
