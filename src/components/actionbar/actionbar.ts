@@ -1,14 +1,14 @@
-import { Vue, Component, Prop, Emit } from 'vue-property-decorator';
-import { TableComponentAction } from '../table/table-action';
-import { ResizeObserver } from 'vue-resize';
+import { Component, Emit, Prop, Vue } from "vue-property-decorator";
+import { ResizeObserver } from "vue-resize";
+import { TableComponentAction } from "../table/table-action";
 
 @Component({
     components: {
-        'resize-observer': ResizeObserver
+        "resize-observer": ResizeObserver
     }
 })
 export default class ActionbarComponent extends Vue{
-    @Prop({default: 'primary'}) actionbarColor: string;
+    @Prop({default: "primary"}) actionbarColor: string;
     @Prop({default: true}) actionbarIsDark: boolean;
     @Prop({required: true}) actions: TableComponentAction[];
     @Prop({default: false}) itemSelected: boolean;
@@ -21,24 +21,24 @@ export default class ActionbarComponent extends Vue{
     onBarAction(items: any[], name: string) {}
 
     mounted() {
-        this.actionbarContainer = document.getElementsByClassName('actionbarContainer');
-        this.actionbar = document.getElementsByClassName('actionbar');
+        this.actionbarContainer = document.getElementsByClassName("actionbarContainer");
+        this.actionbar = document.getElementsByClassName("actionbar");
         this.addWindowEvents();
     }
 
     addWindowEvents() {
         window.onresize = () => {
             this.actionbarSize();
-        }
+        };
         window.onscroll = () => {
             [].forEach.call(this.actionbarContainer, elem => {
                 this.toggleActionbar(elem);
-            })
-        }
+            });
+        };
     }
 
     isElementInViewPort(el) {
-        var rect = el.getBoundingClientRect();
+        const rect = el.getBoundingClientRect();
         return (
         rect.top >= 0 &&
         rect.left >= 0 &&
@@ -48,11 +48,11 @@ export default class ActionbarComponent extends Vue{
     }
 
     isPartOfElementInViewPort(el) {
-        var top = el.offsetTop;
-        var left = el.offsetLeft;
-        var width = el.offsetWidth;
-        var height = el.offsetHeight;
-        while(el.offsetParent) {
+        let top = el.offsetTop;
+        let left = el.offsetLeft;
+        const width = el.offsetWidth;
+        const height = el.offsetHeight;
+        while (el.offsetParent) {
             el = el.offsetParent;
             top += el.offsetTop;
             left += el.offsetLeft;
@@ -67,24 +67,24 @@ export default class ActionbarComponent extends Vue{
 
     actionbarSize() {
         [].forEach.call(this.actionbar, el => {
-            el.style.width = this.actionbarContainer[0].offsetWidth.toString() + 'px';
-        })
+            el.style.width = this.actionbarContainer[0].offsetWidth.toString() + "px";
+        });
     }
 
     toggleActionbar(elem) {
-        let actionBarElement = elem.querySelector('.actionbar');
-        if(!actionBarElement) {
+        const actionBarElement = elem.querySelector(".actionbar");
+        if (!actionBarElement) {
             return;
         }
-        if(this.isPartOfElementInViewPort(elem.querySelector('.mainAnchor')) && !this.isElementInViewPort(elem.querySelector('.actionbarAnchor'))) {
-            actionBarElement.classList.add('actionbarFixed');
+        if (this.isPartOfElementInViewPort(elem.querySelector(".mainAnchor")) && !this.isElementInViewPort(elem.querySelector(".actionbarAnchor"))) {
+            actionBarElement.classList.add("actionbarFixed");
         }else {
-            actionBarElement.classList.remove('actionbarFixed');
+            actionBarElement.classList.remove("actionbarFixed");
         }
     }
 
     executeAction(action: TableComponentAction) {
-        if(action.action) {
+        if (action.action) {
             action.action();
         } else {
             this.onBarAction(this.innerSelected.map(x => x.id), action.name);

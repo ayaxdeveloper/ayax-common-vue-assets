@@ -1,5 +1,5 @@
-import { Component, Vue , Inject, Prop} from 'vue-property-decorator';
-import { INotificationProvider, NotificationItem } from 'ayax-common-types';
+import { INotificationProvider, NotificationItem } from "ayax-common-types";
+import { Component, Inject , Vue } from "vue-property-decorator";
 
 @Component
 export default class NotificationComponent extends Vue {

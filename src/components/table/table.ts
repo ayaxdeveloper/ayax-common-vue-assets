@@ -1,21 +1,21 @@
-import { Component, Vue, Prop, Watch, Emit } from 'vue-property-decorator';
-import { IPagination } from 'ayax-common-types';
-import { TableComponentHeader } from './table-header';
-import TableFilterComponent from '../TableFilterComponent/TableFilterComponent.vue';
-import { TableFilterComponentItem } from '../TableFilterComponent/TableFilterComponentItem';
-import { SortableField } from 'ayax-common-types';
-import { IEntity } from 'ayax-common-types';
-import { TableComponentAction } from './table-action';
-import draggable from 'vuedraggable';
-import ActionbarComponent from '../actionbar/actionbar.vue';
-import { TableFilterComponentItemAppearance } from '../TableFilterComponent/TableFilterComponentItemAppearance';
-import { TableFilterComponentItemInputType } from '../TableFilterComponent/TableFilterComponentItemInputType';
+import { IEntity } from "ayax-common-types";
+import { IPagination } from "ayax-common-types";
+import { SortableField } from "ayax-common-types";
+import { Component, Emit, Prop, Vue, Watch } from "vue-property-decorator";
+import draggable from "vuedraggable";
+import ActionbarComponent from "../actionbar/actionbar.vue";
+import TableFilterComponent from "../TableFilterComponent/TableFilterComponent.vue";
+import { TableFilterComponentItem } from "../TableFilterComponent/TableFilterComponentItem";
+import { TableFilterComponentItemAppearance } from "../TableFilterComponent/TableFilterComponentItemAppearance";
+import { TableFilterComponentItemInputType } from "../TableFilterComponent/TableFilterComponentItemInputType";
+import { TableComponentAction } from "./table-action";
+import { TableComponentHeader } from "./table-header";
 
 @Component({
     components: {
-        'a-table-filter': TableFilterComponent,
-        'a-actionbar': ActionbarComponent,
-        'draggable': draggable
+        "a-table-filter": TableFilterComponent,
+        "a-actionbar": ActionbarComponent,
+        "draggable": draggable
     }
 })
 export default class TableComponent extends Vue {
@@ -31,10 +31,10 @@ export default class TableComponent extends Vue {
     @Prop({ default: false }) loading: boolean;
     @Prop() pagination: IPagination;
     @Prop() selected: any[];
-    @Prop({default: ''}) title: string;
-    @Prop({default: ''}) entity: string;
-    @Prop({default: 'secondary'}) topbarColor: string;
-    @Prop({default: 'primary'}) actionbarColor: string;
+    @Prop({default: ""}) title: string;
+    @Prop({default: ""}) entity: string;
+    @Prop({default: "secondary"}) topbarColor: string;
+    @Prop({default: "primary"}) actionbarColor: string;
     @Prop({default: true}) topbarIsDark: boolean;
     @Prop({default: true}) actionbarIsDark: boolean;
     @Prop({default: false}) configure: boolean;
@@ -44,12 +44,12 @@ export default class TableComponent extends Vue {
     totalItems = 1;
     isTableMenuVisible = false;
     showFilters = this.showHeaderFiltersByDefault;
-    showFiltersMessage = this.showHeaderFiltersByDefault ? 'Показать фильтры' : 'Скрыть фильтры';
+    showFiltersMessage = this.showHeaderFiltersByDefault ? "Показать фильтры" : "Скрыть фильтры";
     showAllFilters = false;
     editableHeaders = [];
     headerSettings = [];
     itemSelected = false;
-    tableIdentifier = `${this.title}_${this.entity}`.replace(/\s+/g, '_').replace('-', '_');
+    tableIdentifier = `${this.title}_${this.entity}`.replace(/\s+/g, "_").replace("-", "_");
     headerFilters: TableFilterComponentItem[] = [];
     topbarFilters: TableFilterComponentItem[] = [];
     allFilters: TableFilterComponentItem[] = [];
@@ -64,7 +64,7 @@ export default class TableComponent extends Vue {
             this.editableHeaders.push(el);
         });
         this.tableFilters.forEach(el => {
-            switch(el.appearance) {
+            switch (el.appearance) {
                 case TableFilterComponentItemAppearance.Header:
                     this.headerFilters.push(el);
                     break;
@@ -78,112 +78,114 @@ export default class TableComponent extends Vue {
                 case TableFilterComponentItemAppearance.AllFilters:
                     this.allFilters.push(el);
                     break;
+                default:
+                    break;
             }
         });
-        if(this.selected) {
+        if (this.selected) {
             this.innerSelected = this.selected;
         }
-        if(localStorage.getItem(`${this.tableIdentifier}_list_show-filters`) != 'true'){
+        if (localStorage.getItem(`${this.tableIdentifier}_list_show-filters`) !== "true") {
             this.showFilters = false;
         } else {
             this.showFilters = true;
-            this.showFiltersMessage = 'Скрыть фильтры'
+            this.showFiltersMessage = "Скрыть фильтры";
         }
-        if(JSON.parse(localStorage.getItem(`${this.tableIdentifier}_list_show-all-filters`))) {
+        if (JSON.parse(localStorage.getItem(`${this.tableIdentifier}_list_show-all-filters`))) {
             this.showAllFilters = true;
         }
-        if(localStorage.getItem(`${this.tableIdentifier}_table_settings`) != null){
-            let data = JSON.parse(localStorage.getItem(`${this.tableIdentifier}_table_settings`));
+        if (localStorage.getItem(`${this.tableIdentifier}_table_settings`) != null) {
+            const data = JSON.parse(localStorage.getItem(`${this.tableIdentifier}_table_settings`));
             data.forEach(settingsElement => {
                 this.editableHeaders.forEach(headerElement => {
-                    if(settingsElement.value == headerElement.value) {
+                    if (settingsElement.value === headerElement.value) {
                         headerElement.isVisible = settingsElement.isVisible;
                         headerElement.order = settingsElement.order;
                     }
-                })
+                });
             });
             this.headerSettings = data;
-            this.editableHeaders.sort(function(a, b){return a.order - b.order});
+            this.editableHeaders.sort((a, b) => a.order - b.order);
         }else {
             this.editableHeaders.forEach(el => {
-                let newItem = {value: '', isVisible: true, order: 0};
+                const newItem = {value: "", isVisible: true, order: 0};
                 newItem.value = el.value;
                 newItem.isVisible = el.isVisible;
                 newItem.order = el.order;
                 this.headerSettings.push(newItem);
-            })
+            });
         }
     }
 
     applyQuery() {
-        if(!(Object.keys(this.$route.query).length === 0 && this.$route.query.constructor === Object)) {
-            if(this.$route.query[`${this.tableIdentifier}`] !== undefined) {
+        if (!(Object.keys(this.$route.query).length === 0 && this.$route.query.constructor === Object)) {
+            if (this.$route.query[`${this.tableIdentifier}`] !== undefined) {
                 this.tableFilters.forEach(filter => {
                     filter.values = [];
-                })
+                });
                 this.editableHeaders.forEach(header => {
-                    if(header.sortable && header.sortBy) {
+                    if (header.sortable && header.sortBy) {
                         header.sortBy = undefined;
                     }
-                })
+                });
                 JSON.parse(this.$route.query[`${this.tableIdentifier}`]).forEach(query => {
-                    if(query.isSort) {
+                    if (query.isSort) {
                         this.editableHeaders.forEach(header => {
-                            if(header.sortable && query.name == header.value) {
-                                if(!header.sortBy) {
+                            if (header.sortable && query.name === header.value) {
+                                if (!header.sortBy) {
                                     header.sortBy = new SortableField();
                                 }
-                                if(query.isdesc == undefined) {
+                                if (query.isdesc === undefined) {
                                     header.sortBy = undefined;
                                 }else {
                                     header.sortBy.isdesc = query.isdesc;
                                 }
                             }
-                        })
+                        });
                     }
-                    if(query.requestName) {
+                    if (query.requestName) {
                         this.tableFilters.forEach(filter => {
-                            if(filter.requestName == query.requestName && query.values && query.values.length > 0) {
+                            if (filter.requestName === query.requestName && query.values && query.values.length > 0) {
                                 filter.values = query.values;
                                 this.applyFilterButtonVisibility = false;
                             }
-                        })
+                        });
                     }  
-                })
+                });
             }
         }
     }
 
-    @Watch('$route.query')
+    @Watch("$route.query")
     onQueryChange() {
-        if(!(Object.keys(this.$route.query).length === 0 && this.$route.query.constructor === Object)) {
-            if(this.lastQuery != JSON.stringify(this.$route.query)){
+        if (!(Object.keys(this.$route.query).length === 0 && this.$route.query.constructor === Object)) {
+            if (this.lastQuery !== JSON.stringify(this.$route.query)) {
                 this.applyQuery();
                 this.applyFilter();
             }
         }else {
             this.editableHeaders.forEach(header => {
-                if(header.sortable) {
-                    if(header.sortBy) {
+                if (header.sortable) {
+                    if (header.sortBy) {
                         header.sortBy = undefined;
                     }
                 }
-            })
+            });
             this.tableFilters.forEach(el => {
                 el.values = [];
-            })
+            });
             this.applyFilter();
         }   
     }
 
-    @Watch('innerSelected')
+    @Watch("innerSelected")
     onSelectChanged(newVal, oldVal) {
-        if(newVal != oldVal) {
+        if (newVal !== oldVal) {
             this.$emit("onSelect", newVal.map((item) => {
-                return item.id
+                return item.id;
             }));
         }
-        if(this.innerSelected.length > 0) {
+        if (this.innerSelected.length > 0) {
             this.itemSelected = true;
         } else {
             this.itemSelected = false;
@@ -192,14 +194,14 @@ export default class TableComponent extends Vue {
 
     toggleFilters() {
         this.isTableMenuVisible = false;
-        if(this.showFilters){
+        if (this.showFilters) {
             this.showFilters = false;
-            localStorage.setItem(`${this.tableIdentifier}_list_show-filters`, 'false');
-            this.showFiltersMessage = 'Показать фильтры'
+            localStorage.setItem(`${this.tableIdentifier}_list_show-filters`, "false");
+            this.showFiltersMessage = "Показать фильтры";
         }else {
             this.showFilters = true;
-            localStorage.setItem(`${this.tableIdentifier}_list_show-filters`, 'true');
-            this.showFiltersMessage = 'Скрыть фильтры'
+            localStorage.setItem(`${this.tableIdentifier}_list_show-filters`, "true");
+            this.showFiltersMessage = "Скрыть фильтры";
         }
     }
 
@@ -210,21 +212,21 @@ export default class TableComponent extends Vue {
 
     onChangeVisible(item) {
         this.headerSettings.forEach(el => {
-            if(el.value == item.value){
+            if (el.value === item.value) {
                 el.isVisible = item.isVisible;
             }
-        })
+        });
         localStorage.setItem(`${this.tableIdentifier}_table_settings`, JSON.stringify(this.headerSettings));
     }
 
     onUpdateDraggable() {
-        for(var i = 0; i < this.editableHeaders.length; i++){
+        for (let i = 0; i < this.editableHeaders.length; i++) {
             this.editableHeaders[i].order = i;
             this.headerSettings.forEach(el => {
-                if(el.value == this.editableHeaders[i].value){
+                if (el.value === this.editableHeaders[i].value) {
                     el.order = this.editableHeaders[i].order;
                 }
-            })
+            });
         }
         localStorage.setItem(`${this.tableIdentifier}_table_settings`, JSON.stringify(this.headerSettings));
     }
@@ -234,7 +236,7 @@ export default class TableComponent extends Vue {
         localStorage.removeItem(`${this.tableIdentifier}_list_show-filters`);
         this.showFilters = true;
         this.isTableMenuVisible = false;
-        this.showFiltersMessage = 'Показать фильтры';
+        this.showFiltersMessage = "Показать фильтры";
         this.editableHeaders = [];
         this.headers.forEach(el => {
             el.isVisible = true;
@@ -243,11 +245,11 @@ export default class TableComponent extends Vue {
     }
 
     getFromDictionary(header: TableComponentHeader, id: number) {
-        if(!header || !header.items || header.items.length == 0) {
+        if (!header || !header.items || header.items.length === 0) {
             return "Нет";
         }
-        let val = header.items.find(x=>x.id == id);
-        if(val) {
+        const val = header.items.find(x => x.id === id);
+        if (val) {
             return val.name ? val.name : val.title;
         }
         return "Нет";
@@ -256,45 +258,45 @@ export default class TableComponent extends Vue {
     clearAllFilters() {
         this.allFilters.forEach(filter => {
             filter.values = [];
-        })
+        });
         this.applyFilter();
     }
 
     @Emit()
     applyFilter() {
-        if(this.pagination.page > 1) {
+        if (this.pagination.page > 1) {
             this.pagination.page = 1;
         }
-        let query = {};
-        let filters = [];
+        const query = {};
+        const filters = [];
         this.tableFilters.forEach(filter => {
-            if(filter.values && filter.values.length > 0) {
+            if (filter.values && filter.values.length > 0) {
                 filters.push({
                     requestName: filter.requestName,
                     name: filter.name ? filter.name : undefined,
                     values: filter.values
-                })
+                });
             }
-        })
+        });
         this.editableHeaders.forEach(header => {
-            if(header.sortable && header.sortBy) {
+            if (header.sortable && header.sortBy) {
                 filters.push({
                     isSort: true,
                     name: header.value, 
                     isdesc: header.sortBy ? header.sortBy.isdesc : undefined
                 });
             }
-        })
-        if(filters.length > 0) {
+        });
+        if (filters.length > 0) {
             query[`${this.tableIdentifier}`] = JSON.stringify(filters);
-            this.$router.push({path: this.$route.path, query: query}); 
+            this.$router.push({path: this.$route.path, query}); 
         }
         this.lastQuery = JSON.stringify(query);
         this.applyFilterButtonVisibility = false;
     }
 
     applyFormatterIfExists(header: TableComponentHeader, value) {
-        if(header.formatter) {
+        if (header.formatter) {
             return header.formatter(value);
         } else {
             return value;
@@ -302,21 +304,21 @@ export default class TableComponent extends Vue {
     }
 
     get GetTotalPages() {
-        return this.pagination.rowsPerPage ? Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage) : 1
+        return this.pagination.rowsPerPage ? Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage) : 1;
     }
 
     selectClick(props) {
-        if(this.selectableSingle) {
-            if(props.selected) {
+        if (this.selectableSingle) {
+            if (props.selected) {
                 props.selected = false;
             } else {
                 props.selected = true;
                 this.innerSelected = [props.item];
             }
         } else {
-            props.selected = !props.selected
+            props.selected = !props.selected;
         }
-    };
+    }
 
     toggleAll () {
         if (this.innerSelected.length) {
@@ -324,12 +326,12 @@ export default class TableComponent extends Vue {
         } else {
             this.innerSelected = this.items.slice();
         }
-    };
+    }
 
     changeSort (headerValue: string) {
-        this.editableHeaders.forEach((item)=>{
-            if(item.value == headerValue && item.sortable) {
-                if(!item.sortBy) {
+        this.editableHeaders.forEach((item) => {
+            if (item.value === headerValue && item.sortable) {
+                if (!item.sortBy) {
                     item.sortBy = new SortableField();
                 }
                 item.sortBy.isdesc = !item.sortBy.isdesc;
@@ -338,10 +340,10 @@ export default class TableComponent extends Vue {
             }
         });
         this.applyFilter();
-    };
+    }
 
     currentHeaderFilter(headerValue) {
-       return this.headerFilters.filter(filter => filter.name == headerValue)[0];
+       return this.headerFilters.filter(filter => filter.name === headerValue)[0];
     }
 
     @Emit()
@@ -351,8 +353,8 @@ export default class TableComponent extends Vue {
     onBarAction(items: any[], name: string) {}
 
     firstAction(item: IEntity) {
-        if(this.actions && this.actions.filter(x=>x.single && x.active).length > 0) {
-            this.onRowAction(item, this.actions.filter(x=>x.single && x.active)[0].name);
+        if (this.actions && this.actions.filter(x => x.single && x.active).length > 0) {
+            this.onRowAction(item, this.actions.filter(x => x.single && x.active)[0].name);
         }
     }
 }

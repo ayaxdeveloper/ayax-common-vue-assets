@@ -1,5 +1,5 @@
-import { INotificationProvider, NotificationItem, INotificationSettings } from 'ayax-common-types';
-import Vue from '*.vue';
+import Vue from "*.vue";
+import { INotificationProvider, INotificationSettings, NotificationItem } from "ayax-common-types";
 
 export class NotificationProvider implements INotificationProvider {
     notifications: NotificationItem[] = [];
@@ -11,47 +11,47 @@ export class NotificationProvider implements INotificationProvider {
     }
     public Error(message?: any, title?: any, dismissAfter?: number) {
         this.PushNotification(new NotificationItem(
-            message == null ? '' : message, 
-            'warning', 
-            'error', 
-            title == null ? 'Ошибка' : title,
+            message == null ? "" : message, 
+            "warning", 
+            "error", 
+            title == null ? "Ошибка" : title,
             dismissAfter != null ? dismissAfter : this._settings.errorDismiss
         ));
-        if(message) {
+        if (message) {
             console.error(`Error: ${message}`);
         }
-        if(message && message.stack) {
+        if (message && message.stack) {
             console.error(`Stack: ${message.stack}`);
         }
     }
 
     public Success(message?: any, title?: any, dismissAfter?: number) {
         this.PushNotification(new NotificationItem(
-            message == null ? '' : message, 
-            'check_circle', 
-            'success', 
-            title == null ? 'Успешно' : title,
+            message == null ? "" : message, 
+            "check_circle", 
+            "success", 
+            title == null ? "Успешно" : title,
             dismissAfter != null ? dismissAfter : this._settings.successDismiss
         ));
     }
 
     public Info(message?: any, title?: any, dismissAfter?: number) {
         this.PushNotification(new NotificationItem(
-            message == null ? '' : message, 
-            'info', 
-            'info', 
-            title == null ? 'Инфо' : title,
+            message == null ? "" : message, 
+            "info", 
+            "info", 
+            title == null ? "Инфо" : title,
             dismissAfter != null ? dismissAfter : this._settings.infoDismiss
         ));
     }
 
     public Warning(message?: any, title?: any, dismissAfter?: number) {
         this.PushNotification(new NotificationItem(
-            message == null ? '' : message, 
-            'priority_high', 
-            'warning', 
-            title == null ? 'Предупреждение' : title,
-            dismissAfter !=null ? dismissAfter : this._settings.warningDismiss
+            message == null ? "" : message, 
+            "priority_high", 
+            "warning", 
+            title == null ? "Предупреждение" : title,
+            dismissAfter != null ? dismissAfter : this._settings.warningDismiss
         ));
     }
 
@@ -65,8 +65,8 @@ export class NotificationProvider implements INotificationProvider {
 
     private PushNotification(notification: NotificationItem) {
         this.notifications.push(notification); 
-            if(notification.dismissAfter > 0 ) {
-                setInterval(()=>{notification.showing = false}, notification.dismissAfter);
+            if (notification.dismissAfter > 0 ) {
+                setInterval(() => {notification.showing = false;}, notification.dismissAfter);
             }
     }
 }

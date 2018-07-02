@@ -9,15 +9,15 @@ export class FormComponentItem {
     itemsFromPromise?: Promise<SelectItem[]>;
     dictionary: string;
     mask: string;
-    returnMaskedValue: boolean = false;
-    required: boolean = false;
-    disabled: boolean = false;
-    hidden: boolean = false;
-    dense: boolean = true;
+    returnMaskedValue = false;
+    required = false;
+    disabled = false;
+    hidden = false;
+    dense = true;
     hint: string;
     rules: any[];
     model: any = null;
-    row: number = 0;
+    row = 0;
 
     constructor(init?: Partial<FormComponentItem>) {
         if (init) {

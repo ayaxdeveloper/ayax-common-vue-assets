@@ -2,7 +2,7 @@ export class TableComponentAction {
     name: string;
     title: string;
     icon: string;
-    single: boolean = false;
+    single = false;
     children: TableComponentAction[];
     action: Function;
     needSelectedItem: boolean;
@@ -10,8 +10,8 @@ export class TableComponentAction {
     spaceNext = false;
     loading = false;
     constructor(init?: Partial<TableComponentAction>) {
-        if(init) {
-            Object.assign(this, init)
+        if (init) {
+            Object.assign(this, init);
         }
     }
 }

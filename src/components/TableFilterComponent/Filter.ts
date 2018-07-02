@@ -1,5 +1,5 @@
-import { FilterValue } from "./FilterValue";
 import { FilterOperation } from "./FilterOperation";
+import { FilterValue } from "./FilterValue";
 
 export class Filter {
     term: string;

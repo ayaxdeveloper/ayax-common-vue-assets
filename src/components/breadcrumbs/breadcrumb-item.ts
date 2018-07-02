@@ -1,9 +1,9 @@
 export class BreadCrumbItem {
-    text: String;
-    disabled: Boolean;
-    route: String;
+    text: string;
+    disabled: boolean;
+    route: string;
     constructor(init?: Partial<BreadCrumbItem>) {
-        if(init) {
+        if (init) {
             Object.assign(this, init);
         }
     }

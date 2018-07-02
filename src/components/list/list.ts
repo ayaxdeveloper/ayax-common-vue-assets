@@ -1,11 +1,11 @@
-import { Component, Vue, Prop, Inject, Watch, Emit } from 'vue-property-decorator';
-import { Pagination, IClientSettings, INotificationProvider, IPagination, IEntity, SearchResponse } from 'ayax-common-types';
-import { TableComponentHeader } from '../table/table-header';
-import { TableFilterComponentItem } from '../TableFilterComponent/TableFilterComponentItem';
-import { TableComponentAction } from '../table/table-action';
-import { Route } from 'vue-router';
-import { ICacheService } from 'ayax-common-cache';
-import { IOperationService } from 'ayax-common-operation';
+import { ICacheService } from "ayax-common-cache";
+import { IOperationService } from "ayax-common-operation";
+import { IClientSettings, IEntity, INotificationProvider, IPagination, Pagination, SearchResponse } from "ayax-common-types";
+import { Component, Emit, Inject, Prop, Vue, Watch } from "vue-property-decorator";
+import { Route } from "vue-router";
+import { TableComponentAction } from "../table/table-action";
+import { TableComponentHeader } from "../table/table-header";
+import { TableFilterComponentItem } from "../TableFilterComponent/TableFilterComponentItem";
 
 @Component
 export default class ListComponent extends Vue {
@@ -27,8 +27,8 @@ export default class ListComponent extends Vue {
     @Prop() showRoute: Route;
     @Prop({ default: true}) selectable: boolean; 
     @Prop({ default: false}) selectableSingle: boolean; 
-    @Prop({default: 'secondary'}) topbarColor: string;
-    @Prop({default: 'primary'}) actionbarColor: string;
+    @Prop({default: "secondary"}) topbarColor: string;
+    @Prop({default: "primary"}) actionbarColor: string;
     @Prop({default: true}) topbarIsDark: boolean;
     @Prop({default: true}) actionbarIsDark: boolean;
     @Prop({default: false}) configure: boolean;
@@ -36,23 +36,23 @@ export default class ListComponent extends Vue {
     @Prop({default: null}) toggledItemSlot;
     tableVisible = false;
     
-    @Watch('pagination.page')
+    @Watch("pagination.page")
     PageChanged(newVal, oldVal) {
-        if(newVal!==oldVal) {
+        if (newVal !== oldVal) {
             this.request.page = newVal;
             this.load();
         }
     }
 
-    @Watch('toggledItemSlot')
+    @Watch("toggledItemSlot")
     onChange() {
-        if(this.headers.filter(x => x.custom).length > 0) {
-            if(this.toggledItemSlot) {
+        if (this.headers.filter(x => x.custom).length > 0) {
+            if (this.toggledItemSlot) {
                 this.items.forEach(item => {
-                    if(item.indexForSlot == this.toggledItemSlot.indexForSlot) {
+                    if (item.indexForSlot === this.toggledItemSlot.indexForSlot) {
                         item.toggleForSlot = this.toggledItemSlot.toggleForSlot;
                     }
-                })
+                });
             }
         }
     }
@@ -76,15 +76,18 @@ export default class ListComponent extends Vue {
 
     @Emit()
     onRowAction(item: IEntity, name: string) {
-        let tableAction = this.actions.find(x=>x.name == name);
-        if(tableAction && tableAction.action) {
+        
+        const tableAction = this.actions.find(x => x.name === name);
+        if (tableAction && tableAction.action) {
             tableAction.action(item);
             return name;
         }
-        if(!item) {
+
+        if (!item) {
             return false;
         }
-        switch(name) {
+
+        switch (name) {
             case "edit": 
             this.edit(item);
             break;
@@ -94,124 +97,133 @@ export default class ListComponent extends Vue {
             case "show":
             this.show(item);
             break;
+            default:
+            break;
         }
+
         return true;
     }
 
     @Emit()
     onBarAction(items: any[], name: string) {
-        let tableAction = this.actions.find(x=>x.name == name);
-        if(tableAction && tableAction.action) {
+        const tableAction = this.actions.find(x => x.name === name);
+
+        if (tableAction && tableAction.action) {
             tableAction.action(items);
             return name;
         }
-        switch(name) {
-            case 'add':
+
+        switch (name) {
+            case "add":
             this.add();
             break;
-            case 'removeSelected':
+            case "removeSelected":
             this.removeSelected(items);
             break;
+            default:
+            break;
         }
+
         return name;
     }
 
     private AddFilter(request) {
-        let filteredRequest = {...request};
+        const filteredRequest = {...request};
         this.tableFilters.filter(x => x.values.length > 0)
         .forEach((filter) => {           
-            let filters = filter.FormRequestFilters();
-            if(filters) {
+            const filters = filter.FormRequestFilters();
+            if (filters) {
                 filteredRequest[filter.requestName] = filters;
             }
         });
-        this.headers.filter(x=>x.sortBy).forEach((header)=> {
+
+        this.headers.filter(x => x.sortBy).forEach((header) => {
             filteredRequest[`${header.value}sort`] = header.sortBy;
         });
-        //console.log(`filteredRequest ${JSON.stringify(filteredRequest)}`);
+
         return filteredRequest; 
     }
 
     async created() {
-        if(this.entity && !this.search) {
-            this._search = {url: `/${this.entity}/search`, method : 'post'};
+        if (this.entity && !this.search) {
+            this._search = {url: `/${this.entity}/search`, method : "post"};
         } else {
             this._search = this.search;
         }
-        if(this.entity && !this.deleteUrl) {
+        if (this.entity && !this.deleteUrl) {
             this._deleteUrl = `/${this.entity}/delete`;
         } else {
             this._deleteUrl = this.deleteUrl;
         }
-        if(this.entity && !this.bulkDeleteUrl) {
+        if (this.entity && !this.bulkDeleteUrl) {
             this._bulkDeleteUrl = `/${this.entity}/bulkdelete`;
         } else {
             this._bulkDeleteUrl = this.bulkDeleteUrl;
         }
-        if(!this.pagination) {
+
+        if (!this.pagination) {
             this.pagination = Pagination.Default(this.clientSettings.listRowsPerpage);
         }
-        await Promise.all(this.headers.filter(x=>x.dictionary && (!x.items || x.items.length == 0)).map(x=>{
+
+        const headerPromises = this.headers.filter(x => (x.dictionary || x.dictionaryPromise) && !x.items).map(x => {
             return new Promise((resolve) => {
-                this.cacheService.List(x.dictionary)
-                .then(z=> {
-                    x.items = z;
-                    resolve();
-                });
+                if (x.dictionary) {
+                    this.cacheService.List(x.dictionary)
+                    .then(z => {
+                        x.items = z;
+                        resolve();
+                    });
+                } else if (x.dictionaryPromise) {
+                    x.dictionaryPromise
+                    .then(z => {
+                        x.items = z;
+                        resolve();
+                    });
+                }
             });
-        }));
+        });
 
-        await Promise.all(this.headers.filter(x=>x.dictionaryPromise && (!x.items || x.items.length == 0)).map(x=>{
+        const filterPromises = this.tableFilters.filter(x => !x.selectItems && (x.selectItemsFromDictionary || x.selectItemsFromPromise)).map(x => {
             return new Promise((resolve) => {
-                x.dictionaryPromise
-                .then(z=> {
-                    x.items = z;
-                    resolve();
-                });
+                if (x.selectItemsFromDictionary) {
+                    this.cacheService.ListAsSelectItems(x.selectItemsFromDictionary)
+                    .then(z => {
+                        x.selectItems = z;
+                        resolve();
+                    });
+                } else if (x.selectItemsFromPromise) {
+                    x.selectItemsFromPromise
+                    .then(z => {
+                        x.selectItems = z;
+                        resolve();
+                    });
+                }
             });
-        }));
+        });
 
-        await Promise.all(this.tableFilters.filter(x => x.selectItemsFromDictionary && (!x.selectItems || x.selectItems.length == 0)).map(x => {
-            return new Promise((resolve) => {
-                this.cacheService.ListAsSelectItems(x.selectItemsFromDictionary)
-                .then(z => {
-                    x.selectItems = z;
-                    resolve();
-                })
-            }) 
-        }));
-
-        await Promise.all(this.tableFilters.filter(x => x.selectItemsFromPromise && (!x.selectItems || x.selectItems.length == 0)).map(x => {
-            return new Promise((resolve) => {
-                x.selectItemsFromPromise
-                .then(z => {
-                    x.selectItems = z;
-                    resolve();
-                })
-            }) 
-        }));
+        await Promise.all([headerPromises, filterPromises]);
 
         await this.load();
         this.tableVisible = true;
-    };
+    }
 
     add() {
-        if(this.addRoute) {
+        if (this.addRoute) {
             this.$router.push(this.addRoute);
         } else {
-            this.$router.push({ name: `${this.entity}-edit`, params: { id: '0'}});
+            this.$router.push({ name: `${this.entity}-edit`, params: { id: "0"}});
         }
-    };
+    }
     edit(item) {
-        if(this.editRoute) {
+        if (this.editRoute) {
             this.editRoute.params.id = item.id;
             this.$router.push(this.editRoute);
         } else {
             this.$router.push({ name: `${this.entity}-edit`, params: { id: item.id } });
         }
-    };
+    }
     show(item) {
-        if(this.showRoute) {
+        if (this.showRoute) {
             this.showRoute.params.id = item.id;
             this.$router.push(this.showRoute);
         } else {
@@ -224,10 +236,10 @@ export default class ListComponent extends Vue {
     remove(item) {
         this.itemForRemove = item;
         this.removeDialog = true;
-    };
+    }
 
     removeSelected(items) {
-        if(items.length > 0) {
+        if (items.length > 0) {
             this.itemsForRemove = items;
         }
         this.removeSelectedDialog = true;
@@ -235,7 +247,7 @@ export default class ListComponent extends Vue {
 
     async removeOk() {
         if (!this.itemForRemove) {
-            this.notificationProvider.Error('Удаляемый объект не существует');
+            this.notificationProvider.Error("Удаляемый объект не существует");
             return;
         }
         try {
@@ -248,46 +260,46 @@ export default class ListComponent extends Vue {
         this.loading = false;
         this.itemForRemove = null;
         this.removeDialog = false;
-    };
+    }
 
     async removeSelectedOk() {
         try {
             if (!this.itemsForRemove) {
-                this.notificationProvider.Error('Удаляемые объекты не существуют')
+                this.notificationProvider.Error("Удаляемые объекты не существуют");
                 return;
             }
             (await this.operationService.delete(`${this._bulkDeleteUrl}`, this.itemsForRemove)).ensureSuccess();
             this.notificationProvider.Success("Объект удален");
             this.load();            
-        } catch(e) {
+        } catch (e) {
             this.notificationProvider.Error(e);
         }
 
         this.removeSelectedDialog = false;
             this.itemsForRemove = null;
-    };
+    }
 
     removeCancel() {
         this.itemForRemove = null;
         this.removeDialog = false;
         this.itemsForRemove = null;
         this.removeSelectedDialog = false;
-    };
+    }
 
     public async load() {
         try {
-            let response =  (await this.operationService.post<SearchResponse<any[]>>(`${this._search.url}`, this.AddFilter(this.request))).ensureSuccess();
+            const response =  (await this.operationService.post<SearchResponse<any[]>>(`${this._search.url}`, this.AddFilter(this.request))).ensureSuccess();
             this.items = response.data;
-            this.pagination.totalItems = response.total
-            if(this.headers.filter(x => x.custom).length > 0) {
+            this.pagination.totalItems = response.total;
+            if (this.headers.filter(x => x.custom).length > 0) {
                 let index = 0;
                 this.items.forEach(item => {
-                    item['toggleForSlot'] = false;
-                    item['indexForSlot'] = index;
+                    item["toggleForSlot"] = false;
+                    item["indexForSlot"] = index;
                     index++;
-                })
+                });
             }
-        } catch(e) {
+        } catch (e) {
             this.notificationProvider.Error(e);
         } 
         this.loading = false;
