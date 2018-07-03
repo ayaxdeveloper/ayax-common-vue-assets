@@ -1,4 +1,4 @@
-import { IEntity, guid } from "ayax-common-types";
+import { guid, IEntity } from "ayax-common-types";
 
 export class PrefSummary implements IEntity {
     id: string | number | guid;

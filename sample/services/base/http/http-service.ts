@@ -1,13 +1,13 @@
-import axios from 'axios';
-import { AppSettings } from '../../../settings';
-import { IHttpService } from 'ayax-common-types';
+import axios from "axios";
+import { IHttpService } from "ayax-common-types";
+import { AppSettings } from "../../../settings";
 
-require('../../../mock-adapter');
+require("../../../mock-adapter");
 
 export class HttpService implements IHttpService {
     baseUrl: string;
     private _serverSettings = new AppSettings().Server();
-    constructor(apiUrl? :string) {
+    constructor(apiUrl? : string) {
         this.baseUrl = apiUrl ? apiUrl : `${this._serverSettings.baseUrl}${this._serverSettings.apiPrefix}`;
     } 
 
@@ -15,15 +15,15 @@ export class HttpService implements IHttpService {
         return (await axios.post(`${this.baseUrl}${relativeUrl}`, data)).data;
     }
 
-    async get(relativeUrl: String) {
-        return (await axios.get(`${this.baseUrl}${relativeUrl}`)).data
+    async get(relativeUrl: string) {
+        return (await axios.get(`${this.baseUrl}${relativeUrl}`)).data;
     }
 
-    async delete(relativeUrl: String) {
+    async delete(relativeUrl: string) {
         return (await axios.delete(`${this.baseUrl}${relativeUrl}`)).data;
     }
 
-    async put(relativeUrl: String, data: any) {
+    async put(relativeUrl: string, data: any) {
         return (await axios.put(`${this.baseUrl}${relativeUrl}`, data)).data;
     }
 }

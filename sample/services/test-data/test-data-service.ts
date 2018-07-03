@@ -2,23 +2,23 @@ import Vue from "vue";
 
 export default class TestDataService extends Vue {
     data = [
-        { id: 1, activeLead:{qq:'aaa', ww:'bbb'}, otherLeads: [{name: '#722 Отложенный спрос'}, {name: '#913 Уточнение информации'}], code: '1231', title: 'Alpha', created: new Date('2018-04-01'), dictionaryId: 0},
-        { id: 2, activeLead:{qq:'aaa', ww:'bbb'}, otherLeads: [], code: '1232', title: 'Bravo', created: new Date('2018-04-02'), dictionaryId: 1},
-        { id: 3, activeLead:{qq:'aaa', ww:'bbb'}, otherLeads: [{name: '#356 Пригласили в офис'}], code: '1233', title: 'Charlie', created: new Date('2018-04-03'), dictionaryId: 2},
-        { id: 4, activeLead:{qq:'aaa', ww:'bbb'}, otherLeads: [], code: '1234', title: 'Delta', created: new Date('2018-04-04'), dictionaryId: 1},
-        { id: 5, activeLead:{qq:'aaa', ww:'bbb'}, otherLeads: [], code: '1235', title: 'Echo', created: new Date('2018-04-05'), dictionaryId: 0},
-        { id: 6, activeLead:{qq:'aaa', ww:'bbb'}, otherLeads: [], code: '1236', title: 'Foxtrot', created: new Date('2018-04-06'), dictionaryId: 0},
-        { id: 7, activeLead:{qq:'aaa', ww:'bbb'}, otherLeads: [], code: '1237', title: 'Golf', created: new Date('2018-04-07'), dictionaryId: 0},
-        { id: 8, activeLead:{qq:'aaa', ww:'bbb'}, otherLeads: [], code: '1238', title: 'Hotel', created: new Date('2018-04-08'), dictionaryId: 0},
-        { id: 9, activeLead:{qq:'aaa', ww:'bbb'}, otherLeads: [], code: '1239', title: 'India', created: new Date('2018-04-09'), dictionaryId: 0},
-        { id: 10, activeLead:{qq:'aaa', ww:'bbb'}, otherLeads: [], code: '12310', title: 'Juliett', created: new Date('2018-04-10'), dictionaryId: 1}
+        { id: 1, activeLead: {qq: "aaa", ww: "bbb"}, otherLeads: [{name: "#722 Отложенный спрос"}, {name: "#913 Уточнение информации"}], code: "1231", title: "Alpha", created: new Date("2018-04-01"), dictionaryId: 0},
+        { id: 2, activeLead: {qq: "aaa", ww: "bbb"}, otherLeads: [], code: "1232", title: "Bravo", created: new Date("2018-04-02"), dictionaryId: 1},
+        { id: 3, activeLead: {qq: "aaa", ww: "bbb"}, otherLeads: [{name: "#356 Пригласили в офис"}], code: "1233", title: "Charlie", created: new Date("2018-04-03"), dictionaryId: 2},
+        { id: 4, activeLead: {qq: "aaa", ww: "bbb"}, otherLeads: [], code: "1234", title: "Delta", created: new Date("2018-04-04"), dictionaryId: 1},
+        { id: 5, activeLead: {qq: "aaa", ww: "bbb"}, otherLeads: [], code: "1235", title: "Echo", created: new Date("2018-04-05"), dictionaryId: 0},
+        { id: 6, activeLead: {qq: "aaa", ww: "bbb"}, otherLeads: [], code: "1236", title: "Foxtrot", created: new Date("2018-04-06"), dictionaryId: 0},
+        { id: 7, activeLead: {qq: "aaa", ww: "bbb"}, otherLeads: [], code: "1237", title: "Golf", created: new Date("2018-04-07"), dictionaryId: 0},
+        { id: 8, activeLead: {qq: "aaa", ww: "bbb"}, otherLeads: [], code: "1238", title: "Hotel", created: new Date("2018-04-08"), dictionaryId: 0},
+        { id: 9, activeLead: {qq: "aaa", ww: "bbb"}, otherLeads: [], code: "1239", title: "India", created: new Date("2018-04-09"), dictionaryId: 0},
+        { id: 10, activeLead: {qq: "aaa", ww: "bbb"}, otherLeads: [], code: "12310", title: "Juliett", created: new Date("2018-04-10"), dictionaryId: 1}
     ];
 
     lastId = 10;
 
     getPage(page, perPage) {
-        page = page - 1
-        return this.getData().slice(page * perPage, (page + 1) * perPage)
+        page = page - 1;
+        return this.getData().slice(page * perPage, (page + 1) * perPage);
     }
 
     getData() {
@@ -33,24 +33,24 @@ export default class TestDataService extends Vue {
         ];
     }
 
-    getById(id:number) {
-        for(var i = 0; i < this.getData().length; i++) {
-            if(this.getData()[i].id == id){
-                return this.getData()[i]
+    getById(id: number) {
+        for (let i = 0; i < this.getData().length; i++) {
+            if (this.getData()[i].id === id) {
+                return this.getData()[i];
             }
         }
         return null;
     }
 
     add(item) {
-        let row = { id: this.lastId + 1, otherLeads: item.otherLeads, activeLead: {qq: item.qq, ww:item.ww }, code: item.code, title: item.title, created: item.created, dictionaryId: 0 };
+        const row = { id: this.lastId + 1, otherLeads: item.otherLeads, activeLead: {qq: item.qq, ww: item.ww }, code: item.code, title: item.title, created: item.created, dictionaryId: 0 };
         this.getData().push(row);
         this.lastId++;
     }
 
     edit(id, item) {
-        for(var i = 0; i < this.getData().length; i++) {
-            if(this.getData()[i].id == id){
+        for (let i = 0; i < this.getData().length; i++) {
+            if (this.getData()[i].id === id) {
                 this.getData()[i].code = item.code;
                 this.getData()[i].title = item.title;
                 this.getData()[i].created = item.created;
@@ -59,8 +59,8 @@ export default class TestDataService extends Vue {
     }
 
     remove(id) {
-        for(var i = 0; i < this.getData().length; i++) {
-            if(this.getData()[i].id == id){
+        for (let i = 0; i < this.getData().length; i++) {
+            if (this.getData()[i].id === id) {
                 this.getData().splice(i, 1);
             }
         }
@@ -68,31 +68,31 @@ export default class TestDataService extends Vue {
 
     bulkDelete(items) {
         items.forEach(element => {
-            this.remove(element)
+            this.remove(element);
         });
     }
 
     sortData(data, isdesc: boolean) {
-        if(!isdesc) {
-            return data.sort(function(a,b){
-                var x = a.title.toLowerCase();
-                var y = b.title.toLowerCase();
+        if (!isdesc) {
+            return data.sort((a,b) => {
+                const x = a.title.toLowerCase();
+                const y = b.title.toLowerCase();
                 if (x < y) {return -1;}
                 if (x > y) {return 1;}
                 return 0;
-            })
+            });
         } else {
-            return data.sort(function(a,b){
-                var x = a.title.toLowerCase();
-                var y = b.title.toLowerCase();
+            return data.sort((a,b) => {
+                const x = a.title.toLowerCase();
+                const y = b.title.toLowerCase();
                 if (x > y) {return -1;}
                 if (x < y) {return 1;}
                 return 0;
-            })
+            });
         }
     }
 
     filterByTitle(title) {
-        return this.getData().filter(el => el.title.toLowerCase().includes(title))
+        return this.getData().filter(el => el.title.toLowerCase().includes(title));
     }
 }

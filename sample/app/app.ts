@@ -1,9 +1,6 @@
-import { Component, Vue, Prop, Watch, Inject } from 'vue-property-decorator';
-import { INotificationProvider } from 'ayax-common-types';
-import { VueInjection } from '../injection';
-import { AppSettings } from '../settings';
-import { EventBus } from '../event-bus';
-import { SidebarComponentItem } from '../../src/components/sidebar/sidebar-item';
+import { Component } from "vue-property-decorator";
+import { SidebarComponentItem } from "../../src/components/sidebar/sidebar-item";
+import { VueInjection } from "../injection";
 
 @Component
 export default class App extends VueInjection {
@@ -48,23 +45,24 @@ export default class App extends VueInjection {
     ];
 
     castNotification(type: string) {
-        switch(type){
-            case 'success':{
-                this.notificationProvider.Success('Успешно сохранено');
+        switch (type){
+            case "success": {
+                this.notificationProvider.Success("Успешно сохранено");
             }
             break;
-            case 'error': {
+            case "error": {
                 this.notificationProvider.Error();
             }
             break;
-            case 'info':{
+            case "info": {
                 this.notificationProvider.Info();
             }
             break;
-            case 'warning':{
+            case "warning": {
                 this.notificationProvider.Warning();
             }
             break;
+            default: break;
         }
     }
 }

@@ -1,28 +1,27 @@
-import 'vuetify/dist/vuetify.min.css'
-import 'element-ui/lib/theme-chalk/index.css';
+import "element-ui/lib/theme-chalk/index.css";
+import "vuetify/dist/vuetify.min.css";
 // import '../node_modules/mdi/css/materialdesignicons.css';
-import '../node_modules/material-design-icons-iconfont/dist/material-design-icons.css';
+import "../node_modules/material-design-icons-iconfont/dist/material-design-icons.css";
 
-import Vue from 'vue';
-import VueRouter from 'vue-router'
-import Vuetify from 'vuetify';
-import App from './app/app.vue'
-import { routes } from './routes';
-import AyaxCommonVueAssets from '../src/index';
-import lang from 'element-ui/lib/locale/lang/ru-RU';
-import locale from 'element-ui/lib/locale';
+import locale from "element-ui/lib/locale";
+import lang from "element-ui/lib/locale/lang/ru-RU";
+import Vue from "vue";
+import VueRouter, { RouterOptions } from "vue-router";
+import Vuetify from "vuetify";
+import AyaxCommonVueAssets from "../src/index";
+import App from "./app/app.vue";
+import { routes } from "./routes";
 locale.use(lang);
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
 Vue.use(AyaxCommonVueAssets);
-Vue.use(require('vue-shortkey'));
+Vue.use(require("vue-shortkey"));
 
+const routerOptions = <RouterOptions> { mode: "history", routes };
+// tslint:disable-next-line:no-unused-expression
 new Vue({
-    el: '#app',
-    router: new VueRouter({ mode: 'history', routes: routes }),
-    render: h => h(App),
-    created: function () {
-          
-    }
-})
+    el: "#app",
+    router: new VueRouter(routerOptions),
+    render: h => h(App)
+});

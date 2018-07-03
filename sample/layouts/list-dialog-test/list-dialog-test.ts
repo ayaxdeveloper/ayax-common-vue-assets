@@ -1,14 +1,14 @@
-import { Component, Inject } from 'vue-property-decorator';
-import BaseListLayout from '../base/base-list/base-list-layout';
-import { TableComponentHeader } from '../../../src/components/table/table-header';
-import { SelectItem } from 'ayax-common-types';
-import { FormComponentItem } from '../../../src/components/form/form-item';
-import { TestModel } from '../../models/test/test-model';
-import { TableFilterComponentItem } from '../../../src';
-import { ICacheService } from 'ayax-common-cache';
-import { TableFilterComponentItemAppearance } from '../../../src/components/TableFilterComponent/TableFilterComponentItemAppearance';
-import { TableFilterComponentItemType } from '../../../src/components/TableFilterComponent/TableFilterComponentItemType';
-import { TableFilterComponentItemInputType } from '../../../src/components/TableFilterComponent/TableFilterComponentItemInputType';
+import { ICacheService } from "ayax-common-cache";
+import { SelectItem } from "ayax-common-types";
+import { Component, Inject } from "vue-property-decorator";
+import { TableFilterComponentItem } from "../../../src";
+import { FormComponentItem } from "../../../src/components/form/form-item";
+import { TableComponentHeader } from "../../../src/components/table/table-header";
+import { TableFilterComponentItemAppearance } from "../../../src/components/TableFilterComponent/TableFilterComponentItemAppearance";
+import { TableFilterComponentItemInputType } from "../../../src/components/TableFilterComponent/TableFilterComponentItemInputType";
+import { TableFilterComponentItemType } from "../../../src/components/TableFilterComponent/TableFilterComponentItemType";
+import { TestModel } from "../../models/test/test-model";
+import BaseListLayout from "../base/base-list/base-list-layout";
 
 @Component
 export default class ListDialogTestLayout extends BaseListLayout {
@@ -45,66 +45,66 @@ export default class ListDialogTestLayout extends BaseListLayout {
     ];
     tableFilters: TableFilterComponentItem[] = this.tableFilters = [
         new TableFilterComponentItem({
-            requestName: 'titlefilter', 
+            requestName: "titlefilter", 
             appearance: TableFilterComponentItemAppearance.AllFilters, 
-            name:'title',
+            name: "title",
             requestType: TableFilterComponentItemType.Like,
-            placeholder: 'Введите',
-            label: 'Название улицы',
+            placeholder: "Введите",
+            label: "Название улицы",
             largeInput: true
         }),
         new TableFilterComponentItem({
-            requestName: 'titlefilter', 
+            requestName: "titlefilter", 
             appearance: TableFilterComponentItemAppearance.Topbar, 
-            name:'title',
+            name: "title",
             requestType: TableFilterComponentItemType.Like,
-            placeholder: 'Введите',
-            label: 'Наименование'
+            placeholder: "Введите",
+            label: "Наименование"
         }),
         new TableFilterComponentItem({
-            requestName: 'datefilter', 
+            requestName: "datefilter", 
             appearance: TableFilterComponentItemAppearance.Topbar, 
             requestType: TableFilterComponentItemType.Range,
             inputType: TableFilterComponentItemInputType.Date,
-            label: 'Дата создания'
+            label: "Дата создания"
 
         }),
        
         new TableFilterComponentItem({
-            requestName: 'qqfilter', 
+            requestName: "qqfilter", 
             appearance: TableFilterComponentItemAppearance.Topbar, 
             requestType: TableFilterComponentItemType.Eq,
             inputType: TableFilterComponentItemInputType.Select,
             selectItems: [
-                new SelectItem ({value: 1, text: 'Район 1'}),
-                new SelectItem ({value: 2, text: 'Район 2'}),
-                new SelectItem ({value: 3, text: 'Район 3'}),
-                new SelectItem ({value: 4, text: 'Район 4'}),
-                new SelectItem ({value: 5, text: 'Район 5'}),
+                new SelectItem ({value: 1, text: "Район 1"}),
+                new SelectItem ({value: 2, text: "Район 2"}),
+                new SelectItem ({value: 3, text: "Район 3"}),
+                new SelectItem ({value: 4, text: "Район 4"}),
+                new SelectItem ({value: 5, text: "Район 5"}),
             ],
-            label: 'Выбор района',
-            placeholder: 'Выберите'
+            label: "Выбор района",
+            placeholder: "Выберите"
         }),
         new TableFilterComponentItem({
-            requestName: 'wwfilter', 
+            requestName: "wwfilter", 
             appearance: TableFilterComponentItemAppearance.AllFilters, 
             requestType: TableFilterComponentItemType.In,
             inputType: TableFilterComponentItemInputType.Select,
             selectItems: [
-                new SelectItem ({value: 1, text: 'Район 1'}),
-                new SelectItem ({value: 2, text: 'Район 2'}),
-                new SelectItem ({value: 3, text: 'Район 3'}),
-                new SelectItem ({value: 4, text: 'Район 4'}),
-                new SelectItem ({value: 5, text: 'Район 5'}),
+                new SelectItem ({value: 1, text: "Район 1"}),
+                new SelectItem ({value: 2, text: "Район 2"}),
+                new SelectItem ({value: 3, text: "Район 3"}),
+                new SelectItem ({value: 4, text: "Район 4"}),
+                new SelectItem ({value: 5, text: "Район 5"}),
             ],
-            label: 'Выбор районов',
-            placeholder: 'Выберите'
+            label: "Выбор районов",
+            placeholder: "Выберите"
         }),
         new TableFilterComponentItem({
-            requestName: '', 
+            requestName: "", 
             appearance: TableFilterComponentItemAppearance.AllFilters, 
             requestType: TableFilterComponentItemType.Range,
-            label: 'Комнат в доме'
+            label: "Комнат в доме"
         }),
     ];
 

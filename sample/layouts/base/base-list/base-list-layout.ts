@@ -1,6 +1,6 @@
-import { Pagination, IClientSettings } from "ayax-common-types";
+import { IClientSettings, Pagination } from "ayax-common-types";
 import { Inject, Vue } from "vue-property-decorator";
-import { TableComponentAction } from '../../../../src/components/table/table-action';
+import { TableComponentAction } from "../../../../src/components/table/table-action";
 
 export default abstract class BaseListLayout extends Vue {
     @Inject() clientSettings: IClientSettings;
@@ -17,7 +17,7 @@ export default abstract class BaseListLayout extends Vue {
             single: false,
             needSelectedItem: true,
             children: [
-                new TableComponentAction({name: "Excel", title: "Экспорт в Excel", icon: 'insert_chart', single: false, action: this.exportExcel})
+                new TableComponentAction({name: "Excel", title: "Экспорт в Excel", icon: "insert_chart", single: false, action: this.exportExcel})
             ]
         }),
         new TableComponentAction({
@@ -25,8 +25,8 @@ export default abstract class BaseListLayout extends Vue {
             title: "Загрузка", 
             single: false,
             action: () => {
-                let action = this.actions.find(x=>x.name == "loading");
-                if(action) {
+                const action = this.actions.find(x => x.name === "loading");
+                if (action) {
                     action.loading = true;
                     setTimeout(() => action.loading = false, 3000);
                 }

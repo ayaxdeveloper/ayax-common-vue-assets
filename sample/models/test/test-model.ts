@@ -1,4 +1,4 @@
-import { IEntity, guid } from "ayax-common-types";
+import { guid, IEntity } from "ayax-common-types";
 
 export class TestModel implements IEntity {
     id: number;
@@ -6,8 +6,8 @@ export class TestModel implements IEntity {
     title: string;
     created: Date;
     constructor(init?: Partial<TestModel>) {
-        if(init) {
-            Object.assign(this, init)
+        if (init) {
+            Object.assign(this, init);
         }
     }
 }
