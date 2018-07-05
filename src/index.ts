@@ -45,6 +45,9 @@ export * from "./providers/notification/notification-provider";
 export * from "./components/TableFilterComponent/TableFilterComponentItemAppearance";
 export * from "./components/TableFilterComponent/TableFilterComponentItemInputType";
 export * from "./components/TableFilterComponent/TableFilterComponentItemType";
+export * from "./components/TableFilterComponent/Filter";
+export * from "./components/TableFilterComponent/FilterOperation";
+export * from "./components/TableFilterComponent/FilterValue";
 
 export { 
     TableComponent, 
