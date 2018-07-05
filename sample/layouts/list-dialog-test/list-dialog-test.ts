@@ -69,6 +69,14 @@ export default class ListDialogTestLayout extends BaseListLayout {
             label: "Дата создания"
 
         }),
+        new TableFilterComponentItem({
+            requestName: "", 
+            appearance: TableFilterComponentItemAppearance.AllFilters, 
+            requestType: TableFilterComponentItemType.Range,
+            inputType: TableFilterComponentItemInputType.Date,
+            label: "Дата создания"
+
+        }),
        
         new TableFilterComponentItem({
             requestName: "qqfilter", 

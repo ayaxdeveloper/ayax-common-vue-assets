@@ -12,8 +12,7 @@
         
         <template v-if="header != null">
             <template v-if="(filter.requestType == filterTypes['Eq'] || filter.requestType == filterTypes['Like']) && filter.inputType == filterInputTypes['Text']">
-                <v-text-field 
-                @input="applyFilterButton = filter.values[0]" 
+                <v-text-field                 
                 :name="filter.requestName" 
                 persistent-hint 
                 class="table-filter-input" 
@@ -40,8 +39,7 @@
                 </template>
                 <template v-else>
                     <v-flex xs6>
-                        <v-text-field 
-                        @input="applyFilterButton = filter.values[0]" 
+                        <v-text-field                         
                         :name="filter.requestName" 
                         single-line 
                         hint="Начало" 
@@ -77,8 +75,7 @@
                 clearable
                 dense
                 autocomplete
-                no-data-text="Нет совпадений"
-                @input="applyFilterButton = filter.values[0]"
+                no-data-text="Нет совпадений"                
                 append-icon="arrow_drop_down"
                 ></v-select>
             </template>
@@ -106,8 +103,7 @@
                 v-if="(filter.requestType == filterTypes['Eq'] || filter.requestType == filterTypes['Like']) && filter.inputType == filterInputTypes['Text']">
                 <div class="filterLabel">{{ filter.label }}</div>
                 <v-text-field
-                    class="filterInput"
-                    @input="applyFilterButton = filter.values[0]" 
+                    class="filterInput"                     
                     :name="filter.requestName" 
                     :placeholder="filter.placeholder"
                     :prepend-icon="filter.icon"
@@ -140,7 +136,6 @@
                     <div style="display: flex; flex-direction: row">
                         <v-text-field 
                             class="filterInput filterInputRange"
-                            @input="applyFilterButton = filter.values[0]" 
                             :name="filter.requestName" 
                             single-line 
                             placeholder="От"
@@ -176,8 +171,7 @@
                     dense
                     single-line
                     autocomplete
-                    no-data-text="Нет совпадений"
-                    @input="applyFilterButton = filter.values[0]">
+                    no-data-text="Нет совпадений">
                 </v-select>
             </v-flex>
             <v-flex class="filter" v-else-if="filter.requestType == filterTypes['In'] && filter.inputType == filterInputTypes['Select']">
@@ -194,8 +188,7 @@
                     multiple
                     single-line
                     autocomplete
-                    no-data-text="Нет совпадений"
-                    @input="applyFilterButton = filter.values[0]">
+                    no-data-text="Нет совпадений">
                 </v-select>
             </v-flex>
             <v-flex class="pb-2" style="height: 48px; padding-top: 9px" 

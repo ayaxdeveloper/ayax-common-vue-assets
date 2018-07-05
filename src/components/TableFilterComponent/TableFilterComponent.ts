@@ -54,21 +54,19 @@ export default class TableFilterComponent extends Vue {
 
     @Watch("filter.values")
     onFilterValuesChange(newVal: any, oldVal: any) {
-        if (newVal) {
-            if ((newVal === [] || newVal === "") && oldVal !== []) {
-                this.applyFilterButton = true;
-            }
-            if (this.applyFilterButtonVisibility !== false) {
-                this.applyFilterButton = true;
-            }
-        } else {
-            this.applyFilterButton = false;
-        }
         if (this.filter.inputType === this.filterInputTypes["Date"]) {
             if (!this.filter.values) {
                 this.filter.values = [];
             }
-            this.applyFilter();
+        }
+        if (newVal) {
+            if (this.applyFilterButtonVisibility === false && (newVal === [null] || newVal === [""] || newVal.length === 0)) {
+                this.applyFilterButton = false;
+            } else {
+                this.applyFilterButton = true;
+            }
+        } else {
+            this.applyFilterButton = false;
         }
     }
 
