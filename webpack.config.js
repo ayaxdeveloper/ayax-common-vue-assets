@@ -60,8 +60,11 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: 'style-loader!css-loader'
-      },
+        use: [
+          'vue-style-loader',
+          'css-loader'
+        ],
+      },   
       {
         test: /\.(png|jpg|gif|svg)$/,
         loader: 'file-loader',
