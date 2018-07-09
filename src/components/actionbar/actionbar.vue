@@ -42,11 +42,8 @@
 </style>
 
 <style>
-    .actionbar .toolbar__content>:not(.btn):not(.menu):first-child:not(:only-child) {
-        margin-left: 0px;
-    }
-    .actionbar .toolbar__content>:not(.btn):not(.menu):last-child:not(:only-child) {
-        margin-right: 0px;
+    .actionbar .v-toolbar__content {
+        padding: 0px;
     }
 </style>
 

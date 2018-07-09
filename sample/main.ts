@@ -1,7 +1,6 @@
+import "@mdi/font/css/materialdesignicons.css";
 import "element-ui/lib/theme-chalk/index.css";
 import "vuetify/dist/vuetify.min.css";
-// import '../node_modules/mdi/css/materialdesignicons.css';
-import "../node_modules/material-design-icons-iconfont/dist/material-design-icons.css";
 
 import locale from "element-ui/lib/locale";
 import lang from "element-ui/lib/locale/lang/ru-RU";
@@ -13,7 +12,9 @@ import App from "./app/app.vue";
 import { routes } from "./routes";
 locale.use(lang);
 
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+    iconfont: "mdi"
+});
 Vue.use(VueRouter);
 Vue.use(AyaxCommonVueAssets);
 Vue.use(require("vue-shortkey"));

@@ -49,7 +49,7 @@
         :picker-options="{firstDayOfWeek: 1}"
         />
     </div>
-    <v-select
+    <v-autocomplete
     v-else-if="field.type == select"
     :name="field.name"
     :label="field.dense ? field.title : null"
@@ -60,11 +60,10 @@
     :hint="field.hint"
     bottom
     :hide-details="!field.hint"
-    autocomplete
     clearable
     :rules="field.rules"
     > 
-    ></v-select>
+    ></v-autocomplete>
     <v-checkbox
     v-else-if="field.type == checkbox"
     :label="field.dense ? field.title : null"

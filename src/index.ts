@@ -1,3 +1,4 @@
+import "@mdi/font/css/materialdesignicons.css";
 import { DatePicker } from "element-ui";
 import Vue from "vue";
 import Vuetify from "vuetify";
@@ -13,7 +14,9 @@ import SidebarComponent from "./components/sidebar/sidebar.vue";
 import TableComponent from "./components/table/table.vue";
 import TableFilterComponent from "./components/TableFilterComponent/TableFilterComponent.vue";
 import UserProfileComponent from "./components/user-profile/user-profile.vue";
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+    iconfont: "mdi"
+});
 
 export default {
     // tslint:disable-next-line:variable-name

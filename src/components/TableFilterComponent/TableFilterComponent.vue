@@ -65,7 +65,7 @@
                 </template>
             </template>
             <template v-else-if="filter.requestType == filterTypes['Eq'] && filter.inputType == filterInputTypes['Select']">
-                <v-select 
+                <v-autocomplete
                 :name="filter.requestName" 
                 :items="filter.selectItems" 
                 class="table-filter-select" 
@@ -74,13 +74,12 @@
                 persistent-hint 
                 clearable
                 dense
-                autocomplete
                 no-data-text="Нет совпадений"                
                 append-icon="arrow_drop_down"
-                ></v-select>
+                ></v-autocomplete>
             </template>
             <template v-else-if="filter.requestType == filterTypes['In'] && filter.inputType == filterInputTypes['Select']">
-                <v-select 
+                <v-autocomplete
                 :name="filter.requestName" 
                 :items="filter.selectItems" 
                 multiple 
@@ -89,11 +88,10 @@
                 :hint="getHint()" 
                 persistent-hint 
                 dense
-                autocomplete
                 no-data-text="Нет совпадений"
                 @input="applyFilterButton = true"
                 append-icon="arrow_drop_down"
-                clearable></v-select>
+                clearable></v-autocomplete>
             </template>
         </template>
 
@@ -117,6 +115,7 @@
                 <div class="filterLabel">{{ filter.label }}</div>
                 <el-date-picker
                 :class="['date-range']"
+                style="margin-top: 1px"
                 v-model="filter.values"
                 type="daterange"
                 format="dd.MM.yyyy"
@@ -141,6 +140,7 @@
                             placeholder="От"
                             return-masked-value
                             :mask="getMask()"
+                            clearable
                             v-model="filter.values[0]">
                         </v-text-field>
                         <div class="pa-2">-</div>
@@ -152,6 +152,7 @@
                             placeholder="До"
                             return-masked-value 
                             :mask="getMask()"
+                            clearable
                             v-model="filter.values[1]">
                         </v-text-field>
                     </div>
@@ -160,8 +161,8 @@
             </template>
             <v-flex class="filter" v-else-if="filter.requestType == filterTypes['Eq'] && filter.inputType == filterInputTypes['Select']">
                 <div class="filterLabel">{{ filter.label }}</div>
-                <v-select 
-                    class="filterInput"
+                <v-autocomplete
+                    class="filterInput selectFilter"
                     :name="filter.requestName" 
                     :items="filter.selectItems"
                     v-model="filter.values[0]"
@@ -170,16 +171,15 @@
                     :placeholder="filter.placeholder"
                     dense
                     single-line
-                    autocomplete
                     no-data-text="Нет совпадений">
-                </v-select>
+                </v-autocomplete>
             </v-flex>
             <v-flex class="filter" v-else-if="filter.requestType == filterTypes['In'] && filter.inputType == filterInputTypes['Select']">
                 <div class="filterLabel">{{ filter.label }}</div>
-                <v-select 
+                <v-autocomplete
                     :name="filter.requestName" 
                     :items="filter.selectItems" 
-                    class="filterInput"
+                    class="filterInput selectFilter selectMultiple"
                     v-model="filter.values"
                     :prepend-icon="filter.icon"
                     clearable
@@ -187,9 +187,11 @@
                     dense
                     multiple
                     single-line
-                    autocomplete
                     no-data-text="Нет совпадений">
-                </v-select>
+                    <template slot="selection" slot-scope="data">
+                        {{ data.item.text }}
+                    </template>
+                </v-autocomplete>
             </v-flex>
             <v-flex class="pb-2" style="height: 48px; padding-top: 9px" 
                 v-else-if="filter.requestType == filterTypes['Eq'] && filter.inputType == filterInputTypes['Button']">
@@ -209,7 +211,7 @@
 <style scoped>
     .filter {
         height: 48px;
-        padding-top: 2px;
+        padding-top: 1px;
     }
     .filterLabel {
         height: 12px;
@@ -236,19 +238,27 @@
 </style>
 
 <style>
-    .filter .input-group {
-        padding-top: 0px;
-        margin-top: 5px;
-    }
-    .filter .input-group--text-field input {
-        height: 22px;
+    .filter .v-input {
         font-size: 14px;
+        margin-top: 0px;
     }
-    .filter .input-group__input {
-        min-height: 0px;
-        height: 22px;
-        
+    .filter .v-text-field input {
+        padding: 0px;
+        padding-top: 8px;
     }
+    .filter .selectFilter .v-input__slot {
+        height: 28px;
+        text-overflow: clip;
+        white-space: nowrap; 
+        max-height: 28px;
+    }
+    .filter .selectFilter .v-input__control {
+        overflow: hidden;
+    }
+    .switcher .v-input__slot label {
+        font-size: 13px;
+    }
+
     .filter .el-input__inner {
         background-color: inherit;
         border-radius: 0px;
@@ -258,9 +268,6 @@
         color: white;
         padding: 0px;
         width: 100%;
-    }
-    .filter .input-group--select .input-group__selections__comma {
-        font-size: 14px;
     }
     .filter .el-date-editor .el-range__icon {
         display: none;
@@ -283,8 +290,5 @@
     .filter .el-date-editor .el-range__close-icon {
         width: 20px;
         padding-top: 4px;
-    }
-    .switcher .input-group label {
-        font-size: 13px;
     }
 </style>

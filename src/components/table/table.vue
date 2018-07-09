@@ -118,7 +118,7 @@
                         :width="header.width"
                         @click="header.sortable && changeSort(header.value)"
                     >
-                        <v-icon v-if="header.sortable">arrow-up</v-icon>
+                        <v-icon v-if="header.sortable">arrow_upward</v-icon>
                         <strong>{{ header.text }}</strong>
                     </th>
                 </tr>
@@ -261,7 +261,7 @@
     .table-block >>> th.action, td.action {
         padding: 0 !important;
     }
-    .table-block >>> td.action > .btn {
+    .table-block >>> td.action > .v-btn {
         height: 16px !important;
         width: 16px !important;
         margin: 4px 8px !important;
@@ -272,10 +272,10 @@
     .table-block >>> tbody td.selectable {
         padding: 0 8px !important;
     }
-    .datatable thead th.column {
+    .v-datatable thead th.column {
         position: relative;
     }
-    .datatable thead th.column.sortable i {
+    .v-datatable thead th.column.sortable i {
         /* font-size: 12px; */
         position: absolute;
         right: 0px;
