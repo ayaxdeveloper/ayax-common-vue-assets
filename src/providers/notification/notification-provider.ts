@@ -12,7 +12,7 @@ export class NotificationProvider implements INotificationProvider {
     public Error(message?: any, title?: any, dismissAfter?: number) {
         this.PushNotification(new NotificationItem(
             message == null ? "" : message, 
-            "warning", 
+            "mdi-alert", 
             "error", 
             title == null ? "Ошибка" : title,
             dismissAfter != null ? dismissAfter : this._settings.errorDismiss
@@ -28,7 +28,7 @@ export class NotificationProvider implements INotificationProvider {
     public Success(message?: any, title?: any, dismissAfter?: number) {
         this.PushNotification(new NotificationItem(
             message == null ? "" : message, 
-            "check_circle", 
+            "mdi-checkbox-marked-circle", 
             "success", 
             title == null ? "Успешно" : title,
             dismissAfter != null ? dismissAfter : this._settings.successDismiss
@@ -38,7 +38,7 @@ export class NotificationProvider implements INotificationProvider {
     public Info(message?: any, title?: any, dismissAfter?: number) {
         this.PushNotification(new NotificationItem(
             message == null ? "" : message, 
-            "info", 
+            "mdi-information", 
             "info", 
             title == null ? "Инфо" : title,
             dismissAfter != null ? dismissAfter : this._settings.infoDismiss
@@ -48,7 +48,7 @@ export class NotificationProvider implements INotificationProvider {
     public Warning(message?: any, title?: any, dismissAfter?: number) {
         this.PushNotification(new NotificationItem(
             message == null ? "" : message, 
-            "priority_high", 
+            "mdi-alert-circle", 
             "warning", 
             title == null ? "Предупреждение" : title,
             dismissAfter != null ? dismissAfter : this._settings.warningDismiss
