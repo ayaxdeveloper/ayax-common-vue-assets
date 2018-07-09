@@ -13,7 +13,7 @@
         :showHeaderFiltersByDefault="true">
         <template slot="toolbar-items">
             <v-btn icon>
-                <v-icon>person_add</v-icon>
+                <v-icon>mdi-account-plus</v-icon>
             </v-btn>
         </template>
         </a-list-dialog>

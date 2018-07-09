@@ -22,15 +22,15 @@ export default class App extends VueInjection {
     sidebarItems: SidebarComponentItem[] = [
         new SidebarComponentItem({
             title: "Главная",
-            icon: "contact_phone",
+            icon: "mdi-book-open-variant",
             href: "/",
             isSystem: true
         }),
-        new SidebarComponentItem({title: "LIST", icon: "list", route: "/list-test/list"}),
-        new SidebarComponentItem({title: "LIST-DIALOG", icon: "inbox", route: "/list-dialog-test"}),
+        new SidebarComponentItem({title: "LIST", icon: "mdi-format-list-checkbox", route: "/list-test/list"}),
+        new SidebarComponentItem({title: "LIST-DIALOG", icon: "mdi-inbox", route: "/list-dialog-test"}),
         new SidebarComponentItem({
             title: "НАСТРОЙКИ",
-            icon: "build",
+            icon: "mdi-wrench",
             subItems: [
                 new SidebarComponentItem({title: "Вертушка", route: "/switcher/list"}),
                 new SidebarComponentItem({title: "Маршруты", route: "/route"}),

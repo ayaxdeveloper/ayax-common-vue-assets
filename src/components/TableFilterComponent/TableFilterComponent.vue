@@ -74,8 +74,7 @@
                 persistent-hint 
                 clearable
                 dense
-                no-data-text="Нет совпадений"                
-                append-icon="arrow_drop_down"
+                no-data-text="Нет совпадений"
                 ></v-autocomplete>
             </template>
             <template v-else-if="filter.requestType == filterTypes['In'] && filter.inputType == filterInputTypes['Select']">
@@ -90,7 +89,6 @@
                 dense
                 no-data-text="Нет совпадений"
                 @input="applyFilterButton = true"
-                append-icon="arrow_drop_down"
                 clearable></v-autocomplete>
             </template>
         </template>

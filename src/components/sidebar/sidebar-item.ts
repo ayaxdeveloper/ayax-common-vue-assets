@@ -8,7 +8,7 @@ export class SidebarComponentItem {
     subItems?: SidebarComponentItem[] = [];
     newTab = false;
     expanded = false;
-    arrowDirection = "keyboard_arrow_down";
+    arrowDirection = "mdi-chevron-down";
     constructor(init?: Partial<SidebarComponentItem>) {
         if (init) { 
             Object.assign(this, init);

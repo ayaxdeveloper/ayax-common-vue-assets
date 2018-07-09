@@ -1,6 +1,8 @@
 import "@mdi/font/css/materialdesignicons.css";
 import "element-ui/lib/theme-chalk/index.css";
 import "vuetify/dist/vuetify.min.css";
+import "../node_modules/roboto-fontface/css/roboto/roboto-fontface.css";
+import "./style.scss";
 
 import locale from "element-ui/lib/locale";
 import lang from "element-ui/lib/locale/lang/ru-RU";

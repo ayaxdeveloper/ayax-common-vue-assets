@@ -3,7 +3,7 @@
         <v-layout row>
             <v-flex class="sidebar-switcher">
                 <v-btn class="collapseBtn" icon @click.native.stop="mini = !mini" title="Меню">
-                    <v-icon>menu</v-icon>
+                    <v-icon>mdi-menu</v-icon>
                 </v-btn>
             </v-flex>
             <v-flex class="sidebar-content">

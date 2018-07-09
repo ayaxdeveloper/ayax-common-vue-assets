@@ -6,10 +6,10 @@ export default abstract class BaseListLayout extends Vue {
     @Inject() clientSettings: IClientSettings;
     pagination = Pagination.Default(this.clientSettings.listRowsPerpage);
     actions = [
-        new TableComponentAction({name: "add", title: "Добавить", icon: "add"}),
-        new TableComponentAction({name: "removeSelected", title: "Удалить выбранные", icon: "delete", needSelectedItem: true}),
-        new TableComponentAction({name: "edit", title: "Редактировать", icon: "mode_edit", single: true}),
-        new TableComponentAction({name: "remove", title: "Удалить", icon: "delete", single: true}),
+        new TableComponentAction({name: "add", title: "Добавить", icon: "mdi-plus"}),
+        new TableComponentAction({name: "removeSelected", title: "Удалить выбранные", icon: "mdi-delete", needSelectedItem: true}),
+        new TableComponentAction({name: "edit", title: "Редактировать", icon: "mdi-pencil", single: true}),
+        new TableComponentAction({name: "remove", title: "Удалить", icon: "mdi-delete", single: true}),
         new TableComponentAction({
             name: "export", 
             title: "Экспорт", 

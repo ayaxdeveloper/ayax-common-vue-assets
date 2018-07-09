@@ -15,7 +15,7 @@ export default class SidebarComponent extends mixins(OpenInNewWindowMixin) {
         if (val === true) {
             this.items.forEach(element => {
                 element.expanded = false;
-                element.arrowDirection = "keyboard_arrow_down";
+                element.arrowDirection = "mdi-chevron-down";
             });
         }
     }
@@ -25,12 +25,12 @@ export default class SidebarComponent extends mixins(OpenInNewWindowMixin) {
         this.items.forEach(element => {
             if (element !== item) {
                 element.expanded = false;
-                element.arrowDirection = "keyboard_arrow_down";    
+                element.arrowDirection = "mdi-chevron-down";    
             } 
         });
 
         item.expanded = !item.expanded;
-        item.arrowDirection === "keyboard_arrow_down" ? item.arrowDirection = "keyboard_arrow_up" : item.arrowDirection = "keyboard_arrow_down";
+        item.arrowDirection === "mdi-chevron-down" ? item.arrowDirection = "mdi-chevron-up" : item.arrowDirection = "mdi-chevron-down";
     }
 
     click(e, item: SidebarComponentItem) {

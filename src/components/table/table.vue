@@ -24,12 +24,12 @@
                 <slot name="head-items"></slot>
                 <v-btn small v-if="allFilters.length > 0" :class="{'mr-3':configure}" flat @click="showAllFiltersBtn()">
                     Все фильтры
-                    <v-icon v-if="!showAllFilters">arrow_drop_down</v-icon>
-                    <v-icon v-if="showAllFilters">arrow_drop_up</v-icon>
+                    <v-icon v-if="!showAllFilters">mdi-menu-down</v-icon>
+                    <v-icon v-if="showAllFilters">mdi-menu-up</v-icon>
                 </v-btn>
                 <v-menu bottom offset-y left offset-x :close-on-content-click="false" :value="isTableMenuVisible" v-if="configure">
-                    <v-btn class="mt-2" flat style="height: 30px; width: 30px" small icon title="Настройки таблицы" slot="activator" @click="isTableMenuVisible=true">
-                        <v-icon>settings</v-icon>
+                    <v-btn flat style="height: 30px; width: 30px" small icon title="Настройки таблицы" slot="activator" @click="isTableMenuVisible=true">
+                        <v-icon>mdi-settings</v-icon>
                     </v-btn>
                     <v-list dense>
                         <v-list-tile v-if="headerFilters.length > 0" @click="toggleFilters">
@@ -118,7 +118,7 @@
                         :width="header.width"
                         @click="header.sortable && changeSort(header.value)"
                     >
-                        <v-icon v-if="header.sortable">arrow_upward</v-icon>
+                        <v-icon v-if="header.sortable">mdi-arrow-up</v-icon>
                         <strong>{{ header.text }}</strong>
                     </th>
                 </tr>
@@ -165,7 +165,7 @@
                                 icon
                                 :ripple="false"
                                 >
-                                    <v-icon>more_horiz</v-icon>
+                                    <v-icon>mdi-dots-horizontal</v-icon>
                                 </v-btn>
                                 <v-list
                                 dark
