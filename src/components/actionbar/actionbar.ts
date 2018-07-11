@@ -1,12 +1,7 @@
 import { Component, Emit, Prop, Vue } from "vue-property-decorator";
-import { ResizeObserver } from "vue-resize";
 import { TableComponentAction } from "../table/table-action";
 
-@Component({
-    components: {
-        "resize-observer": ResizeObserver
-    }
-})
+@Component
 export default class ActionbarComponent extends Vue{
     @Prop({default: "primary"}) actionbarColor: string;
     @Prop({default: true}) actionbarIsDark: boolean;
@@ -24,10 +19,14 @@ export default class ActionbarComponent extends Vue{
         this.actionbarContainer = document.getElementsByClassName("actionbarContainer");
         this.actionbar = document.getElementsByClassName("actionbar");
         this.addWindowEvents();
+        this.actionbarSize();
+        [].forEach.call(this.actionbarContainer, elem => {
+            this.toggleActionbar(elem);
+        });
     }
 
     addWindowEvents() {
-        window.onresize = () => {
+        window.onresize = () => {         
             this.actionbarSize();
         };
         window.onscroll = () => {
