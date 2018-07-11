@@ -208,16 +208,17 @@
                 </tr>   
             </template>
         </v-data-table>
-        <div class="actionbarAnchor"></div>
-        <a-actionbar 
-        v-if="actions && actions.filter(el => !el.single && el.active).length > 0"
-        :actions="actions.filter(action => !action.single && action.active)"
-        @on-bar-action="onBarAction"
-        :actionbarColor="actionbarColor"
-        :actionbarIsDark="actionbarIsDark"
-        :itemSelected="itemSelected"
-        :innerSelected="innerSelected"> 
-        </a-actionbar>
+        <div class="actionbarAnchor">
+            <a-actionbar 
+            v-if="actions && actions.filter(el => !el.single && el.active).length > 0"
+            :actions="actions.filter(action => !action.single && action.active)"
+            @on-bar-action="onBarAction"
+            :actionbarColor="actionbarColor"
+            :actionbarIsDark="actionbarIsDark"
+            :itemSelected="itemSelected"
+            :innerSelected="innerSelected"> 
+            </a-actionbar>
+        </div>
         <div class="text-xs-center pt-2">
             <v-pagination v-if="pagination" total-visible="10" v-model="pagination.page" :length="GetTotalPages"></v-pagination>
         </div>
@@ -242,6 +243,9 @@
 </style>
 
 <style scoped>
+    .actionbarAnchor {
+        height: 48px;
+    }
     .table-block >>> tbody tr {
         line-height: 12px !important;
         height: 32px !important;
