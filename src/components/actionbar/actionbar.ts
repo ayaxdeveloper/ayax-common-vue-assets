@@ -22,8 +22,11 @@ export default class ActionbarComponent extends Vue{
         this.actionbarSize();
         [].forEach.call(this.actionbarContainer, elem => {
             this.toggleActionbar(elem);
-            this.actionbarSize();
         });
+    }
+
+    updated() {
+        this.actionbarSize();
     }
 
     addWindowEvents() {
