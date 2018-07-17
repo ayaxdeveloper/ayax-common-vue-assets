@@ -244,14 +244,29 @@ export default class TableComponent extends Vue {
         });
     }
 
-    getFromDictionary(header: TableComponentHeader, id: number) {
+    getFromDictionary(header: TableComponentHeader, id: number | number[]) {
         if (!header || !header.items || header.items.length === 0) {
             return "Нет";
         }
-        const val = header.items.find(x => x.id === id);
-        if (val) {
-            return val.name ? val.name : val.title;
+        if (Array.isArray(id)) {
+            let concat = "";
+            id.forEach(element => {
+                const val = header.items.find(x => x.id === element);
+                if (val) {
+                    concat += val.name ? val.name : val.title + ", ";
+                }
+            });
+            if (concat.length > 1) {
+                concat = concat.substring(0, concat.length - 2);
+            }
+            return concat;
+        } else {
+            const val = header.items.find(x => x.id === id);
+            if (val) {
+                return val.name ? val.name : val.title;
+            }
         }
+        
         return "Нет";
     }
 

@@ -3,7 +3,7 @@ import Vue from "vue";
 export default class TestDataService extends Vue {
     data = [
         { id: 1, activeLead: {qq: "aaa", ww: "bbb"}, otherLeads: [{name: "#722 Отложенный спрос"}, {name: "#913 Уточнение информации"}], code: "1231", title: "Alpha", created: new Date("2018-04-01"), dictionaryId: 0},
-        { id: 2, activeLead: {qq: "aaa", ww: "bbb"}, otherLeads: [], code: "1232", title: "Bravo", created: new Date("2018-04-02"), dictionaryId: 1},
+        { id: 2, activeLead: {qq: "aaa", ww: "bbb"}, otherLeads: [], code: "1232", title: "Bravo", created: new Date("2018-04-02"), dictionaryId: [1,2]},
         { id: 3, activeLead: {qq: "aaa", ww: "bbb"}, otherLeads: [{name: "#356 Пригласили в офис"}], code: "1233", title: "Charlie", created: new Date("2018-04-03"), dictionaryId: 2},
         { id: 4, activeLead: {qq: "aaa", ww: "bbb"}, otherLeads: [], code: "1234", title: "Delta", created: new Date("2018-04-04"), dictionaryId: 1},
         { id: 5, activeLead: {qq: "aaa", ww: "bbb"}, otherLeads: [], code: "1235", title: "Echo", created: new Date("2018-04-05"), dictionaryId: 0},
