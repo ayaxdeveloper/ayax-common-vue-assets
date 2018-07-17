@@ -58,6 +58,7 @@
     :required="field.required"
     :disabled="field.disabled"
     :hint="field.hint"
+    :multiple="field.multiple"
     bottom
     :hide-details="!field.hint"
     clearable

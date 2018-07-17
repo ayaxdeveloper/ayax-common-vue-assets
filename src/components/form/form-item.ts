@@ -18,6 +18,7 @@ export class FormComponentItem {
     rules: any[];
     model: any = null;
     row = 0;
+    multiple = false;
 
     constructor(init?: Partial<FormComponentItem>) {
         if (init) {
