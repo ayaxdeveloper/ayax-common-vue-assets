@@ -59,7 +59,7 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js', '.vue', '.json'],
     alias: {
-      vue$: 'vue/dist/vue.js'
+      vue$: 'vue/dist/vue.min.js'
     }
   },
   externals: [
@@ -72,12 +72,24 @@ module.exports = {
     'moment',
     'vue-shortkey',
     'vuedraggable',
-    'vuetify'
+    'vuetify',
+    'vue-property-decorator'
   ],
   plugins: [
-    new VueLoaderPlugin(),
-    new webpack.DefinePlugin({
-      PRODUCTION: JSON.stringify(true),
-    })
+    new VueLoaderPlugin()
   ]
-}
+};
+
+if (process.env.NODE_ENV === 'production') {
+  module.exports.plugins = (module.exports.plugins || []).concat([
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"production"'
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    })
+  ]);
+};
