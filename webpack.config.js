@@ -5,7 +5,7 @@ module.exports = {
   mode: 'production',
   entry: './src/Index.ts',
   output: {
-    path: path.resolve(__dirname, './dist/'),
+    path: path.resolve(__dirname, './dist'),
     filename: 'build.js',
     library: 'ayax-common-vue-assets',
     libraryTarget: 'umd'
@@ -58,21 +58,21 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js', '.vue', '.json'],
     alias: {
-      vue$: 'vue/dist/vue.js'
+      vue$: 'vue/dist/vue.esm.js'
     }
   },
-  externals : {
-    'ayax-common-auth': 'ayax-common-auth',
-    'ayax-common-cache': 'ayax-common-cache',
-    'ayax-common-helpers': 'ayax-common-helpers',
-    'ayax-common-operation': 'ayax-common-operation',
-    'ayax-common-types': 'ayax-common-types',
-    'element-ui': 'element-ui',
-    'moment': 'moment',
-    'vue-shortkey': 'vue-shortkey',
-    'vuedraggable': 'vuedraggable',
-    'vuetify': 'vuetify'
-  },
+  externals: [
+    'ayax-common-auth',
+    'ayax-common-cache',
+    'ayax-common-helpers',
+    'ayax-common-operation',
+    'ayax-common-types',
+    'element-ui',
+    'moment',
+    'vue-shortkey',
+    'vuedraggable',
+    'vuetify'
+  ],
   plugins: [
     new VueLoaderPlugin()
   ]
