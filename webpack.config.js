@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
@@ -74,6 +75,9 @@ module.exports = {
     'vuetify'
   ],
   plugins: [
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new webpack.DefinePlugin({
+      PRODUCTION: JSON.stringify(true),
+    })
   ]
 }
