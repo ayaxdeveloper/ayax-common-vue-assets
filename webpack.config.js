@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const nodeExternals = require('webpack-node-externals')
 
 module.exports = {
   mode: 'production',
@@ -11,25 +12,7 @@ module.exports = {
     library: 'ayax-common-vue-assets',
     libraryTarget: 'umd'
   },
-  externals: {
-    vue: 'vue',
-    vuetify: 'vuetify',
-    moment: 'moment',
-    ajv: 'ajv',
-    mdi: 'mdi',
-    mime: 'mime',
-    "element-ui": "element-ui",
-    "vue-shortkey": "vue-shortkey",
-    "ayax-common-auth": "ayax-common-auth",
-    "ayax-common-cache": "ayax-common-cache",
-    "ayax-common-helpers": "ayax-common-helpers",
-    "ayax-common-services": "ayax-common-services",
-    "ayax-common-types": "ayax-common-types",
-    "file-loader": "file-loader",
-    "url-loader": "url-loader",
-    "schema-utils": "schema-utils",
-    "vue-shortkey": "vue-shortkey"
-  },
+  externals: [nodeExternals()],
   module: {
     rules: [
       {
