@@ -6,10 +6,29 @@ module.exports = {
   mode: 'production',
   entry: './src/Index.ts',
   output: {
-    path: path.resolve(__dirname, './dist'),
+    path: path.resolve(__dirname, './dist/'),
     filename: 'build.js',
     library: 'ayax-common-vue-assets',
     libraryTarget: 'umd'
+  },
+  externals: {
+    vue: 'vue',
+    vuetify: 'vuetify',
+    moment: 'moment',
+    ajv: 'ajv',
+    mdi: 'mdi',
+    mime: 'mime',
+    "element-ui": "element-ui",
+    "vue-shortkey": "vue-shortkey",
+    "ayax-common-auth": "ayax-common-auth",
+    "ayax-common-cache": "ayax-common-cache",
+    "ayax-common-helpers": "ayax-common-helpers",
+    "ayax-common-services": "ayax-common-services",
+    "ayax-common-types": "ayax-common-types",
+    "file-loader": "file-loader",
+    "url-loader": "url-loader",
+    "schema-utils": "schema-utils",
+    "vue-shortkey": "vue-shortkey"
   },
   module: {
     rules: [
@@ -59,20 +78,8 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js', '.vue', '.json'],
     alias: {
-      vue$: 'vue/dist/vue.min.js'
+      vue$: 'vue/dist/vue.js'
     }
-  },
-  externals: {
-    'ayax-common-auth': 'ayax-common-auth',
-    'ayax-common-cache': 'ayax-common-cache',
-    'ayax-common-helpers': 'ayax-common-helpers',
-    'ayax-common-operation': 'ayax-common-operation',
-    'ayax-common-types': 'ayax-common-types',
-    'element-ui': 'element-ui',
-    'moment': 'moment',
-    'vue-shortkey': 'vue-shortkey',
-    'vuedraggable': 'vuedraggable',
-    'vuetify': 'vuetify'
   },
   plugins: [
     new VueLoaderPlugin()
@@ -80,15 +87,21 @@ module.exports = {
 };
 
 if (process.env.NODE_ENV === 'production') {
+  module.exports.devtool = '#source-map';
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"'
       }
     }),
-    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
+      compress: {
+        warnings: false
+      }
+    }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
     })
   ]);
-};
+}
