@@ -2,3 +2,7 @@ src
 tsconfig.json
 webpack.config.js
 sample
+webpack.config.sample.js
+index.html
+tslint.json
+node_modules
