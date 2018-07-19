@@ -12,7 +12,7 @@ module.exports = {
     library: 'ayax-common-vue-assets',
     libraryTarget: 'umd'
   },
-  // externals: [nodeExternals()],
+  externals: [nodeExternals()],
   module: {
     rules: [
       {
@@ -31,12 +31,7 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        include: path.resolve(__dirname, 'src'),
-        options: {
-          loaders: {
-            ts: 'ts-loader'
-          }
-        }
+        include: path.resolve(__dirname, 'src')
       },
       {
         test: /\.css$/,
@@ -61,7 +56,7 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js', '.vue', '.json'],
     alias: {
-      vue$: 'vue/dist/vue.js'
+      vue$: 'vue/dist/vue.min.js'
     }
   },
   plugins: [
