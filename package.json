@@ -1,7 +1,8 @@
 {
   "name": "ayax-common-vue-assets",
   "version": "3.1.3",
-  "main": "dist/build.js",
+  "main": "dist/build",
+  "typings": "dist/build",
   "description": "Ayax Common Vue Assets package for Vue Typescript projects",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -25,6 +26,7 @@
     "ayax-common-helpers": "^2.2.3",
     "ayax-common-operation": "^1.0.12",
     "ayax-common-types": "^3.0.5",
+    "ayax-common-vue-assets": "^3.1.3",
     "element-ui": "2.2.0",
     "moment": "^2.20.1",
     "roboto-fontface": "^0.9.0",
