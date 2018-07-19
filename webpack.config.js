@@ -5,22 +5,22 @@ module.exports = {
   mode: 'production',
   entry: './src/Index.ts',
   output: {
-    path: path.resolve(__dirname, './dist'),
+    path: path.resolve(__dirname, './dist/'),
     filename: 'build.js',
     library: 'ayax-common-vue-assets',
-    libraryTarget: "umd"
+    libraryTarget: 'umd'
   },
   module: {
     rules: [
       {
         test: /\.js$/,
-        loader: "babel-loader",
-        exclude: path.resolve(__dirname, "node_modules")
+        loader: 'babel-loader',
+        exclude: path.resolve(__dirname, 'node_modules')
       },
       {
         test: /\.ts$/,
         loader: 'ts-loader',
-        include: path.resolve(__dirname, "src"),
+        include: path.resolve(__dirname, 'src'),
         options: {
           appendTsSuffixTo: [/\.vue$/]
         }
@@ -28,7 +28,7 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-        include: path.resolve(__dirname, "src"),
+        include: path.resolve(__dirname, 'src'),
         options: {
           loaders: {
             ts: 'ts-loader'
@@ -50,15 +50,15 @@ module.exports = {
           'scss-loader'
         ],
       },
-      { test: /\.(png|jpg|jpeg|gif|svg)$/, use: "url-loader?limit=25000" },
-      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
-      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" },
+      { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },
+      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff' },
+      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader' },
     ]
   },
   resolve: {
     extensions: ['.ts', '.js', '.vue', '.json'],
     alias: {
-      'vue$': 'vue/dist/vue.esm.js'
+      vue$: 'vue/dist/vue.js'
     }
   },
   externals : {
