@@ -62,19 +62,19 @@ module.exports = {
       vue$: 'vue/dist/vue.min.js'
     }
   },
-  externals: [
-    'ayax-common-auth',
-    'ayax-common-cache',
-    'ayax-common-helpers',
-    'ayax-common-operation',
-    'ayax-common-types',
-    'element-ui',
-    'moment',
-    'vue-shortkey',
-    'vuedraggable',
-    'vuetify',
-    'vue-property-decorator'
-  ],
+  // externals: [
+  //   'ayax-common-auth',
+  //   'ayax-common-cache',
+  //   'ayax-common-helpers',
+  //   'ayax-common-operation',
+  //   'ayax-common-types',
+  //   'element-ui',
+  //   'moment',
+  //   'vue-shortkey',
+  //   'vuedraggable',
+  //   'vuetify',
+  //   'vue-property-decorator'
+  // ],
   plugins: [
     new VueLoaderPlugin()
   ]
