@@ -1,19 +1,18 @@
-import "@mdi/font/css/materialdesignicons.css";
 import { DatePicker } from "element-ui";
 import Vue from "vue";
 import Vuetify from "vuetify";
-import ActionbarComponent from "./components/actionbar/actionbar.vue";
-import BreadcrumbsComponent from "./components/breadcrumbs/breadcrumbs.vue";
-import EditComponent from "./components/edit/edit.vue";
-import FormControlComponent from "./components/form/form-control.vue";
-import FormComponent from "./components/form/form.vue";
-import ListDialogComponent from "./components/list-dialog/list-dialog.vue";
-import ListComponent from "./components/list/list.vue";
-import NotificationComponent from "./components/notification/notification.vue";
-import SidebarComponent from "./components/sidebar/sidebar.vue";
-import TableComponent from "./components/table/table.vue";
-import TableFilterComponent from "./components/TableFilterComponent/TableFilterComponent.vue";
-import UserProfileComponent from "./components/user-profile/user-profile.vue";
+import ActionbarComponent from "./Components/ActionbarComponent/ActionbarComponent.vue";
+import BreadcrumbsComponent from "./Components/BreadcrumbsComponent/BreadcrumbsComponent.vue";
+import EditComponent from "./Components/EditComponent/EditComponent.vue";
+import FormComponent from "./Components/FormComponent/FormComponent.vue";
+import FormControlComponent from "./Components/FormComponent/FormControlComponent.vue";
+import ListComponent from "./Components/ListComponent/ListComponent.vue";
+import ListDialogComponent from "./Components/ListDialogComponent/ListDialogComponent.vue";
+import NotificationComponent from "./Components/NotificationComponent/NotificationComponent.vue";
+import SidebarComponent from "./Components/SidebarComponent/SidebarComponent.vue";
+import TableComponent from "./Components/TableComponent/TableComponent.vue";
+import TableFilterComponent from "./Components/TableFilterComponent/TableFilterComponent.vue";
+import UserProfileComponent from "./Components/UserProfileComponent/UserProfileComponent.vue";
 Vue.use(Vuetify, {
     iconfont: "mdi"
 });
@@ -37,20 +36,20 @@ export default {
     }
 };
 
-export * from "./helpers/form-component-helper";
-export * from "./components/form/form-item";
-export * from "./components/table/table-action";
-export * from "./components/table/table-header";
-export * from "./components/TableFilterComponent/TableFilterComponentItem";
-export * from "./components/sidebar/sidebar-item";
-export * from "./components/breadcrumbs/breadcrumb-item";
-export * from "./providers/notification/notification-provider";
-export * from "./components/TableFilterComponent/TableFilterComponentItemAppearance";
-export * from "./components/TableFilterComponent/TableFilterComponentItemInputType";
-export * from "./components/TableFilterComponent/TableFilterComponentItemType";
-export * from "./components/TableFilterComponent/Filter";
-export * from "./components/TableFilterComponent/FilterOperation";
-export * from "./components/TableFilterComponent/FilterValue";
+export * from "./Helpers/FormComponentHelper";
+export * from "./Components/FormComponent/FormItem";
+export * from "./Components/TableComponent/TableAction";
+export * from "./Components/TableComponent/TableHeader";
+export * from "./Components/TableFilterComponent/TableFilterComponentItem";
+export * from "./Components/SidebarComponent/SidebarItem";
+export * from "./Components/BreadcrumbsComponent/BreadcrumbItem";
+export * from "./Providers/NotificationProvider/NotificationProvider";
+export * from "./Components/TableFilterComponent/TableFilterComponentItemAppearance";
+export * from "./Components/TableFilterComponent/TableFilterComponentItemInputType";
+export * from "./Components/TableFilterComponent/TableFilterComponentItemType";
+export * from "./Components/TableFilterComponent/Filter";
+export * from "./Components/TableFilterComponent/FilterOperation";
+export * from "./Components/TableFilterComponent/FilterValue";
 
 export { 
     TableComponent, 

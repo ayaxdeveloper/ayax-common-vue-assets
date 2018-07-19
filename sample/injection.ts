@@ -2,11 +2,11 @@ import { CacheService, ICacheService } from "ayax-common-cache";
 import { IOperationService, OperationService } from "ayax-common-operation";
 import { IAppSettings, IClientSettings, IHttpService, INotificationProvider, INotificationSettings, IServerSettings } from "ayax-common-types";
 import { Provide, Vue } from "vue-property-decorator";
-import { NotificationProvider } from "../src/index";
-import { EVENTBUS } from "./event-bus";
-import { HttpService } from "./services/base/http/http-service";
-import { AppSettings } from "./settings";
-import { STATICDICTIONARY } from "./static-dictionary";
+import { NotificationProvider } from "../src/Providers/NotificationProvider/NotificationProvider";
+import { EVENTBUS } from "./EventBus";
+import { HttpService } from "./Services/BaseService/HttpService/HttpService";
+import { AppSettings } from "./Settings";
+import { STATICDICTIONARY } from "./StaticDictionary";
 
 export abstract class VueInjection extends Vue {
     @Provide() appSettings: IAppSettings = new AppSettings();
