@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "./built/",
     "experimentalDecorators": true,
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "node",
     "target": "es6",
     "sourceMap": true,
@@ -15,5 +15,8 @@
   },
   "include": [
     "./src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }
