@@ -228,9 +228,12 @@
 
 <script lang="ts">
 import { IEntity } from "ayax-common-types";
-import { IPagination } from "ayax-common-types";
 import { SortableField } from "ayax-common-types";
+import { IPagination } from "ayax-common-types";
 import { Component, Emit, Prop, Vue, Watch } from "vue-property-decorator";
+import vuedraggable from "vuedraggable";
+import ActionbarComponent from "../ActionbarComponent/ActionbarComponent.vue";
+import TableFilterComponent from "../TableFilterComponent/TableFilterComponent.vue";
 import { TableFilterComponentItem } from "../TableFilterComponent/TableFilterComponentItem";
 import { TableFilterComponentItemAppearance } from "../TableFilterComponent/TableFilterComponentItemAppearance";
 import { TableFilterComponentItemInputType } from "../TableFilterComponent/TableFilterComponentItemInputType";
@@ -239,9 +242,9 @@ import { TableComponentHeader } from "./TableHeader";
 
 @Component({
     components: {
-        "a-table-filter": () => import("../TableFilterComponent/TableFilterComponent.vue"),
-        "a-actionbar": () => import("../ActionbarComponent/ActionbarComponent.vue"),
-        "draggable": () => import("vuedraggable")
+        "a-table-filter": TableFilterComponent,
+        "a-actionbar": ActionbarComponent,
+        "draggable": vuedraggable
     }
 })
 export default class TableComponent extends Vue {
