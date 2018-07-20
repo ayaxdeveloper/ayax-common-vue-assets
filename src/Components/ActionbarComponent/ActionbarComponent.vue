@@ -121,7 +121,11 @@ export default class ActionbarComponent extends Vue{
 
     executeAction(action: TableComponentAction) {
         if (action.action) {
-            action.action();
+            if (action.needSelectedItem) {
+                action.action(this.innerSelected);
+            } else {
+                action.action();
+            }
         } else {
             this.onBarAction(this.innerSelected.map(x => x.id), action.name);
         }
