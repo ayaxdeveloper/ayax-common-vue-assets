@@ -11,23 +11,17 @@ export class NotificationProvider implements INotificationProvider {
     }
     public Error(message?: any, title?: any, dismissAfter?: number) {
         this.PushNotification(new NotificationItem(
-            message == null ? "" : message, 
+            this.GetErrorMessage(message), 
             "mdi-alert", 
             "error", 
             title == null ? "Ошибка" : title,
             dismissAfter != null ? dismissAfter : this._settings.errorDismiss
         ));
-        if (message) {
-            console.error(`Error: ${message}`);
-        }
-        if (message && message.stack) {
-            console.error(`Stack: ${message.stack}`);
-        }
     }
 
     public Success(message?: any, title?: any, dismissAfter?: number) {
         this.PushNotification(new NotificationItem(
-            message == null ? "" : message, 
+            this.GetErrorMessage(message), 
             "mdi-checkbox-marked-circle", 
             "success", 
             title == null ? "Успешно" : title,
@@ -37,7 +31,7 @@ export class NotificationProvider implements INotificationProvider {
 
     public Info(message?: any, title?: any, dismissAfter?: number) {
         this.PushNotification(new NotificationItem(
-            message == null ? "" : message, 
+            this.GetErrorMessage(message), 
             "mdi-information", 
             "info", 
             title == null ? "Инфо" : title,
@@ -47,7 +41,7 @@ export class NotificationProvider implements INotificationProvider {
 
     public Warning(message?: any, title?: any, dismissAfter?: number) {
         this.PushNotification(new NotificationItem(
-            message == null ? "" : message, 
+            this.GetErrorMessage(message), 
             "mdi-alert-circle", 
             "warning", 
             title == null ? "Предупреждение" : title,
@@ -56,11 +50,21 @@ export class NotificationProvider implements INotificationProvider {
     }
 
     public Debug(message?: any) {
-        console.log(message);
+        console.debug(message);
     }
 
     public GetNotifications() {
         return [];
+    }
+
+    private GetErrorMessage(message: any) : string {
+        if (message === null) {
+            return "Неизвестная ошибка";
+        }
+        if (message.message !== null) {
+            return message.message;
+        }
+        return `${message}`;
     }
 
     private PushNotification(notification: NotificationItem) {
