@@ -9,7 +9,7 @@ import lang from "element-ui/lib/locale/lang/ru-RU";
 import Vue from "vue";
 import VueRouter, { RouterOptions } from "vue-router";
 import Vuetify from "vuetify";
-import AyaxCommonVueAssets from "../src/Index";
+import AyaxCommonVueAssets from "../src/index";
 import App from "./app/app.vue";
 import { routes } from "./routes";
 locale.use(lang);
