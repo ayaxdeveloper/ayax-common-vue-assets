@@ -61,7 +61,7 @@ export class NotificationProvider implements INotificationProvider {
         if (message === null) {
             return "Неизвестная ошибка";
         }
-        if (message.message !== null) {
+        if (message.message) {
             return message.message;
         }
         return `${message}`;
