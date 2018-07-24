@@ -13,6 +13,7 @@
             :loading="loading"
             :actions="actions"
             :entity="entity"
+            :rowColor="(item) => rowColor(item)"
             :topbar-color="topbarColor"
             :actionbar-color="actionbarColor"
             :topbarIsDark="topbarIsDark"
@@ -109,6 +110,7 @@ export default class ListDialogComponent extends Vue {
     @Prop({default: false}) configure: boolean;
     @Prop({default: false}) showHeaderFiltersByDefault: boolean;
     @Prop({default: null}) toggledItemSlot;
+    @Prop({default: Function }) rowColor: (item) => string;
     editDialog = false;
     request: any;
     itemForRemove: IEntity | null;

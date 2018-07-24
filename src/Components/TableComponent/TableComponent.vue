@@ -143,7 +143,7 @@
                 </tr>
             </template>
             <template slot="items" slot-scope="props">
-                <tr :active="props.selected">
+                <tr :active="props.selected" :style="{ backgroundColor: rowColor(props.item) }">
                     <td v-if='selectable' class="selectable" @click="selectClick(props)">
                         <v-checkbox
                                 primary
@@ -268,6 +268,7 @@ export default class TableComponent extends Vue {
     @Prop({default: true}) actionbarIsDark: boolean;
     @Prop({default: false}) configure: boolean;
     @Prop({default: false}) showHeaderFiltersByDefault: boolean;
+    @Prop({default: Function }) rowColor: (item) => string;
     applyFilterButtonVisibility = true;
     innerSelected: any[] = [];
     totalItems = 1;
