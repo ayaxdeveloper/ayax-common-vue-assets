@@ -345,6 +345,7 @@ export default class ListDialogComponent extends Vue {
             this.mapModelToFields(entity);
             this.editDialog = true;
         } catch (e) {
+            this.notificationProvider.Error(e);
             this.editDialog = false;
         }
 
