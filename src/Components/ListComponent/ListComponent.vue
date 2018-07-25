@@ -94,7 +94,7 @@ export default class ListComponent extends Vue {
     @Prop({default: false}) configure: boolean;
     @Prop({default: false}) showHeaderFiltersByDefault: boolean;
     @Prop({default: null}) toggledItemSlot;
-    @Prop({default: Function }) rowColor: (item) => string;
+    @Prop({default: () => () => "" }) rowColor: (item) => string;
     tableVisible = false;
     
     @Watch("pagination.page")
