@@ -349,6 +349,7 @@ export default class ListComponent extends Vue {
 
     public async load() {
         try {
+            this.loading = true;
             const response =  (await this.operationService.post<SearchResponse<any[]>>(`${this._search.url}`, this.AddFilter(this.request))).ensureSuccess();
             this.items = response.data;
             this.pagination.totalItems = response.total;
