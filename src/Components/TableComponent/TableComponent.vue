@@ -143,13 +143,14 @@
                 </tr>
             </template>
             <template slot="items" slot-scope="props">
-                <tr :active="props.selected" :style="{ backgroundColor: rowColor(props.item) }">
-                    <td v-if='selectable' class="selectable" @click="selectClick(props)">
+                <tr class="verticalBaseline" :active="props.selected" :style="{ backgroundColor: rowColor(props.item) }">
+                    <td v-if='selectable' style="vertical-align: top" class="selectable pt-4" @click="selectClick(props)">
                         <v-checkbox
                                 primary
                                 hide-details
                                 :input-value="props.selected"
                                 color="primary"
+                                style="padding-top: 8px"
                         ></v-checkbox>
                     </td>
                     <td class="text-xs-right action" v-if="actions && actions.filter(x=>x.single && x.active).length > 0">
@@ -618,6 +619,9 @@ export default class TableComponent extends Vue {
 </style>
 
 <style scoped>
+    .verticalBaseline {
+        vertical-align: baseline;
+    }
     .actionbarAnchor {
         height: 48px;
     }
