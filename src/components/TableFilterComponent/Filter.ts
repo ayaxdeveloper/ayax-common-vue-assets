@@ -23,7 +23,7 @@ export class Filter {
     }
 
     public static Not(init: Partial<Filter>) {
-        init.op = FilterOperation.And;
+        init.op = FilterOperation.Not;
         return new Filter(init);
     }
 }
