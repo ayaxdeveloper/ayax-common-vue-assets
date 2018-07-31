@@ -363,6 +363,7 @@ export default class TableFilterComponent extends Vue {
     }
 
     selectElement(item: SelectItem) {
+        console.log("before select   " + JSON.stringify(this.filter));
         const elementIndex = this.filter.values.findIndex(x => x === item.value);
         if (elementIndex > -1) {
             this.filter.values.splice(elementIndex, 1);
@@ -376,7 +377,8 @@ export default class TableFilterComponent extends Vue {
             if (this.multipleSelectValue.length === 0) {
                 this.multipleSelectValue.push(this.filter.selectItems[0].value);
             }
-        }       
+        }    
+        console.log("after select   " + JSON.stringify(this.filter));   
     }
 
     sortSelectedItems() {

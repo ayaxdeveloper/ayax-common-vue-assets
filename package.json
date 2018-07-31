@@ -1,6 +1,6 @@
 {
   "name": "ayax-common-vue-assets",
-  "version": "3.2.11",
+  "version": "3.2.12",
   "main": "dist/build.js",
   "description": "Ayax Common Vue Assets package for Vue Typescript projects",
   "scripts": {
@@ -32,7 +32,7 @@
     "vue-router": "^3.0.1",
     "vue-shortkey": "^3.1.6",
     "vuedraggable": "^2.16.0",
-    "vuetify": "^1.1.4"
+    "vuetify": "^1.1.8"
   },
   "devDependencies": {
     "@mdi/font": "^2.5.94",
