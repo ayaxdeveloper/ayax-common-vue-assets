@@ -186,7 +186,7 @@
                     :name="filter.requestName" 
                     :items="filter.selectItems" 
                     class="filterInput selectFilter"
-                    v-model="multipleSelectValue"
+                    v-model="filter.values"
                     :prepend-icon="filter.icon"
                     @click="sortSelectedItems(); showSelectMenu()"
                     clearable
@@ -196,17 +196,17 @@
                     single-line
                     no-data-text="Нет совпадений">
                     <template slot="selection" slot-scope="data">
-                        Выбрано <span class="selectionChip">{{ filter.values.length }}</span>
+                        <span class="selectionValue pt-2">Выбрано <span class="selectionChip">{{ filter.values.length }}</span></span>
                     </template>
                     <template slot="item" slot-scope="data">
                         <template>
-                            <v-list-tile-action :class="[`${filter.requestName}`]" style="margin-left: -16px; padding-left: 16px" @click.stop="selectElement(data.item)">
-                                <v-icon :class="[data.item.selected ? 'selectPrimary' : 'selectGray']" @click.stop="selectElement(data.item)">
+                            <v-list-tile-action :class="[`${filter.requestName}`]" style="margin-left: -16px; padding-left: 16px">
+                                <v-icon :class="[data.item.selected ? 'selectPrimary' : 'selectGray']">
                                     {{ data.item.selected === true ? 'mdi-checkbox-marked' : 'mdi-checkbox-blank-outline' }}
                                 </v-icon>
                             </v-list-tile-action>
                             <v-list-tile-content style="margin-right: -16px; padding-right: 16px" 
-                            :class="[data.item.selected ? 'selectPrimary' : 'selectBlack']" @click.stop="selectElement(data.item)" 
+                            :class="[data.item.selected ? 'selectPrimary' : 'selectBlack']" 
                             v-text="data.item.text">
                             </v-list-tile-content>
                         </template>
@@ -250,7 +250,6 @@ export default class TableFilterComponent extends Vue {
     searchInput: Function;
     applyFilterButton = false;
     buttonText = "";
-    multipleSelectValue = [];
     initialSelectItems: SelectItem[] = [];
 
     created() {
@@ -278,20 +277,6 @@ export default class TableFilterComponent extends Vue {
     mounted() {
         if ((this.filter.requestType === this.filterTypes["In"] || this.filter.requestType === this.filterTypes["Eq"]) &&  
             this.filter.inputType === this.filterInputTypes["Select"]) {
-
-            // const elements = document.querySelectorAll(`.${this.filter.requestName}`);
-            // const rowElements = [];
-            // [].forEach.call(elements, el => {
-            //     rowElements.push(el.parentNode.parentNode);
-            // });
-            // [].forEach.call(rowElements, el => {
-            //     const clone = el.cloneNode();
-            //     while (el.firstChild) {
-            //         clone.appendChild(el.lastChild);
-            //     }
-            //     el.parentNode.replaceChild(clone, el);
-            // });
-
             this.hideSelectMenu();
         }
     }
@@ -362,25 +347,6 @@ export default class TableFilterComponent extends Vue {
         selectMenu.insertBefore(closeMenuBtn, selectMenu.firstChild);
     }
 
-    selectElement(item: SelectItem) {
-        console.log("before select   " + JSON.stringify(this.filter));
-        const elementIndex = this.filter.values.findIndex(x => x === item.value);
-        if (elementIndex > -1) {
-            this.filter.values.splice(elementIndex, 1);
-            this.filter.selectItems.find(x => x.value === item.value).selected = false;
-            if (this.filter.values.length === 0) {
-                this.multipleSelectValue = [];
-            }
-        } else {
-            this.filter.values.push(item.value);
-            this.filter.selectItems.find(x => x.value === item.value).selected = true;
-            if (this.multipleSelectValue.length === 0) {
-                this.multipleSelectValue.push(this.filter.selectItems[0].value);
-            }
-        }    
-        console.log("after select   " + JSON.stringify(this.filter));   
-    }
-
     sortSelectedItems() {
         if (this.filter.values.length !== 0) {
             this.filter.selectItems.sort((a,b) => {
@@ -407,18 +373,18 @@ export default class TableFilterComponent extends Vue {
         this.applyFilter();
     }
 
-    @Watch("multipleSelectValue")
-    onChange(value) {
-        if (value.length === 0) {
-            this.filter.values = [];
-            this.filter.selectItems.forEach(selectItem => {
-                selectItem.selected = false;
-            });
-        }
-    }
-
     @Watch("filter.values")
     onFilterValuesChange(newVal: any, oldVal: any) {
+        if (this.filter.requestType === this.filterTypes["In"] && this.filter.inputType === this.filterInputTypes["Select"]) {
+            this.filter.selectItems.forEach(selectItem => {
+                const selectedValue = this.filter.values.find(x => x === selectItem.value);
+                if (selectedValue) {
+                    selectItem.selected = true;
+                } else {
+                    selectItem.selected = false;
+                }
+            });
+        }
         if (this.filter.inputType === this.filterInputTypes["Date"]) {
             if (!this.filter.values) {
                 this.filter.values = [];
@@ -500,6 +466,9 @@ export default class TableFilterComponent extends Vue {
 </script>
 
 <style scoped>
+    .selectionValue:not(:first-child) {
+        display: none;
+    }
     .selectBlack {
         color: #000 !important;
     }
@@ -511,7 +480,7 @@ export default class TableFilterComponent extends Vue {
     }
     .selectionChip {
         background-color: #fff;
-        padding: 0 4px 2px 4px;
+        padding: 0 4px 0 4px;
         border-radius: 4px;
         color: #000;
         font-weight: bold;

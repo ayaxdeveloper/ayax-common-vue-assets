@@ -209,7 +209,7 @@ export default class ListDialogComponent extends Vue {
                 }
             });
         });
-    console.log("super before promise promise   " + JSON.stringify(this.tableFilters));
+
         const filterPromises = this.tableFilters.filter(x => !x.selectItems && (x.selectItemsFromDictionary || x.selectItemsFromPromise)).map(x => {
             return new Promise((resolve) => {
                 if (x.selectItemsFromDictionary) {
@@ -227,9 +227,8 @@ export default class ListDialogComponent extends Vue {
                 }
             });
         });
-        console.log("before promise   " + JSON.stringify(this.tableFilters));
+
         await Promise.all([headerPromises, filterPromises]);
-        console.log("after promise   " + JSON.stringify(this.tableFilters));
         
         await this.load();
         this.tableVisible = true;
