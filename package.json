@@ -1,6 +1,6 @@
 {
   "name": "ayax-common-vue-assets",
-  "version": "3.2.13",
+  "version": "3.2.14",
   "main": "dist/build.js",
   "description": "Ayax Common Vue Assets package for Vue Typescript projects",
   "scripts": {
@@ -48,7 +48,7 @@
     "ts-loader": "^4.4.2",
     "tslint": "^5.11.0",
     "tslint-loader": "^3.6.0",
-    "typescript": "^2.9.2",
+    "typescript": "^3.0.1",
     "url-loader": "^1.0.1",
     "vue-class-component": "^6.2.0",
     "vue-loader": "^15.2.4",

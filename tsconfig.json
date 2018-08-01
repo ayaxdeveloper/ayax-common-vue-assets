@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./built/",
+    "outDir": "types/",
     "experimentalDecorators": true,
     "module": "es2015",
     "moduleResolution": "node",
@@ -12,6 +12,7 @@
     "emitDecoratorMetadata": true,
     "strictNullChecks": false,
     "lib": [ "es2015", "dom" ],
+    "declaration": true
   },
   "include": [
     "./src/**/*"
