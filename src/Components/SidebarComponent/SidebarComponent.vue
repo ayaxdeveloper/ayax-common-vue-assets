@@ -84,7 +84,7 @@ import { OpenInNewWindowMixin } from "../../Mixins/OpenInNewWindow/OpenInNewWind
 import { SidebarComponentItem } from "./SidebarItem";
 
 @Component
-export default class SidebarComponent extends mixins(OpenInNewWindowMixin) {
+export default class SidebarComponent extends Vue {
     @Prop() items: SidebarComponentItem[];
     @Prop({default: true}) darkTheme: boolean;
     @Prop({default: 300}) width: number;
