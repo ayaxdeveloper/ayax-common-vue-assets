@@ -10,7 +10,7 @@
                 <v-layout row>
                     <a-table-filter class="ml-3" 
                         :style="{width: topbarFilter.inputType == filterInputTypes['Button'] ? 'initial' : '180px'}" 
-                        v-for="(topbarFilter, index) in topbarFilters" :key="topbarFilter.requestName"
+                        v-for="(topbarFilter, index) in topbarFilters" :key="topbarFilter.name"
                         :applyFilterButtonVisibility="applyFilterButtonVisibility" 
                         :filter="topbarFilter"
                         :index="index"
@@ -58,7 +58,7 @@
             <v-card class="pa-2" v-if="showAllFilters" dark flat style="border-radius: 0">
                 <v-container fluid grid-list-md>
                     <v-layout row wrap>
-                        <v-flex :xs6="filter.largeInput" :xs3="!filter.largeInput"  v-for="(filter, index) in allFilters" :key="filter.requestName">
+                        <v-flex :xs6="filter.largeInput" :xs3="!filter.largeInput"  v-for="(filter, index) in allFilters" :key="filter.name">
                             <a-table-filter
                                 :applyFilterButtonVisibility="applyFilterButtonVisibility" 
                                 :filter="filter"
@@ -386,17 +386,22 @@ export default class TableComponent extends Vue {
     @Watch("$route.query")
     applyQuery() {
         this.appliedFromQuery = true;
+        let filterCount = 0;
         this.tableFilters.forEach(filter => {
             const filterInQuery = Object.keys(JSON.parse(JSON.stringify(this.$route.query))).findIndex(key => key === filter.name);
             if (filterInQuery > -1) {
                 filter.values = JSON.parse(this.$route.query[`${filter.name}`]);
+                filterCount++;
             } else {
                 if (filter.values.length > 0) {
                     filter.values = [];
+                    filterCount++;
                 }
             }
         });
-        this.applyFilter();
+        if (filterCount > 0) {
+            this.applyFilter();
+        }
         setTimeout(() => this.appliedFromQuery = false, 1000);
     }
 
