@@ -13,8 +13,9 @@
                         v-for="(topbarFilter, index) in topbarFilters" :key="topbarFilter.requestName"
                         :applyFilterButtonVisibility="applyFilterButtonVisibility" 
                         :filter="topbarFilter"
-                        :index="index" 
-                        @apply-filter="applyFilter">
+                        :index="index"
+                        @emit-filter="applyEmittedFilter"
+                        :applied-from-query="appliedFromQuery">
                     </a-table-filter>
                 </v-layout>
             </v-toolbar-items>
@@ -61,8 +62,9 @@
                             <a-table-filter
                                 :applyFilterButtonVisibility="applyFilterButtonVisibility" 
                                 :filter="filter"
-                                :index="index" 
-                                @apply-filter="applyFilter">
+                                :index="index"
+                                @emit-filter="applyEmittedFilter"
+                                :applied-from-query="appliedFromQuery">
                             </a-table-filter>
                         </v-flex>
                     </v-layout>
@@ -72,7 +74,7 @@
                     <v-btn light @click="clearAllFilters()">
                         Очистить
                     </v-btn>
-                    <v-btn color="primary" @click="applyFilter()">
+                    <v-btn color="primary" @click="applyAllFilters()">
                         Применить
                     </v-btn>
                 </v-layout>
@@ -133,9 +135,10 @@
                     >
                         <template v-if="currentHeaderFilter(header.value)">
                             <a-table-filter
-                            @apply-filter="applyFilter"
+                            :applied-from-query="appliedFromQuery"
                             :applyFilterButtonVisibility="applyFilterButtonVisibility"
                             :header="header"
+                            @emit-filter="applyEmittedFilter"
                             :filter="currentHeaderFilter(header.value)"
                             ></a-table-filter>
                         </template>
@@ -229,8 +232,8 @@
 
 <script lang="ts">
 import { IEntity } from "ayax-common-types";
-import { SortableField } from "ayax-common-types";
 import { IPagination } from "ayax-common-types";
+import { SortableField } from "ayax-common-types";
 import { Component, Emit, Prop, Vue, Watch } from "vue-property-decorator";
 import vuedraggable from "vuedraggable";
 import ActionbarComponent from "../ActionbarComponent/ActionbarComponent.vue";
@@ -238,6 +241,7 @@ import TableFilterComponent from "../TableFilterComponent/TableFilterComponent.v
 import { TableFilterComponentItem } from "../TableFilterComponent/TableFilterComponentItem";
 import { TableFilterComponentItemAppearance } from "../TableFilterComponent/TableFilterComponentItemAppearance";
 import { TableFilterComponentItemInputType } from "../TableFilterComponent/TableFilterComponentItemInputType";
+import { TableFilterComponentItemType } from "../TableFilterComponent/TableFilterComponentItemType";
 import { TableComponentAction } from "./TableAction";
 import { TableComponentHeader } from "./TableHeader";
 
@@ -284,12 +288,16 @@ export default class TableComponent extends Vue {
     headerFilters: TableFilterComponentItem[] = [];
     topbarFilters: TableFilterComponentItem[] = [];
     allFilters: TableFilterComponentItem[] = [];
-    lastQuery: string;
     filterInputTypes: {[name: string]: TableFilterComponentItemInputType} = {};
+    filterTypes: {[name: string]: TableFilterComponentItemType} = {};
+    appliedFromQuery = false;
     
     created() {
         Object.keys(TableFilterComponentItemInputType).forEach(item => {
             this.filterInputTypes[item] = TableFilterComponentItemInputType[item];
+        });
+        Object.keys(TableFilterComponentItemType).forEach(item => {
+            this.filterTypes[item] = TableFilterComponentItemType[item];
         });
         this.headers.forEach(el => {
             this.editableHeaders.push(el);
@@ -313,6 +321,19 @@ export default class TableComponent extends Vue {
                     break;
             }
         });
+        if (Object.keys(JSON.parse(JSON.stringify(this.$route.query))).length > 0) {
+            let filterCount = 0;
+            Object.keys(JSON.parse(JSON.stringify(this.$route.query))).forEach(key => {
+                const filter = this.tableFilters.find(x => x.name === key);
+                if (filter) {
+                    filter.values = JSON.parse(this.$route.query[`${key}`]);
+                    filterCount++;
+                }
+            });
+            if (filterCount > 0) {
+                this.applyFilter();
+            }
+        }
         if (this.selected) {
             this.innerSelected = this.selected;
         }
@@ -348,67 +369,6 @@ export default class TableComponent extends Vue {
         }
     }
 
-    applyQuery() {
-        if (!(Object.keys(this.$route.query).length === 0 && this.$route.query.constructor === Object)) {
-            if (this.$route.query[`${this.tableIdentifier}`] !== undefined) {
-                this.tableFilters.forEach(filter => {
-                    filter.values = [];
-                });
-                this.editableHeaders.forEach(header => {
-                    if (header.sortable && header.sortBy) {
-                        header.sortBy = undefined;
-                    }
-                });
-                JSON.parse(this.$route.query[`${this.tableIdentifier}`]).forEach(query => {
-                    if (query.isSort) {
-                        this.editableHeaders.forEach(header => {
-                            if (header.sortable && query.name === header.value) {
-                                if (!header.sortBy) {
-                                    header.sortBy = new SortableField();
-                                }
-                                if (query.isdesc === undefined) {
-                                    header.sortBy = undefined;
-                                }else {
-                                    header.sortBy.isdesc = query.isdesc;
-                                }
-                            }
-                        });
-                    }
-                    if (query.requestName) {
-                        this.tableFilters.forEach(filter => {
-                            if (filter.requestName === query.requestName && query.values && query.values.length > 0) {
-                                filter.values = query.values;
-                                this.applyFilterButtonVisibility = false;
-                            }
-                        });
-                    }  
-                });
-            }
-        }
-    }
-
-    @Watch("$route.query")
-    onQueryChange() {
-        if (!(Object.keys(this.$route.query).length === 0 && this.$route.query.constructor === Object)) {
-            if (this.lastQuery !== JSON.stringify(this.$route.query)) {
-                this.applyQuery();
-                this.applyFilter();
-            }
-        }else {
-            this.editableHeaders.forEach(header => {
-                if (header.sortable) {
-                    if (header.sortBy) {
-                        header.sortBy = undefined;
-                    }
-                }
-            });
-            this.tableFilters.forEach(el => {
-                el.values = [];
-            });
-            this.applyFilter();
-        }   
-    }
-
     @Watch("innerSelected")
     onSelectChanged(newVal, oldVal) {
         if (newVal !== oldVal) {
@@ -421,6 +381,65 @@ export default class TableComponent extends Vue {
         } else {
             this.itemSelected = false;
         }
+    }
+
+    @Watch("$route.query")
+    applyQuery() {
+        this.appliedFromQuery = true;
+        this.tableFilters.forEach(filter => {
+            const filterInQuery = Object.keys(JSON.parse(JSON.stringify(this.$route.query))).findIndex(key => key === filter.name);
+            if (filterInQuery > -1) {
+                filter.values = JSON.parse(this.$route.query[`${filter.name}`]);
+            } else {
+                if (filter.values.length > 0) {
+                    filter.values = [];
+                }
+            }
+        });
+        this.applyFilter();
+        setTimeout(() => this.appliedFromQuery = false, 1000);
+    }
+
+    changeQuery(query, filter) {
+        if (!filter.values || filter.values.length === 0 ||  
+            filter.values.length === 2 && (filter.values[0] === "" && filter.values[1] === "" || filter.values[0] === null
+            && filter.values[1] === null || filter.values[0] === undefined && filter.values[1] === undefined)
+            || filter.values.length === 1 && (filter.values[0] === "" || filter.values[0] === null || filter.values[0] === undefined)) {
+            if (query.hasOwnProperty(`${filter.name}`)) {
+                delete query[`${filter.name}`];
+            }
+        } else {
+            if (filter.requestType === this.filterTypes["Range"] && filter.inputType === this.filterInputTypes["Date"]) {
+                if (filter.values.length >= 2) {
+                    filter.values[1] = filter.values[1].substr(0, 10) + " 23:59:59";
+                }
+            }
+            query[`${filter.name}`] = JSON.stringify(filter.values);
+        }
+    }
+
+    applyEmittedFilter(filterName: string) {
+        const filter = this.tableFilters.find(x => x.name === filterName);
+
+        if (filter) {
+            if (filter.requestType === this.filterTypes["Range"] && filter.inputType === this.filterInputTypes["Date"]) {
+                if (filter.values.length >= 2) {
+                    filter.values[1] = filter.values[1].substr(0, 10) + " 23:59:59";
+                }
+            }
+            const query = JSON.parse(JSON.stringify(this.$route.query));
+            this.changeQuery(query, filter);
+            this.$router.push({ path: this.$route.path, query });
+        }
+    }
+
+    applyAllFilters() {
+        const query = JSON.parse(JSON.stringify(this.$route.query));
+
+        this.tableFilters.forEach(filter => {
+            this.changeQuery(query, filter);
+        });
+        this.$router.push({ path: this.$route.path, query });
     }
 
     toggleFilters() {
@@ -502,9 +521,10 @@ export default class TableComponent extends Vue {
     }
 
     clearAllFilters() {
-        this.allFilters.forEach(filter => {
+        this.tableFilters.forEach(filter => {
             filter.values = [];
         });
+        this.$router.push({ path: this.$route.path, query: {}});
         this.applyFilter();
     }
 
@@ -513,31 +533,7 @@ export default class TableComponent extends Vue {
         if (this.pagination.page > 1) {
             this.pagination.page = 1;
         }
-        const query = {};
-        const filters = [];
-        this.tableFilters.forEach(filter => {
-            if (filter.values && filter.values.length > 0) {
-                filters.push({
-                    requestName: filter.requestName,
-                    name: filter.name ? filter.name : undefined,
-                    values: filter.values
-                });
-            }
-        });
-        this.editableHeaders.forEach(header => {
-            if (header.sortable && header.sortBy) {
-                filters.push({
-                    isSort: true,
-                    name: header.value, 
-                    isdesc: header.sortBy ? header.sortBy.isdesc : undefined
-                });
-            }
-        });
-        if (filters.length > 0) {
-            query[`${this.tableIdentifier}`] = JSON.stringify(filters);
-            this.$router.push({path: this.$route.path, query}); 
-        }
-        this.lastQuery = JSON.stringify(query);
+
         this.applyFilterButtonVisibility = false;
     }
 

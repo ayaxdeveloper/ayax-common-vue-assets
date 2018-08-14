@@ -242,6 +242,7 @@ export default class TableFilterComponent extends Vue {
     @Prop({default: 0}) index: number;
     @Prop({default: true}) applyFilterButtonVisibility: boolean;
     @Prop({default: "grey lighten-1"}) color: string;
+    @Prop({default: false}) appliedFromQuery: boolean;
     focus: false;
     filterTypes: {[name: string]: TableFilterComponentItemType} = {};
     headerTypes: {[name: string]: TableComponentHeaderType} = {};
@@ -391,10 +392,12 @@ export default class TableFilterComponent extends Vue {
             }
         }
         if (newVal) {
-            if (this.applyFilterButtonVisibility === false && (newVal === [null] || newVal === [""] || newVal.length === 0)) {
+            if (this.applyFilterButtonVisibility === false && (newVal[0] === null || newVal[0] === "" || newVal.length === 0)) {
                 this.applyFilterButton = false;
             } else {
-                this.applyFilterButton = true;
+                if (!this.appliedFromQuery) {
+                    this.applyFilterButton = true;
+                }
             }
         } else {
             this.applyFilterButton = false;
@@ -443,25 +446,14 @@ export default class TableFilterComponent extends Vue {
         this.$forceUpdate();
     }
 
-@Emit()
-    applyFilter() {
-        if (this.filter.requestType === this.filterTypes["Range"] && this.filter.inputType === this.filterInputTypes["Date"]) {
-            if (this.filter.values.length >= 2) {
-                this.filter.values[1] = this.filter.values[1] + " 23:59:59";
-            }
-        }
-        
+    @Emit()
+    emitFilter(filterName: string) {}
+
+    applyFilter() {  
+        this.emitFilter(this.filter.name);
         this.applyFilterButton = false;
     }
-    // reloadSelectItems() {
-    //     const from = this.header.items;
-    //     this.$forceUpdate();
-    //     // console.log(JSON.stringify(this.header.items));
-    //     if(this.header.dictionary && from) {
-    //         this.selectItems = from.map(x=> new SelectItem({value: x.id, text: x.name}));
-    //     }
-        
-    // }
+
 }
 </script>
 

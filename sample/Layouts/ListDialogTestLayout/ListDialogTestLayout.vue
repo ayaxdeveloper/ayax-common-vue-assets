@@ -68,32 +68,33 @@ export default class ListDialogTestLayout extends BaseListLayout {
     ];
     tableFilters: TableFilterComponentItem[] = this.tableFilters = [
         new TableFilterComponentItem({
-            requestName: "titlefilter", 
+            requestName: "streetfilter", 
             appearance: TableFilterComponentItemAppearance.AllFilters, 
-            name: "title",
+            name: "streetFilter",
             requestType: TableFilterComponentItemType.Like,
             placeholder: "Введите",
             label: "Название улицы",
             largeInput: true
         }),
         new TableFilterComponentItem({
-            requestName: "titlefilter", 
+            requestName: "titlefilter",
             appearance: TableFilterComponentItemAppearance.Topbar, 
-            name: "title",
+            name: "titleFilter",
             requestType: TableFilterComponentItemType.Like,
             placeholder: "Введите",
             label: "Наименование"
         }),
         new TableFilterComponentItem({
-            requestName: "datefilter", 
+            requestName: "datefilter",
+            name: "createdDateFilter",
             appearance: TableFilterComponentItemAppearance.Topbar, 
             requestType: TableFilterComponentItemType.Range,
             inputType: TableFilterComponentItemInputType.Date,
             label: "Дата создания"
-
         }),
         new TableFilterComponentItem({
-            requestName: "", 
+            requestName: "date", 
+            name: "dateFilter",
             appearance: TableFilterComponentItemAppearance.AllFilters, 
             requestType: TableFilterComponentItemType.Range,
             inputType: TableFilterComponentItemInputType.Date,
@@ -103,6 +104,7 @@ export default class ListDialogTestLayout extends BaseListLayout {
        
         new TableFilterComponentItem({
             requestName: "qqfilter", 
+            name: "qqFilter",
             appearance: TableFilterComponentItemAppearance.Topbar, 
             requestType: TableFilterComponentItemType.Eq,
             inputType: TableFilterComponentItemInputType.Select,
@@ -117,7 +119,8 @@ export default class ListDialogTestLayout extends BaseListLayout {
             placeholder: "Выберите"
         }),
         new TableFilterComponentItem({
-            requestName: "wwfilter", 
+            requestName: "wwfilter",
+            name: "wwFilter",
             appearance: TableFilterComponentItemAppearance.AllFilters, 
             requestType: TableFilterComponentItemType.In,
             inputType: TableFilterComponentItemInputType.Select,
@@ -147,7 +150,8 @@ export default class ListDialogTestLayout extends BaseListLayout {
             placeholder: "Выберите"
         }),
         new TableFilterComponentItem({
-            requestName: "", 
+            requestName: "roomFilter", 
+            name: "roomFilter",
             appearance: TableFilterComponentItemAppearance.AllFilters, 
             requestType: TableFilterComponentItemType.Range,
             label: "Комнат в доме"
