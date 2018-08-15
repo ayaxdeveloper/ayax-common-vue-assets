@@ -54,10 +54,10 @@
                             </v-list-tile>
                         </v-list-group>
                         <v-divider></v-divider>
-                        <v-list-tile v-if="headerFilters.length > 0" @click="toggleFilters">
+                        <!-- <v-list-tile v-if="headerFilters.length > 0" @click="toggleFilters">
                             <v-list-tile-title>{{ showFiltersMessage }}</v-list-tile-title>
                         </v-list-tile>
-                        <v-divider v-if="headerFilters.length > 0"></v-divider>
+                        <v-divider v-if="headerFilters.length > 0"></v-divider> -->
                         <draggable :list="editableHeaders" @update="onUpdateDraggable">
                             <v-list-tile v-for="header in editableHeaders" :key="header.value" @click="">
                                 <v-list-tile-action>
@@ -104,19 +104,19 @@
             </v-card>
         </transition>
         </slot>
-        <v-progress-circular v-if="loading" indeterminate fixed class="table-loading" color="primary" size="50"></v-progress-circular>
+        <!-- <v-progress-circular v-if="loading" indeterminate fixed class="table-loading" color="primary" size="50"></v-progress-circular> -->
         <v-data-table
         v-bind:headers="editableHeaders"
         v-bind:items="items"
         :total-items="totalItems"
-        :loading="loading"
         select-all
         no-data-text="Нет данных"
         v-model="innerSelected"
         hide-actions
         item-key="id"
         no-results-text="Ничего не найдено"
-        :class="['elevation-1', 'table-block', 'mainAnchor', 'scrollableTable', items.length > 10 ? 'scrollableTableOverflow' : '']">
+        :class="['elevation-1', 'table-block', 'mainAnchor', 'scrollableTable', items.length > 10 ? 'scrollableTableOverflow' : '']"
+        :style="`--maxHeight: ${maxHeight}px`">
             <template slot="headers" slot-scope="props">
                 <tr class="header-row fixedTableHeader">
                     <th v-if='selectable' class="selectable" :width="configSelectableWidth">
@@ -146,8 +146,9 @@
                         <v-icon v-if="header.sortable">mdi-arrow-up</v-icon>
                         <strong>{{ header.text }}</strong>
                     </th>
+                    <v-progress-linear :active="loading" height="3" style="margin: 0px" :indeterminate="true"></v-progress-linear>
                 </tr>
-                <tr v-if="headerFilters.length > 0 && showFilters" class="filter-row">
+                <!-- <tr v-if="headerFilters.length > 0 && showFilters" class="filter-row">
                     <th v-if='selectable' class="selectable"></th>
                     <th v-if="actions && actions.filter(x=>x.single && x.active).length > 0" class="action">
                     </th>
@@ -166,7 +167,7 @@
                             ></a-table-filter>
                         </template>
                     </th>
-                </tr>
+                </tr> -->
                 <tr class="header-row">
                     <th v-if='selectable' class="selectable" :width="configSelectableWidth">
                         <v-checkbox v-if="!selectableSingle" 
@@ -194,26 +195,6 @@
                     >
                         <v-icon v-if="header.sortable">mdi-arrow-up</v-icon>
                         <strong>{{ header.text }}</strong>
-                    </th>
-                </tr>
-                <tr v-if="headerFilters.length > 0 && showFilters" class="filter-row">
-                    <th v-if='selectable' class="selectable"></th>
-                    <th v-if="actions && actions.filter(x=>x.single && x.active).length > 0" class="action">
-                    </th>
-                    <th v-for="header in editableHeaders"
-                        v-if="header.isVisible" 
-                        :key="header.value"
-                        class="column"
-                    >
-                        <template v-if="currentHeaderFilter(header.value)">
-                            <a-table-filter
-                            :applied-from-query="appliedFromQuery"
-                            :applyFilterButtonVisibility="applyFilterButtonVisibility"
-                            :header="header"
-                            @emit-filter="applyEmittedFilter"
-                            :filter="currentHeaderFilter(header.value)"
-                            ></a-table-filter>
-                        </template>
                     </th>
                 </tr>
             </template>
@@ -348,6 +329,7 @@ export default class TableComponent extends Vue {
     @Prop({default: false}) showHeaderFiltersByDefault: boolean;
     @Prop() rowColor: (item) => string;
     @Prop({default: 0}) updateActionBar: number;
+    @Prop({default: 442}) maxHeight: number;
     applyFilterButtonVisibility = true;
     innerSelected: any[] = [];
     totalItems = 1;
@@ -757,7 +739,7 @@ export default class TableComponent extends Vue {
         height: 32px !important;
     }
     .scrollableTable .v-table__overflow {
-        max-height: 442px;
+        max-height: var(--maxHeight);
         position: relative;
     }
     .scrollableTableOverflow .v-table__overflow {
@@ -836,8 +818,8 @@ export default class TableComponent extends Vue {
         position: absolute;
         top: 0px;
         width: 100%;
+        z-index: 2;
         height: 100%;
-        background-color: rgba(0,0,0,0.1);
     }
     .actionbarFixed {
        position: fixed;

@@ -19,6 +19,7 @@
             :actionbar-color="actionbarColor"
             :topbarIsDark="topbarIsDark"
             :actionbarIsDark="actionbarIsDark"
+            :max-height="maxHeight"
             @on-row-action="onRowAction"
             @on-bar-action="onBarAction"
             @apply-filter="load"
@@ -114,6 +115,7 @@ export default class ListDialogComponent extends Vue {
     @Prop({default: false}) showHeaderFiltersByDefault: boolean;
     @Prop({default: null}) toggledItemSlot;
     @Prop({default: () => () => "" }) rowColor: (item) => string;
+    @Prop({default: 442}) maxHeight: number;
     editDialog = false;
     request: any;
     itemForRemove: IEntity | null;
@@ -477,6 +479,11 @@ export default class ListDialogComponent extends Vue {
             this.notificationProvider.Error(e);
         } 
         this.loading = false;
+        
+        const tableScroll = document.querySelector(`#${this.tableIdentifier} .v-table__overflow`) as HTMLElement;
+        if (tableScroll) {
+            tableScroll.scrollTop = 0;
+        }
     }
 }
 </script>
