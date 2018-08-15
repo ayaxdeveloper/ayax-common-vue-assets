@@ -23,6 +23,7 @@
             @on-bar-action="onBarAction"
             @apply-filter="load"
             @change-pagination="changePagination"
+            @relocate-actionbar="updateActionBar++"
             :configure="configure"
             :showHeaderFiltersByDefault="showHeaderFiltersByDefault"
             :tableFilters="tableFilters">

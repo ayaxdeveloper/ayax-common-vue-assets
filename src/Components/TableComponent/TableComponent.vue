@@ -590,9 +590,13 @@ export default class TableComponent extends Vue {
         }
     }
 
+    @Emit()
+    relocateActionbar() {}
+
     showAllFiltersBtn() {
         this.showAllFilters = !this.showAllFilters;
         localStorage.setItem(`${this.tableIdentifier}_list_show-all-filters`, JSON.stringify(this.showAllFilters));
+        setTimeout(() => this.relocateActionbar(), 500);
     }
 
     onChangeVisible(item) {
