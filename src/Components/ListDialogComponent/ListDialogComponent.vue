@@ -13,6 +13,7 @@
             :loading="loading"
             :actions="actions"
             :entity="entity"
+            :updateActionBar="updateActionBar"
             :rowColor="(item) => rowColor(item)"
             :topbar-color="topbarColor"
             :actionbar-color="actionbarColor"
@@ -21,6 +22,7 @@
             @on-row-action="onRowAction"
             @on-bar-action="onBarAction"
             @apply-filter="load"
+            @change-pagination="changePagination"
             :configure="configure"
             :showHeaderFiltersByDefault="showHeaderFiltersByDefault"
             :tableFilters="tableFilters">
@@ -127,6 +129,8 @@ export default class ListDialogComponent extends Vue {
     _deleteUrl: string;
     _bulkDeleteUrl: string;
     tableVisible = false;
+    tableIdentifier = `${this.title}_${this.entity}`.replace(/\s+/g, "_").replace("-", "_");
+    updateActionBar = 0;
 
     itemIsSaving = false;
 
@@ -191,6 +195,10 @@ export default class ListDialogComponent extends Vue {
             page: 1,
             perPage: this._search.method === "post" ? this.clientSettings.listRowsPerpage : 100
         };
+        if (localStorage.getItem(`${this.tableIdentifier}_custom_pagination`)) {
+            this.request.perPage = parseInt(localStorage.getItem(`${this.tableIdentifier}_custom_pagination`));
+            this.pagination.rowsPerPage = parseInt(localStorage.getItem(`${this.tableIdentifier}_custom_pagination`));
+        }
 
         const headerPromises = this.headers.filter(x => (x.dictionary || x.dictionaryPromise) && !x.items).map(x => {
             return new Promise((resolve) => {
@@ -311,6 +319,22 @@ export default class ListDialogComponent extends Vue {
             filteredRequest[`${header.value}sort`] = header.sortBy;
         });
         return filteredRequest; 
+    }
+
+    async changePagination(rowsPerPage: number) {
+        if (rowsPerPage !== 0) {
+            this.request.perPage = rowsPerPage;
+            this.pagination.rowsPerPage = rowsPerPage;
+        } else {
+            this.request.perPage = this.clientSettings.listRowsPerpage;
+            this.pagination.rowsPerPage = this.clientSettings.listRowsPerpage;
+        }
+
+        this.request.page = 1;
+        this.pagination.page = 1;
+
+        await this.load();
+        this.updateActionBar++;
     }
 
     mapModelToFields(model: any) {

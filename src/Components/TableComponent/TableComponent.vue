@@ -1,5 +1,5 @@
 <template>
-    <div class="actionbarContainer mb-4" style="position: relative">
+    <div :id="tableIdentifier" class="actionbarContainer mb-4" style="position: relative">
         <slot name="table-head">
             <v-toolbar flat dense :dark="topbarIsDark" :class="topbarColor">
             <v-toolbar-title v-if="title">
@@ -29,10 +29,31 @@
                     <v-icon v-if="showAllFilters">mdi-menu-up</v-icon>
                 </v-btn>
                 <v-menu bottom offset-y left offset-x :close-on-content-click="false" :value="isTableMenuVisible" v-if="configure">
-                    <v-btn flat style="height: 30px; width: 30px" small icon title="Настройки таблицы" slot="activator" @click="isTableMenuVisible=true">
+                    <v-btn flat style="height: 30px; width: 30px" small icon title="Настройки таблицы" slot="activator" 
+                    @click="isTableMenuVisible=true; isCustomPaginationExpanded = false">
                         <v-icon>mdi-settings</v-icon>
                     </v-btn>
                     <v-list dense>
+                        <v-list-group :value="isCustomPaginationExpanded" @click.stop="isCustomPaginationExpanded = !isCustomPaginationExpanded">
+                            <v-list-tile slot="activator">
+                                <v-list-tile-content>
+                                    <v-list-tile-title>
+                                        Количество строк на странице
+                                    </v-list-tile-title>
+                                </v-list-tile-content>
+                            </v-list-tile>
+                            <v-list-tile @click="changeRowsPerPage(pageCount)" v-for="(pageCount, index) in customPagination" :key="index">
+                                <v-list-tile-action>
+                                    <v-icon :color="rowsPerPage === pageCount ? 'primary' : ''">
+                                        {{ rowsPerPage === pageCount ? 'mdi-checkbox-marked' : 'mdi-checkbox-blank-outline' }}
+                                    </v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-content>
+                                    <v-list-tile-title>{{ pageCount }}</v-list-tile-title>
+                                </v-list-tile-content>
+                            </v-list-tile>
+                        </v-list-group>
+                        <v-divider></v-divider>
                         <v-list-tile v-if="headerFilters.length > 0" @click="toggleFilters">
                             <v-list-tile-title>{{ showFiltersMessage }}</v-list-tile-title>
                         </v-list-tile>
@@ -40,7 +61,9 @@
                         <draggable :list="editableHeaders" @update="onUpdateDraggable">
                             <v-list-tile v-for="header in editableHeaders" :key="header.value" @click="">
                                 <v-list-tile-action>
-                                    <v-checkbox v-if="header.hiddenable" v-model="header.isVisible" @change="onChangeVisible(header)"></v-checkbox>
+                                    <v-checkbox color="primary" v-if="header.hiddenable" 
+                                    v-model="header.isVisible" @change="onChangeVisible(header)">
+                                    </v-checkbox>
                                     <v-checkbox v-else input-value="true" disabled></v-checkbox>
                                 </v-list-tile-action>
                                 <v-list-tile-title>{{ header.text }}</v-list-tile-title>
@@ -93,8 +116,57 @@
         hide-actions
         item-key="id"
         no-results-text="Ничего не найдено"
-        class="elevation-1 table-block mainAnchor">
+        :class="['elevation-1', 'table-block', 'mainAnchor', 'scrollableTable', items.length > 10 ? 'scrollableTableOverflow' : '']">
             <template slot="headers" slot-scope="props">
+                <tr class="header-row fixedTableHeader">
+                    <th v-if='selectable' class="selectable" :width="configSelectableWidth">
+                        <v-checkbox v-if="!selectableSingle" 
+                                primary
+                                hide-details
+                                @click.native="toggleAll"
+                                :input-value="props.all"
+                                :indeterminate="props.indeterminate"
+                                color="primary"
+                        ></v-checkbox>
+                    </th>
+                    <th class="text-xs-center action" v-if="actions && actions.filter(x => x.single && x.active).length > 0" :width="configActionsWidth">
+                        ...
+                    </th>
+                    <th v-for="header in editableHeaders"
+                        v-if="header.isVisible" 
+                        :key="header.value"
+                        :class="[
+                            'column', header.sortable ? 'sortable' : '', header.sortBy && header.sortBy.isdesc ? 'desc' : 'asc', 
+                            header.sortBy ? 'active' : '',
+                            header.align == 'right' ? 'text-xs-right' : 'text-xs-left'
+                            ]"
+                        :width="header.width"
+                        @click="header.sortable && changeSort(header.value)"
+                    >
+                        <v-icon v-if="header.sortable">mdi-arrow-up</v-icon>
+                        <strong>{{ header.text }}</strong>
+                    </th>
+                </tr>
+                <tr v-if="headerFilters.length > 0 && showFilters" class="filter-row">
+                    <th v-if='selectable' class="selectable"></th>
+                    <th v-if="actions && actions.filter(x=>x.single && x.active).length > 0" class="action">
+                    </th>
+                    <th v-for="header in editableHeaders"
+                        v-if="header.isVisible" 
+                        :key="header.value"
+                        class="column"
+                    >
+                        <template v-if="currentHeaderFilter(header.value)">
+                            <a-table-filter
+                            :applied-from-query="appliedFromQuery"
+                            :applyFilterButtonVisibility="applyFilterButtonVisibility"
+                            :header="header"
+                            @emit-filter="applyEmittedFilter"
+                            :filter="currentHeaderFilter(header.value)"
+                            ></a-table-filter>
+                        </template>
+                    </th>
+                </tr>
                 <tr class="header-row">
                     <th v-if='selectable' class="selectable" :width="configSelectableWidth">
                         <v-checkbox v-if="!selectableSingle" 
@@ -217,6 +289,7 @@
             v-if="actions && actions.filter(el => !el.single && el.active).length > 0"
             :actions="actions.filter(action => !action.single && action.active)"
             @on-bar-action="onBarAction"
+            :updateActionBar="updateActionBar"
             :actionbarColor="actionbarColor"
             :actionbarIsDark="actionbarIsDark"
             :itemSelected="itemSelected"
@@ -274,6 +347,7 @@ export default class TableComponent extends Vue {
     @Prop({default: false}) configure: boolean;
     @Prop({default: false}) showHeaderFiltersByDefault: boolean;
     @Prop() rowColor: (item) => string;
+    @Prop({default: 0}) updateActionBar: number;
     applyFilterButtonVisibility = true;
     innerSelected: any[] = [];
     totalItems = 1;
@@ -291,6 +365,12 @@ export default class TableComponent extends Vue {
     filterInputTypes: {[name: string]: TableFilterComponentItemInputType} = {};
     filterTypes: {[name: string]: TableFilterComponentItemType} = {};
     appliedFromQuery = false;
+
+    customPagination = [10, 20, 30, 50, 100];
+    rowsPerPage = 0;
+    isCustomPaginationExpanded = false;
+
+    fixedHeader: HTMLElement;
     
     created() {
         Object.keys(TableFilterComponentItemInputType).forEach(item => {
@@ -337,6 +417,11 @@ export default class TableComponent extends Vue {
         if (this.selected) {
             this.innerSelected = this.selected;
         }
+        if (localStorage.getItem(`${this.tableIdentifier}_custom_pagination`)) {
+            this.rowsPerPage = parseInt(localStorage.getItem(`${this.tableIdentifier}_custom_pagination`));
+        } else {
+            this.rowsPerPage = this.pagination.rowsPerPage;
+        }
         if (localStorage.getItem(`${this.tableIdentifier}_list_show-filters`) !== "true") {
             this.showFilters = false;
         } else {
@@ -366,6 +451,30 @@ export default class TableComponent extends Vue {
                 newItem.order = el.order;
                 this.headerSettings.push(newItem);
             });
+        }
+        window.addEventListener("resize", () => this.fixedHeaderSize());
+    }
+
+    mounted() {
+        this.fixedHeader = document.querySelector(`#${this.tableIdentifier} .fixedTableHeader`) as HTMLElement;
+        const tableScroll = document.querySelector(`#${this.tableIdentifier} .v-table__overflow`) as HTMLElement;
+
+        tableScroll.addEventListener("scroll", () => this.onTableScroll(tableScroll.scrollTop));
+
+        setTimeout(() => this.fixedHeaderSize(), 10);
+    }
+
+    onTableScroll(scrollTop) {
+        this.fixedHeader.style.top = `${scrollTop}px`;
+    }
+
+    fixedHeaderSize() {
+        const firstRow = document.querySelector(`#${this.tableIdentifier} .verticalBaseline`).querySelectorAll("td");
+        const header = document.querySelectorAll(`#${this.tableIdentifier} .fixedTableHeader th`) as HTMLCollectionOf<HTMLElement>;
+        
+        for (let i = 0; i < firstRow.length; i++) {
+            header[i].style.width = `${firstRow[i].offsetWidth}px`;
+            header[i].style.minWidth = `${firstRow[i].offsetWidth}px`;
         }
     }
 
@@ -447,6 +556,23 @@ export default class TableComponent extends Vue {
         this.$router.push({ path: this.$route.path, query });
     }
 
+    @Watch("updateActionBar")
+    onChange() {
+        this.fixedHeaderSize();
+    }
+
+    @Emit()
+    changePagination(rowsPerPage) {}
+
+    changeRowsPerPage(pageCount: number): void {
+        if (this.rowsPerPage !== pageCount) {
+            this.rowsPerPage = pageCount;
+            this.changePagination(this.rowsPerPage);
+        }
+        localStorage.setItem(`${this.tableIdentifier}_custom_pagination`, `${this.rowsPerPage}`);
+        this.isTableMenuVisible = false;
+    }
+
     toggleFilters() {
         this.isTableMenuVisible = false;
         if (this.showFilters) {
@@ -489,6 +615,8 @@ export default class TableComponent extends Vue {
     resetTableSettings() {
         localStorage.removeItem(`${this.tableIdentifier}_table_settings`);
         localStorage.removeItem(`${this.tableIdentifier}_list_show-filters`);
+        localStorage.removeItem(`${this.tableIdentifier}_custom_pagination`);
+        localStorage.removeItem(`${this.tableIdentifier}_list_show-all-filters`);
         this.showFilters = true;
         this.isTableMenuVisible = false;
         this.showFiltersMessage = "Показать фильтры";
@@ -497,6 +625,10 @@ export default class TableComponent extends Vue {
             el.isVisible = true;
             this.editableHeaders.push(el);       
         });
+        if (this.rowsPerPage !== 0) {
+            this.rowsPerPage = 0;
+            this.changePagination(this.rowsPerPage);
+        }
     }
 
     getFromDictionary(header: TableComponentHeader, id: number | number[]) {
@@ -616,10 +748,25 @@ export default class TableComponent extends Vue {
         border-bottom: none !important;
         height: 32px !important;
     }
-    
+    .scrollableTable .v-table__overflow {
+        max-height: 442px;
+        position: relative;
+    }
+    .scrollableTableOverflow .v-table__overflow {
+        overflow-y: scroll;
+    }
 </style>
 
 <style scoped>
+    .fixedTableHeader {
+        background-color: #fff;
+        position: absolute;
+        left: 0;
+        z-index: 1;
+    }
+    .fixedTableHeader th {
+        border-bottom: 1px solid #ccc;
+    }
     .verticalBaseline {
         vertical-align: baseline;
     }

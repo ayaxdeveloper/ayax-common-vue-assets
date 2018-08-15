@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Emit, Prop, Vue } from "vue-property-decorator";
+import { Component, Emit, Prop, Vue, Watch } from "vue-property-decorator";
 import { TableComponentAction } from "../TableComponent/TableAction";
 
 @Component
@@ -41,9 +41,16 @@ export default class ActionbarComponent extends Vue{
     @Prop({required: true}) actions: TableComponentAction[];
     @Prop({default: false}) itemSelected: boolean;
     @Prop({default: null}) innerSelected: any[];
-
+    @Prop({default: 0}) updateActionBar: number;
     actionbarContainer;
     actionbar;
+
+    @Watch("updateActionBar")
+    onChange() {
+        [].forEach.call(this.actionbarContainer, elem => {
+            this.toggleActionbar(elem);
+        });
+    }
 
     @Emit()
     onBarAction(items: any[], name: string) {}

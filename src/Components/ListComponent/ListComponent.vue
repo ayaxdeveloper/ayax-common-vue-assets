@@ -13,6 +13,7 @@
         :loading="loading"
         :actions="actions"
         :entity="entity"
+        :updateActionBar="updateActionBar"
         :rowColor="(item) => rowColor(item)"
         :topbar-color="topbarColor"
         :actionbar-color="actionbarColor"
@@ -21,6 +22,7 @@
         @on-row-action="onRowAction"
         @on-bar-action="onBarAction"
         @apply-filter="load"
+        @change-pagination="changePagination"
         :configure="configure"
         :showHeaderFiltersByDefault="showHeaderFiltersByDefault"
         :tableFilters="tableFilters">
@@ -96,6 +98,8 @@ export default class ListComponent extends Vue {
     @Prop({default: null}) toggledItemSlot;
     @Prop({default: () => () => "" }) rowColor: (item) => string;
     tableVisible = false;
+    tableIdentifier = `${this.title}_${this.entity}`.replace(/\s+/g, "_").replace("-", "_");
+    updateActionBar = 0;
     
     @Watch("pagination.page")
     PageChanged(newVal, oldVal) {
@@ -226,6 +230,11 @@ export default class ListComponent extends Vue {
             this.pagination = Pagination.Default(this.clientSettings.listRowsPerpage);
         }
 
+        if (localStorage.getItem(`${this.tableIdentifier}_custom_pagination`)) {
+            this.request.perPage = parseInt(localStorage.getItem(`${this.tableIdentifier}_custom_pagination`));
+            this.pagination.rowsPerPage = parseInt(localStorage.getItem(`${this.tableIdentifier}_custom_pagination`));
+        }
+
         const headerPromises = this.headers.filter(x => (x.dictionary || x.dictionaryPromise) && !x.items).map(x => {
             return new Promise((resolve) => {
                 if (x.dictionary) {
@@ -283,6 +292,7 @@ export default class ListComponent extends Vue {
             this.$router.push({ name: `${this.entity}-edit`, params: { id: item.id } });
         }
     }
+    
     show(item) {
         if (this.showRoute) {
             this.showRoute.params.id = item.id;
@@ -292,6 +302,22 @@ export default class ListComponent extends Vue {
         }
         
         
+    }
+
+    async changePagination(rowsPerPage: number) {
+        if (rowsPerPage !== 0) {
+            this.request.perPage = rowsPerPage;
+            this.pagination.rowsPerPage = rowsPerPage;
+        } else {
+            this.request.perPage = this.clientSettings.listRowsPerpage;
+            this.pagination.rowsPerPage = this.clientSettings.listRowsPerpage;
+        }
+
+        this.request.page = 1;
+        this.pagination.page = 1;
+
+        await this.load();
+        this.updateActionBar++;
     }
 
     remove(item) {
