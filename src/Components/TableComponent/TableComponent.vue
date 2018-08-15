@@ -464,6 +464,10 @@ export default class TableComponent extends Vue {
         setTimeout(() => this.fixedHeaderSize(), 10);
     }
 
+    updated() {
+        this.fixedHeaderSize();
+    }
+
     onTableScroll(scrollTop) {
         this.fixedHeader.style.top = `${scrollTop}px`;
     }
