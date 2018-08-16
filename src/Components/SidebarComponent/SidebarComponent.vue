@@ -1,46 +1,19 @@
 <template>
     <v-navigation-drawer app :dark="darkTheme" :mini-variant.sync="mini" mini-variant-width="60" permanent fixed :width="width">
-        <v-layout column fill-height justify-space-between>
-            <v-flex>
-                <v-layout>
-                    <v-flex class="sidebar-content">
-                        <v-list dense>
-                            <v-list-group v-for="item in items.filter(x=>x.isSystem && x.visible)" 
-                            :key="item.title"
-                            :prepend-icon="item.icon"
-                            append-icon=""
-                            :value="item.expanded"  
-                            @click="click($event, item)"
-                            @click.middle="clickMiddle($event, item)">
-                                <v-list-tile slot="activator">
-                                    <v-list-tile-content>
-                                        <v-list-tile-title :title="item.title">{{ item.title }}</v-list-tile-title>
-                                    </v-list-tile-content>
-                                    <v-list-tile-action>
-                                        <v-btn v-if="item.subItems.length > 0" icon @click.stop="toogleList(item)">
-                                            <v-icon>{{ item.arrowDirection }}</v-icon>
-                                        </v-btn>
-                                    </v-list-tile-action>
-                                </v-list-tile>
-                                <v-list-tile v-if="item.subItems.length > 0"
-                                    v-for="subItem in item.subItems.filter(subItem => subItem.visible)" :key="subItem.title" 
-                                    @click="click($event, subItem)"
-                                    @click.middle="clickMiddle($event, subItem)">
-                                    <v-list-tile-action>
-                                        <v-icon>{{ subItem.icon }}</v-icon>
-                                    </v-list-tile-action>
-                                    <v-list-tile-content>
-                                        <v-list-tile-title :title="subItem.title">{{ subItem.title }}</v-list-tile-title>
-                                    </v-list-tile-content>
-                                </v-list-tile>
-                            </v-list-group>
-                        </v-list>
-                    </v-flex>
-                </v-layout>
-                <v-divider></v-divider>
+        <div class="userPhotoContainer mx-3 mb-3 mt-3">
+            <v-card flat>
+                <img class="userPhoto mx-auto" :src="currentUser.profilePictureUrl ? currentUser.profilePictureUrl : '/src/assets/image/no_image.png'" 
+                alt="avatar">
+            </v-card>
+            <div class="mt-2" style="text-align: center; color: #fff; font-size: 13px">
+                {{currentUser && currentUser.name}}
+            </div>
+        </div>
+        <v-layout>
+            <v-flex class="sidebar-content">
                 <v-list dense>
-                    <v-list-group v-for="item in items.filter(item => !item.isSystem && item.visible)" 
-                    :key="item.title" 
+                    <v-list-group v-for="item in items.filter(x=>x.isSystem && x.visible)" 
+                    :key="item.title"
                     :prepend-icon="item.icon"
                     append-icon=""
                     :value="item.expanded"  
@@ -56,7 +29,8 @@
                                 </v-btn>
                             </v-list-tile-action>
                         </v-list-tile>
-                        <v-list-tile v-if="item.subItems.length > 0" v-for="subItem in item.subItems" :key="subItem.title" 
+                        <v-list-tile v-if="item.subItems.length > 0"
+                            v-for="subItem in item.subItems.filter(subItem => subItem.visible)" :key="subItem.title" 
                             @click="click($event, subItem)"
                             @click.middle="clickMiddle($event, subItem)">
                             <v-list-tile-action>
@@ -68,33 +42,65 @@
                         </v-list-tile>
                     </v-list-group>
                 </v-list>
-                <slot></slot>
-            </v-flex>
-            <v-flex style="flex: 0">
-                <v-divider></v-divider>
-                <v-layout justify-end>
-                    <v-btn icon @click.native.stop="mini = !mini" :title="mini ? 'Развернуть меню' : 'Свернуть меню'">
-                        <v-icon size="30">{{ mini ? 'mdi-chevron-right' : 'mdi-chevron-left' }}</v-icon>
-                    </v-btn>
-                </v-layout>
             </v-flex>
         </v-layout>
+        <v-divider></v-divider>
+        <v-list dense>
+            <v-list-group v-for="item in items.filter(item => !item.isSystem && item.visible)" 
+            :key="item.title" 
+            :prepend-icon="item.icon"
+            append-icon=""
+            :value="item.expanded"  
+            @click="click($event, item)"
+            @click.middle="clickMiddle($event, item)">
+                <v-list-tile slot="activator">
+                    <v-list-tile-content>
+                        <v-list-tile-title :title="item.title">{{ item.title }}</v-list-tile-title>
+                    </v-list-tile-content>
+                    <v-list-tile-action>
+                        <v-btn v-if="item.subItems.length > 0" icon @click.stop="toogleList(item)">
+                            <v-icon>{{ item.arrowDirection }}</v-icon>
+                        </v-btn>
+                    </v-list-tile-action>
+                </v-list-tile>
+                <v-list-tile v-if="item.subItems.length > 0" v-for="subItem in item.subItems" :key="subItem.title" 
+                    @click="click($event, subItem)"
+                    @click.middle="clickMiddle($event, subItem)">
+                    <v-list-tile-action>
+                        <v-icon>{{ subItem.icon }}</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title :title="subItem.title">{{ subItem.title }}</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+            </v-list-group>
+        </v-list>
+        <slot></slot>
     </v-navigation-drawer>
 </template>
 
 <script lang="ts">
+import { AuthUser, IAuthService } from "ayax-common-auth";
 import { mixins } from "vue-class-component";
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { Component, Inject, Prop, Vue, Watch } from "vue-property-decorator";
 import { OpenInNewWindowMixin } from "../../Mixins/OpenInNewWindow/OpenInNewWindowMixin";
 import { SidebarComponentItem } from "./SidebarItem";
 
 @Component
 export default class SidebarComponent extends Vue {
+    @Inject() authService: IAuthService;
+    @Prop({default: () => []}) modules: string[];
     @Prop() items: SidebarComponentItem[];
     @Prop({default: true}) darkTheme: boolean;
-    @Prop({default: 300}) width: number;
+    @Prop({default: 256}) width: number;
     @Prop({default: false}) miniProp: boolean;
     mini = this.miniProp;
+    currentUser: AuthUser = new AuthUser();
+    
+    async created() {
+        this.currentUser = (await this.authService.GetAuthenticatedUser(this.modules));
+    }
+
     @Watch("mini")
     onStateChanged(val: boolean, oldVal: boolean) { 
         if (val === true) {
@@ -178,6 +184,19 @@ export default class SidebarComponent extends Vue {
     }
     .collapseBtn { 
         margin-left: 12px;
+    }
+
+    .userPhoto {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        width: auto; 
+        max-height: 144px;
+        border: 1px solid #fff;
+    }
+
+    .userPhotoContainer {
+        width: 224px; 
     }
 
 </style>
