@@ -1,6 +1,6 @@
 <template>
-    <v-navigation-drawer app :dark="darkTheme" :mini-variant.sync="mini" mini-variant-width="60" permanent fixed :width="width">
-        <div class="userPhotoContainer mx-3 mb-3 mt-3">
+    <v-navigation-drawer class="sidebarComponent" app :dark="darkTheme" :mini-variant.sync="mini" mini-variant-width="60" permanent fixed :width="width">
+        <div v-show="!mini" class="userPhotoContainer mx-3 mb-3 mt-3">
             <v-card flat>
                 <img class="userPhoto mx-auto" :src="currentUser.profilePictureUrl ? currentUser.profilePictureUrl : noAvatarImage" 
                 alt="avatar">
@@ -96,10 +96,9 @@ export default class SidebarComponent extends Vue {
     @Prop({default: false}) miniProp: boolean;
     mini = this.miniProp;
     currentUser: AuthUser = new AuthUser();
-    noAvatarImage;
+    noAvatarImage = require("../../assets/image/no_avatar_image.png");
     
     async created() {
-        this.noAvatarImage = require("../../assets/image/no_avatar_image.png");
         this.currentUser = (await this.authService.GetAuthenticatedUser(this.modules));
     }
 
@@ -173,6 +172,16 @@ export default class SidebarComponent extends Vue {
 </script>
 
 <style scoped>
+    .sidebarComponent::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .sidebarComponent::-webkit-scrollbar-thumb {
+        background-color: #ccc; 
+        border-radius: 8px;
+        border: 2px solid #464646;
+    }
+
     .sidebar-switcher {
         max-width:60px;
     }
