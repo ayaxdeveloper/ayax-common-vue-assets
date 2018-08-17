@@ -102,6 +102,11 @@ export default class SidebarComponent extends Vue {
         this.currentUser = (await this.authService.GetAuthenticatedUser(this.modules));
     }
 
+    @Watch("miniProp")
+    onChange() {
+        this.mini = this.miniProp;
+    }
+
     @Watch("mini")
     onStateChanged(val: boolean, oldVal: boolean) { 
         if (val === true) {
