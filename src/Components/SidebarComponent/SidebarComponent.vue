@@ -2,7 +2,7 @@
     <v-navigation-drawer app :dark="darkTheme" :mini-variant.sync="mini" mini-variant-width="60" permanent fixed :width="width">
         <div class="userPhotoContainer mx-3 mb-3 mt-3">
             <v-card flat>
-                <img class="userPhoto mx-auto" :src="currentUser.profilePictureUrl ? currentUser.profilePictureUrl : '/src/assets/image/no_image.png'" 
+                <img class="userPhoto mx-auto" :src="currentUser.profilePictureUrl ? currentUser.profilePictureUrl : noAvatarImage" 
                 alt="avatar">
             </v-card>
             <div class="mt-2" style="text-align: center; color: #fff; font-size: 13px">
@@ -96,8 +96,10 @@ export default class SidebarComponent extends Vue {
     @Prop({default: false}) miniProp: boolean;
     mini = this.miniProp;
     currentUser: AuthUser = new AuthUser();
+    noAvatarImage;
     
     async created() {
+        this.noAvatarImage = require("../../assets/image/no_avatar_image.png");
         this.currentUser = (await this.authService.GetAuthenticatedUser(this.modules));
     }
 

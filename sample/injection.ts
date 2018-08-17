@@ -1,3 +1,4 @@
+import { AuthService, IAuthService, ISecurityService, ITokenService, SecurityService, TokenService } from "ayax-common-auth";
 import { CacheService, ICacheService } from "ayax-common-cache";
 import { IOperationService, OperationService } from "ayax-common-operation";
 import { IAppSettings, IClientSettings, IHttpService, INotificationProvider, INotificationSettings, IServerSettings } from "ayax-common-types";
@@ -10,6 +11,10 @@ import { STATICDICTIONARY } from "./StaticDictionary";
 
 export abstract class VueInjection extends Vue {
     @Provide() appSettings: IAppSettings = new AppSettings();
+    @Provide() authReaderService: IOperationService = new OperationService(new HttpService("https://auth.ayax.ru:8081/api"));
+    @Provide() authIdentityService: IOperationService = new OperationService(new HttpService("https://auth.ayax.ru/api"));
+    @Provide() tokenService: ITokenService = new TokenService();
+    @Provide() authService: IAuthService = new AuthService(this.authIdentityService, this.authReaderService, this.tokenService.getToken());
     @Provide() notificationSettings:  INotificationSettings = this.appSettings.Notification();
     @Provide() notificationProvider: INotificationProvider = new NotificationProvider(this.notificationSettings, EVENTBUS);
     @Provide() httpService: IHttpService = new HttpService();
