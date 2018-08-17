@@ -93,8 +93,8 @@ export default class SidebarComponent extends Vue {
     @Prop() items: SidebarComponentItem[];
     @Prop({default: true}) darkTheme: boolean;
     @Prop({default: 256}) width: number;
-    @Prop({default: false}) miniProp: boolean;
-    mini = this.miniProp;
+    @Prop({default: false}) value: boolean;
+    mini = this.value;
     currentUser: AuthUser = new AuthUser();
     noAvatarImage = require("../../assets/image/no_avatar_image.png");
     
@@ -102,13 +102,14 @@ export default class SidebarComponent extends Vue {
         this.currentUser = (await this.authService.GetAuthenticatedUser(this.modules));
     }
 
-    @Watch("miniProp")
+    @Watch("value")
     onChange() {
-        this.mini = this.miniProp;
+        this.mini = this.value;
     }
 
     @Watch("mini")
     onStateChanged(val: boolean, oldVal: boolean) { 
+        this.$emit("input", this.mini);
         if (val === true) {
             this.items.forEach(element => {
                 element.expanded = false;

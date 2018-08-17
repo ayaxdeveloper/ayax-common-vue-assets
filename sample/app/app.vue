@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-app>
-      <a-sidebar :items="sidebarItems">
+      <a-sidebar v-model="sidebarMiniProp" :items="sidebarItems">
             <v-divider></v-divider>
             <v-list dense>
                 <v-list-tile>
@@ -13,8 +13,10 @@
       </a-sidebar>
       <v-content>
         <a-notification :notificationProvider="notificationProvider"></a-notification>
-        <v-toolbar dark light dense fixed>
-          <v-toolbar-title>Title</v-toolbar-title>
+        <v-toolbar dense fixed app>
+          <v-toolbar-side-icon>
+              <v-icon x-large @click="sidebarMiniProp = !sidebarMiniProp">{{ sidebarMiniProp ? 'mdi-chevron-right' : 'mdi-chevron-left'}}</v-icon>
+          </v-toolbar-side-icon>
             <v-spacer></v-spacer>
             <v-toolbar-items>
               <v-btn small color="success" @click="castNotification('success')">notification</v-btn>
@@ -23,7 +25,7 @@
               <v-btn small color="warning" @click="castNotification('warning')">notification</v-btn>
             </v-toolbar-items>
       </v-toolbar>
-        <v-container class="mt-5" fluid>
+        <v-container fluid>
           <a-breadcrumbs :breadcrumbsNames="breadcrumbsNames"></a-breadcrumbs>
           <router-view></router-view>
         </v-container>
@@ -39,6 +41,7 @@ import { VueInjection } from "../Injection";
 
 @Component
 export default class App extends VueInjection {
+    sidebarMiniProp = false;
     
     breadcrumbsNames = {
         "": {name: "Главная", route: "home"},
