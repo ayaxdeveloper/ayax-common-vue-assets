@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-layout v-if="!tableVisible" fill-height row justify-center>
-            <v-progress-circular style="position: absolute; top: 40%" :size="150" :width="8" indeterminate color="primary"></v-progress-circular>
+            <v-progress-circular style="position: fixed; top: 40%" :size="150" :width="8" indeterminate color="primary"></v-progress-circular>
         </v-layout>
         <a-table v-else 
             :title="title"
@@ -384,8 +384,7 @@ export default class ListDialogComponent extends Vue {
         try {
             
             const model = this.getModelFromFields();
-            const operation = +model.id > 0 
-            ? (this.operationService.put(`${this._updateUrl}/${+model.id}`, model))
+            const operation = +model.id > 0 ? (this.operationService.put(`${this._updateUrl}/${+model.id}`, model))
             : (this.operationService.post(`${this._addUrl}`, model));
             (await operation).ensureSuccess();
             this.notificationProvider.Success("Успешно сохранено");

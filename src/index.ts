@@ -3,6 +3,7 @@ import Vue from "vue";
 import Vuetify from "vuetify";
 import ActionbarComponent from "./Components/ActionbarComponent/ActionbarComponent.vue";
 import BreadcrumbsComponent from "./Components/BreadcrumbsComponent/BreadcrumbsComponent.vue";
+import BusyLoadingComponent from "./Components/BusyLoadingComponent/BusyLoadingComponent.vue";
 import EditComponent from "./Components/EditComponent/EditComponent.vue";
 import FormComponent from "./Components/FormComponent/FormComponent.vue";
 import FormControlComponent from "./Components/FormComponent/FormControlComponent.vue";
@@ -30,6 +31,7 @@ export default {
         Vue.component("a-list-dialog", ListDialogComponent);
         Vue.component("a-breadcrumbs", BreadcrumbsComponent);
         Vue.component("a-list", ListComponent);
+        Vue.component("a-busy-loading", BusyLoadingComponent);
         Vue.component("a-edit", EditComponent);
         Vue.component("a-user-profile", UserProfileComponent);
         Vue.component("a-actionbar", ActionbarComponent);
@@ -63,5 +65,6 @@ export {
     ListDialogComponent,
     BreadcrumbsComponent,
     UserProfileComponent,
-    ActionbarComponent
+    ActionbarComponent,
+    BusyLoadingComponent
 };

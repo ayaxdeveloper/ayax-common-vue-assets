@@ -1,6 +1,6 @@
 {
   "name": "ayax-common-vue-assets",
-  "version": "3.3.12",
+  "version": "3.3.13",
   "main": "dist/build.js",
   "description": "Ayax Common Vue Assets package for Vue Typescript projects",
   "scripts": {
@@ -21,19 +21,19 @@
   },
   "homepage": "https://github.com/ayaxdeveloper/ayax-common-vue-assets#readme",
   "dependencies": {
-    "ayax-common-auth": "^3.0.22",
+    "ayax-common-auth": "^3.0.26",
     "ayax-common-cache": "^3.0.10",
     "ayax-common-helpers": "^2.2.3",
     "ayax-common-operation": "^1.0.20",
-    "ayax-common-types": "^3.0.19",
+    "ayax-common-types": "^3.0.20",
     "element-ui": "2.2.0",
     "moment": "^2.20.1",
     "roboto-fontface": "^0.9.0",
-    "vue": "^2.5.16",
+    "vue": "^2.5.17",
     "vue-router": "^3.0.1",
     "vue-shortkey": "^3.1.6",
     "vuedraggable": "^2.16.0",
-    "vuetify": "^1.1.8"
+    "vuetify": "^1.1.13"
   },
   "devDependencies": {
     "@mdi/font": "^2.5.94",
@@ -55,7 +55,7 @@
     "vue-loader": "^15.2.4",
     "vue-property-decorator": "^7.0.0",
     "vue-style-loader": "^4.1.0",
-    "vue-template-compiler": "^2.5.16",
+    "vue-template-compiler": "^2.5.17",
     "webpack": "^4.16.1",
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-cli": "^3.0.8",
