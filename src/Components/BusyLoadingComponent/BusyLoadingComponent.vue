@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="busyLoadingComponent"></div>
+        <div class="busyLoadingComponent" :style="{backgroundColor: maskColor}"></div>
         <v-layout style="position: absolute; z-index: 3; width: 100%" justify-center align-center fill-height>
             <v-progress-circular :size="size" :style="{color: color}" indeterminate :width="width" >
             </v-progress-circular>
@@ -29,7 +29,6 @@ export default class BusyLoadingComponent extends Vue {
         right:0;
         top: 0;
         bottom: 0;
-        background-color: #e6e6e6;
         opacity: 0.3;
     }
 </style>
