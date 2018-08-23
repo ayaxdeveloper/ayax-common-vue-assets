@@ -64,13 +64,16 @@ export class NotificationProvider implements INotificationProvider {
         if (message.message) {
             return message.message;
         }
+        if (message.systemMessage) {
+            return message.systemMessage;
+        }
         return `${message}`;
     }
 
     private PushNotification(notification: NotificationItem) {
         this.notifications.push(notification); 
-            if (notification.dismissAfter > 0 ) {
-                setInterval(() => {notification.showing = false;}, notification.dismissAfter);
-            }
+        if (notification.dismissAfter > 0 ) {
+            setInterval(() => {notification.showing = false;}, notification.dismissAfter);
+        }
     }
 }

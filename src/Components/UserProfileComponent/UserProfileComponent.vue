@@ -36,7 +36,7 @@ export default class UserProfileComponent extends Vue {
     @Inject() authService: IAuthService;
     @Inject() eventBus: Vue;
     @Inject() tokenService: ITokenService;
-    @Prop({default: () => []}) modules: string[];
+    @Prop({default: null}) modules?: string[];
     currentUser: AuthUser = new AuthUser();
     async created() {
         this.currentUser = (await this.authService.GetAuthenticatedUser(this.modules));
@@ -47,7 +47,3 @@ export default class UserProfileComponent extends Vue {
     }
 }
 </script>
-
-<style>
-
-</style>
