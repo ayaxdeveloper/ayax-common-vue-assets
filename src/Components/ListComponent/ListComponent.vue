@@ -102,6 +102,7 @@ export default class ListComponent extends Vue {
     @Prop({default: null}) toggledItemSlot;
     @Prop({default: () => () => "" }) rowColor: (item) => string;
     @Prop({default: 442}) maxHeight: number;
+    @Prop({default: 0}) forceReload: number;
     tableVisible = false;
     tableIdentifier = `${this.title}_${this.entity}`.replace(/\s+/g, "_").replace("-", "_");
     updateActionBar = 0;
@@ -112,6 +113,11 @@ export default class ListComponent extends Vue {
             this.request.page = newVal;
             this.load();
         }
+    }
+
+    @Watch("forceReload")
+    async onForce() {
+        await this.load();
     }
 
     @Watch("toggledItemSlot")

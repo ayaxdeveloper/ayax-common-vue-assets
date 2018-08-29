@@ -118,6 +118,7 @@ export default class ListDialogComponent extends Vue {
     @Prop({default: null}) toggledItemSlot;
     @Prop({default: () => () => "" }) rowColor: (item) => string;
     @Prop({default: 442}) maxHeight: number;
+    @Prop({default: 0}) forceReload: number;
     editDialog = false;
     request: any;
     itemForRemove: IEntity | null;
@@ -143,6 +144,11 @@ export default class ListDialogComponent extends Vue {
         save: ["enter"],
         close: ["esc"]
     };
+
+    @Watch("forceReload")
+    async onForce() {
+        await this.load();
+    }
 
     editModelShortkeyHandler(key : any) {
         if (!key || !key.srcKey) {
