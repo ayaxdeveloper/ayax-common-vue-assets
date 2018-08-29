@@ -12,7 +12,6 @@ module.exports = {
     library: 'ayax-common-vue-assets',
     libraryTarget: 'umd'
   },
-  externals: [nodeExternals()],
   module: {
     rules: [
       {
