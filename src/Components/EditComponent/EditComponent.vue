@@ -26,7 +26,9 @@ import { INotificationProvider, SelectItem } from "ayax-common-types";
 import { Component, Inject, Prop, Vue, } from "vue-property-decorator";
 import { FormComponentItem } from "../FormComponent/FormItem";
 
-@Component
+@Component({
+    name: "a-edit"
+})
 export default class EditComponent extends Vue {
     @Inject() notificationProvider: INotificationProvider;
     @Inject() cacheService: ICacheService;

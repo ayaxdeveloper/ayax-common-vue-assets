@@ -300,6 +300,7 @@ import { TableComponentAction } from "./TableAction";
 import { TableComponentHeader } from "./TableHeader";
 
 @Component({
+    name: "a-table",
     components: {
         "a-table-filter": TableFilterComponent,
         "a-actionbar": ActionbarComponent,

@@ -34,7 +34,9 @@
 import { Component, Emit, Prop, Vue, Watch } from "vue-property-decorator";
 import { TableComponentAction } from "../TableComponent/TableAction";
 
-@Component
+@Component({
+    name: "a-actionbar"
+})
 export default class ActionbarComponent extends Vue{
     @Prop({default: "primary"}) actionbarColor: string;
     @Prop({default: true}) actionbarIsDark: boolean;

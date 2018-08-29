@@ -31,7 +31,9 @@
 import { AuthUser, IAuthService, ITokenService } from "ayax-common-auth";
 import { Component, Inject, Prop, Vue } from "vue-property-decorator";
 
-@Component
+@Component({
+    name: "a-user-profile"
+})
 export default class UserProfileComponent extends Vue {
     @Inject() authService: IAuthService;
     @Inject() eventBus: Vue;

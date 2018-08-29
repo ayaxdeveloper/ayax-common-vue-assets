@@ -234,7 +234,9 @@ import { TableFilterComponentItemAppearance } from "./TableFilterComponentItemAp
 import { TableFilterComponentItemInputType } from "./TableFilterComponentItemInputType";
 import { TableFilterComponentItemType } from "./TableFilterComponentItemType";
 
-@Component
+@Component({
+    name: "a-table-filter"
+})
 export default class TableFilterComponent extends Vue {
     @Prop({default: null}) header: TableComponentHeader;
     @Prop({required: true}) filter: TableFilterComponentItem;

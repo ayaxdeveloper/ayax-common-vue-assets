@@ -22,19 +22,19 @@ export default {
     // tslint:disable-next-line:variable-name
     install(Vue) {
         Vue.component(DatePicker.name, DatePicker);
-        Vue.component("a-table", TableComponent);
-        Vue.component("a-table-filter", TableFilterComponent);
-        Vue.component("a-form", FormComponent);
-        Vue.component("a-form-control", FormControlComponent);
-        Vue.component("a-notification", NotificationComponent);
-        Vue.component("a-sidebar", SidebarComponent);
-        Vue.component("a-list-dialog", ListDialogComponent);
-        Vue.component("a-breadcrumbs", BreadcrumbsComponent);
-        Vue.component("a-list", ListComponent);
-        Vue.component("a-busy-loading", BusyLoadingComponent);
-        Vue.component("a-edit", EditComponent);
-        Vue.component("a-user-profile", UserProfileComponent);
-        Vue.component("a-actionbar", ActionbarComponent);
+        Vue.component(TableComponent);
+        Vue.component(TableFilterComponent);
+        Vue.component(FormComponent);
+        Vue.component(FormControlComponent);
+        Vue.component(NotificationComponent);
+        Vue.component(SidebarComponent);
+        Vue.component(ListDialogComponent);
+        Vue.component(BreadcrumbsComponent);
+        Vue.component(ListComponent);
+        Vue.component(BusyLoadingComponent);
+        Vue.component(EditComponent);
+        Vue.component(UserProfileComponent);
+        Vue.component(ActionbarComponent);
     }
 };
 

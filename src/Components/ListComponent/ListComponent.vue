@@ -71,7 +71,9 @@ import { TableComponentAction } from "../TableComponent/TableAction";
 import { TableComponentHeader } from "../TableComponent/TableHeader";
 import { TableFilterComponentItem } from "../TableFilterComponent/TableFilterComponentItem";
 
-@Component
+@Component({
+    name: "a-list"
+})
 export default class ListComponent extends Vue {
     @Inject() notificationProvider: INotificationProvider;
     @Inject() cacheService: ICacheService;

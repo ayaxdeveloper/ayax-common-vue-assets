@@ -12,7 +12,9 @@
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 
-@Component
+@Component({
+    name: "a-busy-loading"
+})
 export default class BusyLoadingComponent extends Vue {
     @Prop({default: 70}) size: number;
     @Prop({default: "#e6e6e6"}) maskColor: string;

@@ -84,7 +84,9 @@ import * as moment from "moment";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { FormComponentItem } from "./FormItem";
 
-@Component
+@Component({
+    name: "a-form-control"
+})
 export default class FormControlComponent extends Vue {
     @Prop() field: FormComponentItem;
     input = HtmlElementType.input;

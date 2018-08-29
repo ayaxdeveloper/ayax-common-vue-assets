@@ -85,7 +85,9 @@ import { TableComponentAction } from "../TableComponent/TableAction";
 import { TableComponentHeader } from "../TableComponent/TableHeader";
 import { TableFilterComponentItem } from "../TableFilterComponent/TableFilterComponentItem";
 
-@Component
+@Component({
+    name: "a-list-dialog"
+})
 export default class ListDialogComponent extends Vue {
     @Inject() clientSettings: IClientSettings;
     @Inject() notificationProvider: INotificationProvider;

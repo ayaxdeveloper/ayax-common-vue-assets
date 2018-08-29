@@ -28,7 +28,9 @@ import { HtmlElementType } from "ayax-common-types";
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { FormComponentItem } from "./FormItem";
 
-@Component
+@Component({
+    name: "a-form"
+})
 export default class FormComponent extends Vue {
     @Prop() fields: FormComponentItem[];
     @Prop() model: any;

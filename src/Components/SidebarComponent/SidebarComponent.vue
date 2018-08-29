@@ -86,7 +86,9 @@ import { Component, Inject, Prop, Vue, Watch } from "vue-property-decorator";
 import { OpenInNewWindowMixin } from "../../Mixins/OpenInNewWindow/OpenInNewWindowMixin";
 import { SidebarComponentItem } from "./SidebarItem";
 
-@Component
+@Component({
+    name: "a-sidebar"
+})
 export default class SidebarComponent extends Vue {
     @Inject() authService: IAuthService;
     @Prop({default: () => []}) modules: string[];

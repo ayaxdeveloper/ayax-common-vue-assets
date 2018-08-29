@@ -15,7 +15,9 @@
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { BreadCrumbItem } from "./BreadcrumbItem";
 
-@Component
+@Component({
+    name: "a-breadcrumbs"
+})
 export default class BreadcrumbsComponent extends Vue {
     @Watch("$route")
     onRouteChanged(to, from) {
