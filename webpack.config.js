@@ -12,6 +12,7 @@ module.exports = {
     library: 'ayax-common-vue-assets',
     libraryTarget: 'umd'
   },
+  externals: [nodeExternals({modulesFromFile: true})],
   module: {
     rules: [
       {
@@ -71,15 +72,14 @@ if (process.env.NODE_ENV === 'production') {
         NODE_ENV: '"production"'
       }
     }),
-    // new webpack.optimize.UglifyJsPlugin({
-    //   sourceMap: true,
-    //   compress: {
-    //     warnings: false
-    //   },
-    //   uglifyOptions: { keep_classnames: true }
-    // }),
-    // new webpack.LoaderOptionsPlugin({
-    //   minimize: true
-    // })
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
+      compress: {
+        warnings: false
+      }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    })
   ]);
 }
