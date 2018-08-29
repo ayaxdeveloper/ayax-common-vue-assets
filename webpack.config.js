@@ -12,7 +12,7 @@ module.exports = {
     library: 'ayax-common-vue-assets',
     libraryTarget: 'umd'
   },
-  externals: [nodeExternals({modulesFromFile: true})],
+  externals: [nodeExternals({ whitelist: ["vue-property-decorator", "vue-template-compiler", "vue-class-component"]})],
   module: {
     rules: [
       {
