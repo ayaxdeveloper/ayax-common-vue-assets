@@ -79,8 +79,8 @@ if (process.env.NODE_ENV === 'production') {
     //   },
     //   uglifyOptions: { keep_classnames: true }
     // }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true
-    })
+    // new webpack.LoaderOptionsPlugin({
+    //   minimize: true
+    // })
   ]);
 }
