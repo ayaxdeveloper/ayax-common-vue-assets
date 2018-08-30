@@ -101,7 +101,7 @@ export default class SidebarComponent extends Vue {
     noAvatarImage = require("../../assets/image/no_avatar_image.png");
     
     async created() {
-        this.currentUser = (await this.authService.GetAuthenticatedUser(this.modules));
+        this.currentUser = await this.authService.GetCurrentUser();
     }
 
     @Watch("value")
