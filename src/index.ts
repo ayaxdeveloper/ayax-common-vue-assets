@@ -1,6 +1,4 @@
 import { DatePicker } from "element-ui";
-import locale from "element-ui/lib/locale";
-import lang from "element-ui/lib/locale/lang/ru-Ru";
 import Vue from "vue";
 import Vuetify from "vuetify";
 import ActionbarComponent from "./Components/ActionbarComponent/ActionbarComponent.vue";
@@ -19,8 +17,6 @@ import UserProfileComponent from "./Components/UserProfileComponent/UserProfileC
 Vue.use(Vuetify, {
     iconfont: "mdi"
 });
-
-locale.use(lang);
 
 export default {
     // tslint:disable-next-line:variable-name
