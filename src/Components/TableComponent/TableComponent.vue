@@ -330,6 +330,7 @@ export default class TableComponent extends Vue {
     @Prop({default: false}) showHeaderFiltersByDefault: boolean;
     @Prop() rowColor: (item) => string;
     @Prop({default: 0}) updateActionBar: number;
+    @Prop({default: 0}) clearSelected: number;
     @Prop({default: 442}) maxHeight: number;
     applyFilterButtonVisibility = true;
     innerSelected: any[] = [];
@@ -477,6 +478,13 @@ export default class TableComponent extends Vue {
         } else {
             this.itemSelected = false;
         }
+    }
+
+    @Watch("clearSelected")
+    onClearSelected() {
+        console.log("clearSelected");
+        this.innerSelected = [];
+        this.$forceUpdate();
     }
 
     @Watch("$route.query")

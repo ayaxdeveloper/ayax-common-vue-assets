@@ -1,6 +1,4 @@
-import Vue from "vue";
-
-export default class TestDataService extends Vue {
+export default class TestDataService {
     data = [
         { id: 1, activeLead: {qq: "aaa", ww: "bbb"}, otherLeads: [{name: "#722 Отложенный спрос"}, {name: "#913 Уточнение информации"}], code: "1231", title: "Alpha", created: new Date("2018-04-01"), dictionaryId: 0},
         { id: 2, activeLead: {qq: "aaa", ww: "bbb"}, otherLeads: [], code: "1232", title: "Bravo", created: new Date("2018-04-02"), dictionaryId: [1,2]},
@@ -67,9 +65,10 @@ export default class TestDataService extends Vue {
     }
 
     bulkDelete(items) {
-        items.forEach(element => {
-            this.remove(element);
-        });
+        console.log(items);
+        for (const item of items) {
+            this.remove(item.id);
+        }
     }
 
     sortData(data, isdesc: boolean) {

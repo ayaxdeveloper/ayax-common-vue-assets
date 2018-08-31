@@ -9,6 +9,7 @@
         :default-model="defaultModel"
         :fields="fields"
         :configure="true"
+        :forceReload="update"
         :tableFilters="tableFilters"
         :showHeaderFiltersByDefault="true">
         <template slot="toolbar-items">
@@ -31,11 +32,13 @@ import { TableFilterComponentItemAppearance } from "../../../src/Components/Tabl
 import { TableFilterComponentItemInputType } from "../../../src/Components/TableFilterComponent/TableFilterComponentItemInputType";
 import { TableFilterComponentItemType } from "../../../src/Components/TableFilterComponent/TableFilterComponentItemType";
 import { TestModel } from "../../Models/Test/TestModel";
+import { mixins } from "vue-class-component";
 import BaseListLayout from "../BaseLayout/BaseListLayout/BaseListLayout";
 
 @Component
 export default class ListDialogTestLayout extends BaseListLayout {
     @Inject() cacheService: ICacheService;
+    
     defaultModel = new TestModel();
     headers  = [
         TableComponentHeader.String({value: "id", text: "Id", hiddenable: false}),
@@ -157,13 +160,6 @@ export default class ListDialogTestLayout extends BaseListLayout {
             label: "Комнат в доме"
         }),
     ];
-
-    created() {
-        
-        
-
-        
-    }
 }
 </script>
 

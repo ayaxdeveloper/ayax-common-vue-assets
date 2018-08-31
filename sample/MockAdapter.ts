@@ -59,8 +59,8 @@ mock
     testDataService.remove(id);
     return [200, new OperationResult({ status: 0 })];
 })
-.onDelete("/api/testentity/bulkdelete").reply((config) => {
-    testDataService.bulkDelete(JSON.parse(config.data));
+.onPost("/api/testentity/bulkdelete").reply(({data}) => {
+    testDataService.bulkDelete(data);
     return [200, new OperationResult({ status: 0 })];
 })
 .onAny().reply((config) => {

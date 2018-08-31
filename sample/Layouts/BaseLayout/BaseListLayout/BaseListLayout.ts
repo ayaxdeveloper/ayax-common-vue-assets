@@ -1,13 +1,16 @@
+import { IOperationService } from "ayax-common-operation";
 import { IClientSettings, Pagination } from "ayax-common-types";
 import { Inject, Vue } from "vue-property-decorator";
 import { TableComponentAction } from "../../../../src/Components/TableComponent/TableAction";
 
-export default abstract class BaseListLayout extends Vue {
+export default class BaseListLayout extends Vue {
     @Inject() clientSettings: IClientSettings;
+    @Inject() operationService: IOperationService;
+    update = 0;
     pagination = Pagination.Default(this.clientSettings.listRowsPerpage);
     actions = [
         new TableComponentAction({name: "add", title: "Добавить", icon: "mdi-plus"}),
-        new TableComponentAction({name: "removeSelected", title: "Удалить выбранные", icon: "mdi-delete", needSelectedItem: true}),
+        new TableComponentAction({name: "bulkDelete", title: "Удалить выбранные", icon: "mdi-delete", needSelectedItem: true }),
         new TableComponentAction({name: "edit", title: "Редактировать", icon: "mdi-pencil", single: true}),
         new TableComponentAction({name: "remove", title: "Удалить", icon: "mdi-delete", single: true}),
         new TableComponentAction({
@@ -28,7 +31,7 @@ export default abstract class BaseListLayout extends Vue {
                 const action = this.actions.find(x => x.name === "loading");
                 if (action) {
                     action.loading = true;
-                    setTimeout(() => action.loading = false, 3000);
+                    setTimeout(() => action.loading = false, 2000);
                 }
             }
         })

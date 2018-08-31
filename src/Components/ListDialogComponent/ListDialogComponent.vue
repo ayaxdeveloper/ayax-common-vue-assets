@@ -20,6 +20,7 @@
             :topbarIsDark="topbarIsDark"
             :actionbarIsDark="actionbarIsDark"
             :max-height="maxHeight"
+            :clear-selected="clearSelected"
             @on-row-action="onRowAction"
             @on-bar-action="onBarAction"
             @apply-filter="load"
@@ -119,6 +120,7 @@ export default class ListDialogComponent extends Vue {
     @Prop({default: () => () => "" }) rowColor: (item) => string;
     @Prop({default: 442}) maxHeight: number;
     @Prop({default: 0}) forceReload: number;
+    clearSelected = 0;
     editDialog = false;
     request: any;
     itemForRemove: IEntity | null;
@@ -465,7 +467,7 @@ export default class ListDialogComponent extends Vue {
     public async load() {
         try {
             this.loading = true;
-            this.selected = [];
+            this.clearSelected++;
             if (this._search.method === "post") {
                 const response = (await this.operationService.post<SearchResponse<any[]>>(`${this._search.url}`,this.AddFilter(this.request))).ensureSuccess();
                 this.items =  response.data;
