@@ -9,6 +9,7 @@ export class TableComponentAction {
     active = true;
     spaceNext = false;
     loading = false;
+    hint = "";
     constructor(init?: Partial<TableComponentAction>) {
         if (init) {
             Object.assign(this, init);
