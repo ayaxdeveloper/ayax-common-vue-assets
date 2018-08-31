@@ -6,7 +6,8 @@
                     <v-btn v-if="!action.children"
                     :title="action.hint"
                     :disabled="action.needSelectedItem && !itemSelected" flat @click="executeAction(action)"
-                    :loading="action.loading">
+                    :loading="action.loading"
+                    :class="hideButtonText ? 'iconButtonMinWidth' : ''">
                         <v-icon :class="hideButtonText ? 'hiddenButtonText' : ''" left v-if="action.icon">{{action.icon}}</v-icon>
                         <template v-if="!hideButtonText || !action.icon">{{action.title}}</template>
                     </v-btn>
@@ -14,7 +15,8 @@
                         <v-btn slot="activator"
                         :title="action.hint"
                         :loading="action.loading"
-                        :disabled="action.needSelectedItem && !itemSelected" flat>
+                        :disabled="action.needSelectedItem && !itemSelected" flat
+                        :class="hideButtonText ? 'iconButtonMinWidth' : ''">
                         <v-icon :class="hideButtonText ? 'hiddenButtonText' : ''" left v-if="action.icon">{{action.icon}}</v-icon>
                         <template v-if="!hideButtonText || !action.icon">{{action.title}}</template>
                     </v-btn>
@@ -167,6 +169,9 @@ export default class ActionbarComponent extends Vue{
     }
     .hiddenButtonText {
         margin-right: 0px;
+    }
+    .iconButtonMinWidth {
+        min-width: 50px;
     }
 </style>
 
