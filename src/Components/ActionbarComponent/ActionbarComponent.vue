@@ -4,20 +4,22 @@
             <template v-for="action in actions">
                 <v-toolbar-items :key="action.name">
                     <v-btn v-if="!action.children"
+                    :title="action.hint"
                     :disabled="action.needSelectedItem && !itemSelected" flat @click="executeAction(action)"
                     :loading="action.loading">
-                        <v-icon left v-if="action.icon">{{action.icon}}</v-icon>
-                        {{action.title}}
+                        <v-icon :class="hideButtonText ? 'hiddenButtonText' : ''" left v-if="action.icon">{{action.icon}}</v-icon>
+                        <template v-if="!hideButtonText || !action.icon">{{action.title}}</template>
                     </v-btn>
                     <v-menu top offset-y :disabled="action.needSelectedItem && !itemSelected" v-if="action.children">
                         <v-btn slot="activator"
+                        :title="action.hint"
                         :loading="action.loading"
                         :disabled="action.needSelectedItem && !itemSelected" flat>
-                        <v-icon left v-if="action.icon">{{action.icon}}</v-icon>
-                        {{action.title}}
+                        <v-icon :class="hideButtonText ? 'hiddenButtonText' : ''" left v-if="action.icon">{{action.icon}}</v-icon>
+                        <template v-if="!hideButtonText || !action.icon">{{action.title}}</template>
                     </v-btn>
                     <v-list dense>
-                        <v-list-tile v-for="child in action.children" :key="child.name"  @click="executeAction(child)">
+                        <v-list-tile :title="action.hint" v-for="child in action.children" :key="child.name"  @click="executeAction(child)">
                             <v-list-tile-action v-if="child.icon"><v-icon>{{child.icon}}</v-icon></v-list-tile-action>
                             <v-list-tile-title>{{ child.title }}</v-list-tile-title>
                         </v-list-tile>
@@ -46,6 +48,7 @@ export default class ActionbarComponent extends Vue{
     @Prop({default: 0}) updateActionBar: number;
     actionbarContainer;
     actionbar;
+    hideButtonText = false;
 
     @Watch("updateActionBar")
     onChange() {
@@ -65,6 +68,8 @@ export default class ActionbarComponent extends Vue{
         [].forEach.call(this.actionbarContainer, elem => {
             this.toggleActionbar(elem);
         });
+
+        this.collapseButtons(this.actionbar[0]);
     }
 
     updated() {
@@ -116,6 +121,16 @@ export default class ActionbarComponent extends Vue{
         });
     }
 
+    collapseButtons(actionbar: HTMLElement) {
+        if (actionbar.scrollWidth - actionbar.offsetWidth !== 0) {
+            this.hideButtonText = true; 
+        } else {
+            if (this.hideButtonText === true) {
+                this.hideButtonText = false;
+            }
+        }
+    }
+
     toggleActionbar(elem) {
         const actionBarElement = elem.querySelector(".actionbar");
         if (!actionBarElement) {
@@ -146,6 +161,12 @@ export default class ActionbarComponent extends Vue{
     .actionbarFixed {
         position: fixed;
         bottom: 0;
+    }
+    .actionbar {
+        overflow: hidden;
+    }
+    .hiddenButtonText {
+        margin-right: 0px;
     }
 </style>
 
