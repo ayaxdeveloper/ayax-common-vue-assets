@@ -465,6 +465,7 @@ export default class ListDialogComponent extends Vue {
     public async load() {
         try {
             this.loading = true;
+            this.items = [];
             if (this._search.method === "post") {
                 const response = (await this.operationService.post<SearchResponse<any[]>>(`${this._search.url}`,this.AddFilter(this.request))).ensureSuccess();
                 this.items =  response.data;
