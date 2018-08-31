@@ -103,6 +103,23 @@ export default class App extends VueInjection {
             default: break;
         }
     }
+
+    created() {
+        // Проставим текущего пользователя
+        const currentUserObject = {
+            accessRules:[],
+            accessRulesNames:[],
+            birthdate:"1988-02-27T00:00:00",
+            id:0,
+            identity:null,
+            login:"ajax\\as_testuser",
+            name:"Тестовый пользователь",
+            profilePictureUrl:null,
+            subdivisionIds:[11, 14],
+            uid:"00000000-0000-0000-0000-000000000000"
+        }
+        localStorage.setItem("currentUser", JSON.stringify(currentUserObject));
+    }
 }
 </script>                            
 

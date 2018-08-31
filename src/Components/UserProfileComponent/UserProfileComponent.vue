@@ -41,7 +41,7 @@ export default class UserProfileComponent extends Vue {
     @Prop({default: null}) modules?: string[];
     currentUser: AuthUser = new AuthUser();
     async created() {
-        this.currentUser = (await this.authService.GetAuthenticatedUser(this.modules));
+        this.currentUser = (await this.authService.GetCurrentUser());
     }
 
     logout() {
