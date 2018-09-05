@@ -4,7 +4,7 @@ import { OperationResult } from "ayax-common-operation";
 import { SearchResponse } from "ayax-common-types";
 import TestDataService from "./Services/TestDataService/TestDataService";
 
-const mock = new MockAdapter(axios, { delayResponse: 2000 });
+const mock = new MockAdapter(axios, { delayResponse: 1000 });
 const testDataService = new TestDataService();
 const searchResponse = new SearchResponse<any[]>();
 

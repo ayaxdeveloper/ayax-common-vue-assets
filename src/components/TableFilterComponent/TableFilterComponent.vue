@@ -215,7 +215,7 @@
             </v-flex>
             <v-flex class="pb-2" style="height: 48px; padding-top: 9px" 
                 v-else-if="filter.requestType == filterTypes['Eq'] && filter.inputType == filterInputTypes['Button']">
-                <v-btn style="height: 30px" small light @click="changeBtnValue()">{{ buttonText }}</v-btn>
+                <v-btn style="height: 30px" small light @click="changeBtnValue()" :class="[filter.values[0] == true && !filter.buttonClickedText ? 'white--text' : 'black--text']" :color="filter.values[0] == true && !filter.buttonClickedText ? 'primary' : 'default'">{{ filter.buttonClickedText && filter.values[0] == true ? filter.buttonClickedText : filter.buttonText }}</v-btn>
             </v-flex>
             <v-flex class="pr-2 pb-2 switcher" style="width: 180px; height: 48px; padding-top: 9px" 
                 v-else-if="filter.requestType == filterTypes['Eq'] && filter.inputType == filterInputTypes['Checkbox']">
@@ -268,10 +268,6 @@ export default class TableFilterComponent extends Vue {
         Object.keys(TableFilterComponentItemAppearance).forEach(item => {
             this.filterAppearance[item] = TableFilterComponentItemAppearance[item];
         });
-        if (this.filter.inputType === this.filterInputTypes["Button"]) {
-            this.filter.values[0] = false;
-            this.buttonText = this.filter.buttonText;
-        }
         if (this.filter.selectItems) {
             this.initialSelectItems = JSON.parse(JSON.stringify(this.filter.selectItems));
         }
@@ -368,10 +364,12 @@ export default class TableFilterComponent extends Vue {
 
     changeBtnValue() {
         this.filter.values[0] = !this.filter.values[0];
-        if (this.filter.values[0] === true) {
-            this.buttonText = this.filter.buttonClickedText;
-        } else {
-            this.buttonText = this.filter.buttonText;
+        if(this.filter.buttonClickedText) {
+            if (this.filter.values[0] == true) {
+                this.buttonText = this.filter.buttonClickedText;
+            } else {
+                this.buttonText = this.filter.buttonText;
+            }
         }
         this.applyFilter();
     }

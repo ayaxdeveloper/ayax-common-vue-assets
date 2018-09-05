@@ -104,7 +104,21 @@ export default class ListDialogTestLayout extends BaseListLayout {
             label: "Дата создания"
 
         }),
-       
+        new TableFilterComponentItem({
+            name: "buttomFilter",
+            requestName: "buttonFilter", 
+            appearance: TableFilterComponentItemAppearance.Topbar, 
+            inputType: TableFilterComponentItemInputType.Button,
+            buttonText: "Кнопка"
+        }),
+        new TableFilterComponentItem({
+            name: "buttomFilter2",
+            requestName: "buttonFilter2", 
+            appearance: TableFilterComponentItemAppearance.Topbar, 
+            inputType: TableFilterComponentItemInputType.Button,
+            buttonText: "Отжата",
+            buttonClickedText: "Нажата"
+        }),
         new TableFilterComponentItem({
             requestName: "qqfilter", 
             name: "qqFilter",
