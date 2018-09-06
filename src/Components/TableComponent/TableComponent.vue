@@ -9,7 +9,7 @@
             <v-toolbar-items>
                 <v-layout row>
                     <a-table-filter class="ml-3" 
-                        :style="{width: topbarFilter.inputType == filterInputTypes['Button'] ? 'initial' : '180px'}" 
+                        :style="{width: topbarFilter.inputType == filterInputTypes['Button'] || topbarFilter.inputType == filterInputTypes['ButtonToggle']  ? 'initial' : '180px'}" 
                         v-for="(topbarFilter, index) in topbarFilters" :key="topbarFilter.name"
                         :applyFilterButtonVisibility="applyFilterButtonVisibility" 
                         :filter="topbarFilter"

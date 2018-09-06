@@ -217,7 +217,7 @@
                 v-else-if="filter.requestType == filterTypes['Eq'] && filter.inputType == filterInputTypes['Button']">
                 <v-btn style="height: 30px" small light @click="changeBtnValue()" :class="['filterBtn', filter.values[0] == true || filter.buttonClickedText ? 'clicked' : 'released']">{{ filter.buttonClickedText && filter.values[0] == true ? filter.buttonClickedText : filter.buttonText }}</v-btn>
             </v-flex>
-            <v-flex class="pb-2" style="height: 48px; padding-top: 9px" 
+            <v-flex class="pb-2 filter" style="height: 48px; padding-top: 9px" 
                 v-else-if="filter.requestType == filterTypes['In'] && filter.inputType == filterInputTypes['ButtonToggle'] && filter.buttonsForToggle">
                 <v-btn-toggle v-model="filter.values" light multiple class="filterBtnToggle">
                     <v-btn style="height: 30px" small flat v-for="(btn, index) in filter.buttonsForToggle" :key="`${filter.name}${index}`" :value="btn.value" class="filterBtn">
