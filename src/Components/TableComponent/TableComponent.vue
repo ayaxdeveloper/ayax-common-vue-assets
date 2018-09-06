@@ -457,15 +457,9 @@ export default class TableComponent extends Vue {
     }
 
     fixedHeaderSize() {
-        const baseLine = document.querySelector(`#${this.tableIdentifier} .verticalBaseline`);
-        if(!baseLine) {
-            return;
-        }
-        const firstRow = baseLine.querySelectorAll("td");
+        const firstRow = document.querySelector(`#${this.tableIdentifier} .verticalBaseline`).querySelectorAll("td");
         const header = document.querySelectorAll(`#${this.tableIdentifier} .fixedTableHeader th`) as HTMLCollectionOf<HTMLElement>;
-        if(!header) {
-            return;
-        }
+        
         for (let i = 0; i < firstRow.length; i++) {
             header[i].style.width = `${firstRow[i].offsetWidth}px`;
             header[i].style.minWidth = `${firstRow[i].offsetWidth}px`;
