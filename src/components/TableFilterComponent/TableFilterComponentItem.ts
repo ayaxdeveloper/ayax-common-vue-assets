@@ -22,6 +22,7 @@ export class TableFilterComponentItem {
     selectItemsFromDictionary: string;
     selectItemsFromPromise: Promise<SelectItem[]>;
     values: any[] = [];
+    active = true;
 
     constructor(init: Partial<TableFilterComponentItem>) {
         Object.assign(this, init);

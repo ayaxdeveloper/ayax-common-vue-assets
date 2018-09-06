@@ -1,5 +1,5 @@
 <template>
-    <div v-shortkey.once="{applyFilter: ['enter']}" @shortkey="shortkeyHandler">
+    <div v-shortkey.once="{applyFilter: ['enter']}" @shortkey="shortkeyHandler" v-if="filter.active">
         <div v-if="filter.appearance != filterAppearance['AllFilters'] || filter.inputType == filterInputTypes['Button']" style="position: relative">
             <v-btn 
             v-if="applyFilterButton"
