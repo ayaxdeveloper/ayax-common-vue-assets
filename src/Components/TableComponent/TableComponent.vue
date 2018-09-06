@@ -116,7 +116,7 @@
         item-key="id"
         no-results-text="Ничего не найдено"
         :class="['elevation-1', 'table-block', 'mainAnchor', 'scrollableTable', items.length > 10 ? 'scrollableTableOverflow' : '']"
-        :style="[items.length > 10 ? `--maxHeight: ${maxHeight}px` : '']">
+        :style="items.length > 10 ? `--maxHeight: ${maxHeight}px` : ''">
             <template slot="headers" slot-scope="props">
                 <tr class="header-row fixedTableHeader">
                     <th v-if='selectable' class="selectable" :width="configSelectableWidth">
