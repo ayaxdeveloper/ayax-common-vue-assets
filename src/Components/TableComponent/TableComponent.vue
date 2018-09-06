@@ -488,7 +488,6 @@ export default class TableComponent extends Vue {
 
     @Watch("clearSelected")
     onClearSelected() {
-        console.log("clearSelected");
         this.innerSelected = [];
         this.$forceUpdate();
     }

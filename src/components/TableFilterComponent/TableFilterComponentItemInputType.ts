@@ -1,3 +1,3 @@
 export enum TableFilterComponentItemInputType {
-    Text, Date, Checkbox, Button, Select
+    Text, Date, Checkbox, Button, ButtonToggle, Select
 }

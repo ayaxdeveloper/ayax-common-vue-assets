@@ -85,7 +85,20 @@ export default class ListDialogTestLayout extends BaseListLayout {
             name: "titleFilter",
             requestType: TableFilterComponentItemType.Like,
             placeholder: "Введите",
-            label: "Наименование"
+            label: "Наименование",
+            active: false,
+        }),
+        new TableFilterComponentItem({
+            name: "buttomToggleFilter",
+            requestName: "buttonToggleFilter", 
+            appearance: TableFilterComponentItemAppearance.Topbar, 
+            inputType: TableFilterComponentItemInputType.ButtonToggle,
+            requestType: TableFilterComponentItemType.In,
+            buttonsForToggle: [
+                {text: "Первый", value: "1"},
+                {text: "Второй", value: "2"},
+                {text: "Третий", value: "3"}
+            ]
         }),
         new TableFilterComponentItem({
             requestName: "datefilter",

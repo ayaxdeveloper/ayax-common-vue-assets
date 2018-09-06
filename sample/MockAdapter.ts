@@ -9,15 +9,17 @@ const testDataService = new TestDataService();
 const searchResponse = new SearchResponse<any[]>();
 
 mock
-.onGet("/api/dictionary/list").reply(({data}) => {
+.onGet("/api/dictionary/list").reply((response) => {
+    console.log(response);
     return [200, new OperationResult<any[]>({
         status: 0,
         result: testDataService.getDictionary()
     })];
 })
-.onPost("/api/testentity/search").reply(({data}) => {
+.onPost("/api/testentity/search").reply((response) => {
+    console.log(response);
     searchResponse.total = testDataService.getData().length;
-    data = JSON.parse(data);
+    const data = JSON.parse(response.data);
     searchResponse.data = testDataService.getPage(data.page, data.perPage);
 
     if (data.titlesort !== undefined) {
@@ -41,29 +43,34 @@ mock
         result: searchResponse,
     })];
 })
-.onPost("/api/testentity/add").reply(({data}) => {
-    testDataService.add(JSON.parse(data));
+.onPost("/api/testentity/add").reply((response) => {
+    console.log(response);
+    testDataService.add(JSON.parse(response.data));
     return [200, new OperationResult({ status: 0 })];
 })
-.onGet(/\/api\/testentity\/get\/\d+/).reply((config) => {
-    const id = +config.url.substring(config.url.lastIndexOf("/") + 1);
+.onGet(/\/api\/testentity\/get\/\d+/).reply((response) => {
+    console.log(response);
+    const id = +response.url.substring(response.url.lastIndexOf("/") + 1);
     return [200, new OperationResult({ status: 0, result: testDataService.getById(id)})];
 })
-.onPut(/\/api\/testentity\/update\/\d+/).reply((config) => {
-    const id = +config.url.substring(config.url.lastIndexOf("/") + 1);
-    testDataService.edit(id, JSON.parse(config.data));
+.onPut(/\/api\/testentity\/update\/\d+/).reply((response) => {
+    console.log(response);
+    const id = +response.url.substring(response.url.lastIndexOf("/") + 1);
+    testDataService.edit(id, JSON.parse(response.data));
     return [200, new OperationResult({ status: 0 })];
 })
-.onDelete(/\/api\/testentity\/delete\/\d+/).reply((config) => {
-    const id = +config.url.substring(config.url.lastIndexOf("/") + 1);
+.onDelete(/\/api\/testentity\/delete\/\d+/).reply((response) => {
+    console.log(response);
+    const id = +response.url.substring(response.url.lastIndexOf("/") + 1);
     testDataService.remove(id);
     return [200, new OperationResult({ status: 0 })];
 })
-.onPost("/api/testentity/bulkdelete").reply(({data}) => {
-    testDataService.bulkDelete(data);
+.onPost("/api/testentity/bulkdelete").reply((response) => {
+    console.log(response);
+    testDataService.bulkDelete(JSON.parse(response.data));
     return [200, new OperationResult({ status: 0 })];
 })
-.onAny().reply((config) => {
-    console.error(`Unchatched mock ${config.url}`);
+.onAny().reply((response) => {
+    console.error(`Uncatched mock url ${response.url}`);
     return [500];
 });

@@ -215,7 +215,15 @@
             </v-flex>
             <v-flex class="pb-2" style="height: 48px; padding-top: 9px" 
                 v-else-if="filter.requestType == filterTypes['Eq'] && filter.inputType == filterInputTypes['Button']">
-                <v-btn style="height: 30px" small light @click="changeBtnValue()" :class="[filter.values[0] == true && !filter.buttonClickedText ? 'white--text' : 'black--text']" :color="filter.values[0] == true && !filter.buttonClickedText ? 'primary' : 'default'">{{ filter.buttonClickedText && filter.values[0] == true ? filter.buttonClickedText : filter.buttonText }}</v-btn>
+                <v-btn style="height: 30px" small light @click="changeBtnValue()" :class="['filterBtn', filter.values[0] == true || filter.buttonClickedText ? 'clicked' : 'released']">{{ filter.buttonClickedText && filter.values[0] == true ? filter.buttonClickedText : filter.buttonText }}</v-btn>
+            </v-flex>
+            <v-flex class="pb-2" style="height: 48px; padding-top: 9px" 
+                v-else-if="filter.requestType == filterTypes['In'] && filter.inputType == filterInputTypes['ButtonToggle'] && filter.buttonsForToggle">
+                <v-btn-toggle v-model="filter.values" light multiple class="filterBtnToggle">
+                    <v-btn style="height: 30px" small flat v-for="(btn, index) in filter.buttonsForToggle" :key="`${filter.name}${index}`" :value="btn.value" class="filterBtn">
+                        {{btn.text}}
+                    </v-btn>
+                </v-btn-toggle>
             </v-flex>
             <v-flex class="pr-2 pb-2 switcher" style="width: 180px; height: 48px; padding-top: 9px" 
                 v-else-if="filter.requestType == filterTypes['Eq'] && filter.inputType == filterInputTypes['Checkbox']">
@@ -508,9 +516,23 @@ export default class TableFilterComponent extends Vue {
         height: 20px !important;
         left: 0;
     }
+    
 </style>
 
 <style>
+    .filterBtnToggle {
+        
+    }
+    
+    .filterBtn.released {
+        color: rgba(0,0,0,.4) !important;
+    }
+
+    .filterBtn.clicked {
+        color: rgba(0,0,0,.87) !important;
+        background-color: rgb(221, 221, 221) !important;
+    }
+
     .closeFilterMenuBtn {
         padding: 2px 4px 4px;
         text-align: right;
