@@ -372,8 +372,8 @@ export default class TableFilterComponent extends Vue {
 
     changeBtnValue() {
         this.filter.values[0] = !this.filter.values[0];
-        if(this.filter.buttonClickedText) {
-            if (this.filter.values[0] == true) {
+        if (this.filter.buttonClickedText) {
+            if (this.filter.values[0] === true) {
                 this.buttonText = this.filter.buttonClickedText;
             } else {
                 this.buttonText = this.filter.buttonText;
@@ -396,11 +396,12 @@ export default class TableFilterComponent extends Vue {
         }
         if (this.filter.inputType === this.filterInputTypes["Date"]) {
             if (!this.filter.values) {
-                this.filter.values = [];
+                this.filter.values = [undefined];
             }
         }
         if (newVal) {
-            if (this.applyFilterButtonVisibility === false && (newVal[0] === null || newVal[0] === "" || newVal.length === 0)) {
+            if (this.applyFilterButtonVisibility === false && 
+            (newVal[0] === null || newVal[0] === "" || newVal.length === 0)) {
                 this.applyFilterButton = false;
             } else {
                 if (!this.appliedFromQuery) {
