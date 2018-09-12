@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import { Component, Emit, Prop, Vue, Watch } from "vue-property-decorator";
-import { TableComponentAction } from "../TableComponent/TableAction";
+import ActionItem from "./ActionItem";
 
 @Component({
     name: "a-actionbar"
@@ -44,7 +44,7 @@ import { TableComponentAction } from "../TableComponent/TableAction";
 export default class ActionbarComponent extends Vue{
     @Prop({default: "primary"}) actionbarColor: string;
     @Prop({default: true}) actionbarIsDark: boolean;
-    @Prop({required: true}) actions: TableComponentAction[];
+    @Prop({required: true}) actions: ActionItem[];
     @Prop({default: false}) itemSelected: boolean;
     @Prop({default: null}) innerSelected: any[];
     @Prop({default: 0}) updateActionBar: number;
@@ -145,7 +145,7 @@ export default class ActionbarComponent extends Vue{
         }
     }
 
-    executeAction(action: TableComponentAction) {
+    executeAction(action: ActionItem) {
         if (action.action) {
             if (action.needSelectedItem) {
                 action.action(this.innerSelected);

@@ -9,9 +9,9 @@ import FormComponent from "./Components/FormComponent/FormComponent.vue";
 import FormControlComponent from "./Components/FormComponent/FormControlComponent.vue";
 import ListComponent from "./Components/ListComponent/ListComponent.vue";
 import ListDialogComponent from "./Components/ListDialogComponent/ListDialogComponent.vue";
+import TableComponent from "./Components/NewTableComponent/TableComponent.vue";
 import NotificationComponent from "./Components/NotificationComponent/NotificationComponent.vue";
 import SidebarComponent from "./Components/SidebarComponent/SidebarComponent.vue";
-import TableComponent from "./Components/TableComponent/TableComponent.vue";
 import TableFilterComponent from "./Components/TableFilterComponent/TableFilterComponent.vue";
 import UserProfileComponent from "./Components/UserProfileComponent/UserProfileComponent.vue";
 Vue.use(Vuetify, {

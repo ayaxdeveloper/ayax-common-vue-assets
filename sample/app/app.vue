@@ -64,8 +64,7 @@ export default class App extends VueInjection {
             href: "/",
             isSystem: true
         }),
-        new SidebarComponentItem({title: "LIST", icon: "mdi-format-list-checkbox", route: "/list-test/list"}),
-        new SidebarComponentItem({title: "LIST-DIALOG", icon: "mdi-inbox", route: "/list-dialog-test"}),
+        new SidebarComponentItem({title: "TABLE", icon: "mdi-format-list-checkbox", route: "/table-test"}),
         new SidebarComponentItem({
             title: "НАСТРОЙКИ",
             icon: "mdi-wrench",
