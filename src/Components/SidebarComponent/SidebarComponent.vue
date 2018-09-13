@@ -31,12 +31,11 @@
                         </v-list-tile>
                         <v-list-tile v-if="item.subItems.length > 0"
                             v-for="subItem in item.subItems.filter(subItem => subItem.visible)" :key="subItem.title" 
-                            @click="click($event, subItem)"
-                            @click.middle="clickMiddle($event, subItem)">
-                            <v-list-tile-action>
+                            @click="click($event, subItem)">
+                            <v-list-tile-action @click.middle="clickMiddle($event, subItem)">
                                 <v-icon>{{ subItem.icon }}</v-icon>
                             </v-list-tile-action>
-                            <v-list-tile-content>
+                            <v-list-tile-content @click.middle="clickMiddle($event, subItem)">
                                 <v-list-tile-title :title="subItem.title">{{ subItem.title }}</v-list-tile-title>
                             </v-list-tile-content>
                         </v-list-tile>
@@ -64,12 +63,11 @@
                     </v-list-tile-action>
                 </v-list-tile>
                 <v-list-tile v-if="item.subItems.length > 0" v-for="subItem in item.subItems" :key="subItem.title" 
-                    @click="click($event, subItem)"
-                    @click.middle="clickMiddle($event, subItem)">
-                    <v-list-tile-action>
+                    @click="click($event, subItem)">
+                    <v-list-tile-action  @click.middle="clickMiddle($event, subItem)">
                         <v-icon>{{ subItem.icon }}</v-icon>
                     </v-list-tile-action>
-                    <v-list-tile-content>
+                    <v-list-tile-content @click.middle="clickMiddle($event, subItem)">
                         <v-list-tile-title :title="subItem.title">{{ subItem.title }}</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
