@@ -37,7 +37,7 @@ import TableOptions from "../../src/Components/NewTableComponent/TableOptions";
 export default class TableTestLayout extends Vue {
     @Inject() operationService: IOperationService;
     options: TableOptions = new TableOptions({
-        pagination: new Pagination({page: 1, rowsPerPage: 5}),
+        pagination: new Pagination({page: 1, rowsPerPage: 10}),
         getData: (pagination: Pagination) => this.operationService.post<SearchResponse<any>>("/testentity/search", pagination),
         headers: [
             TableComponentHeader.String({value: "id", text: "Id"}),
@@ -49,11 +49,13 @@ export default class TableTestLayout extends Vue {
         ],
         actions: [
             new ActionItem({
-            icon: "mdi-arrow-right", 
-            title: "Открыть", 
-            name: "show",
-            single: true
-        }),
+                icon: "mdi-arrow-right", 
+                title: "Открыть", 
+                name: "show",
+                single: true,
+                action: (asd) => console.log(asd)
+                
+            }),
         ]
     });
 

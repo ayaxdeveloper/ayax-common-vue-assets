@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :id="options.tableName" class="actionbarContainer" style="position: relative">
         <v-data-table
             :headers="options.headers"
             :items="items"
@@ -9,76 +9,106 @@
             disable-initial-sort
             item-key="id"
             no-results-text="Ничего не найдено"
-            class="elevation-1"
+            :class="[
+                'elevation-1', 
+                'a-table-component', 
+                'mainAnchor', 
+                'scrollableTable', 
+                items.length > 10 ? 'scrollableTableOverflow' : ''
+            ]"
+            :style="items.length > 10 ? `--maxHeight: ${options.maxHeight}px` : ''"
+            v-resize="onTableResize"
         >
         <template slot="headers" slot-scope="props">
-            <tr style="height: 36px">
+            <tr class="fixedTableHeader">
                 <th v-if="options.selectable" class="line-action">
                     <v-checkbox v-if="!options.selectableSingle"
-                        :input-value="props.all"
-                        :indeterminate="props.indeterminate"
                         primary
+                        class="pb-1"
+                        :input-value="selectedItems.length === items.length && items.length > 0 ? true : false"
                         color="primary"
+                        :indeterminate="selectedItems.length > 0 && selectedItems.length !== items.length"
                         hide-details
-                        @click.native="toggleAll"
+                        @click.stop="toggleAll()"
                     ></v-checkbox>
                 </th>
-                <!-- <th class="text-xs-center line-action" 
-                    v-if="options.actions && options.actions.filter(x => x.single && x.active).length > 0">
+                <th class="text-xs-center line-action" 
+                    v-if="options.actions && options.actions.filter(x => x.single && x.active).length > 0"
+                >
                     <v-icon>mdi-dots-horizontal</v-icon>
-                </th> -->
+                </th>
                 <th v-for="header in props.headers.filter(x => x.isVisible)" :key="header.value"
                     :class="[header.align == 'right' ? 'text-xs-right' : 'text-xs-left', 'black--text']"
                 >
                     {{ header.text.toUpperCase() }}
                 </th>
             </tr>
+            <tr :id="options.tableName + '-static-header'" style="height: 36px">
+                <th v-if="options.selectable" class="line-action">
+                    <v-checkbox v-if="!options.selectableSingle"
+                        primary
+                        class="pb-1"
+                        hide-details
+                    ></v-checkbox>
+                </th>
+                <th class="text-xs-center line-action" 
+                    v-if="options.actions && options.actions.filter(x => x.single && x.active).length > 0"
+                >
+                    <v-icon>mdi-dots-horizontal</v-icon>
+                </th>
+                <th v-for="header in props.headers.filter(x => x.isVisible)" :key="header.value"
+                    :class="[header.align == 'right' ? 'text-xs-right' : 'text-xs-left', 'black--text']"
+                    style="color: #fff !important; background-color: #fff !important"
+                >
+                    {{ header.text.toUpperCase() }}
+                </th>
+            </tr>
         </template>
         <template slot="items" slot-scope="props">
-            <tr>
-                <td v-if="options.selectable" class="line-action">
+            <tr :style="{ backgroundColor: options.rowColor(props.item), verticalAlign: 'baseline' }">
+                <td v-if="options.selectable" 
+                    style="width: 48px; padding: 0 0 0 16px !important; vertical-align: top"
+                >
                     <v-checkbox
-                        :input-value="props.selected"
+                        v-model="props.item.selected"
                         primary
+                        class="pt-2"
                         hide-details
                         color="primary"
                     ></v-checkbox>
                 </td>
-                <!-- <td class="text-xs-right line-action" 
+                <td class="text-xs-right line-action" 
                     v-if="options.actions && options.actions.filter(x => x.single && x.active).length > 0">
                     <div class="text-xs-center">
-                        <v-menu :disabled="itemSelected" offset-x>
+                        <v-menu :disabled="selectedItems.length > 0" offset-x offset-y>
                             <v-btn 
-                            color="primary" 
-                            :disabled="itemSelected"
+                            :disabled="selectedItems.length > 0"
+                            color="primary"
                             dark 
                             flat
                             slot="activator"
                             small
                             icon
-                            :ripple="false"
                             >
                                 <v-icon>mdi-dots-horizontal</v-icon>
                             </v-btn>
-                            <v-list
-                            dark
-                            dense>
+                            <v-list dark dense>
                                 <v-list-tile 
-                                v-for="action in options.actions.filter(action => action.single && action.active)" 
-                                :key="action.name"
-                                @click="onRowAction(props.item, action.name)">
-                                    <v-list-tile-action
-                                    v-if="action.icon">
+                                    v-for="action in options.actions.filter(action => action.single && action.active)" 
+                                    :key="action.name"
+                                    @click="executeSingleAction(action.name, props.item)"
+                                >
+                                    <v-list-tile-action v-if="action.icon">
                                         <v-icon>{{action.icon}}</v-icon>
                                     </v-list-tile-action>
-                                    <v-list-tile-title 
-                                    v-if="action.title && !action.onlyIcon"
-                                    >{{ action.title }}</v-list-tile-title>
+                                    <v-list-tile-title v-if="action.title && !action.onlyIcon">
+                                        {{ action.title }}
+                                    </v-list-tile-title>
                                 </v-list-tile>
                             </v-list>
                         </v-menu>
                     </div>
-                </td> -->
+                </td>
                 <td v-for="(header, index) in options.headers.filter(x => x.isVisible)" :key="index"
                     :class="[header.align == 'right' ? 'text-xs-right' : 'text-xs-left']"
                 >
@@ -98,11 +128,15 @@
             </tr>
         </template>
         </v-data-table>
-        <div class="text-xs-center mt-2">
+        <div style="position: relative" class="text-xs-center mt-2">
             <v-pagination v-if="options.pagination" total-visible="10" 
                 v-model="options.pagination.page" :length="getTotalPages()"
             >
             </v-pagination>
+            <div class="custom-pagination">
+                <v-select dense :items="customPagination">
+                </v-select>
+            </div>
         </div>
     </div>
 </template>
@@ -111,6 +145,7 @@
 import { INotificationProvider } from "ayax-common-types";
 import Vue from "vue";
 import { Component, Inject, Prop, Watch } from "vue-property-decorator";
+import resize from "vue-resize-directive";
 import { BusyLoadingComponent, TableComponentHeader } from "../..";
 import TableOptions from "./TableOptions";
 
@@ -118,6 +153,9 @@ import TableOptions from "./TableOptions";
     name: "TableComponent",
     components: {
         "a-busy-loading": BusyLoadingComponent
+    },
+    directives: {
+        resize
     }
 })
 export default class TableComponent extends Vue {
@@ -126,9 +164,14 @@ export default class TableComponent extends Vue {
     @Prop({default: () => ({ tableIndex: null, toggleValue: false })}) slotToggle;
     
     items = [];
-    selectedItems = [];
     loading = false;
     tableLoading = true;
+    fixedTableHeader: HTMLElement;
+    customPagination = [10, 20, 30, 50, 100];
+
+    get selectedItems() {
+        return this.items.filter(item => item.selected);
+    }
 
     @Watch("options.pagination.page")
     onPageChange(newVal, oldVal) {
@@ -153,30 +196,70 @@ export default class TableComponent extends Vue {
         await this.loadData();
     }
 
+    mounted() {
+        this.fixedTableHeader = document.querySelector(`#${this.options.tableName} .fixedTableHeader`) as HTMLElement;
+        const tableScroll = document.querySelector(`#${this.options.tableName} .v-table__overflow`) as HTMLElement;
+
+        tableScroll.addEventListener("scroll", () => this.onTableScroll(tableScroll.scrollTop));
+    }
+
+    executeSingleAction(actionName: string, item: any) {
+        if (actionName) {
+            const singleAction = this.options.actions.find(action => action.name === actionName);
+            
+            if (singleAction) {
+                singleAction.action(item);
+            }
+        }
+    }
+
+    resizeFixedHeader() {
+        const staticHeader = document
+            .querySelector(`#${this.options.tableName} #${this.options.tableName + "-static-header"}`)
+            .querySelectorAll("th");
+
+        const header = document
+            .querySelectorAll(`#${this.options.tableName} .fixedTableHeader th`) as HTMLCollectionOf<HTMLElement>;
+        
+        for (let i = 0; i < staticHeader.length; i++) {
+            header[i].style.width = `${staticHeader[i].offsetWidth}px`;
+            header[i].style.minWidth = `${staticHeader[i].offsetWidth}px`;
+        }
+    }
+
+    onTableScroll(scrollTop) {
+        this.fixedTableHeader.style.top = `${scrollTop}px`;
+    }
+
+    onTableResize() {
+        this.resizeFixedHeader();
+    }
+
     async loadData() {
         try {
             this.tableLoading = true;
             await this.options.getData(this.options.pagination).then(resp => {
+                for (let i = 0; i < resp.result.data.length; i++) {
+                    resp.result.data[i].tableIndex = i;
+                    resp.result.data[i].slotToggle = false;
+                    resp.result.data[i].selected = false;
+                }
                 this.items = resp.result.data;
                 this.options.pagination.totalItems = resp.result.total;
             });
-            for (let i = 0; i < this.items.length; i++) {
-                this.items[i].tableIndex = i;
-                this.items[i].slotToggle = false;
-                this.items[i].selected = false;
-            }
         } catch (e) {
-            this.notificationProvider.Error("Не удалось получить данные");
+            this.notificationProvider.Error("Ошибка получения данных");
+            console.error(e);
         } finally {
             this.tableLoading = false;
         }
     }
 
     toggleAll() {
-        if (this.selectedItems.length) {
-            this.selectedItems = [];
+        if (this.selectedItems.length === 0) {
+            this.items.forEach(item => item.selected = true);
         } else {
-            this.selectedItems = this.items.slice();
+            this.items.forEach(item => item.selected = false);
         }
     }
 
@@ -221,11 +304,42 @@ export default class TableComponent extends Vue {
 }
 </script>
 
+<style>
+    .scrollableTable .v-table__overflow {
+        max-height: var(--maxHeight);
+        position: relative;
+    }
+    .scrollableTableOverflow .v-table__overflow {
+        overflow-y: scroll;
+    }
+</style>
+
+
 <style scoped>
+    .a-table-component td {
+        height: auto;
+    }
     .line-action {
         width: 48px;
         padding: 0 !important;
         padding-left: 16px !important; 
+    }
+    .fixedTableHeader {
+        height: 36px;
+        background-color: #fff;
+        border-bottom: 1px solid #ccc;
+        position: absolute;
+        left: 0;
+        z-index: 1;
+    }
+    .fixedTableHeader th {
+        height: 36px;
+    }
+    .custom-pagination {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
     }
 </style>
 

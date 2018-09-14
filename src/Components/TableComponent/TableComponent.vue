@@ -738,7 +738,7 @@ export default class TableComponent extends Vue {
 </script>
 
 <style>
-    .filter-row {
+    /* .filter-row {
         border-bottom: 1px solid rgba(0,0,0,.12) !important;
         height: 32px !important;
     }
@@ -752,7 +752,7 @@ export default class TableComponent extends Vue {
     }
     .scrollableTableOverflow .v-table__overflow {
         overflow-y: scroll;
-    }
+    } */
 </style>
 
 <style scoped>
