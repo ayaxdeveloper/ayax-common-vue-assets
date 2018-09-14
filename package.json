@@ -1,6 +1,6 @@
 {
   "name": "ayax-common-vue-assets",
-  "version": "3.3.45",
+  "version": "3.3.46",
   "main": "dist/build.js",
   "description": "Ayax Common Vue Assets package for Vue Typescript projects",
   "scripts": {
@@ -25,7 +25,7 @@
     "ayax-common-cache": "^3.0.13",
     "ayax-common-helpers": "^2.2.3",
     "ayax-common-operation": "^1.0.21",
-    "ayax-common-types": "^3.0.20",
+    "ayax-common-types": "^3.0.24",
     "element-ui": "2.2.0",
     "moment": "^2.20.1",
     "roboto-fontface": "^0.9.0",

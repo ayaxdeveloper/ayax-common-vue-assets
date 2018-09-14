@@ -3,9 +3,7 @@
         <v-breadcrumbs-item 
             v-for="item in items" :key="item.text"
             :disabled="item.disabled" 
-            :replace="true" router
-            @click.native="routeTo(item)"
-            >
+            :to="item.route">
             {{item.text}}
         </v-breadcrumbs-item>
     </v-breadcrumbs>
@@ -19,38 +17,35 @@ import { BreadCrumbItem } from "./BreadcrumbItem";
     name: "a-breadcrumbs"
 })
 export default class BreadcrumbsComponent extends Vue {
-    @Watch("$route")
-    onRouteChanged(to, from) {
-        this.items = this.getItemsFromPath(to.path);
-    }
-    @Prop() breadcrumbsNames;
-    items: any[];
-    data() {
-        return {
-            items: this.getItemsFromPath(this.$route.path)
-        };
-    }
-    
-    getItemsFromPath(path) { 
-        const result: BreadCrumbItem[] = [];
-        const routes = path.split("/");
-        if (!routes) return result;
-        if (routes[routes.length - 1] === "") {
-            routes.pop();
-        }
-        for (let i = 0; i < routes.length; i++) {
-            if (!this.breadcrumbsNames[routes[i]]) continue;
-            result.push( new BreadCrumbItem ({
-                text: this.breadcrumbsNames[routes[i]].name, 
-                disabled: i === routes.length - 1,
-                route: this.breadcrumbsNames[routes[i]].route
-            }));
-        }
-        return result;
+    items = [];
+
+    created() {
+        this.$router.afterEach((to, from) => {
+            this.FillBreadcrumbsFromRouteMetedata();
+        });
     }
 
-    routeTo(item) {
-        this.$router.push({ name: item.route });
+    mounted() {
+        this.FillBreadcrumbsFromRouteMetedata();
+    }
+
+    FillBreadcrumbsFromRouteMetedata() {
+        this.items = [{
+            text: "Главная",
+            route: "/",
+            disabled: true
+        }];
+        const routeBreadcrumbs = this.$route.meta.breadcrumbs;
+        if(routeBreadcrumbs && routeBreadcrumbs.length > 0) {
+            this.items[0].disabled = false;
+            routeBreadcrumbs.forEach(x => {
+                this.items.push({
+                    text: x.text,
+                    route: x.route,
+                    disabled: !x.route
+                })
+            });
+        }
     }
 }
 </script>
