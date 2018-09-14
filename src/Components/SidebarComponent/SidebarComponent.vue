@@ -50,6 +50,7 @@
             :prepend-icon="item.icon"
             append-icon=""
             :value="item.expanded"  
+            :class="[item.selected ? 'selected' : '']"
             @click="click($event, item)"
             @click.middle="clickMiddle($event, item)">
                 <v-list-tile slot="activator">
@@ -62,9 +63,10 @@
                         </v-btn>
                     </v-list-tile-action>
                 </v-list-tile>
-                <v-list-tile v-if="item.subItems.length > 0" v-for="subItem in item.subItems" :key="subItem.title" 
+                <v-list-tile v-for="subItem in item.subItems" :key="subItem.title" 
+                    :class="[subItem.selected ? 'selected' : '']"
                     @click="click($event, subItem)">
-                    <v-list-tile-action  @click.middle="clickMiddle($event, subItem)">
+                    <v-list-tile-action  @click.middle="clickMiddle($event, subItem)" >
                         <v-icon>{{ subItem.icon }}</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content @click.middle="clickMiddle($event, subItem)">
@@ -100,6 +102,37 @@ export default class SidebarComponent extends Vue {
     
     async created() {
         this.currentUser = await this.authService.GetCurrentUser();
+        this.$router.beforeEach((to, from, next) => {
+            this.FillActiveItemFromRoute(to.path);
+            next();
+        });
+    }
+
+    mounted() {
+        this.FillActiveItemFromRoute(this.$router.currentRoute.path);
+    }
+
+    FillActiveItemFromRoute(routePath : string) {
+        this.items.forEach(element => {
+            element.selected = false;
+            element.subItems.forEach(subElement => {
+                subElement.selected = false;
+            });
+        });
+        this.items.filter(x => !x.isSystem).some(item => {
+            if (item.route === routePath) {
+                item.selected = true;
+                return true;
+            } else if (item.subItems && item.subItems.length > 0) {
+                if (item.subItems.some(subItem => subItem.selected = subItem.route === routePath)) {
+                    item.expanded = true;
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            return false;
+        });
     }
 
     @Watch("value")
@@ -216,4 +249,17 @@ export default class SidebarComponent extends Vue {
         width: 224px; 
     }
 
+    .v-list__group.selected {
+        background-color: rgb(250, 250, 250);
+        color: rgba(0, 0, 0, 0.87);
+    }
+
+    .v-list__group.selected >>> .v-icon {
+        color: rgba(0, 0, 0, 0.87);
+    }
+
+    .selected {
+        background-color: rgb(250, 250, 250);
+        color: rgba(0, 0, 0, 0.87);
+    }
 </style>

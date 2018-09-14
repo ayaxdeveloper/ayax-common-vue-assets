@@ -8,6 +8,7 @@ export class SidebarComponentItem {
     subItems?: SidebarComponentItem[] = [];
     newTab = false;
     expanded = false;
+    selected = false;
     arrowDirection = "mdi-chevron-down";
     constructor(init?: Partial<SidebarComponentItem>) {
         if (init) { 
