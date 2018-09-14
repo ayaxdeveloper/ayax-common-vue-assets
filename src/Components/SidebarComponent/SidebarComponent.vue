@@ -102,9 +102,8 @@ export default class SidebarComponent extends Vue {
     
     async created() {
         this.currentUser = await this.authService.GetCurrentUser();
-        this.$router.beforeEach((to, from, next) => {
+        this.$router.afterEach((to, from) => {
             this.FillActiveItemFromRoute(to.path);
-            next();
         });
     }
 
@@ -260,6 +259,10 @@ export default class SidebarComponent extends Vue {
 
     .selected {
         background-color: rgb(250, 250, 250);
+        color: rgba(0, 0, 0, 0.87);
+    }
+
+    .selected >>> .v-icon {
         color: rgba(0, 0, 0, 0.87);
     }
 </style>
