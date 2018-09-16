@@ -42,6 +42,8 @@
                 >
                     {{ header.text.toUpperCase() }}
                 </th>
+                <v-progress-linear :active="tableLoading" height="2" style="margin: 0px" :indeterminate="true">
+                </v-progress-linear>
             </tr>
             <tr :id="options.tableName + '-static-header'" style="height: 36px">
                 <th v-if="options.selectable" class="line-action">
@@ -133,10 +135,13 @@
                 v-model="options.pagination.page" :length="getTotalPages()"
             >
             </v-pagination>
-            <div class="custom-pagination">
-                <v-select dense :items="customPagination">
+            <v-layout class="custom-pagination">
+                <div class="pt-2 pr-4">Cтрок на странице: </div>
+                <v-select v-model="options.pagination.rowsPerPage" 
+                    style="padding-top: 0px; width: 50px" dense :items="customPagination"
+                >
                 </v-select>
-            </div>
+            </v-layout>
         </div>
     </div>
 </template>
@@ -182,7 +187,11 @@ export default class TableComponent extends Vue {
 
     @Watch("options.pagination.rowsPerPage")
     onPerPageChange() {
-        this.options.pagination.page = 1;
+        if (this.options.pagination.page === 1) {
+            this.loadData();
+        } else {
+            this.options.pagination.page = 1;
+        }
     }
 
     @Watch("slotToggle")
