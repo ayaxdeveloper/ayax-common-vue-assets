@@ -1,7 +1,6 @@
 <template>
     <v-menu 
     offset-y
-    open-on-hover 
     bottom>
         <v-btn
         slot="activator"

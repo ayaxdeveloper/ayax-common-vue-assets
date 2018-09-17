@@ -1,5 +1,14 @@
 <template>
     <div :id="options.tableName" class="actionbarContainer" style="position: relative">
+        <a-table-topbar
+            :title="options.title"
+            :topbarColor="options.topbarColor"
+            :darkTopbar="options.darkTopbar"
+            :itemsQuantity="options.pagination.totalItems"
+            :filters.sync="options.filters"
+            @apply-filter="loadData"
+        >
+        </a-table-topbar>
         <v-data-table
             :headers="options.headers"
             :items="items"
@@ -130,15 +139,25 @@
             </tr>
         </template>
         </v-data-table>
+        <div class="actionbarAnchor">
+            <a-actionbar 
+                v-if="options.actions && options.actions.filter(el => !el.single && el.active).length > 0"
+                :actions="options.actions.filter(action => !action.single && action.active)"
+                :selectedItems="selectedItems"
+                :actionbarColor="options.actionbarColor"
+                :darkActionbar="options.darkActionbar"
+            >
+            </a-actionbar>
+        </div>
         <div style="position: relative" class="text-xs-center mt-2">
             <v-pagination v-if="options.pagination" total-visible="10" 
                 v-model="options.pagination.page" :length="getTotalPages()"
             >
             </v-pagination>
             <v-layout class="custom-pagination">
-                <div class="pt-2 pr-4">Cтрок на странице: </div>
+                <div class="pt-2 pr-3">Cтрок на странице: </div>
                 <v-select v-model="options.pagination.rowsPerPage" 
-                    style="padding-top: 0px; width: 50px" dense :items="customPagination"
+                    style="margin-top: 4px; width: 50px" dense :items="customPagination"
                 >
                 </v-select>
             </v-layout>
@@ -151,12 +170,15 @@ import { INotificationProvider } from "ayax-common-types";
 import Vue from "vue";
 import { Component, Inject, Prop, Watch } from "vue-property-decorator";
 import resize from "vue-resize-directive";
-import { BusyLoadingComponent, TableComponentHeader } from "../..";
+import { ActionbarComponent, BusyLoadingComponent, TableComponentHeader } from "../..";
 import TableOptions from "./TableOptions";
+import TableTopbarComponent from "./TableTopbarComponent.vue";
 
 @Component({
     name: "TableComponent",
     components: {
+        "a-table-topbar": TableTopbarComponent,
+        "a-actionbar": ActionbarComponent,
         "a-busy-loading": BusyLoadingComponent
     },
     directives: {
@@ -264,6 +286,21 @@ export default class TableComponent extends Vue {
         }
     }
 
+    // AddFilter(request) {
+    //     const filteredRequest = {...request};
+    //     this.tableFilters.filter(x => x.values.length > 0)
+    //     .forEach((filter) => {           
+    //         const filters = filter.FormRequestFilters();
+    //         if (filters) {
+    //             filteredRequest[filter.requestName] = filters;
+    //         }
+    //     });
+    //     this.headers.filter(x => x.sortBy).forEach((header) => {
+    //         filteredRequest[`${header.value}sort`] = header.sortBy;
+    //     });
+    //     return filteredRequest; 
+    // }
+
     toggleAll() {
         if (this.selectedItems.length === 0) {
             this.items.forEach(item => item.selected = true);
@@ -321,6 +358,16 @@ export default class TableComponent extends Vue {
     .scrollableTableOverflow .v-table__overflow {
         overflow-y: scroll;
     }
+    .a-table-component table.v-table tbody td:first-child, 
+    .a-table-component table.v-table tbody td:not(:first-child), 
+    .a-table-component table.v-table tbody th:first-child, 
+    .a-table-component table.v-table tbody th:not(:first-child), 
+    .a-table-component table.v-table thead td:first-child, 
+    .a-table-component table.v-table thead td:not(:first-child), 
+    .a-table-component table.v-table thead th:first-child, 
+    .a-table-component table.v-table thead th:not(:first-child) {
+        padding: 0 8px;
+    }
 </style>
 
 
@@ -349,6 +396,9 @@ export default class TableComponent extends Vue {
         right: 0;
         top: 0;
         bottom: 0;
+    }
+    .actionbarAnchor {
+        height: 48px;
     }
 </style>
 

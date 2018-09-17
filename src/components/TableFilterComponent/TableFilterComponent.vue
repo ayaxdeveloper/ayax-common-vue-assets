@@ -3,98 +3,14 @@
         <div v-if="filter.appearance != filterAppearance['AllFilters'] || filter.inputType == filterInputTypes['Button']" style="position: relative">
             <v-btn 
             v-if="applyFilterButton"
-            :class="[header == null ? 'table-filter-apply-btn_topbar' : 'table-filter-apply-btn_header']"
+            class="table-filter-apply-btn_topbar"
             color="blue darken-1" small
             @click="applyFilter">
                 Применить
             </v-btn>
         </div>
-        
-        <template v-if="header != null">
-            <template v-if="(filter.requestType == filterTypes['Eq'] || filter.requestType == filterTypes['Like']) && filter.inputType == filterInputTypes['Text']">
-                <v-text-field                 
-                :name="filter.requestName" 
-                persistent-hint 
-                class="table-filter-input" 
-                :mask="getMask()" 
-                v-model="filter.values[0]" 
-                clearable
-                :hint="getHint()"></v-text-field>
-            </template>
-            <template v-else-if="filter.requestType == filterTypes['Range']">
-                <template v-if="filter.inputType == filterInputTypes['Date']">
-                    <el-date-picker
-                    class="date-range"
-                    v-model="filter.values"
-                    type="daterange"
-                    format="dd.MM.yyyy"
-                    value-format="yyyy.MM.dd"
-                    size="small"
-                    clearable
-                    :picker-options="{firstDayOfWeek: 1}"
-                    align="right"
-                    start-placeholder="Начало"
-                    end-placeholder="Конец">
-                    </el-date-picker>
-                </template>
-                <template v-else>
-                    <v-flex xs6>
-                        <v-text-field                         
-                        :name="filter.requestName" 
-                        single-line 
-                        hint="Начало" 
-                        persistent-hint 
-                        class="table-filter-input" 
-                        return-masked-value 
-                        :mask="getMask()" 
-                        clearable
-                        v-model="filter.values[0]"/>
-                    </v-flex>
-                    <v-flex xs6>
-                        <v-text-field
-                        @input="applyFilterButton = filter.values[1]" 
-                        :name="filter.requestName" 
-                        single-line 
-                        hint="Конец" 
-                        persistent-hint 
-                        class="table-filter-input" 
-                        return-masked-value 
-                        :mask="getMask()" 
-                        v-model="filter.values[1]"/>
-                    </v-flex>
-                </template>
-            </template>
-            <template v-else-if="filter.requestType == filterTypes['Eq'] && filter.inputType == filterInputTypes['Select']">
-                <v-autocomplete
-                :name="filter.requestName" 
-                :items="filter.selectItems" 
-                class="table-filter-select" 
-                v-model="filter.values[0]" 
-                :hint="getHint()" 
-                persistent-hint 
-                clearable
-                dense
-                no-data-text="Нет совпадений"
-                ></v-autocomplete>
-            </template>
-            <template v-else-if="filter.requestType == filterTypes['In'] && filter.inputType == filterInputTypes['Select']">
-                <v-autocomplete
-                :name="filter.requestName" 
-                :items="filter.selectItems" 
-                multiple 
-                class="table-filter-select" 
-                v-model="filter.values" 
-                :hint="getHint()" 
-                persistent-hint 
-                dense
-                no-data-text="Нет совпадений"
-                @input="applyFilterButton = true"
-                clearable></v-autocomplete>
-            </template>
-        </template>
 
-
-        <template v-if="header == null">
+        <template>
             <v-flex class="filter" 
                 v-if="(filter.requestType == filterTypes['Eq'] || filter.requestType == filterTypes['Like']) && filter.inputType == filterInputTypes['Text']">
                 <div class="filterLabel">{{ filter.label }}</div>
@@ -246,7 +162,6 @@ import { TableFilterComponentItemType } from "./TableFilterComponentItemType";
     name: "a-table-filter"
 })
 export default class TableFilterComponent extends Vue {
-    @Prop({default: null}) header: TableComponentHeader;
     @Prop({required: true}) filter: TableFilterComponentItem;
     @Prop() value: any;
     @Prop({default: 0}) index: number;
@@ -450,11 +365,6 @@ export default class TableFilterComponent extends Vue {
         }
     }
 
-    @Watch("header.dictionary")
-    onSelectItemsChange() {
-        this.$forceUpdate();
-    }
-
     @Emit()
     emitFilter(filterName: string) {}
 
@@ -498,6 +408,7 @@ export default class TableFilterComponent extends Vue {
     .filterLabel {
         height: 12px;
         font-size: 13px;
+        color: #fff;
     }
     .filterInput {
         width: 100%;
@@ -548,6 +459,9 @@ export default class TableFilterComponent extends Vue {
     .filter .v-input {
         font-size: 14px;
         margin-top: 0px;
+    }
+    .filter .v-text-field {
+        padding-top: 0px;
     }
     .filter .v-text-field input {
         padding: 0px;

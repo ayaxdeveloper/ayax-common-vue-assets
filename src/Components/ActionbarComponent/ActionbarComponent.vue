@@ -1,21 +1,27 @@
 <template>
     <div class="actionbar">
-        <v-toolbar :dark="actionbarIsDark" :class="actionbarColor" dense>
+        <v-toolbar :dark="darkActionbar" :class="actionbarColor" dense>
             <template v-for="action in actions">
                 <v-toolbar-items :key="action.name">
                     <v-btn v-if="!action.children"
-                    :title="action.hint"
-                    :disabled="action.needSelectedItem && !itemSelected" flat @click="executeAction(action)"
-                    :loading="action.loading"
-                    :class="hideButtonText ? 'iconButtonMinWidth' : ''">
+                        :title="action.hint"
+                        :disabled="action.needSelectedItem && selectedItems.length === 0" 
+                        flat 
+                        @click="executeAction(action)"
+                        :loading="action.loading"
+                        :class="hideButtonText ? 'iconButtonMinWidth' : ''"
+                    >
                         <v-icon :class="hideButtonText ? 'hiddenButtonText' : ''" left v-if="action.icon">{{action.icon}}</v-icon>
                         <template v-if="!hideButtonText || !action.icon">{{action.title}}</template>
                     </v-btn>
-                    <v-menu top offset-y :disabled="action.needSelectedItem && !itemSelected" v-if="action.children">
+                    <v-menu top offset-y 
+                        :disabled="action.needSelectedItem && selectedItems.length === 0" 
+                        v-if="action.children"
+                    >
                         <v-btn slot="activator"
                         :title="action.hint"
                         :loading="action.loading"
-                        :disabled="action.needSelectedItem && !itemSelected" flat
+                        :disabled="action.needSelectedItem && selectedItems.length === 0" flat
                         :class="hideButtonText ? 'iconButtonMinWidth' : ''">
                         <v-icon :class="hideButtonText ? 'hiddenButtonText' : ''" left v-if="action.icon">{{action.icon}}</v-icon>
                         <template v-if="!hideButtonText || !action.icon">{{action.title}}</template>
@@ -43,10 +49,9 @@ import ActionItem from "./ActionItem";
 })
 export default class ActionbarComponent extends Vue{
     @Prop({default: "primary"}) actionbarColor: string;
-    @Prop({default: true}) actionbarIsDark: boolean;
+    @Prop({default: true}) darkActionbar: boolean;
     @Prop({required: true}) actions: ActionItem[];
-    @Prop({default: false}) itemSelected: boolean;
-    @Prop({default: null}) innerSelected: any[];
+    @Prop({default: () => []}) selectedItems;
     @Prop({default: 0}) updateActionBar: number;
     actionbarContainer;
     actionbar;
@@ -148,12 +153,10 @@ export default class ActionbarComponent extends Vue{
     executeAction(action: ActionItem) {
         if (action.action) {
             if (action.needSelectedItem) {
-                action.action(this.innerSelected);
+                action.action(this.selectedItems);
             } else {
                 action.action();
             }
-        } else {
-            this.onBarAction(this.innerSelected.map(x => x.id), action.name);
         }
     }
 }
