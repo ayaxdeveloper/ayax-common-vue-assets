@@ -1,4 +1,4 @@
-import { DatePicker } from "element-ui";
+
 import Vue from "vue";
 import Vuetify from "vuetify";
 import ActionbarComponent from "./Components/ActionbarComponent/ActionbarComponent.vue";
@@ -21,7 +21,6 @@ Vue.use(Vuetify, {
 export default {
     // tslint:disable-next-line:variable-name
     install(Vue) {
-        Vue.component(DatePicker.name, DatePicker);
         Vue.component("a-table", TableComponent);
         Vue.component("a-table-filter", TableFilterComponent);
         Vue.component("a-form", FormComponent);
