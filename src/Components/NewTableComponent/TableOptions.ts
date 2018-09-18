@@ -4,7 +4,7 @@ import { TableFilterComponentItem } from "../TableFilterComponent/TableFilterCom
 import { TableComponentHeader } from "./TableHeader";
 
 export default class TableOptions {
-    getData: (pagination: Pagination) => Promise<any>;
+    getData: (request) => Promise<any>;
     tableName = "tableComponent";
     headers: TableComponentHeader[] = [];
     actions: ActionItem[] = [];
@@ -16,7 +16,7 @@ export default class TableOptions {
     actionbarColor = "primary";
     darkTopbar = true;
     darkActionbar = true;
-    pagination: Pagination = {page: 1, rowsPerPage: 10, totalItems: 0};
+    pagination: Pagination = {page: 1, perPage: 10, totalItems: 0};
     configurable = true;
     rowColor: (item) => string = () => "";
     maxHeight = 450;

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-toolbar flat dense :dark="darkTopbar" :class="topbarColor">
+        <v-toolbar class="table-topbar" flat dense :dark="darkTopbar" :class="topbarColor">
             <v-toolbar-title v-if="title.length > 0">
                 {{ title }}
                 <v-chip disabled title="Количество записей" label small 
@@ -103,32 +103,36 @@ export default class TableTopbarComponent extends Vue {
     filterTypes: {[name: string]: TableFilterComponentItemType} = {};
 
     created() {
-        Object.keys(TableFilterComponentItemAppearance).forEach(item => {
-            this.filterAppearance[item] = TableFilterComponentItemAppearance[item];
-        });
-        Object.keys(TableFilterComponentItemInputType).forEach(item => {
-            this.filterInputTypes[item] = TableFilterComponentItemInputType[item];
-        });
-        Object.keys(TableFilterComponentItemType).forEach(item => {
-            this.filterTypes[item] = TableFilterComponentItemType[item];
-        });
-
-        if (JSON.parse(localStorage.getItem(`${this.title}_show-all-filters`))) {
-            this.showAllFilters = true;
-        }
-
-        if (Object.keys(JSON.parse(JSON.stringify(this.$route.query))).length > 0) {
-            let filterCount = 0;
-            Object.keys(JSON.parse(JSON.stringify(this.$route.query))).forEach(key => {
-                const filter = this.filters.find(x => x.name === key);
-                if (filter) {
-                    filter.values = JSON.parse(this.$route.query[`${key}`]);
-                    filterCount++;
-                }
+        try {
+            Object.keys(TableFilterComponentItemAppearance).forEach(item => {
+                this.filterAppearance[item] = TableFilterComponentItemAppearance[item];
             });
-            if (filterCount > 0) {
-                this.applyFilter();
+            Object.keys(TableFilterComponentItemInputType).forEach(item => {
+                this.filterInputTypes[item] = TableFilterComponentItemInputType[item];
+            });
+            Object.keys(TableFilterComponentItemType).forEach(item => {
+                this.filterTypes[item] = TableFilterComponentItemType[item];
+            });
+
+            if (JSON.parse(localStorage.getItem(`${this.title}_show-all-filters`))) {
+                this.showAllFilters = true;
             }
+
+            if (Object.keys(JSON.parse(JSON.stringify(this.$route.query))).length > 0) {
+                let filterCount = 0;
+                Object.keys(JSON.parse(JSON.stringify(this.$route.query))).forEach(key => {
+                    const filter = this.filters.find(x => x.name === key);
+                    if (filter) {
+                        filter.values = JSON.parse(this.$route.query[`${key}`]);
+                        filterCount++;
+                    }
+                });
+            }
+        } catch (e) {
+            console.error(e);
+        }
+        finally {
+            this.applyFilter();
         }
     }
 
@@ -227,5 +231,11 @@ export default class TableTopbarComponent extends Vue {
     .slide-enter, .slide-leave-to {
         transform: translateY(-5px);
         opacity: 0;
+    }
+</style>
+
+<style>
+    .table-topbar .v-toolbar__content {
+        padding: 16px;
     }
 </style>

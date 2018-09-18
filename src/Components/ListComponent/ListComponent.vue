@@ -243,7 +243,7 @@ export default class ListComponent extends Vue {
 
         if (localStorage.getItem(`${this.tableIdentifier}_custom_pagination`)) {
             this.request.perPage = parseInt(localStorage.getItem(`${this.tableIdentifier}_custom_pagination`));
-            this.pagination.rowsPerPage = parseInt(localStorage.getItem(`${this.tableIdentifier}_custom_pagination`));
+            this.pagination.perPage = parseInt(localStorage.getItem(`${this.tableIdentifier}_custom_pagination`));
         }
 
         const headerPromises = this.headers.filter(x => (x.dictionary || x.dictionaryPromise) && !x.items).map(x => {
@@ -315,13 +315,13 @@ export default class ListComponent extends Vue {
         
     }
 
-    async changePagination(rowsPerPage: number) {
-        if (rowsPerPage !== 0) {
-            this.request.perPage = rowsPerPage;
-            this.pagination.rowsPerPage = rowsPerPage;
+    async changePagination(perPage: number) {
+        if (perPage !== 0) {
+            this.request.perPage = perPage;
+            this.pagination.perPage = perPage;
         } else {
             this.request.perPage = this.clientSettings.listRowsPerpage;
-            this.pagination.rowsPerPage = this.clientSettings.listRowsPerpage;
+            this.pagination.perPage = this.clientSettings.listRowsPerpage;
         }
 
         this.request.page = 1;

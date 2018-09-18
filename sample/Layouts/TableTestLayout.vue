@@ -44,10 +44,10 @@ export default class TableTestLayout extends Vue {
     @Inject() operationService: IOperationService;
     options: TableOptions = new TableOptions({
         title: "Тестовая таблица",
-        pagination: new Pagination({page: 1, rowsPerPage: 10}),
-        getData: (pagination: Pagination) => this.operationService.post<SearchResponse<any>>("/testentity/search", pagination),
+        pagination: new Pagination({page: 1, perPage: 10}),
+        getData: (request) => this.operationService.post<SearchResponse<any>>("/testentity/search", request),
         headers: [
-            TableComponentHeader.String({value: "id", text: "Id"}),
+            TableComponentHeader.String({value: "id", text: "Id", hiddenable: false}),
             TableComponentHeader.String({value: "code", text: "Код"}),
             TableComponentHeader.String({value: "title", text: "Наименование", sortable: true}),
             TableComponentHeader.String({value: "qq", text: "Статус обращений qq", custom: true}),
@@ -102,7 +102,7 @@ export default class TableTestLayout extends Vue {
                 requestType: TableFilterComponentItemType.Like,
                 placeholder: "Введите",
                 label: "Наименование",
-                active: false,
+                active: true,
             }),
             new TableFilterComponentItem({
                 name: "buttomToggleFilter",

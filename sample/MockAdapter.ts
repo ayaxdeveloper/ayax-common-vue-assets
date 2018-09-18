@@ -20,7 +20,7 @@ mock
     console.log(response);
     searchResponse.total = testDataService.getData().length;
     const data = JSON.parse(response.data);
-    searchResponse.data = testDataService.getPage(data.page, data.rowsPerPage);
+    searchResponse.data = testDataService.getPage(data.page, data.perPage);
 
     if (data.titlesort !== undefined) {
         searchResponse.data = testDataService.sortData(searchResponse.data, data.titlesort.isdesc);

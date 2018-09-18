@@ -1,6 +1,8 @@
 <template>
     <div :id="options.tableName" class="actionbarContainer" style="position: relative">
+        <a-busy-loading v-if="loading"></a-busy-loading>
         <a-table-topbar
+            v-show="!loading"
             :title="options.title"
             :topbarColor="options.topbarColor"
             :darkTopbar="options.darkTopbar"
@@ -8,8 +10,36 @@
             :filters.sync="options.filters"
             @apply-filter="loadData"
         >
+        <!-- <template slot="settings" v-if="options.configurable">
+            <v-menu bottom offset-y left offset-x :close-on-content-click="false" :value="isTableMenuVisible">
+                <v-btn class="ml-2" flat style="height: 30px; width: 30px" small icon title="Настройки таблицы" 
+                    slot="activator" 
+                    @click="isTableMenuVisible=true"
+                >
+                    <v-icon>mdi-settings</v-icon>
+                </v-btn>
+                <v-list dense>
+                    <draggable :list="options.headers" @update="onUpdateDraggable">
+                        <v-list-tile v-for="header in options.headers" :key="header.value" @click="">
+                            <v-list-tile-action>
+                                <v-checkbox color="primary" v-if="header.hiddenable" 
+                                    v-model="header.isVisible" @change="onChangeVisible(header)">
+                                </v-checkbox>
+                                <v-checkbox v-else input-value="true" disabled></v-checkbox>
+                            </v-list-tile-action>
+                            <v-list-tile-title>{{ header.text }}</v-list-tile-title>
+                        </v-list-tile>
+                    </draggable>
+                    <v-divider></v-divider>
+                        <v-list-tile @click="resetTableSettings()">
+                        <v-list-tile-title>Сбросить настройки таблицы</v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
+        </template> -->
         </a-table-topbar>
         <v-data-table
+            v-show="!loading"
             :headers="options.headers"
             :items="items"
             :total-items="1"
@@ -50,6 +80,11 @@
                     :class="[header.align == 'right' ? 'text-xs-right' : 'text-xs-left', 'black--text']"
                 >
                     {{ header.text.toUpperCase() }}
+                    <v-icon v-if="header.sortable" small @click="changeSort(header.value)"
+                        :class="[(header.sortBy && header.sortBy.isdesc !== undefined) ? 'black--text' : '']"
+                    >
+                        {{ (header.sortBy && header.sortBy.isdesc) ? 'mdi-arrow-down' : 'mdi-arrow-up' }}
+                    </v-icon>
                 </th>
                 <v-progress-linear :active="tableLoading" height="2" style="margin: 0px" :indeterminate="true">
                 </v-progress-linear>
@@ -139,7 +174,7 @@
             </tr>
         </template>
         </v-data-table>
-        <div class="actionbarAnchor">
+        <div v-show="!loading" class="actionbarAnchor">
             <a-actionbar 
                 v-if="options.actions && options.actions.filter(el => !el.single && el.active).length > 0"
                 :actions="options.actions.filter(action => !action.single && action.active)"
@@ -149,14 +184,14 @@
             >
             </a-actionbar>
         </div>
-        <div style="position: relative" class="text-xs-center mt-2">
+        <div v-show="!loading" style="position: relative" class="text-xs-center mt-2">
             <v-pagination v-if="options.pagination" total-visible="10" 
                 v-model="options.pagination.page" :length="getTotalPages()"
             >
             </v-pagination>
             <v-layout class="custom-pagination">
                 <div class="pt-2 pr-3">Cтрок на странице: </div>
-                <v-select v-model="options.pagination.rowsPerPage" 
+                <v-select v-model="options.pagination.perPage" 
                     style="margin-top: 4px; width: 50px" dense :items="customPagination"
                 >
                 </v-select>
@@ -166,10 +201,11 @@
 </template>
 
 <script lang="ts">
-import { INotificationProvider } from "ayax-common-types";
+import { INotificationProvider, SortableField } from "ayax-common-types";
 import Vue from "vue";
 import { Component, Inject, Prop, Watch } from "vue-property-decorator";
 import resize from "vue-resize-directive";
+import vuedraggable from "vuedraggable";
 import { ActionbarComponent, BusyLoadingComponent, TableComponentHeader } from "../..";
 import TableOptions from "./TableOptions";
 import TableTopbarComponent from "./TableTopbarComponent.vue";
@@ -179,7 +215,8 @@ import TableTopbarComponent from "./TableTopbarComponent.vue";
     components: {
         "a-table-topbar": TableTopbarComponent,
         "a-actionbar": ActionbarComponent,
-        "a-busy-loading": BusyLoadingComponent
+        "a-busy-loading": BusyLoadingComponent,
+        "draggable": vuedraggable
     },
     directives: {
         resize
@@ -191,10 +228,12 @@ export default class TableComponent extends Vue {
     @Prop({default: () => ({ tableIndex: null, toggleValue: false })}) slotToggle;
     
     items = [];
-    loading = false;
+    loading = true;
     tableLoading = true;
     fixedTableHeader: HTMLElement;
     customPagination = [10, 20, 30, 50, 100];
+    sortArrowDirection = "";
+    isTableMenuVisible = false;
 
     get selectedItems() {
         return this.items.filter(item => item.selected);
@@ -207,7 +246,7 @@ export default class TableComponent extends Vue {
         }
     }
 
-    @Watch("options.pagination.rowsPerPage")
+    @Watch("options.pagination.perPage")
     onPerPageChange() {
         if (this.options.pagination.page === 1) {
             this.loadData();
@@ -223,8 +262,8 @@ export default class TableComponent extends Vue {
         }
     }
 
-    async created() {
-        await this.loadData();
+    created() {
+        // await this.loadData();
     }
 
     mounted() {
@@ -269,7 +308,7 @@ export default class TableComponent extends Vue {
     async loadData() {
         try {
             this.tableLoading = true;
-            await this.options.getData(this.options.pagination).then(resp => {
+            await this.options.getData(this.AddFilter()).then(resp => {
                 for (let i = 0; i < resp.result.data.length; i++) {
                     resp.result.data[i].tableIndex = i;
                     resp.result.data[i].slotToggle = false;
@@ -283,23 +322,28 @@ export default class TableComponent extends Vue {
             console.error(e);
         } finally {
             this.tableLoading = false;
+            this.loading = false;
+            setTimeout(() => this.resizeFixedHeader(), 0);
         }
     }
 
-    // AddFilter(request) {
-    //     const filteredRequest = {...request};
-    //     this.tableFilters.filter(x => x.values.length > 0)
-    //     .forEach((filter) => {           
-    //         const filters = filter.FormRequestFilters();
-    //         if (filters) {
-    //             filteredRequest[filter.requestName] = filters;
-    //         }
-    //     });
-    //     this.headers.filter(x => x.sortBy).forEach((header) => {
-    //         filteredRequest[`${header.value}sort`] = header.sortBy;
-    //     });
-    //     return filteredRequest; 
-    // }
+    AddFilter() {
+        const filteredRequest = {...{
+            page: this.options.pagination.page, 
+            perPage: this.options.pagination.perPage
+        }};
+        this.options.filters.filter(x => x.values.length > 0)
+        .forEach((filter) => {           
+            const filters = filter.FormRequestFilters();
+            if (filters) {
+                filteredRequest[filter.requestName] = filters;
+            }
+        });
+        this.options.headers.filter(x => x.sortBy).forEach((header) => {
+            filteredRequest[`${header.value}sort`] = header.sortBy;
+        });
+        return filteredRequest; 
+    }
 
     toggleAll() {
         if (this.selectedItems.length === 0) {
@@ -344,9 +388,36 @@ export default class TableComponent extends Vue {
     }
 
     getTotalPages() {
-        return this.options.pagination.rowsPerPage && this.options.pagination.totalItems ? 
-            Math.ceil(this.options.pagination.totalItems / this.options.pagination.rowsPerPage) : 1;
+        return this.options.pagination.perPage && this.options.pagination.totalItems ? 
+            Math.ceil(this.options.pagination.totalItems / this.options.pagination.perPage) : 1;
     }
+
+    changeSort(headerValue: string) {
+        this.options.headers.filter(el => el.sortable).forEach(header => {
+            if (header.value === headerValue) {
+                if (!header.sortBy) {
+                    header.sortBy = new SortableField();
+                    header.sortBy.isdesc = false;
+                }
+                header.sortBy.isdesc = !header.sortBy.isdesc;
+            } else {
+                header.sortBy = undefined;
+            }
+        });
+        this.loadData();
+    }
+
+    // onUpdateDraggable() {
+    //     for (let i = 0; i < this.options.headers.length; i++) {
+    //         this.options.headers[i].order = i;
+    //         // this.headerSettings.forEach(el => {
+    //         //     if (el.value === this.editableHeaders[i].value) {
+    //         //         el.order = this.editableHeaders[i].order;
+    //         //     }
+    //         // });
+    //     }
+    //     //localStorage.setItem(`${this.tableIdentifier}_table_settings`, JSON.stringify(this.headerSettings));
+    // }
 }
 </script>
 
