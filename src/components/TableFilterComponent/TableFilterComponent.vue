@@ -315,8 +315,7 @@ export default class TableFilterComponent extends Vue {
             }
         }
         if (newVal) {
-            if (this.applyFilterButtonVisibility === false && 
-            (newVal[0] === null || newVal[0] === "" || newVal.length === 0)) {
+            if (this.applyFilterButtonVisibility === false && newVal[0] === "") {
                 this.applyFilterButton = false;
             } else {
                 if (!this.appliedFromQuery) {

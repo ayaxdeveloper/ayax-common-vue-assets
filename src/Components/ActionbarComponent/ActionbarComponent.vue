@@ -27,7 +27,12 @@
                         <template v-if="!hideButtonText || !action.icon">{{action.title}}</template>
                     </v-btn>
                     <v-list dense>
-                        <v-list-tile :title="action.hint" v-for="child in action.children" :key="child.name"  @click="executeAction(child)">
+                        <v-list-tile :disabled="child.needSelectedItem && selectedItems.length === 0" 
+                            :title="action.hint" 
+                            v-for="child in action.children" 
+                            :key="child.name"  
+                            @click="executeAction(child)"
+                        >
                             <v-list-tile-action v-if="child.icon"><v-icon>{{child.icon}}</v-icon></v-list-tile-action>
                             <v-list-tile-title>{{ child.title }}</v-list-tile-title>
                         </v-list-tile>
@@ -52,6 +57,7 @@ export default class ActionbarComponent extends Vue{
     @Prop({default: true}) darkActionbar: boolean;
     @Prop({required: true}) actions: ActionItem[];
     @Prop({default: () => []}) selectedItems;
+    @Prop({default: () => {}}) filteredRequest;
     @Prop({default: 0}) updateActionBar: number;
     actionbarContainer;
     actionbar;
@@ -145,7 +151,7 @@ export default class ActionbarComponent extends Vue{
         }
         if (this.isPartOfElementInViewPort(elem.querySelector(".mainAnchor")) && !this.isElementInViewPort(elem.querySelector(".actionbarAnchor"))) {
             actionBarElement.classList.add("actionbarFixed");
-        }else {
+        } else {
             actionBarElement.classList.remove("actionbarFixed");
         }
     }
@@ -153,11 +159,24 @@ export default class ActionbarComponent extends Vue{
     executeAction(action: ActionItem) {
         if (action.action) {
             if (action.needSelectedItem) {
-                action.action(this.selectedItems);
+                action.action(this.selectedItems, this.idFilter());
             } else {
-                action.action();
+                action.action(this.filteredRequest);
             }
         }
+    }
+
+    idFilter() {
+        const request = {
+            idFilter: {
+                term: "in",
+                val: {
+                    values: []
+                }
+            }
+        };
+        request.idFilter.val.values = this.selectedItems.map(el => el.id);
+        return request;
     }
 }
 </script>

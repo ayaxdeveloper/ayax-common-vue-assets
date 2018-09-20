@@ -11,6 +11,8 @@ export default class TableOptions {
     filters: TableFilterComponentItem[] = [];
     selectable = true; 
     selectableSingle = false; 
+    clearSelected = 0;
+    reloadData = 0;
     title = "";
     topbarColor = "secondary";
     actionbarColor = "primary";
@@ -19,7 +21,7 @@ export default class TableOptions {
     pagination: Pagination = {page: 1, perPage: 10, totalItems: 0};
     configurable = true;
     rowColor: (item) => string = () => "";
-    maxHeight = 450;
+    maxHeight = null;
     constructor(init?: Partial<TableOptions>) {
         if (init) {
             Object.assign(this, init);

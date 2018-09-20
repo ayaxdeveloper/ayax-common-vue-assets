@@ -1,14 +1,12 @@
 <template>
-    <div :id="options.tableName" class="actionbarContainer" style="position: relative">
-        <a-busy-loading v-if="loading"></a-busy-loading>
+    <div v-show="!loading" :id="options.tableName" class="actionbarContainer" style="position: relative">
         <a-table-topbar
-            v-show="!loading"
             :title="options.title"
             :topbarColor="options.topbarColor"
             :darkTopbar="options.darkTopbar"
             :itemsQuantity="options.pagination.totalItems"
             :filters.sync="options.filters"
-            @apply-filter="loadData"
+            @apply-filter="loadData()"
         >
         <template slot="settings" v-if="options.configurable">
             <v-menu bottom offset-y left offset-x :close-on-content-click="false" :value="isTableMenuVisible">
@@ -39,7 +37,6 @@
         </template>
         </a-table-topbar>
         <v-data-table
-            v-show="!loading"
             :headers="options.headers"
             :items="items"
             :total-items="1"
@@ -53,14 +50,14 @@
                 'a-table-component', 
                 'mainAnchor', 
                 'scrollableTable', 
-                items.length > 10 ? 'scrollableTableOverflow' : ''
+                items.length > 10 && options.maxHeight ? 'scrollableTableOverflow' : ''
             ]"
-            :style="items.length > 10 ? `--maxHeight: ${options.maxHeight}px` : ''"
+            :style="items.length > 10 && options.maxHeight ? `--maxHeight: ${options.maxHeight}px` : ''"
             v-resize="onTableResize"
         >
         <template slot="headers" slot-scope="props">
             <tr class="fixedTableHeader">
-                <th v-if="options.selectable" class="line-action">
+                <th v-if="options.selectable" class="select-checkbox">
                     <v-checkbox v-if="!options.selectableSingle"
                         primary
                         class="pb-1"
@@ -68,7 +65,7 @@
                         color="primary"
                         :indeterminate="selectedItemsOnPage.length > 0 && selectedItemsOnPage.length !== items.length"
                         hide-details
-                        @click.stop="toggleAll()"
+                        @click.stop="toggleAllItems()"
                     ></v-checkbox>
                 </th>
                 <th class="text-xs-center line-action" 
@@ -90,7 +87,7 @@
                 </v-progress-linear>
             </tr>
             <tr :id="options.tableName + '-static-header'" style="height: 36px">
-                <th v-if="options.selectable" class="line-action">
+                <th v-if="options.selectable" class="select-checkbox">
                     <v-checkbox v-if="!options.selectableSingle"
                         primary
                         class="pb-1"
@@ -180,22 +177,33 @@
             </tr>
         </template>
         </v-data-table>
-        <div v-show="!loading" class="actionbarAnchor">
+        <div class="actionbarAnchor">
             <a-actionbar 
                 v-if="options.actions && options.actions.filter(el => !el.single && el.active).length > 0"
                 :actions="options.actions.filter(action => !action.single && action.active)"
                 :selectedItems="selectedItems"
                 :actionbarColor="options.actionbarColor"
                 :darkActionbar="options.darkActionbar"
+                :filteredRequest="lastFilteredRequest"
             >
             </a-actionbar>
         </div>
-        <v-layout v-show="!loading" class="text-xs-center mt-2">
+        <v-layout class="text-xs-center mt-2">
             <v-flex xs6>
                 <v-layout justify-start>
-                    <v-btn small>
-                        Выбрано {{ selectedItems.length }}
-                    </v-btn>
+                    <v-card v-if="selectedItems.length > 0" style="height: 36px; min-width: 120px" class="pa-2 mt-1">
+                        <v-layout>
+                            <v-flex>Выбрано</v-flex>
+                            <v-flex>
+                                <div style="border-radius: 4px" class="px-2 ml-2 d-inline-block cyan darken-1 white--text">
+                                    {{ selectedItems.length }}
+                                </div>
+                            </v-flex>
+                            <v-flex>
+                                <v-icon @click="onClearSelected()" class="ml-2" small>mdi-close</v-icon>
+                            </v-flex>
+                        </v-layout>
+                    </v-card>
                 </v-layout>
             </v-flex>
             <v-flex>
@@ -220,10 +228,10 @@
 <script lang="ts">
 import { INotificationProvider, SortableField } from "ayax-common-types";
 import Vue from "vue";
-import { Component, Inject, Prop, Watch } from "vue-property-decorator";
+import { Component, Emit, Inject, Prop, Watch } from "vue-property-decorator";
 import resize from "vue-resize-directive";
 import vuedraggable from "vuedraggable";
-import { ActionbarComponent, BusyLoadingComponent, TableComponentHeader } from "../..";
+import { ActionbarComponent, TableComponentHeader } from "../..";
 import TableOptions from "./TableOptions";
 import TableTopbarComponent from "./TableTopbarComponent.vue";
 
@@ -232,7 +240,6 @@ import TableTopbarComponent from "./TableTopbarComponent.vue";
     components: {
         "a-table-topbar": TableTopbarComponent,
         "a-actionbar": ActionbarComponent,
-        "a-busy-loading": BusyLoadingComponent,
         "draggable": vuedraggable
     },
     directives: {
@@ -253,6 +260,7 @@ export default class TableComponent extends Vue {
     isTableMenuVisible = false;
     originalHeaders: TableComponentHeader[] = [];
     selectedItems = [];
+    lastFilteredRequest = {};
 
     get visibleHeaders() {
         return this.options.headers.filter(header => header.isVisible) as TableComponentHeader[];
@@ -266,6 +274,33 @@ export default class TableComponent extends Vue {
             }
         });
         return selectedOnPage;
+    }
+
+    created() {
+        this.originalHeaders = JSON.parse(JSON.stringify(this.options.headers));
+        for (let i = 0; i < this.originalHeaders.length; i++) {
+            this.originalHeaders[i].order = i;
+        }
+
+        if (localStorage.getItem(`${this.options.title}_header_settings`)) {
+            const data = JSON.parse(localStorage.getItem(`${this.options.title}_header_settings`));
+            data.forEach(item => {
+                this.options.headers.forEach(header => {
+                    if (item.value === header.value) {
+                        header.isVisible = item.isVisible;
+                        header.order = item.order;
+                    }
+                });
+            });
+            this.options.headers.sort((a, b) => a.order - b.order);
+        }
+    }
+
+    mounted() {
+        this.fixedTableHeader = document.querySelector(`#${this.options.tableName} .fixedTableHeader`) as HTMLElement;
+        const tableScroll = document.querySelector(`#${this.options.tableName} .v-table__overflow`) as HTMLElement;
+
+        tableScroll.addEventListener("scroll", () => this.onTableScroll(tableScroll.scrollTop));
     }
 
     @Watch("options.pagination.page")
@@ -296,17 +331,30 @@ export default class TableComponent extends Vue {
         setTimeout(() => this.resizeFixedHeader(), 0);
     }
 
-    created() {
-        this.originalHeaders = JSON.parse(JSON.stringify(this.options.headers));
-        
+    @Watch("options.clearSelected")
+    onClearSelected() {
+        this.selectedItems = [];
+        this.items.forEach(item => {
+            item.selected = false;
+        });
     }
 
-    mounted() {
-        this.fixedTableHeader = document.querySelector(`#${this.options.tableName} .fixedTableHeader`) as HTMLElement;
-        const tableScroll = document.querySelector(`#${this.options.tableName} .v-table__overflow`) as HTMLElement;
-
-        tableScroll.addEventListener("scroll", () => this.onTableScroll(tableScroll.scrollTop));
+    @Watch("options.reloadData")
+    onReload() {
+        this.loadData();
     }
+
+    @Watch("items.length")
+    onEmpty() {
+        if (this.items.length === 0) {
+            const headersCount = document.querySelectorAll(`#${this.options.tableName + "-static-header"} th`).length;
+            const firstTd = document.querySelector(`#${this.options.tableName} tbody tr td`)as any;
+            firstTd.colSpan = `${headersCount}`;
+        }
+    }
+
+    @Emit()
+    loadingIsReady() {}
 
     executeSingleAction(actionName: string, item: any) {
         if (actionName) {
@@ -343,7 +391,8 @@ export default class TableComponent extends Vue {
     async loadData() {
         try {
             this.tableLoading = true;
-            await this.options.getData(this.AddFilter()).then(resp => {
+            const filteredRequest = this.AddFilter();
+            await this.options.getData(filteredRequest).then(resp => {
                 for (let i = 0; i < resp.result.data.length; i++) {
                     resp.result.data[i].tableIndex = i;
                     resp.result.data[i].slotToggle = false;
@@ -356,6 +405,10 @@ export default class TableComponent extends Vue {
                 }
                 this.items = resp.result.data;
                 this.options.pagination.totalItems = resp.result.total;
+
+                delete filteredRequest.page;
+                delete filteredRequest.perPage;
+                this.lastFilteredRequest = filteredRequest;
             });
         } catch (e) {
             this.notificationProvider.Error("Ошибка получения данных");
@@ -364,6 +417,8 @@ export default class TableComponent extends Vue {
             this.tableLoading = false;
             this.loading = false;
             setTimeout(() => this.resizeFixedHeader(), 0);
+            this.onEmpty();
+            this.loadingIsReady();
         }
     }
 
@@ -385,12 +440,6 @@ export default class TableComponent extends Vue {
         return filteredRequest; 
     }
 
-    @Watch("selectedItems")
-    qq() {
-        console.log(this.selectedItems);
-        
-    }
-
     selectItem(item) {
         const itemIndex = this.selectedItems.findIndex(selectedItem => selectedItem.id === item.id);
         if (itemIndex > -1) {
@@ -402,7 +451,7 @@ export default class TableComponent extends Vue {
         }
     }
 
-    toggleAll() {
+    toggleAllItems() {
         if (this.selectedItemsOnPage.length === 0) {
             this.items.forEach(item => {
                 item.selected = true;
@@ -474,12 +523,23 @@ export default class TableComponent extends Vue {
     }
 
     onUpdateDraggable() {
+        for (let i = 0; i < this.options.headers.length; i++) {
+            this.options.headers[i].order = i;
+        }
         localStorage.setItem(`${this.options.title}_header_settings`, JSON.stringify(this.options.headers));
     }
 
     resetTableSettings() {
         localStorage.removeItem(`${this.options.title}_header_settings`);
-
+        this.options.headers.forEach(header => {
+            this.originalHeaders.forEach(originalHeader => {
+                if (header.value === originalHeader.value) {
+                    header.isVisible = originalHeader.isVisible;
+                    header.order = originalHeader.order;
+                }
+            });
+        });
+        this.options.headers.sort((a, b) => a.order - b.order);
     }
 }
 </script>
@@ -510,7 +570,11 @@ export default class TableComponent extends Vue {
         height: auto;
     }
     .line-action {
-        width: 48px;
+        width: 48px !important;
+        padding: 0 !important;
+    }
+    .select-checkbox {
+        width: 48px !important;
         padding: 0 !important;
         padding-left: 16px !important; 
     }

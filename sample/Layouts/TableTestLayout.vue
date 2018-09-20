@@ -73,13 +73,18 @@ export default class TableTestLayout extends Vue {
                 name: "export", 
                 title: "Экспорт", 
                 icon: "mdi-upload",
-                needSelectedItem: true,
                 children: [
                     new ActionItem({
                         name: "Excel", 
-                        title: "Экспорт в Excel", 
+                        title: "Экспорт выбранного в Excel", 
                         icon: "mdi-upload", 
                         needSelectedItem: true,
+                        action: (asd, qq) => console.log(qq)
+                    }),
+                    new ActionItem({
+                        name: "ExcelAll", 
+                        title: "Экспорт всего в Excel", 
+                        icon: "mdi-upload",
                         action: (asd) => console.log(asd)
                     })
                 ]
@@ -115,14 +120,6 @@ export default class TableTestLayout extends Vue {
                     {text: "Второй", value: "2"},
                     {text: "Третий", value: "3"}
                 ]
-            }),
-            new TableFilterComponentItem({
-                requestName: "datefilter",
-                name: "createdDateFilter",
-                appearance: TableFilterComponentItemAppearance.Topbar, 
-                requestType: TableFilterComponentItemType.Range,
-                inputType: TableFilterComponentItemInputType.Date,
-                label: "Дата создания"
             }),
             new TableFilterComponentItem({
                 requestName: "date", 

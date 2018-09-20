@@ -5,7 +5,7 @@ export default class ActionItem {
     single = false;
     children: ActionItem[];
     action: Function;
-    needSelectedItem: boolean;
+    needSelectedItem = false;
     active = true;
     spaceNext = false;
     loading = false;
