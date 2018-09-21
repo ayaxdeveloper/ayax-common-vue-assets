@@ -1,4 +1,4 @@
-export default class ActionItem {
+export class ActionItem {
     name: string;
     title: string;
     icon: string;

@@ -236,7 +236,7 @@ import { Component, Emit, Inject, Prop, Watch } from "vue-property-decorator";
 import resize from "vue-resize-directive";
 import vuedraggable from "vuedraggable";
 import { ActionbarComponent, TableComponentHeader } from "../..";
-import TableOptions from "./TableOptions";
+import { TableOptions } from "./TableOptions";
 import TableTopbarComponent from "./TableTopbarComponent.vue";
 
 @Component({

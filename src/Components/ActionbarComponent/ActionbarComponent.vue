@@ -47,7 +47,7 @@
 
 <script lang="ts">
 import { Component, Emit, Prop, Vue, Watch } from "vue-property-decorator";
-import ActionItem from "./ActionItem";
+import { ActionItem } from "./ActionItem";
 
 @Component({
     name: "a-actionbar"

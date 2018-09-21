@@ -1,9 +1,9 @@
 import { Pagination } from "ayax-common-types";
-import ActionItem from "../ActionbarComponent/ActionItem";
+import { ActionItem } from "../ActionbarComponent/ActionItem";
 import { TableFilterComponentItem } from "../TableFilterComponent/TableFilterComponentItem";
 import { TableComponentHeader } from "./TableHeader";
 
-export default class TableOptions {
+export class TableOptions {
     getData: (request) => Promise<any>;
     tableName = "tableComponent";
     headers: TableComponentHeader[] = [];
