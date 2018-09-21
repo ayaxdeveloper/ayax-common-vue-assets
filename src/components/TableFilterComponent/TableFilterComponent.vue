@@ -197,10 +197,10 @@ export default class TableFilterComponent extends Vue {
     }
 
     mounted() {
-        if ((this.filter.requestType === this.filterTypes["In"] || this.filter.requestType === this.filterTypes["Eq"]) &&  
-            this.filter.inputType === this.filterInputTypes["Select"]) {
-            this.hideSelectMenu();
-        }
+        // if ((this.filter.requestType === this.filterTypes["In"] || this.filter.requestType === this.filterTypes["Eq"]) &&  
+        //     this.filter.inputType === this.filterInputTypes["Select"]) {
+        //     this.hideSelectMenu();
+        // }
     }
 
     showSelectMenu() {
