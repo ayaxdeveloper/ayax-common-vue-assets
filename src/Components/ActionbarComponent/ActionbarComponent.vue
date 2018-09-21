@@ -56,8 +56,8 @@ export default class ActionbarComponent extends Vue{
     @Prop({default: "primary"}) actionbarColor: string;
     @Prop({default: true}) darkActionbar: boolean;
     @Prop({required: true}) actions: ActionItem[];
-    @Prop({default: () => []}) selectedItems;
-    @Prop({default: () => {}}) filteredRequest;
+    @Prop({default: () => []}) selectedItems: any[];
+    @Prop({default: () => {}}) filteredRequest: {};
     @Prop({default: 0}) updateActionbar: number;
     actionbarContainer;
     actionbar;

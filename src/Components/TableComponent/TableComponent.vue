@@ -238,6 +238,7 @@ import vuedraggable from "vuedraggable";
 import { ActionbarComponent, TableComponentHeader } from "../..";
 import { TableOptions } from "./TableOptions";
 import TableTopbarComponent from "./TableTopbarComponent.vue";
+import { ICacheService } from "ayax-common-cache";
 
 @Component({
     name: "TableComponent",
@@ -252,6 +253,7 @@ import TableTopbarComponent from "./TableTopbarComponent.vue";
 })
 export default class TableComponent extends Vue {
     @Inject() notificationProvider: INotificationProvider;
+    @Inject() cacheService: ICacheService;
     @Prop({default: () => new TableOptions()}) options: TableOptions;
     @Prop({default: () => ({ tableIndex: null, toggleValue: false })}) slotToggle;
     
@@ -281,7 +283,47 @@ export default class TableComponent extends Vue {
         return selectedOnPage;
     }
 
-    created() {
+    async created() {
+        const headerPromises = this.options.headers.filter(x => (x.dictionary || x.dictionaryPromise) && !x.items)
+            .map(x => {
+            return new Promise((resolve) => {
+                if (x.dictionary) {
+                    this.cacheService.List(x.dictionary)
+                    .then(z => {
+                        x.items = z;
+                        resolve();
+                    });
+                } else if (x.dictionaryPromise) {
+                    x.dictionaryPromise
+                    .then(z => {
+                        x.items = z;
+                        resolve();
+                    });
+                }
+            });
+        });
+        
+        const filterPromises = this.options.filters
+            .filter(x => !x.selectItems && (x.selectItemsFromDictionary || x.selectItemsFromPromise)).map(x => {
+            return new Promise((resolve) => {
+                if (x.selectItemsFromDictionary) {
+                    this.cacheService.ListAsSelectItems(x.selectItemsFromDictionary)
+                    .then(z => {
+                        x.selectItems = z;
+                        resolve();
+                    });
+                } else if (x.selectItemsFromPromise) {
+                    x.selectItemsFromPromise
+                    .then(z => {
+                        x.selectItems = z;
+                        resolve();
+                    });
+                }
+            });
+        });
+
+        await Promise.all([headerPromises, filterPromises]);
+
         this.originalHeaders = JSON.parse(JSON.stringify(this.options.headers));
         for (let i = 0; i < this.originalHeaders.length; i++) {
             this.originalHeaders[i].order = i;
