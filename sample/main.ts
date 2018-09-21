@@ -4,6 +4,7 @@ import "vuetify/dist/vuetify.min.css";
 import "../node_modules/roboto-fontface/css/roboto/roboto-fontface.css";
 import "./style.css";
 
+import { DatePicker } from "element-ui";
 import locale from "element-ui/lib/locale";
 import lang from "element-ui/lib/locale/lang/ru-RU";
 import Vue from "vue";
@@ -17,6 +18,7 @@ locale.use(lang);
 Vue.use(Vuetify, {
     iconfont: "mdi"
 });
+Vue.component(DatePicker.name, DatePicker);
 Vue.use(VueRouter);
 Vue.use(AyaxCommonVueAssets);
 Vue.use(require("vue-shortkey"));

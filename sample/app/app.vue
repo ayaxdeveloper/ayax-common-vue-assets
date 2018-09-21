@@ -17,6 +17,7 @@
           <v-toolbar-side-icon>
               <v-icon x-large @click="sidebarMiniProp = !sidebarMiniProp">{{ sidebarMiniProp ? 'mdi-chevron-right' : 'mdi-chevron-left'}}</v-icon>
           </v-toolbar-side-icon>
+           <a-breadcrumbs :breadcrumbsNames="breadcrumbsNames"></a-breadcrumbs>
             <v-spacer></v-spacer>
             <v-toolbar-items>
               <v-btn small color="success" @click="castNotification('success')">notification</v-btn>
@@ -25,8 +26,7 @@
               <v-btn small color="warning" @click="castNotification('warning')">notification</v-btn>
             </v-toolbar-items>
       </v-toolbar>
-        <v-container fluid>
-          <a-breadcrumbs :breadcrumbsNames="breadcrumbsNames"></a-breadcrumbs>
+        <v-container fluid class="px-3 py-4">
           <router-view></router-view>
         </v-container>
       </v-content>

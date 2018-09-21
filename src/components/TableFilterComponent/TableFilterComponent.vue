@@ -38,7 +38,7 @@
                 clearable
                 unlink-panels
                 :picker-options="{firstDayOfWeek: 1}"
-                align="right"
+                align="center"
                 start-placeholder="Начало"
                 end-placeholder="Конец">
                 </el-date-picker>
@@ -423,7 +423,7 @@ export default class TableFilterComponent extends Vue {
     }
     .table-filter-apply-btn_topbar {
         position: absolute;
-        top: -24px;
+        top: -16px;
         height: 20px !important;
         left: 0;
     }
