@@ -37,7 +37,7 @@ import {
     TableFilterComponentItemType 
 } from "../../src";
 import ActionItem from "../../src/Components/ActionbarComponent/ActionItem";
-import TableOptions from "../../src/Components/NewTableComponent/TableOptions";
+import TableOptions from "../../src/Components/TableComponent/TableOptions";
 
 @Component
 export default class TableTestLayout extends Vue {
