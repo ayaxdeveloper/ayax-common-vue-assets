@@ -204,31 +204,31 @@ export default class TableFilterComponent extends Vue {
     }
 
     showSelectMenu() {
-        const selectMenu = <HTMLElement> document.querySelector(`.${this.filter.requestName}`)
-            .parentNode.parentNode.parentNode.parentNode.parentNode;
-        selectMenu.style.display = "inline";
+        // const selectMenu = <HTMLElement> document.querySelector(`.${this.filter.requestName}`)
+        //     .parentNode.parentNode.parentNode.parentNode.parentNode;
+        // selectMenu.style.display = "inline";
 
-        if (this.filter.requestType === this.filterTypes["In"]) {
-            const input = <HTMLElement> document.querySelector(`#${this.filter.requestName}`);
-            input.parentElement.parentElement.parentElement.parentElement
-            .parentElement.parentElement
-            .parentElement.classList.add("v-select--is-menu-active", "v-input--is-focused", "primary--text");
+        // if (this.filter.requestType === this.filterTypes["In"]) {
+        //     const input = <HTMLElement> document.querySelector(`#${this.filter.requestName}`);
+        //     input.parentElement.parentElement.parentElement.parentElement
+        //     .parentElement.parentElement
+        //     .parentElement.classList.add("v-select--is-menu-active", "v-input--is-focused", "primary--text");
 
-            const icons = input.parentElement.parentElement.querySelectorAll("i");
-            [].forEach.call(icons, el => {
-                el.classList.add("primary--text");
-            });
-        } else {
-            const input = <HTMLElement> document.querySelector(`#${this.filter.requestName}`);
+        //     const icons = input.parentElement.parentElement.querySelectorAll("i");
+        //     [].forEach.call(icons, el => {
+        //         el.classList.add("primary--text");
+        //     });
+        // } else {
+        //     const input = <HTMLElement> document.querySelector(`#${this.filter.requestName}`);
             
-            input.parentElement.parentElement.parentElement.parentElement
-            .parentElement.parentElement.classList.add("v-select--is-menu-active", "v-input--is-focused", "primary--text");
+        //     input.parentElement.parentElement.parentElement.parentElement
+        //     .parentElement.parentElement.classList.add("v-select--is-menu-active", "v-input--is-focused", "primary--text");
 
-            const icons = input.parentElement.parentElement.querySelectorAll("i");
-            [].forEach.call(icons, el => {
-                el.classList.add("primary--text");
-            });
-        }
+        //     const icons = input.parentElement.parentElement.querySelectorAll("i");
+        //     [].forEach.call(icons, el => {
+        //         el.classList.add("primary--text");
+        //     });
+        // }
     }
 
     hideSelectMenu() {
