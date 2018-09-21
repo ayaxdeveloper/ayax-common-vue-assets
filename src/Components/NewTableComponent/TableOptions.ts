@@ -21,7 +21,7 @@ export default class TableOptions {
     pagination: Pagination = {page: 1, perPage: 10, totalItems: 0};
     configurable = true;
     rowColor: (item) => string = () => "";
-    maxHeight = null;
+    maxHeight = 450;
     constructor(init?: Partial<TableOptions>) {
         if (init) {
             Object.assign(this, init);

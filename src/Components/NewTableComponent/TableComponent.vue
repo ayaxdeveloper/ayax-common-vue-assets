@@ -1,12 +1,14 @@
 <template>
-    <div v-show="!loading" :id="options.tableName" class="actionbarContainer" style="position: relative">
+    <div :id="options.tableName" class="actionbarContainer" style="position: relative">
         <a-table-topbar
+            v-show="!loading"
             :title="options.title"
             :topbarColor="options.topbarColor"
             :darkTopbar="options.darkTopbar"
             :itemsQuantity="options.pagination.totalItems"
             :filters.sync="options.filters"
             @apply-filter="loadData()"
+            @relocate-actionbar="updateActionbar++"
         >
         <template slot="settings" v-if="options.configurable">
             <v-menu bottom offset-y left offset-x :close-on-content-click="false" :value="isTableMenuVisible">
@@ -37,6 +39,7 @@
         </template>
         </a-table-topbar>
         <v-data-table
+            v-show="!loading"
             :headers="options.headers"
             :items="items"
             :total-items="1"
@@ -177,7 +180,7 @@
             </tr>
         </template>
         </v-data-table>
-        <div class="actionbarAnchor">
+        <div class="actionbarAnchor" v-show="!loading">
             <a-actionbar 
                 v-if="options.actions && options.actions.filter(el => !el.single && el.active).length > 0"
                 :actions="options.actions.filter(action => !action.single && action.active)"
@@ -185,10 +188,11 @@
                 :actionbarColor="options.actionbarColor"
                 :darkActionbar="options.darkActionbar"
                 :filteredRequest="lastFilteredRequest"
+                :updateActionbar="updateActionbar"
             >
             </a-actionbar>
         </div>
-        <v-layout class="text-xs-center mt-2">
+        <v-layout v-show="!loading" class="text-xs-center mt-2">
             <v-flex xs6>
                 <v-layout justify-start>
                     <v-card v-if="selectedItems.length > 0" style="height: 36px; min-width: 120px" class="pa-2 mt-1">
@@ -261,6 +265,7 @@ export default class TableComponent extends Vue {
     originalHeaders: TableComponentHeader[] = [];
     selectedItems = [];
     lastFilteredRequest = {};
+    updateActionbar = 0;
 
     get visibleHeaders() {
         return this.options.headers.filter(header => header.isVisible) as TableComponentHeader[];
@@ -299,7 +304,6 @@ export default class TableComponent extends Vue {
     mounted() {
         this.fixedTableHeader = document.querySelector(`#${this.options.tableName} .fixedTableHeader`) as HTMLElement;
         const tableScroll = document.querySelector(`#${this.options.tableName} .v-table__overflow`) as HTMLElement;
-
         tableScroll.addEventListener("scroll", () => this.onTableScroll(tableScroll.scrollTop));
     }
 

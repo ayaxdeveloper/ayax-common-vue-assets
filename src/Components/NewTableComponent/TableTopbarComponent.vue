@@ -178,12 +178,11 @@ export default class TableTopbarComponent extends Vue {
 
     @Emit()
     applyFilter() {
-        // if (this.pagination.page > 1) {
-        //     this.pagination.page = 1;
-        // }
-
         this.applyFilterButtonVisibility = false;
     }
+
+    @Emit()
+    relocateActionbar() {}
 
     applyEmittedFilter(filterName: string) {
         const filter = this.filters.find(x => x.name === filterName);
@@ -220,6 +219,7 @@ export default class TableTopbarComponent extends Vue {
     showAllFiltersBtn() {
         this.showAllFilters = !this.showAllFilters;
         localStorage.setItem(`${this.title}_show-all-filters`, JSON.stringify(this.showAllFilters));
+        setTimeout(() => this.relocateActionbar(), 500);
     }
 }
 </script>

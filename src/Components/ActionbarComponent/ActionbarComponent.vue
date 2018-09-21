@@ -58,12 +58,12 @@ export default class ActionbarComponent extends Vue{
     @Prop({required: true}) actions: ActionItem[];
     @Prop({default: () => []}) selectedItems;
     @Prop({default: () => {}}) filteredRequest;
-    @Prop({default: 0}) updateActionBar: number;
+    @Prop({default: 0}) updateActionbar: number;
     actionbarContainer;
     actionbar;
     hideButtonText = false;
 
-    @Watch("updateActionBar")
+    @Watch("updateActionbar")
     onChange() {
         [].forEach.call(this.actionbarContainer, elem => {
             this.toggleActionbar(elem);
