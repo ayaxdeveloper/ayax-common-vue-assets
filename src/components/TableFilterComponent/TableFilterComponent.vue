@@ -197,38 +197,38 @@ export default class TableFilterComponent extends Vue {
     }
 
     mounted() {
-        // if ((this.filter.requestType === this.filterTypes["In"] || this.filter.requestType === this.filterTypes["Eq"]) &&  
-        //     this.filter.inputType === this.filterInputTypes["Select"]) {
-        //     this.hideSelectMenu();
-        // }
+        if ((this.filter.requestType === this.filterTypes["In"] || this.filter.requestType === this.filterTypes["Eq"]) &&  
+            this.filter.inputType === this.filterInputTypes["Select"]) {
+            this.hideSelectMenu();
+        }
     }
 
     showSelectMenu() {
-        // const selectMenu = <HTMLElement> document.querySelector(`.${this.filter.requestName}`)
-        //     .parentNode.parentNode.parentNode.parentNode.parentNode;
-        // selectMenu.style.display = "inline";
+        const selectMenu = <HTMLElement> document.querySelector(`.${this.filter.requestName}`)
+            .parentNode.parentNode.parentNode.parentNode.parentNode;
+        selectMenu.style.display = "inline";
 
-        // if (this.filter.requestType === this.filterTypes["In"]) {
-        //     const input = <HTMLElement> document.querySelector(`#${this.filter.requestName}`);
-        //     input.parentElement.parentElement.parentElement.parentElement
-        //     .parentElement.parentElement
-        //     .parentElement.classList.add("v-select--is-menu-active", "v-input--is-focused", "primary--text");
+        if (this.filter.requestType === this.filterTypes["In"]) {
+            const input = <HTMLElement> document.querySelector(`#${this.filter.requestName}`);
+            input.parentElement.parentElement.parentElement.parentElement
+            .parentElement.parentElement
+            .parentElement.classList.add("v-select--is-menu-active", "v-input--is-focused", "primary--text");
 
-        //     const icons = input.parentElement.parentElement.querySelectorAll("i");
-        //     [].forEach.call(icons, el => {
-        //         el.classList.add("primary--text");
-        //     });
-        // } else {
-        //     const input = <HTMLElement> document.querySelector(`#${this.filter.requestName}`);
+            const icons = input.parentElement.parentElement.querySelectorAll("i");
+            [].forEach.call(icons, el => {
+                el.classList.add("primary--text");
+            });
+        } else {
+            const input = <HTMLElement> document.querySelector(`#${this.filter.requestName}`);
             
-        //     input.parentElement.parentElement.parentElement.parentElement
-        //     .parentElement.parentElement.classList.add("v-select--is-menu-active", "v-input--is-focused", "primary--text");
+            input.parentElement.parentElement.parentElement.parentElement
+            .parentElement.parentElement.classList.add("v-select--is-menu-active", "v-input--is-focused", "primary--text");
 
-        //     const icons = input.parentElement.parentElement.querySelectorAll("i");
-        //     [].forEach.call(icons, el => {
-        //         el.classList.add("primary--text");
-        //     });
-        // }
+            const icons = input.parentElement.parentElement.querySelectorAll("i");
+            [].forEach.call(icons, el => {
+                el.classList.add("primary--text");
+            });
+        }
     }
 
     hideSelectMenu() {
@@ -270,19 +270,19 @@ export default class TableFilterComponent extends Vue {
     }
 
     sortSelectedItems() {
-        if (this.filter.values.length !== 0) {
-            this.filter.selectItems.sort((a,b) => {
-                if (a.selected && !b.selected) {
-                    return -1;
-                }
-                if (!a.selected && b.selected) {
-                    return 1;
-                }
-                return 0;
-            });
-        } else {
-            this.filter.selectItems = JSON.parse(JSON.stringify(this.initialSelectItems));
-        }
+        // if (this.filter.values.length !== 0) {
+        //     this.filter.selectItems.sort((a,b) => {
+        //         if (a.selected && !b.selected) {
+        //             return -1;
+        //         }
+        //         if (!a.selected && b.selected) {
+        //             return 1;
+        //         }
+        //         return 0;
+        //     });
+        // } else {
+        //     this.filter.selectItems = JSON.parse(JSON.stringify(this.initialSelectItems));
+        // }
     }
 
     changeBtnValue() {
