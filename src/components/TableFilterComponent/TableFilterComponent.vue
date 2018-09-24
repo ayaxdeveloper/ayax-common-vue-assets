@@ -82,17 +82,11 @@
                     :items="filter.selectItems"
                     v-model="filter.values[0]"
                     :prepend-icon="filter.icon"
-                    @click="showSelectMenu()"
                     clearable
                     :placeholder="filter.placeholder"
                     dense
                     single-line
                     no-data-text="Нет совпадений">
-                    <template slot="item" slot-scope="data">
-                        <div :class="[`${filter.requestName}`]">
-                            {{ data.item.text }}
-                        </div>
-                    </template>
                 </v-autocomplete>
             </v-flex>
             <v-flex class="filter" v-else-if="filter.requestType == filterTypes['In'] && filter.inputType == filterInputTypes['Select']">
@@ -104,7 +98,6 @@
                     class="filterInput selectFilter"
                     v-model="filter.values"
                     :prepend-icon="filter.icon"
-                    @click="sortSelectedItems(); showSelectMenu()"
                     clearable
                     :placeholder="filter.placeholder"
                     dense
@@ -194,95 +187,6 @@ export default class TableFilterComponent extends Vue {
         if (this.filter.selectItems) {
             this.initialSelectItems = JSON.parse(JSON.stringify(this.filter.selectItems));
         }
-    }
-
-    mounted() {
-        if ((this.filter.requestType === this.filterTypes["In"] || this.filter.requestType === this.filterTypes["Eq"]) &&  
-            this.filter.inputType === this.filterInputTypes["Select"]) {
-            this.hideSelectMenu();
-        }
-    }
-
-    showSelectMenu() {
-        const selectMenu = <HTMLElement> document.querySelector(`.${this.filter.requestName}`)
-            .parentNode.parentNode.parentNode.parentNode.parentNode;
-        selectMenu.style.display = "inline";
-
-        if (this.filter.requestType === this.filterTypes["In"]) {
-            const input = <HTMLElement> document.querySelector(`#${this.filter.requestName}`);
-            input.parentElement.parentElement.parentElement.parentElement
-            .parentElement.parentElement
-            .parentElement.classList.add("v-select--is-menu-active", "v-input--is-focused", "primary--text");
-
-            const icons = input.parentElement.parentElement.querySelectorAll("i");
-            [].forEach.call(icons, el => {
-                el.classList.add("primary--text");
-            });
-        } else {
-            const input = <HTMLElement> document.querySelector(`#${this.filter.requestName}`);
-            
-            input.parentElement.parentElement.parentElement.parentElement
-            .parentElement.parentElement.classList.add("v-select--is-menu-active", "v-input--is-focused", "primary--text");
-
-            const icons = input.parentElement.parentElement.querySelectorAll("i");
-            [].forEach.call(icons, el => {
-                el.classList.add("primary--text");
-            });
-        }
-    }
-
-    hideSelectMenu() {
-        const selectMenu = <HTMLElement> document.querySelector(`.${this.filter.requestName}`).parentNode.parentNode.parentNode.parentNode.parentNode;
-            
-        const closeMenuBtn = document.createElement("div");
-        const closeMenuBtnText = document.createElement("span");
-
-        closeMenuBtnText.innerHTML = "Закрыть";
-        closeMenuBtnText.classList.add("closeFilterMenuBtnText");
-        closeMenuBtnText.addEventListener("click", () => { 
-            selectMenu.style.display = "none";
-
-            if (this.filter.requestType === this.filterTypes["In"]) {
-                const input = <HTMLElement> document.querySelector(`#${this.filter.requestName}`);
-                input.parentElement.parentElement.parentElement.parentElement
-                .parentElement.parentElement
-                .parentElement.classList.remove("v-select--is-menu-active", "v-input--is-focused", "primary--text");
-
-                const icons = input.parentElement.parentElement.querySelectorAll("i");
-                [].forEach.call(icons, el => {
-                    el.classList.remove("primary--text");
-                });
-            } else {
-                const input = <HTMLElement> document.querySelector(`#${this.filter.requestName}`);
-                input.parentElement.parentElement.parentElement.parentElement
-                .parentElement.parentElement.classList.remove("v-select--is-menu-active", "v-input--is-focused", "primary--text");
-
-                const icons = input.parentElement.parentElement.querySelectorAll("i");
-                [].forEach.call(icons, el => {
-                    el.classList.remove("primary--text");
-                });
-            }
-        });
-        closeMenuBtn.classList.add("closeFilterMenuBtn");
-
-        closeMenuBtn.appendChild(closeMenuBtnText);
-        selectMenu.insertBefore(closeMenuBtn, selectMenu.firstChild);
-    }
-
-    sortSelectedItems() {
-        // if (this.filter.values.length !== 0) {
-        //     this.filter.selectItems.sort((a,b) => {
-        //         if (a.selected && !b.selected) {
-        //             return -1;
-        //         }
-        //         if (!a.selected && b.selected) {
-        //             return 1;
-        //         }
-        //         return 0;
-        //     });
-        // } else {
-        //     this.filter.selectItems = JSON.parse(JSON.stringify(this.initialSelectItems));
-        // }
     }
 
     changeBtnValue() {
