@@ -163,6 +163,7 @@
                 </td>
                 <td v-for="(header, index) in visibleHeaders" :key="index"
                     :class="[header.align == 'right' ? 'text-xs-right' : 'text-xs-left']"
+                    @dblclick="firstSingleAction(props.item)"
                 >
                     <slot :name="header.value" :item="props.item">
                         <template 
@@ -409,6 +410,14 @@ export default class TableComponent extends Vue {
             if (singleAction) {
                 singleAction.action(item);
             }
+        }
+    }
+
+    firstSingleAction(item) {
+        const firstAction = this.options.actions.filter(action => action.single)[0];
+        
+        if (firstAction && firstAction.action) {
+            firstAction.action(item);
         }
     }
 
