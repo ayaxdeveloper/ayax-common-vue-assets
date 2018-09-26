@@ -595,6 +595,7 @@ export default class TableComponent extends Vue {
             });
         });
         this.options.headers.sort((a, b) => a.order - b.order);
+        this.isTableMenuVisible = false;
     }
 }
 </script>
