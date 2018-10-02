@@ -23,7 +23,7 @@
         <v-dialog v-model="editDialog" max-width="600px">
             <v-card>
                 <v-card-text>
-                    <a-form :fields="fields" :model="currentModel" v-if="editDialog"></a-form>
+                    <a-form :fields="fields" :model.sync="currentModel" v-if="editDialog"></a-form>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -222,7 +222,7 @@ export default class TableTestLayout extends Vue {
         ]
     });
 
-    currentModel : IEntity = {id: 0};
+    currentModel = {};
 
     fields = [
                 FormComponentItem.Hidden({ title: "Id", name: "id" }),
@@ -239,11 +239,11 @@ export default class TableTestLayout extends Vue {
         try {
             switch(action) {
                 case "edit":
-                this.currentModel = await this.operationService.get<IEntity>(`/testentity/get/${item.id}`).then(x => x.ensureSuccess())
+                this.currentModel = await this.operationService.get(`/testentity/get/${item.id}`).then(x => x.ensureSuccess())
                 this.editDialog = true;
                 break;
                 case "add":
-                this.currentModel = null;
+                this.currentModel = {};
                 this.editDialog = true;
                 break;
             }
@@ -253,11 +253,22 @@ export default class TableTestLayout extends Vue {
 
     }
 
-    editOk(item) {
+    async editOk() {
+        
+        try {
+            if (+this.currentModel["id"] > 0) {
+                await this.operationService.put(`/testentity/update/${+this.currentModel["id"]}`,this.currentModel).then(x => x.ensureSuccess());
+            } else {
+                await this.operationService.post(`/testentity/add`, this.currentModel).then(x => x.ensureSuccess());
+            }
+            this.options.reloadData++;
+        } catch (e) {
+            console.error(e);
+        }
         this.editDialog = false;
     }
 
-    editCancel(item) {
+    editCancel() {
         this.editDialog = false;
     }
 }

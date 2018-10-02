@@ -7,7 +7,7 @@
             <v-flex v-for="(field, fieldIndex) in row" :key="fieldIndex" class="pa-1">
                 <template v-if="field.dense">
                     <a-form-control
-                    :field="field"></a-form-control>
+                    :field="field" @field-update="fieldUpdate"></a-form-control>
                 </template>
                 <template v-else>
                     <v-flex xs4 v-if="!field.dense">
@@ -69,6 +69,11 @@ export default class FormComponent extends Vue {
         this.$emit("after-loaded");
 
         this.formVisible = true;
+    }
+
+    fieldUpdate(fieldName: string, model: any) {
+        this.model[fieldName] = model;
+        this.$emit("update:model", this.model);
     }
 
     get computedRows() {

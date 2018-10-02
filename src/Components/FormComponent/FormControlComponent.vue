@@ -126,6 +126,7 @@ export default class FormControlComponent extends Vue {
     @Watch("field.model")
     onFieldModelChange(model: any) {
         this.dateTypeInit();
+        this.$emit("field-update", this.field.name, model);
     }
 
 
