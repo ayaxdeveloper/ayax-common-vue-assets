@@ -20,12 +20,24 @@
                 <div>{{item.activeLead.ww}}</div>
             </template>
         </a-table>
+        <v-dialog v-model="editDialog" max-width="600px">
+            <v-card>
+                <v-card-text>
+                    <a-form :fields="fields" :model="currentModel" v-if="editDialog"></a-form>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="lighten-2" flat @click.native="editOk">ОК</v-btn>
+                    <v-btn color="lighten-2" flat @click.native.stop="editCancel">Отмена</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
 <script lang="ts">
 import { IOperationService, OperationService } from "ayax-common-operation";
-import { Pagination, SearchResponse, SelectItem } from "ayax-common-types";
+import { Pagination, SearchResponse, SelectItem, IEntity } from "ayax-common-types";
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Inject } from "vue-property-decorator";
@@ -38,10 +50,13 @@ import {
 } from "../../src";
 import { ActionItem } from "../../src/Components/ActionbarComponent/ActionItem";
 import { TableOptions } from "../../src/Components/TableComponent/TableOptions";
+import { FormComponentItem } from "../../src/Components/FormComponent/FormItem";
 
 @Component
 export default class TableTestLayout extends Vue {
     @Inject() operationService: IOperationService;
+
+    editDialog = false;
     options: TableOptions = new TableOptions({
         title: "Тестовая таблица",
         pagination: new Pagination({page: 1, perPage: 10}),
@@ -60,7 +75,13 @@ export default class TableTestLayout extends Vue {
                 title: "Открыть", 
                 name: "show",
                 single: true,
-                action: (asd) => console.log(asd)
+                action: (asd) => this.showDialog(asd, "edit")
+            }),
+            new ActionItem({
+                icon: "mdi-plus", 
+                title: "Добавить", 
+                name: "add",
+                action: (asd) => this.showDialog(asd, "add")
             }),
             new ActionItem({
                 icon: "mdi-delete", 
@@ -201,10 +222,43 @@ export default class TableTestLayout extends Vue {
         ]
     });
 
+    currentModel : IEntity = {id: 0};
+
+    fields = [
+                FormComponentItem.Hidden({ title: "Id", name: "id" }),
+                FormComponentItem.Input({ title: "Имя", name: "title" })
+            ] as FormComponentItem[]
+
     slotToggle = null;
 
     toggleLead(item) {
         this.slotToggle = { tableIndex: item.tableIndex, toggleValue: !item.slotToggle }; 
+    }
+
+    async showDialog(item : IEntity, action) {
+        try {
+            switch(action) {
+                case "edit":
+                this.currentModel = await this.operationService.get<IEntity>(`/testentity/get/${item.id}`).then(x => x.ensureSuccess())
+                this.editDialog = true;
+                break;
+                case "add":
+                this.currentModel = null;
+                this.editDialog = true;
+                break;
+            }
+        } catch (e) {
+            console.error(e);
+        }
+
+    }
+
+    editOk(item) {
+        this.editDialog = false;
+    }
+
+    editCancel(item) {
+        this.editDialog = false;
     }
 }
 </script>

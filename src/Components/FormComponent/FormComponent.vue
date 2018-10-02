@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import { HtmlElementType } from "ayax-common-types";
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { FormComponentItem } from "./FormItem";
 
 @Component({
@@ -34,9 +34,18 @@ import { FormComponentItem } from "./FormItem";
 export default class FormComponent extends Vue {
     @Prop() fields: FormComponentItem[];
     @Prop() model: any;
+    @Prop({default: 0}) clear: number;
     formVisible = false;   
-    async created() {
 
+    @Watch("clear")
+    clearValues() {
+        this.fields.forEach(element => {
+            element.model = null;
+        });
+    }
+
+    async created() {
+        this.clearValues();
         if (this.model) {
             Object.keys(this.model).forEach(key => {
                 const field = this.fields.find(x => x.name === key);
@@ -45,7 +54,6 @@ export default class FormComponent extends Vue {
                 }
             });
         }
-
         const fieldsPromises = this.fields.filter(x => x.itemsFromPromise && !x.items).map(x => {
             return new Promise((resolve) => {
                 x.itemsFromPromise
@@ -57,6 +65,8 @@ export default class FormComponent extends Vue {
         });
 
         await Promise.all(fieldsPromises);
+
+        this.$emit("after-loaded");
 
         this.formVisible = true;
     }
