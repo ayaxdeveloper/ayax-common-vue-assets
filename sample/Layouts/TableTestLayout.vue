@@ -60,7 +60,7 @@ export default class TableTestLayout extends Vue {
     options: TableOptions = new TableOptions({
         title: "Тестовая таблица",
         pagination: new Pagination({page: 1, perPage: 10}),
-        getData: (request) => this.operationService.post<SearchResponse<any>>("/testentity/search", request),
+        searchData: (request) => this.operationService.search<any>("/testentity/search", request).then(x => x.ensureSuccess()),
         headers: [
             TableComponentHeader.String({value: "id", text: "Id", hiddenable: false}),
             TableComponentHeader.String({value: "code", text: "Код"}),

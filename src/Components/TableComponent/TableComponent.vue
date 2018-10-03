@@ -447,24 +447,32 @@ export default class TableComponent extends Vue {
         try {
             this.tableLoading = true;
             const filteredRequest = this.AddFilter();
-            await this.options.getData(filteredRequest).then(resp => {
-                for (let i = 0; i < resp.result.data.length; i++) {
-                    resp.result.data[i].tableIndex = i;
-                    resp.result.data[i].slotToggle = false;
-
-                    if (this.selectedItems.findIndex(selectedItem => selectedItem.id === resp.result.data[i].id) > -1) {
-                        resp.result.data[i].selected = true;
-                    } else {
-                        resp.result.data[i].selected = false;
+            const request = this.options.searchData 
+                ? await this.options.searchData(filteredRequest)
+                : await this.options.rawData(filteredRequest).then(x => {
+                    return {
+                        data: x,
+                        total: x.length
                     }
-                }
-                this.items = resp.result.data;
-                this.options.pagination.totalItems = resp.result.total;
+                });
 
-                delete filteredRequest.page;
-                delete filteredRequest.perPage;
-                this.lastFilteredRequest = filteredRequest;
-            });
+            for (let i = 0; i < request.data.length; i++) {
+                request.data[i].tableIndex = i;
+                request.data[i].slotToggle = false;
+
+                if (this.selectedItems.findIndex(selectedItem => selectedItem.id === request.data[i].id) > -1) {
+                    request.data[i].selected = true;
+                } else {
+                    request.data[i].selected = false;
+                }
+            }
+            this.items = request.data;
+            this.options.pagination.totalItems = request.total;
+
+            delete filteredRequest.page;
+            delete filteredRequest.perPage;
+            this.lastFilteredRequest = filteredRequest;
+
         } catch (e) {
             this.notificationProvider.Error("Ошибка получения данных");
             console.error(e);
