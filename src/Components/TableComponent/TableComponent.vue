@@ -38,6 +38,8 @@
             </v-menu>
         </template>
         </a-table-topbar>
+        <v-progress-linear :active="loading" height="2" style="margin: 0px" :indeterminate="true">
+        </v-progress-linear>
         <v-data-table
             v-show="!loading"
             :headers="options.headers"
@@ -285,7 +287,11 @@ export default class TableComponent extends Vue {
     }
 
     async created() {
-        const headerPromises = this.options.headers.filter(x => (x.dictionary || x.dictionaryPromise || x.itemsPromise) && !x.items)
+    }
+
+    async loadHeaders() {
+        this.loading = true;
+        const headerPromises = this.options.headers.filter(x => (x.dictionary || x.dictionaryPromise) && !x.items)
             .map(x => {
             return new Promise((resolve) => {
                 if (x.dictionary) {
@@ -297,18 +303,14 @@ export default class TableComponent extends Vue {
                 } else if (x.dictionaryPromise) {
                     x.dictionaryPromise
                     .then(z => {
+                        console.log(z);
                         x.items = z;
                         resolve();
                     });
-                } else if (x.itemsPromise) {
-                    x.itemsPromise()
-                    .then(z => {
-                        x.items = z;
-                        resolve();
-                    })
                 }
             });
         });
+        await Promise.all(headerPromises);
         
         const filterPromises = this.options.filters
             .filter(x => !x.selectItems && (x.selectItemsFromDictionary || x.selectItemsFromPromise)).map(x => {
@@ -329,7 +331,7 @@ export default class TableComponent extends Vue {
             });
         });
 
-        await Promise.all([headerPromises, filterPromises]);
+        await Promise.all(filterPromises);
 
         this.originalHeaders = JSON.parse(JSON.stringify(this.options.headers));
         for (let i = 0; i < this.originalHeaders.length; i++) {
@@ -348,6 +350,7 @@ export default class TableComponent extends Vue {
             });
             this.options.headers.sort((a, b) => a.order - b.order);
         }
+        this.loading = false;
     }
 
     mounted() {
@@ -452,6 +455,7 @@ export default class TableComponent extends Vue {
     async loadData() {
         try {
             this.tableLoading = true;
+            await this.loadHeaders();
             const filteredRequest = this.AddFilter();
             const request = this.options.searchData 
                 ? await this.options.searchData(filteredRequest)

@@ -1,4 +1,3 @@
-import { CacheItem } from "ayax-common-cache";
 import { DateHelper } from "ayax-common-helpers";
 import { IListItem, SortableField } from "ayax-common-types";
 
@@ -7,8 +6,7 @@ export class TableComponentHeader {
     value: string;
     text: string;
     dictionary?: string;
-    dictionaryPromise?: Promise<CacheItem[]>;
-    itemsPromise?: () => Promise<IListItem[]>;
+    dictionaryPromise?: Promise<IListItem[]>;
     items: IListItem[];
     isVisible = true;
     hiddenable = true;

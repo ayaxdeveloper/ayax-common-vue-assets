@@ -52,12 +52,14 @@ import { ActionItem } from "../../src/Components/ActionbarComponent/ActionItem";
 import { TableOptions } from "../../src/Components/TableComponent/TableOptions";
 import { FormComponentItem } from "../../src/Components/FormComponent/FormItem";
 import { ICacheService, CacheItem } from "../../../../../DEV/Repos/ayax-common-vue-assets/node_modules/ayax-common-cache/dist";
+import TestDataService from "../Services/TestDataService/TestDataService";
 
 @Component
 export default class TableTestLayout extends Vue {
     @Inject() operationService: IOperationService;
     @Inject() cacheService: ICacheService;
 
+    testDataService = new TestDataService();
     editDialog = false;
     options: TableOptions = new TableOptions({
         title: "Тестовая таблица",
@@ -70,8 +72,7 @@ export default class TableTestLayout extends Vue {
             TableComponentHeader.String({
                 value: "dictionaryId",
                 text: "Справочник",
-                // dictionaryPromise: this.cacheService.List("dictionary")
-                dictionaryPromise: this.operationService.get<CacheItem[]>("/dictionary/list").then(x => x.ensureSuccess())
+                dictionaryPromise: new Promise<CacheItem[]>((resolve) => setTimeout(() => resolve(this.testDataService.getDictionary().map(x => new CacheItem(x))), 2000))
             }),
             TableComponentHeader.String({value: "qq", text: "Статус обращений qq", custom: true}),
             TableComponentHeader.Date({value: "created", text: "Дата создания"}),
