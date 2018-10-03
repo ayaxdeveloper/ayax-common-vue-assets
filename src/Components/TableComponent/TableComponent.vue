@@ -285,7 +285,7 @@ export default class TableComponent extends Vue {
     }
 
     async created() {
-        const headerPromises = this.options.headers.filter(x => (x.dictionary || x.dictionaryPromise) && !x.items)
+        const headerPromises = this.options.headers.filter(x => (x.dictionary || x.dictionaryPromise || x.itemsPromise) && !x.items)
             .map(x => {
             return new Promise((resolve) => {
                 if (x.dictionary) {
@@ -300,6 +300,12 @@ export default class TableComponent extends Vue {
                         x.items = z;
                         resolve();
                     });
+                } else if (x.itemsPromise) {
+                    x.itemsPromise()
+                    .then(z => {
+                        x.items = z;
+                        resolve();
+                    })
                 }
             });
         });

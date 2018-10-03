@@ -1,6 +1,6 @@
 import { CacheItem } from "ayax-common-cache";
 import { DateHelper } from "ayax-common-helpers";
-import { SortableField } from "ayax-common-types";
+import { IListItem, SortableField } from "ayax-common-types";
 
 export class TableComponentHeader {
     align = "left";
@@ -8,7 +8,8 @@ export class TableComponentHeader {
     text: string;
     dictionary?: string;
     dictionaryPromise?: Promise<CacheItem[]>;
-    items: CacheItem[];
+    itemsPromise?: () => Promise<IListItem[]>;
+    items: IListItem[];
     isVisible = true;
     hiddenable = true;
     width?: number;
