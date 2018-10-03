@@ -51,10 +51,12 @@ import {
 import { ActionItem } from "../../src/Components/ActionbarComponent/ActionItem";
 import { TableOptions } from "../../src/Components/TableComponent/TableOptions";
 import { FormComponentItem } from "../../src/Components/FormComponent/FormItem";
+import { ICacheService, CacheItem } from "../../../../../DEV/Repos/ayax-common-vue-assets/node_modules/ayax-common-cache/dist";
 
 @Component
 export default class TableTestLayout extends Vue {
     @Inject() operationService: IOperationService;
+    @Inject() cacheService: ICacheService;
 
     editDialog = false;
     options: TableOptions = new TableOptions({
@@ -65,6 +67,12 @@ export default class TableTestLayout extends Vue {
             TableComponentHeader.String({value: "id", text: "Id", hiddenable: false}),
             TableComponentHeader.String({value: "code", text: "Код"}),
             TableComponentHeader.String({value: "title", text: "Наименование", sortable: true}),
+            TableComponentHeader.String({
+                value: "dictionaryId",
+                text: "Справочник",
+                // dictionaryPromise: this.cacheService.List("dictionary")
+                dictionaryPromise: this.operationService.get<CacheItem[]>("/dictionary/list").then(x => x.ensureSuccess())
+            }),
             TableComponentHeader.String({value: "qq", text: "Статус обращений qq", custom: true}),
             TableComponentHeader.Date({value: "created", text: "Дата создания"}),
             TableComponentHeader.String({value: "ww", text: "Статус обращений ww", custom: true})
