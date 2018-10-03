@@ -303,7 +303,6 @@ export default class TableComponent extends Vue {
                 } else if (x.dictionaryPromise) {
                     x.dictionaryPromise
                     .then(z => {
-                        console.log(z);
                         x.items = z;
                         resolve();
                     });
