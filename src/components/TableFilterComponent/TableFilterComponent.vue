@@ -128,7 +128,7 @@
             </v-flex>
             <v-flex class="pb-2 filter" style="height: 48px; padding-top: 9px" 
                 v-else-if="filter.requestType == filterTypes['In'] && filter.inputType == filterInputTypes['ButtonToggle'] && filter.buttonsForToggle">
-                <v-btn-toggle v-model="filter.values" light multiple class="filterBtnToggle">
+                <v-btn-toggle v-model="filter.values" light :multiple="filter.buttonsMultiple" class="filterBtnToggle">
                     <v-btn style="height: 30px" small flat v-for="(btn, index) in filter.buttonsForToggle" :key="`${filter.name}${index}`" :value="btn.value" class="filterBtn">
                         {{btn.text}}
                     </v-btn>

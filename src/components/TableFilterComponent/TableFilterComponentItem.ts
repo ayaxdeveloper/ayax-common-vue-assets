@@ -17,6 +17,7 @@ export class TableFilterComponentItem {
     buttonText?: string;
     buttonClickedText?: string;
     buttonsForToggle?: Array<{text: string, value: any}>;
+    buttonsMultiple = true;
     largeInput = false;
     placeholder?: string;
     selectItems?: SelectItem[];
