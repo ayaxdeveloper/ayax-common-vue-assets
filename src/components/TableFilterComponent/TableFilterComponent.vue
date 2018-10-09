@@ -170,6 +170,11 @@
                             </v-btn>
                             <v-list dense>
                                 <v-list-tile
+                                @click="clickDropdown(null)"
+                                >
+                                <v-list-tile-title>Не выбрано</v-list-tile-title>
+                                </v-list-tile>
+                                <v-list-tile
                                 v-for="(btn, index) in filter.buttonsForToggle"
                                 :key="`${filter.name}${index}`"
                                 @click="clickDropdown(btn.value)"
