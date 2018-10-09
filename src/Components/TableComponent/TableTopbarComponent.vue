@@ -16,7 +16,7 @@
                         v-for="(topbarFilter, index) in filters.filter(filter => filter.appearance === filterAppearance['Topbar'])" 
                         :key="topbarFilter.name"
                         :style="{width: topbarFilter.inputType == filterInputTypes['Button'] 
-                            || topbarFilter.inputType == filterInputTypes['ButtonToggle']  ? 'initial' : '180px'}" 
+                            || topbarFilter.inputType == filterInputTypes['ButtonToggle'] || topbarFilter.inputType == filterInputTypes['ButtonDropdown'] ? 'initial' : '180px'}" 
                         :filter="topbarFilter"
                         :index="index"
                         @emit-filter="applyEmittedFilter"

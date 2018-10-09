@@ -122,17 +122,86 @@
                     </template>
                 </v-autocomplete>
             </v-flex>
-            <v-flex class="pb-2" style="height: 48px; padding-top: 9px" 
+            <v-flex class="pb-2 filter" style="height: 48px" 
                 v-else-if="filter.requestType == filterTypes['Eq'] && filter.inputType == filterInputTypes['Button']">
-                <v-btn style="height: 30px" small light @click="changeBtnValue()" :class="['filterBtn', filter.values[0] == true || filter.buttonClickedText ? 'clicked' : 'released']">{{ filter.buttonClickedText && filter.values[0] == true ? filter.buttonClickedText : filter.buttonText }}</v-btn>
+                <template v-if="filter.label">
+                    <v-layout row class="filterLabel">{{filter.label}}</v-layout>
+                    <v-layout row style="margin-top:5px">
+                        <v-btn style="height: 24px" small light @click="changeBtnValue()" :class="['filterBtn', filter.values[0] == true || filter.buttonClickedText ? 'clicked' : 'released']">{{ filter.buttonClickedText && filter.values[0] == true ? filter.buttonClickedText : filter.buttonText }}</v-btn>
+                    </v-layout>
+                </template>
+                <template v-else>
+                    <v-btn style="height: 36px; margin-top:5px" small light @click="changeBtnValue()" :class="['filterBtn', filter.values[0] == true || filter.buttonClickedText ? 'clicked' : 'released']">{{ filter.buttonClickedText && filter.values[0] == true ? filter.buttonClickedText : filter.buttonText }}</v-btn>
+                </template>
             </v-flex>
-            <v-flex class="pb-2 filter" style="height: 48px; padding-top: 9px" 
-                v-else-if="filter.requestType == filterTypes['In'] && filter.inputType == filterInputTypes['ButtonToggle'] && filter.buttonsForToggle">
-                <v-btn-toggle v-model="filter.values" light :multiple="filter.buttonsMultiple" class="filterBtnToggle">
-                    <v-btn style="height: 30px" small flat v-for="(btn, index) in filter.buttonsForToggle" :key="`${filter.name}${index}`" :value="btn.value" class="filterBtn">
-                        {{btn.text}}
-                    </v-btn>
-                </v-btn-toggle>
+            <v-flex class="pb-2 filter" style="height: 48px" 
+                v-else-if="(filter.requestType == filterTypes['In'] || filter.requestType == filterTypes['Eq']) && filter.inputType == filterInputTypes['ButtonToggle'] && filter.buttonsForToggle">
+                <template v-if="filter.label">
+                    <v-layout row class="filterLabel">{{filter.label}}</v-layout>
+                    <v-layout row style="margin-top:5px">
+                        <v-btn-toggle v-model="filter.values" light :multiple="filter.requestType == filterTypes['In']" class="filterBtnToggle">
+                            <v-btn style="height: 24px" small flat v-for="(btn, index) in filter.buttonsForToggle" :key="`${filter.name}${index}`" :value="btn.value" class="filterBtn">
+                                {{btn.text}}
+                            </v-btn>
+                        </v-btn-toggle>
+                    </v-layout>
+                </template>
+                <template v-else>
+                    <v-btn-toggle v-model="filter.values" light :multiple="filter.requestType == filterTypes['In']" class="filterBtnToggle" style="margin-top:5px">
+                        <v-btn style="height: 36px" small flat v-for="(btn, index) in filter.buttonsForToggle" :key="`${filter.name}${index}`" :value="btn.value" class="filterBtn">
+                            {{btn.text}}
+                        </v-btn>
+                    </v-btn-toggle>
+                </template>
+            </v-flex>
+            <v-flex class="pb-2 filter" style="height: 46px"
+                v-else-if="filter.requestType == filterTypes['Eq'] && filter.inputType == filterInputTypes['ButtonDropdown']">
+                <template v-if="filter.label">
+                    <v-layout row class="filterLabel">{{filter.label}}</v-layout>
+                    <v-layout row style="margin-top:5px">
+                        <v-menu offset-y light>
+                            <v-btn style="height: 24px"
+                                slot="activator"
+                                light
+                                color="default"
+                            >
+                                {{ButtonDropdownText}}
+                                <v-icon style="margin-left:8px;">mdi-chevron-down</v-icon>
+                            </v-btn>
+                            <v-list dense>
+                                <v-list-tile
+                                v-for="(btn, index) in filter.buttonsForToggle"
+                                :key="`${filter.name}${index}`"
+                                @click="clickDropdown(btn.value)"
+                                >
+                                <v-list-tile-title>{{ btn.text }}</v-list-tile-title>
+                                </v-list-tile>
+                            </v-list>
+                        </v-menu>
+                    </v-layout>
+                </template>
+                <template v-else>
+                    <v-menu offset-y light>
+                        <v-btn style="height: 36px"
+                            slot="activator"
+                            light
+                            color="default"
+                        >
+                            {{ButtonDropdownText}}
+                            <v-icon style="margin-left:8px;">mdi-chevron-down</v-icon>
+                        </v-btn>
+                        <v-list dense>
+                            <v-list-tile
+                            v-for="(btn, index) in filter.buttonsForToggle"
+                            :key="`${filter.name}${index}`"
+                            @click="clickDropdown(btn.value)"
+                            >
+                            <v-list-tile-title>{{ btn.text }}</v-list-tile-title>
+                            </v-list-tile>
+                        </v-list>
+                    </v-menu>
+                </template>
+                
             </v-flex>
             <v-flex class="pr-2 pb-2 switcher" style="width: 180px; height: 48px; padding-top: 9px" 
                 v-else-if="filter.requestType == filterTypes['Eq'] && filter.inputType == filterInputTypes['Checkbox']">
@@ -199,6 +268,15 @@ export default class TableFilterComponent extends Vue {
             }
         }
         this.applyFilter();
+    }
+    get ButtonDropdownText() {
+        const search = this.filter.buttonsForToggle.find(x => x.value == this.filter.values[0]);
+        return search ? search.text : "Выберите";
+    }
+
+    clickDropdown(value: any) {
+        this.filter.values = [];
+        this.filter.values.push(value);
     }
 
     @Watch("filter.values")

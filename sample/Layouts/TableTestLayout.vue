@@ -130,21 +130,47 @@ export default class TableTestLayout extends Vue {
             label: "Название улицы",
             largeInput: true
             }),
-            new TableFilterComponentItem({
-                requestName: "titlefilter",
-                appearance: TableFilterComponentItemAppearance.Topbar, 
-                name: "titleFilter",
-                requestType: TableFilterComponentItemType.Like,
-                placeholder: "Введите",
-                label: "Наименование",
-                active: true,
-            }),
+            // new TableFilterComponentItem({
+            //     requestName: "titlefilter",
+            //     appearance: TableFilterComponentItemAppearance.Topbar, 
+            //     name: "titleFilter",
+            //     requestType: TableFilterComponentItemType.Like,
+            //     placeholder: "Введите",
+            //     label: "Наименование",
+            //     active: true,
+            // }),
             new TableFilterComponentItem({
                 name: "buttomToggleFilter",
                 requestName: "buttonToggleFilter", 
+                label: "ButtonToggle",
                 appearance: TableFilterComponentItemAppearance.Topbar, 
                 inputType: TableFilterComponentItemInputType.ButtonToggle,
                 requestType: TableFilterComponentItemType.In,
+                buttonsForToggle: [
+                    {text: "Первый", value: "1"},
+                    {text: "Второй", value: "2"},
+                    {text: "Третий", value: "3"}
+                ]
+            }),
+            new TableFilterComponentItem({
+                name: "buttomToggleFilter1",
+                requestName: "buttonToggleFilter1", 
+                appearance: TableFilterComponentItemAppearance.Topbar, 
+                inputType: TableFilterComponentItemInputType.ButtonToggle,
+                requestType: TableFilterComponentItemType.In,
+                buttonsForToggle: [
+                    {text: "Первый", value: "1"},
+                    {text: "Второй", value: "2"},
+                    {text: "Третий", value: "3"}
+                ]
+            }),
+            new TableFilterComponentItem({
+                name: "buttomToggleFilter2",
+                requestName: "buttonToggleFilter2", 
+                appearance: TableFilterComponentItemAppearance.Topbar, 
+                inputType: TableFilterComponentItemInputType.ButtonDropdown,
+                requestType: TableFilterComponentItemType.Eq,
+                label: "Dropdown",
                 buttonsForToggle: [
                     {text: "Первый", value: "1"},
                     {text: "Второй", value: "2"},
@@ -164,7 +190,8 @@ export default class TableTestLayout extends Vue {
                 requestName: "buttonFilter", 
                 appearance: TableFilterComponentItemAppearance.Topbar, 
                 inputType: TableFilterComponentItemInputType.Button,
-                buttonText: "Кнопка"
+                buttonText: "Кнопка",
+                label: "Кнопка"
             }),
             new TableFilterComponentItem({
                 name: "buttomFilter2",
