@@ -1,4 +1,7 @@
 /node_modules
 /sample/node_modules
 /dist
+*.js
+*.d.ts
+*.js.map
 debug.log

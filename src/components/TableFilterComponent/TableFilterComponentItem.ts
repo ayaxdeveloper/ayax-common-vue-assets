@@ -1,6 +1,5 @@
 import { SelectItem } from "ayax-common-types";
 import { Filter } from "./Filter";
-import { FilterValue } from "./FilterValue";
 import { TableFilterComponentItemAppearance } from "./TableFilterComponentItemAppearance";
 import { TableFilterComponentItemInputType } from "./TableFilterComponentItemInputType";
 import { TableFilterComponentItemType } from "./TableFilterComponentItemType";
@@ -33,30 +32,19 @@ export class TableFilterComponentItem {
         switch (this.requestType) {
             case TableFilterComponentItemType.Eq:
                 if (this.values[0]) {
-                    return new Filter({term: "eq", val: new FilterValue({ value: this.values[0] })});
+                    return Filter.Eq(this.values[0]);
                 }
                 break;
             case TableFilterComponentItemType.Like:
                 if (this.values[0]) {
-                    return new Filter({term: "like", val: new FilterValue({ value: `${this.values[0]}`})});
+                    return Filter.Like(this.values[0]);
                 }
                 break;
             case TableFilterComponentItemType.Range:
-                const filterValue = new FilterValue();
-
-                if (this.values[0]) {
-                    filterValue.left = this.values[0];
-                }
-                if (this.values[1]) {
-                    filterValue.right = this.values[1];
-                }
-                if (this.values[0] || this.values[1]) {
-                    return new Filter({term: "fromeq toeq", val: filterValue});
-                }
-                break;
+                return Filter.Range(this.values);
             case TableFilterComponentItemType.In:
                 if (this.values.length > 0) {
-                    return new Filter({term: "in", val: new FilterValue({values: this.values})});
+                    return Filter.In(this.values);
                 }
                 break;
             default:
