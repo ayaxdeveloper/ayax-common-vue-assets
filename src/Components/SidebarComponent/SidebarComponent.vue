@@ -1,14 +1,16 @@
 <template>
     <v-navigation-drawer class="sidebarComponent" app :dark="darkTheme" :mini-variant.sync="mini" mini-variant-width="60" permanent fixed :width="width">
-        <div v-show="!mini" class="userPhotoContainer mx-3 mb-3 mt-3">
-            <v-card flat>
-                <img class="userPhoto mx-auto" :src="currentUser.profilePictureUrl ? currentUser.profilePictureUrl : noAvatarImage" 
-                alt="avatar">
-            </v-card>
-            <div class="mt-2" style="text-align: center; color: #fff; font-size: 13px">
-                {{currentUser && currentUser.name}}
+        <v-layout justify-center>
+            <div v-show="!mini" class="userPhotoContainer mt-3">
+                <v-card flat>
+                    <img class="userPhoto mx-auto" :src="currentUser.profilePictureUrl ? currentUser.profilePictureUrl : noAvatarImage" 
+                    alt="avatar">
+                </v-card>
+                <div class="mt-2" style="text-align: center; color: #fff; font-size: 13px">
+                    {{currentUser && currentUser.name}}
+                </div>
             </div>
-        </div>
+        </v-layout>
         <v-layout>
             <v-flex class="sidebar-content">
                 <v-list dense>
