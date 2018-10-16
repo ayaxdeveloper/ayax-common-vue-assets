@@ -59,7 +59,7 @@
     :disabled="field.disabled"
     :hint="field.hint"
     :multiple="field.multiple"
-    bottom
+    menu-props="bottom"
     :hide-details="!field.hint"
     clearable
     :rules="field.rules"
