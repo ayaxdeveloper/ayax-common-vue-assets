@@ -51,7 +51,7 @@ import {
 import { ActionItem } from "../../src/Components/ActionbarComponent/ActionItem";
 import { TableOptions } from "../../src/Components/TableComponent/TableOptions";
 import { FormComponentItem } from "../../src/Components/FormComponent/FormItem";
-import { ICacheService, CacheItem } from "../../../../../DEV/Repos/ayax-common-vue-assets/node_modules/ayax-common-cache/dist";
+import { ICacheService, CacheItem } from "ayax-common-cache/dist";
 import TestDataService from "../Services/TestDataService/TestDataService";
 
 @Component

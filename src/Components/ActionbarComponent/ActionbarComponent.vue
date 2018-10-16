@@ -168,14 +168,14 @@ export default class ActionbarComponent extends Vue{
 
     idFilter() {
         const request = {
-            idFilter: {
+            idsFilter: {
                 term: "in",
                 val: {
                     values: []
                 }
             }
         };
-        request.idFilter.val.values = this.selectedItems.map(el => el.id);
+        request.idsFilter.val.values = this.selectedItems.map(el => el.id);
         return request;
     }
 }

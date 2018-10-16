@@ -7,7 +7,7 @@
             :darkTopbar="options.darkTopbar"
             :itemsQuantity="options.pagination.totalItems"
             :filters.sync="options.filters"
-            @apply-filter="loadData()"
+            @apply-filter="applyFilter()"
             @relocate-actionbar="updateActionbar++"
         >
         <template slot="settings" v-if="options.configurable">
@@ -20,7 +20,7 @@
                 </v-btn>
                 <v-list dense>
                     <draggable :list="options.headers" @update="onUpdateDraggable">
-                        <v-list-tile v-for="header in options.headers" :key="header.value" @click="">
+                        <v-list-tile v-for="header in options.headers" :key="header.value" @click.stop>
                             <v-list-tile-action>
                                 <v-checkbox color="primary" v-if="header.hiddenable" 
                                     v-model="header.isVisible">
@@ -223,7 +223,7 @@
                 <v-layout justify-end>
                     <div class="pt-2 pr-3 d-inline-block">Cтрок на странице: </div>
                     <v-select v-model="options.pagination.perPage" 
-                        style="margin-top: 4px; max-width: 54px" dense :items="customPagination"
+                        style="margin-top: 4px; max-width: 54px; padding-top: 0px" dense :items="customPagination"
                     >
                     </v-select>
                 </v-layout>
@@ -286,7 +286,12 @@ export default class TableComponent extends Vue {
         return selectedOnPage;
     }
 
-    async created() {
+    applyFilter() {
+        if (this.options.pagination.page === 1) {
+            this.loadData();
+        } else {
+            this.options.pagination.page = 1;
+        }
     }
 
     async loadHeaders() {
