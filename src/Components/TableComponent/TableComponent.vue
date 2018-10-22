@@ -157,7 +157,7 @@
                         verticalAlign: options.actions && options.actions.filter(x => x.single && x.active).length > 0 ? 'baseline' : 'middle'}"
                 >
                     <td
-                        v-if="options.selectable"
+                        v-if="options.selectable || options.selectableSingle"
                         style="width: 48px; padding: 0 0 4px 16px !important; vertical-align: top"
                     >
                         <v-checkbox
@@ -567,7 +567,22 @@ export default class TableComponent extends Vue {
         return filteredRequest; 
     }
 
+    @Emit()
+    onSelectItem(item) {}
+
     selectItem(item) {
+        if (this.options.selectableSingle) {
+            if (this.selectedItems.length > 0 && this.selectedItems[0].id && this.selectedItems[0].id === item.id) {
+                this.selectedItems = [];
+                item.selected = false;
+            } else {
+                this.items.forEach(item => item.selected = false);
+                item.selected = true;
+                this.selectedItems = [item];
+            }
+            this.onSelectItem(item);
+            return;
+        }
         const itemIndex = this.selectedItems.findIndex(selectedItem => selectedItem.id === item.id);
         if (itemIndex > -1) {
             this.selectedItems.splice(itemIndex, 1);
