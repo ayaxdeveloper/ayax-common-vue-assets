@@ -10,36 +10,57 @@
             @apply-filter="applyFilter()"
             @relocate-actionbar="updateActionbar++"
         >
-        <template slot="settings" v-if="options.configurable">
-            <v-menu bottom offset-y left offset-x :close-on-content-click="false" :value="isTableMenuVisible">
-                <v-btn class="ml-2" flat style="height: 30px; width: 30px" small icon title="Настройки таблицы" 
-                    slot="activator" 
-                    @click="isTableMenuVisible=true"
+            <template slot="topbar-items">
+                <slot name="topbar-items"></slot>
+            </template>
+            <template slot="settings" v-if="options.configurable">
+                <v-menu
+                    bottom
+                    offset-y
+                    left
+                    offset-x
+                    :close-on-content-click="false"
+                    :value="isTableMenuVisible"
                 >
-                    <v-icon>mdi-settings</v-icon>
-                </v-btn>
-                <v-list dense>
-                    <draggable :list="options.headers" @update="onUpdateDraggable">
-                        <v-list-tile v-for="header in options.headers" :key="header.value" @click.stop>
-                            <v-list-tile-action>
-                                <v-checkbox color="primary" v-if="header.hiddenable" 
-                                    v-model="header.isVisible">
-                                </v-checkbox>
-                                <v-checkbox v-else input-value="true" disabled></v-checkbox>
-                            </v-list-tile-action>
-                            <v-list-tile-title>{{ header.text }}</v-list-tile-title>
-                        </v-list-tile>
-                    </draggable>
-                    <v-divider></v-divider>
+                    <v-btn
+                        class="ml-2"
+                        flat
+                        style="height: 30px; width: 30px"
+                        small
+                        icon
+                        title="Настройки таблицы"
+                        slot="activator"
+                        @click="isTableMenuVisible=true"
+                    >
+                        <v-icon>mdi-settings</v-icon>
+                    </v-btn>
+                    <v-list dense>
+                        <draggable :list="options.headers" @update="onUpdateDraggable">
+                            <v-list-tile
+                                v-for="header in options.headers"
+                                :key="header.value"
+                                @click.stop
+                            >
+                                <v-list-tile-action>
+                                    <v-checkbox
+                                        color="primary"
+                                        v-if="header.hiddenable"
+                                        v-model="header.isVisible"
+                                    ></v-checkbox>
+                                    <v-checkbox v-else input-value="true" disabled></v-checkbox>
+                                </v-list-tile-action>
+                                <v-list-tile-title>{{ header.text }}</v-list-tile-title>
+                            </v-list-tile>
+                        </draggable>
+                        <v-divider></v-divider>
                         <v-list-tile @click="resetTableSettings()">
-                        <v-list-tile-title>Сбросить настройки таблицы</v-list-tile-title>
-                    </v-list-tile>
-                </v-list>
-            </v-menu>
-        </template>
+                            <v-list-tile-title>Сбросить настройки таблицы</v-list-tile-title>
+                        </v-list-tile>
+                    </v-list>
+                </v-menu>
+            </template>
         </a-table-topbar>
-        <v-progress-linear :active="loading" height="2" style="margin: 0px" :indeterminate="true">
-        </v-progress-linear>
+        <v-progress-linear :active="loading" height="2" style="margin: 0px" :indeterminate="true"></v-progress-linear>
         <v-data-table
             v-show="!loading"
             :headers="options.headers"
@@ -60,131 +81,152 @@
             :style="items.length > 10 && options.maxHeight ? `--maxHeight: ${options.maxHeight}px` : ''"
             v-resize="onTableResize"
         >
-        <template slot="headers" slot-scope="props">
-            <tr class="fixedTableHeader">
-                <th v-if="options.selectable" class="select-checkbox">
-                    <v-checkbox v-if="!options.selectableSingle"
-                        primary
-                        class="pb-1"
-                        :input-value="selectedItemsOnPage.length === items.length && items.length > 0 ? true : false"
-                        color="primary"
-                        :indeterminate="selectedItemsOnPage.length > 0 && selectedItemsOnPage.length !== items.length"
-                        hide-details
-                        @click.stop="toggleAllItems()"
-                    ></v-checkbox>
-                </th>
-                <th class="text-xs-center line-action" 
-                    v-if="options.actions && options.actions.filter(x => x.single && x.active).length > 0"
-                >
-                    <v-icon>mdi-dots-horizontal</v-icon>
-                </th>
-                <th v-for="header in props.headers.filter(x => x.isVisible)" :key="header.value"
-                    :class="[header.align == 'right' ? 'text-xs-right' : 'text-xs-left', 'black--text']"
-                >
-                    {{ header.text.toUpperCase() }}
-                    <v-icon v-if="header.sortable" small @click="changeSort(header.value)"
-                        :class="[(header.sortBy && header.sortBy.isdesc !== undefined) ? 'black--text' : '']"
-                    >
-                        {{ (header.sortBy && header.sortBy.isdesc) ? 'mdi-arrow-down' : 'mdi-arrow-up' }}
-                    </v-icon>
-                </th>
-                <v-progress-linear :active="tableLoading" height="2" style="margin: 0px" :indeterminate="true">
-                </v-progress-linear>
-            </tr>
-            <tr :id="options.tableName + '-static-header'" style="height: 36px">
-                <th v-if="options.selectable" class="select-checkbox">
-                    <v-checkbox v-if="!options.selectableSingle"
-                        primary
-                        class="pb-1"
-                        hide-details
-                    ></v-checkbox>
-                </th>
-                <th class="text-xs-center line-action" 
-                    v-if="options.actions && options.actions.filter(x => x.single && x.active).length > 0"
-                >
-                    <v-icon>mdi-dots-horizontal</v-icon>
-                </th>
-                <th v-for="header in props.headers.filter(x => x.isVisible)" :key="header.value"
-                    :class="[header.align == 'right' ? 'text-xs-right' : 'text-xs-left', 'black--text']"
-                    style="color: #fff !important; background-color: #fff !important"
-                >
-                    {{ header.text.toUpperCase() }}
-                    <v-icon v-if="header.sortable" small
-                        :class="[(header.sortBy && header.sortBy.isdesc !== undefined) ? 'black--text' : '']"
-                    >
-                        {{ (header.sortBy && header.sortBy.isdesc) ? 'mdi-arrow-down' : 'mdi-arrow-up' }}
-                    </v-icon>
-                </th>
-            </tr>
-        </template>
-        <template slot="items" slot-scope="props">
-            <tr :style="{ backgroundColor: options.rowColor(props.item), verticalAlign: 'baseline' }">
-                <td v-if="options.selectable" 
-                    style="width: 48px; padding: 0 0 0 16px !important; vertical-align: top"
-                >
-                    <v-checkbox
-                        @click.stop="selectItem(props.item)"
-                        :input-value="props.item.selected ? true : false"
-                        primary
-                        class="pt-2"
-                        hide-details
-                        color="primary"
-                    ></v-checkbox>
-                </td>
-                <td class="text-xs-right line-action" 
-                    v-if="options.actions && options.actions.filter(x => x.single && x.active).length > 0">
-                    <div class="text-xs-center">
-                        <v-menu :disabled="selectedItems.length > 0" offset-x offset-y>
-                            <v-btn 
-                            :disabled="selectedItems.length > 0"
+            <template slot="headers" slot-scope="props">
+                <tr class="fixedTableHeader">
+                    <th v-if="options.selectable" class="select-checkbox">
+                        <v-checkbox
+                            v-if="!options.selectableSingle"
+                            primary
+                            class="pb-1"
+                            :input-value="selectedItemsOnPage.length === items.length && items.length > 0 ? true : false"
                             color="primary"
-                            dark 
-                            flat
-                            slot="activator"
+                            :indeterminate="selectedItemsOnPage.length > 0 && selectedItemsOnPage.length !== items.length"
+                            hide-details
+                            @click.stop="toggleAllItems()"
+                        ></v-checkbox>
+                    </th>
+                    <th
+                        class="text-xs-center line-action"
+                        v-if="options.actions && options.actions.filter(x => x.single && x.active).length > 0"
+                    >
+                        <v-icon>mdi-dots-horizontal</v-icon>
+                    </th>
+                    <th
+                        v-for="header in props.headers.filter(x => x.isVisible)"
+                        :key="header.value"
+                        :class="[header.align == 'right' ? 'text-xs-right' : 'text-xs-left', 'black--text']"
+                    >
+                        {{ header.text.toUpperCase() }}
+                        <v-icon
+                            v-if="header.sortable"
                             small
-                            icon
-                            >
-                                <v-icon>mdi-dots-horizontal</v-icon>
-                            </v-btn>
-                            <v-list dark dense>
-                                <v-list-tile 
-                                    v-for="action in options.actions.filter(action => action.single && action.active)" 
-                                    :key="action.name"
-                                    @click="executeSingleAction(action.name, props.item)"
-                                >
-                                    <v-list-tile-action v-if="action.icon">
-                                        <v-icon>{{action.icon}}</v-icon>
-                                    </v-list-tile-action>
-                                    <v-list-tile-title v-if="action.title && !action.onlyIcon">
-                                        {{ action.title }}
-                                    </v-list-tile-title>
-                                </v-list-tile>
-                            </v-list>
-                        </v-menu>
-                    </div>
-                </td>
-                <td v-for="(header, index) in visibleHeaders" :key="index"
-                    :class="[header.align == 'right' ? 'text-xs-right' : 'text-xs-left']"
-                    @dblclick="firstSingleAction(props.item)"
+                            @click="changeSort(header.value)"
+                            :class="[(header.sortBy && header.sortBy.isdesc !== undefined) ? 'black--text' : '']"
+                        >{{ (header.sortBy && header.sortBy.isdesc) ? 'mdi-arrow-down' : 'mdi-arrow-up' }}</v-icon>
+                    </th>
+                    <v-progress-linear
+                        :active="tableLoading"
+                        height="2"
+                        style="margin: 0px"
+                        :indeterminate="true"
+                    ></v-progress-linear>
+                </tr>
+                <tr :id="options.tableName + '-static-header'" style="height: 36px">
+                    <th v-if="options.selectable" class="select-checkbox">
+                        <v-checkbox
+                            v-if="!options.selectableSingle"
+                            primary
+                            class="pb-1"
+                            hide-details
+                        ></v-checkbox>
+                    </th>
+                    <th
+                        class="text-xs-center line-action"
+                        v-if="options.actions && options.actions.filter(x => x.single && x.active).length > 0"
+                    >
+                        <v-icon>mdi-dots-horizontal</v-icon>
+                    </th>
+                    <th
+                        v-for="header in props.headers.filter(x => x.isVisible)"
+                        :key="header.value"
+                        :class="[header.align == 'right' ? 'text-xs-right' : 'text-xs-left', 'black--text']"
+                        style="color: #fff !important; background-color: #fff !important"
+                    >
+                        {{ header.text.toUpperCase() }}
+                        <v-icon
+                            v-if="header.sortable"
+                            small
+                            :class="[(header.sortBy && header.sortBy.isdesc !== undefined) ? 'black--text' : '']"
+                        >{{ (header.sortBy && header.sortBy.isdesc) ? 'mdi-arrow-down' : 'mdi-arrow-up' }}</v-icon>
+                    </th>
+                </tr>
+            </template>
+            <template slot="items" slot-scope="props">
+                <tr
+                    :style="{ backgroundColor: options.rowColor(props.item), 
+                        verticalAlign: options.actions && options.actions.filter(x => x.single && x.active).length > 0 ? 'baseline' : 'middle'}"
                 >
-                    <slot :name="header.value" :item="props.item">
-                        <template 
-                            v-for="propertyname in Object.keys(props.item).filter(x => x === visibleHeaders[index].value)"
-                        >
-                            <template v-if="visibleHeaders[index].items">
-                                {{getFromDictionary(visibleHeaders[index], props.item[propertyname])}}
+                    <td
+                        v-if="options.selectable"
+                        style="width: 48px; padding: 0 0 4px 16px !important; vertical-align: top"
+                    >
+                        <v-checkbox
+                            @click.stop="selectItem(props.item)"
+                            :input-value="props.item.selected ? true : false"
+                            primary
+                            class="pt-2"
+                            hide-details
+                            color="primary"
+                        ></v-checkbox>
+                    </td>
+                    <td
+                        class="text-xs-right line-action"
+                        v-if="options.actions && options.actions.filter(x => x.single && x.active).length > 0"
+                    >
+                        <div class="text-xs-center">
+                            <v-menu :disabled="selectedItems.length > 0" offset-x offset-y>
+                                <v-btn
+                                    :disabled="selectedItems.length > 0"
+                                    color="primary"
+                                    dark
+                                    flat
+                                    slot="activator"
+                                    small
+                                    icon
+                                >
+                                    <v-icon>mdi-dots-horizontal</v-icon>
+                                </v-btn>
+                                <v-list dark dense>
+                                    <v-list-tile
+                                        v-for="action in options.actions.filter(action => action.single && action.active)"
+                                        :key="action.name"
+                                        @click="executeSingleAction(action.name, props.item)"
+                                    >
+                                        <v-list-tile-action v-if="action.icon">
+                                            <v-icon>{{action.icon}}</v-icon>
+                                        </v-list-tile-action>
+                                        <v-list-tile-title
+                                            v-if="action.title && !action.onlyIcon"
+                                        >{{ action.title }}</v-list-tile-title>
+                                    </v-list-tile>
+                                </v-list>
+                            </v-menu>
+                        </div>
+                    </td>
+                    <td
+                        v-for="(header, index) in visibleHeaders"
+                        :key="index"
+                        :class="[header.align == 'right' ? 'text-xs-right' : 'text-xs-left']"
+                        @dblclick="firstSingleAction(props.item)"
+                    >
+                        <slot :name="header.value" :item="props.item">
+                            <template
+                                v-for="propertyname in Object.keys(props.item).filter(x => x === visibleHeaders[index].value)"
+                            >
+                                <template
+                                    v-if="visibleHeaders[index].items"
+                                >{{getFromDictionary(visibleHeaders[index], props.item[propertyname])}}</template>
+                                <template
+                                    v-else
+                                >{{applyFormatterIfExists(header, props.item[propertyname])}}</template>
                             </template>
-                            <template v-else>
-                                {{applyFormatterIfExists(header, props.item[propertyname])}}
-                            </template>
-                        </template>
-                    </slot>
-                </td>
-            </tr>
-        </template>
+                        </slot>
+                    </td>
+                </tr>
+            </template>
         </v-data-table>
         <div class="actionbarAnchor" v-show="!loading">
-            <a-actionbar 
+            <a-actionbar
                 v-if="options.actions && options.actions.filter(el => !el.single && el.active).length > 0"
                 :actions="options.actions.filter(action => !action.single && action.active)"
                 :selectedItems="selectedItems"
@@ -192,19 +234,23 @@
                 :darkActionbar="options.darkActionbar"
                 :filteredRequest="lastFilteredRequest"
                 :updateActionbar="updateActionbar"
-            >
-            </a-actionbar>
+            ></a-actionbar>
         </div>
         <v-layout v-show="!loading" class="text-xs-center mt-2">
             <v-flex xs6>
                 <v-layout justify-start>
-                    <v-card v-if="selectedItems.length > 0" style="height: 36px; min-width: 120px" class="pa-2 mt-1">
+                    <v-card
+                        v-if="selectedItems.length > 0"
+                        style="height: 36px; min-width: 120px"
+                        class="pa-2 mt-1"
+                    >
                         <v-layout>
                             <v-flex>Выбрано</v-flex>
                             <v-flex>
-                                <div style="border-radius: 4px" class="px-2 ml-2 d-inline-block cyan darken-1 white--text">
-                                    {{ selectedItems.length }}
-                                </div>
+                                <div
+                                    style="border-radius: 4px"
+                                    class="px-2 ml-2 d-inline-block cyan darken-1 white--text"
+                                >{{ selectedItems.length }}</div>
                             </v-flex>
                             <v-flex>
                                 <v-icon @click="onClearSelected()" class="ml-2" small>mdi-close</v-icon>
@@ -214,18 +260,22 @@
                 </v-layout>
             </v-flex>
             <v-flex>
-                <v-pagination v-if="options.pagination" total-visible="10" 
-                    v-model="options.pagination.page" :length="getTotalPages()"
-                >
-                </v-pagination>
+                <v-pagination
+                    v-if="options.pagination"
+                    total-visible="10"
+                    v-model="options.pagination.page"
+                    :length="getTotalPages()"
+                ></v-pagination>
             </v-flex>
             <v-flex xs6>
                 <v-layout justify-end>
-                    <div class="pt-2 pr-3 d-inline-block">Cтрок на странице: </div>
-                    <v-select v-model="options.pagination.perPage" 
-                        style="margin-top: 4px; max-width: 54px; padding-top: 0px" dense :items="customPagination"
-                    >
-                    </v-select>
+                    <div class="pt-2 pr-3 d-inline-block">Cтрок на странице:</div>
+                    <v-select
+                        v-model="options.pagination.perPage"
+                        style="margin-top: 4px; max-width: 54px; padding-top: 0px"
+                        dense
+                        :items="customPagination"
+                    ></v-select>
                 </v-layout>
             </v-flex>
         </v-layout>
@@ -623,52 +673,52 @@ export default class TableComponent extends Vue {
 </script>
 
 <style>
-    .scrollableTable .v-table__overflow {
-        max-height: var(--maxHeight);
-        position: relative;
-    }
-    .scrollableTableOverflow .v-table__overflow {
-        overflow-y: scroll;
-    }
-    .a-table-component table.v-table tbody td:first-child, 
-    .a-table-component table.v-table tbody td:not(:first-child), 
-    .a-table-component table.v-table tbody th:first-child, 
-    .a-table-component table.v-table tbody th:not(:first-child), 
-    .a-table-component table.v-table thead td:first-child, 
-    .a-table-component table.v-table thead td:not(:first-child), 
-    .a-table-component table.v-table thead th:first-child, 
-    .a-table-component table.v-table thead th:not(:first-child) {
-        padding: 0 8px;
-    }
+.scrollableTable .v-table__overflow {
+  max-height: var(--maxHeight);
+  position: relative;
+}
+.scrollableTableOverflow .v-table__overflow {
+  overflow-y: scroll;
+}
+.a-table-component table.v-table tbody td:first-child,
+.a-table-component table.v-table tbody td:not(:first-child),
+.a-table-component table.v-table tbody th:first-child,
+.a-table-component table.v-table tbody th:not(:first-child),
+.a-table-component table.v-table thead td:first-child,
+.a-table-component table.v-table thead td:not(:first-child),
+.a-table-component table.v-table thead th:first-child,
+.a-table-component table.v-table thead th:not(:first-child) {
+  padding: 0 8px;
+}
 </style>
 
 
 <style scoped>
-    .a-table-component td {
-        height: auto;
-    }
-    .line-action {
-        width: 48px !important;
-        padding: 0 !important;
-    }
-    .select-checkbox {
-        width: 48px !important;
-        padding: 0 !important;
-        padding-left: 16px !important; 
-    }
-    .fixedTableHeader {
-        height: 36px;
-        background-color: #fff;
-        border-bottom: 1px solid #ccc;
-        position: absolute;
-        left: 0;
-        z-index: 1;
-    }
-    .fixedTableHeader th {
-        height: 36px;
-    }
-    .actionbarAnchor {
-        height: 48px;
-    }
+.a-table-component td {
+  height: auto;
+}
+.line-action {
+  width: 48px !important;
+  padding: 0 !important;
+}
+.select-checkbox {
+  width: 48px !important;
+  padding: 0 !important;
+  padding-left: 16px !important;
+}
+.fixedTableHeader {
+  height: 36px;
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+  position: absolute;
+  left: 0;
+  z-index: 1;
+}
+.fixedTableHeader th {
+  height: 36px;
+}
+.actionbarAnchor {
+  height: 48px;
+}
 </style>
 

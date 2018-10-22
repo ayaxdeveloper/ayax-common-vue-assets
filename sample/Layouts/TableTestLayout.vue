@@ -1,19 +1,30 @@
 <template>
     <div>
         <a-table :options.sync="options" :slot-toggle="slotToggle">
+            <template slot="topbar-items">
+                <v-btn
+                    style="height: 30px; width: 30px"
+                    class="ml-2 mt-2"
+                    small
+                    flat
+                    icon
+                    to="/employee/master"
+                >
+                    <v-icon>mdi-account-plus</v-icon>
+                </v-btn>
+            </template>
             <template slot="qq" slot-scope="{item}">
                 <div>{{item.activeLead.qq}}</div>
                 <template v-if="item.otherLeads.length > 0">
                     <v-flex class="mt-1 mb-1">
-                    <template v-if="item.slotToggle">
-                        <div v-for="lead in item.otherLeads" :key="lead.name">
-                            {{ lead.name }}
-                        </div>
-                    </template>
-                    <div class="tableItemSlot" @click.stop="toggleLead(item)">
-                        {{item.slotToggle ? 'Скрыть' : `Еще ${item.otherLeads.length} обращений`}}
-                    </div>
-                </v-flex>
+                        <template v-if="item.slotToggle">
+                            <div v-for="lead in item.otherLeads" :key="lead.name">{{ lead.name }}</div>
+                        </template>
+                        <div
+                            class="tableItemSlot"
+                            @click.stop="toggleLead(item)"
+                        >{{item.slotToggle ? 'Скрыть' : `Еще ${item.otherLeads.length} обращений`}}</div>
+                    </v-flex>
                 </template>
             </template>
             <template slot="ww" slot-scope="{item}">
@@ -311,13 +322,13 @@ export default class TableTestLayout extends Vue {
 </script>
 
 <style scoped>
-    .tableItemSlot {
-        display: inline;
-        font-size: 12px;
-        text-decoration: underline;
-    }
-    .tableItemSlot:hover {
-        cursor: pointer;
-    }
+.tableItemSlot {
+  display: inline;
+  font-size: 12px;
+  text-decoration: underline;
+}
+.tableItemSlot:hover {
+  cursor: pointer;
+}
 </style>
 
