@@ -690,26 +690,28 @@ export default class TableComponent extends Vue {
   max-height: var(--maxHeight);
   position: relative;
 }
+
 .scrollableTableOverflow .v-table__overflow {
   overflow-y: scroll;
 }
-.a-table-component table.v-table tbody td:first-child,
-.a-table-component table.v-table tbody td:not(:first-child),
-.a-table-component table.v-table tbody th:first-child,
-.a-table-component table.v-table tbody th:not(:first-child),
-.a-table-component table.v-table thead td:first-child,
-.a-table-component table.v-table thead td:not(:first-child),
-.a-table-component table.v-table thead th:first-child,
-.a-table-component table.v-table thead th:not(:first-child) {
+
+.a-table-component table.v-table tbody tr td:first-child,
+.a-table-component table.v-table thead tr th:first-child {
+  padding: 0 0 0 24px;
+}
+
+.a-table-component table.v-table tbody tr td:not(:first-child),
+.a-table-component table.v-table thead tr th:not(:first-child) {
   padding: 0 8px;
+}
+
+.a-table-component table.v-table tbody td {
+  height: 41px;
 }
 </style>
 
 
 <style scoped>
-.a-table-component td {
-  height: auto;
-}
 .line-action {
   width: 48px !important;
   padding: 0 !important;
