@@ -76,9 +76,9 @@
                 'a-table-component', 
                 'mainAnchor', 
                 'scrollableTable', 
-                items.length > 10 && options.maxHeight ? 'scrollableTableOverflow' : ''
+                options.maxHeight ? 'scrollableTableOverflow' : ''
             ]"
-            :style="items.length > 10 && options.maxHeight ? `--maxHeight: ${options.maxHeight}px` : ''"
+            :style="options.maxHeight ? `--maxHeight: ${options.maxHeight}px` : ''"
             v-resize="onTableResize"
         >
             <template slot="headers" slot-scope="props">
@@ -152,10 +152,7 @@
                 </tr>
             </template>
             <template slot="items" slot-scope="props">
-                <tr
-                    :style="{ backgroundColor: options.rowColor(props.item), 
-                        verticalAlign: options.actions && options.actions.filter(x => x.single && x.active).length > 0 ? 'baseline' : 'middle'}"
-                >
+                <tr :style="{ backgroundColor: options.rowColor(props.item), verticalAlign: 'top'}">
                     <td
                         v-if="options.selectable || options.selectableSingle"
                         style="width: 48px; padding: 0 0 4px 16px !important; vertical-align: top"
@@ -207,6 +204,7 @@
                         v-for="(header, index) in visibleHeaders"
                         :key="index"
                         :class="[header.align == 'right' ? 'text-xs-right' : 'text-xs-left']"
+                        style="padding-top: 10px"
                         @dblclick="firstSingleAction(props.item)"
                     >
                         <slot :name="header.value" :item="props.item">
