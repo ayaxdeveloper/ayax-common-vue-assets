@@ -12,6 +12,7 @@
                 v-model="notification.showing"
                 :dismissible="notification.dismissAfter == 0 || notification.dismissAfter > 5000"
                 transition="fade"
+                :style="{cursor: notification.onClick ? 'pointer' : ''}"
             >
                 <v-layout
                     class="ml-2 mt-2"
