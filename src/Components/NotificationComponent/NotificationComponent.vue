@@ -5,7 +5,6 @@
                 v-for="notification in notifications"
                 :key="notification.id"
                 class="notification-item"
-                @click="notificationClick(notification)"
                 color="white"
                 :value="notification.showing"
                 :outline="notification.outline"
@@ -19,6 +18,7 @@
                     :class="{'mb-2': notification.message == ''}"
                     row
                     align-start
+                    @click="notificationClick(notification)"
                 >
                     <v-icon class="mt-1" :color="notification.color">{{ notification.icon }}</v-icon>
                     <v-flex class="ml-2">
