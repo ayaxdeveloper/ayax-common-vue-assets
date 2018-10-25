@@ -9,44 +9,60 @@ export class NotificationProvider implements INotificationProvider {
         this._settings = notificationSettings;
         this._notificationBus = notificationBus;
     }
-    public Error(message?: any, title?: any, dismissAfter?: number) {
-        this.PushNotification(new NotificationItem(
-            this.GetErrorMessage(message), 
-            "mdi-alert", 
-            "error", 
-            title == null ? "Ошибка" : title,
-            dismissAfter != null ? dismissAfter : this._settings.errorDismiss
-        ));
+    public Error(message?: any, title?: any, dismissAfter?: number, onClick?: Function, closeAfterClick?: boolean) {
+        this.PushNotification(
+            new NotificationItem(
+                this.GetErrorMessage(message),
+                "mdi-alert",
+                "error",
+                title == null ? "Ошибка" : title,
+                dismissAfter != null ? dismissAfter : this._settings.errorDismiss,
+                (onClick = onClick),
+                (closeAfterClick = closeAfterClick),
+            ),
+        );
     }
 
-    public Success(message?: any, title?: any, dismissAfter?: number) {
-        this.PushNotification(new NotificationItem(
-            this.GetErrorMessage(message), 
-            "mdi-checkbox-marked-circle", 
-            "success", 
-            title == null ? "Успешно" : title,
-            dismissAfter != null ? dismissAfter : this._settings.successDismiss
-        ));
+    public Success(message?: any, title?: any, dismissAfter?: number, onClick?: Function, closeAfterClick?: boolean) {
+        this.PushNotification(
+            new NotificationItem(
+                this.GetErrorMessage(message),
+                "mdi-checkbox-marked-circle",
+                "success",
+                title == null ? "Успешно" : title,
+                dismissAfter != null ? dismissAfter : this._settings.successDismiss,
+                (onClick = onClick),
+                (closeAfterClick = closeAfterClick),
+            ),
+        );
     }
 
-    public Info(message?: any, title?: any, dismissAfter?: number) {
-        this.PushNotification(new NotificationItem(
-            this.GetErrorMessage(message), 
-            "mdi-information", 
-            "info", 
-            title == null ? "Инфо" : title,
-            dismissAfter != null ? dismissAfter : this._settings.infoDismiss
-        ));
+    public Info(message?: any, title?: any, dismissAfter?: number, onClick?: Function, closeAfterClick?: boolean) {
+        this.PushNotification(
+            new NotificationItem(
+                this.GetErrorMessage(message),
+                "mdi-information",
+                "info",
+                title == null ? "Инфо" : title,
+                dismissAfter != null ? dismissAfter : this._settings.infoDismiss,
+                (onClick = onClick),
+                (closeAfterClick = closeAfterClick),
+            ),
+        );
     }
 
-    public Warning(message?: any, title?: any, dismissAfter?: number) {
-        this.PushNotification(new NotificationItem(
-            this.GetErrorMessage(message), 
-            "mdi-alert-circle", 
-            "warning", 
-            title == null ? "Предупреждение" : title,
-            dismissAfter != null ? dismissAfter : this._settings.warningDismiss
-        ));
+    public Warning(message?: any, title?: any, dismissAfter?: number, onClick?: Function, closeAfterClick?: boolean) {
+        this.PushNotification(
+            new NotificationItem(
+                this.GetErrorMessage(message),
+                "mdi-alert-circle",
+                "warning",
+                title == null ? "Предупреждение" : title,
+                dismissAfter != null ? dismissAfter : this._settings.warningDismiss,
+                (onClick = onClick),
+                (closeAfterClick = closeAfterClick),
+            ),
+        );
     }
 
     public Debug(message?: any) {
@@ -57,7 +73,7 @@ export class NotificationProvider implements INotificationProvider {
         return [];
     }
 
-    private GetErrorMessage(message: any) : string {
+    private GetErrorMessage(message: any): string {
         if (message === null) {
             return "Неизвестная ошибка";
         }
@@ -71,9 +87,11 @@ export class NotificationProvider implements INotificationProvider {
     }
 
     private PushNotification(notification: NotificationItem) {
-        this.notifications.push(notification); 
-        if (notification.dismissAfter > 0 ) {
-            setInterval(() => {notification.showing = false;}, notification.dismissAfter);
+        this.notifications.push(notification);
+        if (notification.dismissAfter > 0) {
+            setInterval(() => {
+                notification.showing = false;
+            }, notification.dismissAfter);
         }
     }
 }
