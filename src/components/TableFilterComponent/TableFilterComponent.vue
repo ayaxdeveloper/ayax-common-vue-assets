@@ -269,7 +269,7 @@
                 v-else-if="filter.requestType == filterTypes['Eq'] && filter.inputType == filterInputTypes['Checkbox']"
             >
                 <v-checkbox
-                    style="margin-top: 8px"
+                    style="margin-top: 0px"
                     :label="filter.label"
                     v-model="filter.values[0]"
                 ></v-checkbox>
