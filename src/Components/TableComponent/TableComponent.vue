@@ -104,7 +104,7 @@
                     <th
                         v-for="header in props.headers.filter(x => x.isVisible)"
                         :key="header.value"
-                        :class="[header.align == 'right' ? 'text-xs-right' : 'text-xs-left', 'black--text']"
+                        :style="{textAlign: header.align}"
                     >
                         {{ header.text.toUpperCase() }}
                         <v-icon
@@ -139,8 +139,7 @@
                     <th
                         v-for="header in props.headers.filter(x => x.isVisible)"
                         :key="header.value"
-                        :class="[header.align == 'right' ? 'text-xs-right' : 'text-xs-left', 'black--text']"
-                        style="color: #fff !important; background-color: #fff !important"
+                        :style="{color: '#fff !important', backgroundColor: '#fff !important', textAlign: header.align}"
                     >
                         {{ header.text.toUpperCase() }}
                         <v-icon
@@ -203,8 +202,7 @@
                     <td
                         v-for="(header, index) in visibleHeaders"
                         :key="index"
-                        :class="[header.align == 'right' ? 'text-xs-right' : 'text-xs-left']"
-                        style="padding-top: 10px"
+                        :style="{paddingTop: '10px', textAlign: header.align}"
                         @dblclick="firstSingleAction(props.item)"
                     >
                         <slot :name="header.value" :item="props.item">
@@ -687,53 +685,53 @@ export default class TableComponent extends Vue {
 
 <style>
 .scrollableTable .v-table__overflow {
-  max-height: var(--maxHeight);
-  position: relative;
+    max-height: var(--maxHeight);
+    position: relative;
 }
 
 .scrollableTableOverflow .v-table__overflow {
-  overflow-y: scroll;
+    overflow-y: scroll;
 }
 
 .a-table-component table.v-table tbody tr td:first-child,
 .a-table-component table.v-table thead tr th:first-child {
-  padding: 0 0 0 24px;
+    padding: 0 0 0 24px;
 }
 
 .a-table-component table.v-table tbody tr td:not(:first-child),
 .a-table-component table.v-table thead tr th:not(:first-child) {
-  padding: 0 8px;
+    padding: 0 8px;
 }
 
 .a-table-component table.v-table tbody td {
-  height: 41px;
+    height: 41px;
 }
 </style>
 
 
 <style scoped>
 .line-action {
-  width: 48px !important;
-  padding: 0 !important;
+    width: 48px !important;
+    padding: 0 !important;
 }
 .select-checkbox {
-  width: 48px !important;
-  padding: 0 !important;
-  padding-left: 16px !important;
+    width: 48px !important;
+    padding: 0 !important;
+    padding-left: 16px !important;
 }
 .fixedTableHeader {
-  height: 36px;
-  background-color: #fff;
-  border-bottom: 1px solid #ccc;
-  position: absolute;
-  left: 0;
-  z-index: 1;
+    height: 36px;
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+    position: absolute;
+    left: 0;
+    z-index: 1;
 }
 .fixedTableHeader th {
-  height: 36px;
+    height: 36px;
 }
 .actionbarAnchor {
-  height: 48px;
+    height: 48px;
 }
 </style>
 

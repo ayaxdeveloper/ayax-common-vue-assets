@@ -157,11 +157,11 @@ export default class TableTestLayout extends Vue {
                 appearance: TableFilterComponentItemAppearance.Topbar, 
                 inputType: TableFilterComponentItemInputType.ButtonToggle,
                 requestType: TableFilterComponentItemType.In,
-                buttonsForToggle: [
-                    {text: "Первый", value: "1"},
-                    {text: "Второй", value: "2"},
-                    {text: "Третий", value: "3"}
-                ]
+                selectItems: [
+                    new SelectItem ({text: "Первый", value: "1"}),
+                    new SelectItem ({text: "Второй", value: "2"}),
+                    new SelectItem ({text: "Третий", value: "3"})
+                ],
             }),
             new TableFilterComponentItem({
                 name: "buttomToggleFilter1",
@@ -169,11 +169,11 @@ export default class TableTestLayout extends Vue {
                 appearance: TableFilterComponentItemAppearance.Topbar, 
                 inputType: TableFilterComponentItemInputType.ButtonToggle,
                 requestType: TableFilterComponentItemType.In,
-                buttonsForToggle: [
-                    {text: "Первый", value: "1"},
-                    {text: "Второй", value: "2"},
-                    {text: "Третий", value: "3"}
-                ]
+                selectItems: [
+                    new SelectItem ({text: "Первый", value: "1"}),
+                    new SelectItem ({text: "Второй", value: "2"}),
+                    new SelectItem ({text: "Третий", value: "3"})
+                ],
             }),
             new TableFilterComponentItem({
                 name: "buttomToggleFilter2",
@@ -182,11 +182,11 @@ export default class TableTestLayout extends Vue {
                 inputType: TableFilterComponentItemInputType.ButtonDropdown,
                 requestType: TableFilterComponentItemType.Eq,
                 label: "Dropdown",
-                buttonsForToggle: [
-                    {text: "Первый", value: "1"},
-                    {text: "Второй", value: "2"},
-                    {text: "Третий", value: "3"}
-                ]
+                selectItems: [
+                    new SelectItem ({text: "Первый", value: "1"}),
+                    new SelectItem ({text: "Второй", value: "2"}),
+                    new SelectItem ({text: "Третий", value: "3"})
+                ],
             }),
             new TableFilterComponentItem({
                 requestName: "date", 
@@ -323,12 +323,12 @@ export default class TableTestLayout extends Vue {
 
 <style scoped>
 .tableItemSlot {
-  display: inline;
-  font-size: 12px;
-  text-decoration: underline;
+    display: inline;
+    font-size: 12px;
+    text-decoration: underline;
 }
 .tableItemSlot:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 </style>
 
