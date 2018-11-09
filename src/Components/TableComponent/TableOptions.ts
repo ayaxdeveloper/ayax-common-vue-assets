@@ -10,8 +10,9 @@ export class TableOptions {
     headers: TableComponentHeader[] = [];
     actions: ActionItem[] = [];
     filters: TableFilterComponentItem[] = [];
-    selectable = true; 
-    selectableSingle = false; 
+    filterGroups: string[] = [];
+    selectable = true;
+    selectableSingle = false;
     clearSelected = 0;
     reloadData = 0;
     title = "";
@@ -19,7 +20,7 @@ export class TableOptions {
     actionbarColor = "primary";
     darkTopbar = true;
     darkActionbar = true;
-    pagination: Pagination = {page: 1, perPage: 10, totalItems: 0};
+    pagination: Pagination = { page: 1, perPage: 10, totalItems: 0 };
     configurable = true;
     rowColor: (item) => string = () => "";
     maxHeight = 450;

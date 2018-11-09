@@ -131,6 +131,7 @@ export default class TableTestLayout extends Vue {
                 ]
             }),
         ],
+        filterGroups: ["Обращение", "Запрос клиента"],
         filters: [
             new TableFilterComponentItem({
             requestName: "streetfilter", 
@@ -139,7 +140,8 @@ export default class TableTestLayout extends Vue {
             requestType: TableFilterComponentItemType.Like,
             placeholder: "Введите",
             label: "Название улицы",
-            largeInput: true
+            largeInput: true,
+            groupName: "Запрос клиента"
             }),
             // new TableFilterComponentItem({
             //     requestName: "titlefilter",
@@ -150,51 +152,51 @@ export default class TableTestLayout extends Vue {
             //     label: "Наименование",
             //     active: true,
             // }),
-            new TableFilterComponentItem({
-                name: "buttomToggleFilter",
-                requestName: "buttonToggleFilter", 
-                label: "ButtonToggle",
-                appearance: TableFilterComponentItemAppearance.Topbar, 
-                inputType: TableFilterComponentItemInputType.ButtonToggle,
-                requestType: TableFilterComponentItemType.In,
-                selectItems: [
-                    new SelectItem ({text: "Первый", value: "1"}),
-                    new SelectItem ({text: "Второй", value: "2"}),
-                    new SelectItem ({text: "Третий", value: "3"})
-                ],
-            }),
-            new TableFilterComponentItem({
-                name: "buttomToggleFilter1",
-                requestName: "buttonToggleFilter1", 
-                appearance: TableFilterComponentItemAppearance.Topbar, 
-                inputType: TableFilterComponentItemInputType.ButtonToggle,
-                requestType: TableFilterComponentItemType.In,
-                selectItems: [
-                    new SelectItem ({text: "Первый", value: "1"}),
-                    new SelectItem ({text: "Второй", value: "2"}),
-                    new SelectItem ({text: "Третий", value: "3"})
-                ],
-            }),
-            new TableFilterComponentItem({
-                name: "buttomToggleFilter2",
-                requestName: "buttonToggleFilter2", 
-                appearance: TableFilterComponentItemAppearance.Topbar, 
-                inputType: TableFilterComponentItemInputType.ButtonDropdown,
-                requestType: TableFilterComponentItemType.Eq,
-                label: "Dropdown",
-                selectItems: [
-                    new SelectItem ({text: "Первый", value: "1"}),
-                    new SelectItem ({text: "Второй", value: "2"}),
-                    new SelectItem ({text: "Третий", value: "3"})
-                ],
-            }),
+            // new TableFilterComponentItem({
+            //     name: "buttomToggleFilter",
+            //     requestName: "buttonToggleFilter", 
+            //     label: "ButtonToggle",
+            //     appearance: TableFilterComponentItemAppearance.Topbar, 
+            //     inputType: TableFilterComponentItemInputType.ButtonToggle,
+            //     requestType: TableFilterComponentItemType.In,
+            //     selectItems: [
+            //         new SelectItem ({text: "Первый", value: "1"}),
+            //         new SelectItem ({text: "Второй", value: "2"}),
+            //         new SelectItem ({text: "Третий", value: "3"})
+            //     ],
+            // }),
+            // new TableFilterComponentItem({
+            //     name: "buttomToggleFilter1",
+            //     requestName: "buttonToggleFilter1", 
+            //     appearance: TableFilterComponentItemAppearance.Topbar, 
+            //     inputType: TableFilterComponentItemInputType.ButtonToggle,
+            //     requestType: TableFilterComponentItemType.In,
+            //     selectItems: [
+            //         new SelectItem ({text: "Первый", value: "1"}),
+            //         new SelectItem ({text: "Второй", value: "2"}),
+            //         new SelectItem ({text: "Третий", value: "3"})
+            //     ],
+            // }),
+            // new TableFilterComponentItem({
+            //     name: "buttomToggleFilter2",
+            //     requestName: "buttonToggleFilter2", 
+            //     appearance: TableFilterComponentItemAppearance.Topbar, 
+            //     inputType: TableFilterComponentItemInputType.ButtonDropdown,
+            //     requestType: TableFilterComponentItemType.Eq,
+            //     label: "Dropdown",
+            //     selectItems: [
+            //         new SelectItem ({text: "Первый", value: "1"}),
+            //         new SelectItem ({text: "Второй", value: "2"}),
+            //         new SelectItem ({text: "Третий", value: "3"})
+            //     ],
+            // }),
             new TableFilterComponentItem({
                 requestName: "date", 
                 name: "dateFilter",
                 appearance: TableFilterComponentItemAppearance.AllFilters, 
                 requestType: TableFilterComponentItemType.Range,
                 inputType: TableFilterComponentItemInputType.Date,
-                label: "Дата создания"
+                label: "Дата создания",
             }),
             new TableFilterComponentItem({
                 name: "buttomFilter",
@@ -234,6 +236,7 @@ export default class TableTestLayout extends Vue {
                 appearance: TableFilterComponentItemAppearance.AllFilters, 
                 requestType: TableFilterComponentItemType.In,
                 inputType: TableFilterComponentItemInputType.Select,
+                groupName: "Обращение",
                 selectItems: [
                     new SelectItem ({value: 1, text: "Район 1"}),
                     new SelectItem ({value: 2, text: "Район 2"}),
@@ -264,7 +267,8 @@ export default class TableTestLayout extends Vue {
                 name: "roomFilter",
                 appearance: TableFilterComponentItemAppearance.AllFilters, 
                 requestType: TableFilterComponentItemType.Range,
-                label: "Комнат в доме"
+                label: "Комнат в доме",
+                groupName: "Запрос клиента"
             })
         ]
     });

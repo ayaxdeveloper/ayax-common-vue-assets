@@ -3,38 +3,49 @@
         <v-toolbar class="table-topbar" flat dense :dark="darkTopbar" :class="topbarColor">
             <v-toolbar-title v-if="title.length > 0">
                 {{ title }}
-                <v-chip disabled title="Количество записей" label small 
+                <v-chip
+                    disabled
+                    title="Количество записей"
+                    label=""
+                    small
                     v-if="itemsQuantity"
                     class="black--text"
-                >
-                    {{ itemsQuantity }}
-                </v-chip>
+                >{{ itemsQuantity }}</v-chip>
             </v-toolbar-title>
             <v-toolbar-items v-if="filters.length > 0">
                 <v-layout row>
-                    <a-table-filter class="ml-3" 
-                        v-for="(topbarFilter, index) in filters.filter(filter => filter.appearance === filterAppearance['Topbar'])" 
+                    <a-table-filter
+                        class="ml-3"
+                        v-for="(topbarFilter, index) in filters.filter(filter => filter.appearance === filterAppearance['Topbar'])"
                         :key="topbarFilter.name"
                         :style="{width: topbarFilter.inputType == filterInputTypes['Button'] 
-                            || topbarFilter.inputType == filterInputTypes['ButtonToggle'] || topbarFilter.inputType == filterInputTypes['ButtonDropdown'] ? 'initial' : '180px'}" 
+                            || topbarFilter.inputType == filterInputTypes['ButtonToggle'] || topbarFilter.inputType == filterInputTypes['ButtonDropdown'] ? 'initial' : '180px'}"
                         :filter="topbarFilter"
                         :index="index"
                         @emit-filter="applyEmittedFilter"
                         :applied-from-query="appliedFromQuery"
                         :applyFilterButtonVisibility="applyFilterButtonVisibility"
-                    >
-                    </a-table-filter>
+                    ></a-table-filter>
+                    <template v-if="!showAllFilters">
+                        <v-btn class="topbar-button ml-3" light @click="clearAllFilters()">Очистить</v-btn>
+                        <v-btn
+                            class="topbar-button ml-2"
+                            color="primary"
+                            @click="applyAllFilters()"
+                        >Применить</v-btn>
+                    </template>
                 </v-layout>
             </v-toolbar-items>
             <v-spacer></v-spacer>
             <v-toolbar-items>
                 <slot name="topbar-items"></slot>
-                <v-btn v-if="filters.filter(filter => filter.appearance === filterAppearance['AllFilters']).length > 0" 
+                <v-btn
+                    v-if="filters.filter(filter => filter.appearance === filterAppearance['AllFilters']).length > 0"
                     class="ml-2"
-                    small flat
+                    small
+                    flat
                     @click="showAllFiltersBtn()"
-                >
-                    Все фильтры
+                >Все фильтры
                     <v-icon v-if="!showAllFilters">mdi-menu-down</v-icon>
                     <v-icon v-if="showAllFilters">mdi-menu-up</v-icon>
                 </v-btn>
@@ -46,29 +57,60 @@
         <transition name="slide">
             <v-card class="pa-2" v-show="showAllFilters" dark flat style="border-radius: 0">
                 <v-container fluid grid-list-md>
-                    <v-layout row wrap>
-                        <v-flex :xs6="filter.largeInput" :xs3="!filter.largeInput" 
-                            v-for="(filter, index) in filters.filter(filter => filter.appearance === filterAppearance['AllFilters'])" 
-                            :key="filter.name"
-                        >
-                            <a-table-filter
-                                :filter.sync="filter"
-                                :index="index"
-                                @emit-filter="applyEmittedFilter"
-                                :applied-from-query="appliedFromQuery"
+                    <v-layout row wrap="">
+                        <template v-if="filterGroups.length > 0">
+                            <template v-for="(group, index) in filterGroups">
+                                <v-flex xs12 class="filter-group-name" :key="index">{{ group }}</v-flex>
+                                <v-flex
+                                    :xs6="filter.largeInput"
+                                    :xs3="!filter.largeInput"
+                                    v-for="(filter, index) in filters.filter(filter => filter.appearance === filterAppearance['AllFilters'] && filter.groupName === group)"
+                                    :key="filter.name"
+                                >
+                                    <a-table-filter
+                                        :filter.sync="filter"
+                                        :index="index"
+                                        @emit-filter="applyEmittedFilter"
+                                        :applied-from-query="appliedFromQuery"
+                                    ></a-table-filter>
+                                </v-flex>
+                            </template>
+                            <v-flex v-if="filterGroups.length > 0" xs12 style="margin-top: 16px"></v-flex>
+                            <v-flex
+                                :xs6="filter.largeInput"
+                                :xs3="!filter.largeInput"
+                                v-for="(filter, index) in filters.filter(filter => filter.appearance === filterAppearance['AllFilters'] && !filter.groupName)"
+                                :key="filter.name"
                             >
-                            </a-table-filter>
-                        </v-flex>
+                                <a-table-filter
+                                    :filter.sync="filter"
+                                    :index="index"
+                                    @emit-filter="applyEmittedFilter"
+                                    :applied-from-query="appliedFromQuery"
+                                ></a-table-filter>
+                            </v-flex>
+                        </template>
+                        <template v-else>
+                            <v-flex
+                                :xs6="filter.largeInput"
+                                :xs3="!filter.largeInput"
+                                v-for="(filter, index) in filters.filter(filter => filter.appearance === filterAppearance['AllFilters'])"
+                                :key="filter.name"
+                            >
+                                <a-table-filter
+                                    :filter.sync="filter"
+                                    :index="index"
+                                    @emit-filter="applyEmittedFilter"
+                                    :applied-from-query="appliedFromQuery"
+                                ></a-table-filter>
+                            </v-flex>
+                        </template>
                     </v-layout>
                 </v-container>
                 <v-layout>
                     <v-spacer></v-spacer>
-                    <v-btn light @click="clearAllFilters()">
-                        Очистить
-                    </v-btn>
-                    <v-btn color="primary" @click="applyAllFilters()">
-                        Применить
-                    </v-btn>
+                    <v-btn light @click="clearAllFilters()">Очистить</v-btn>
+                    <v-btn color="primary" @click="applyAllFilters()">Применить</v-btn>
                 </v-layout>
             </v-card>
         </transition>
@@ -94,6 +136,8 @@ export default class TableTopbarComponent extends Vue {
     @Prop({default: "secondary"}) topbarColor: string;
     @Prop({default: true}) darkTopbar: boolean;
     @Prop({default: () => []}) filters: TableFilterComponentItem[];
+    @Prop({default: () => []}) filterGroups: string[];
+
     showAllFilters = false;
     applyFilterButtonVisibility = true;
     appliedFromQuery = false;
@@ -225,17 +269,34 @@ export default class TableTopbarComponent extends Vue {
 </script>
 
 <style scoped>
-    .slide-enter-active, .slide-leave-active {
-        transition: all .3s ease;
-    }
-    .slide-enter, .slide-leave-to {
-        transform: translateY(-5px);
-        opacity: 0;
-    }
+.topbar-button {
+    margin: 10px 0;
+    padding: 0 2px;
+    font-size: 12px;
+}
+.filter-group-name {
+    border-bottom: 2px solid #ccc;
+    margin: 0 8px 6px;
+    padding: 0 0 4px 0 !important;
+    font-size: 16px;
+    font-weight: 100;
+}
+.filter-group-name:not(:first-child) {
+    margin-top: 24px;
+}
+.slide-enter-active,
+.slide-leave-active {
+    transition: all 0.3s ease;
+}
+.slide-enter,
+.slide-leave-to {
+    transform: translateY(-5px);
+    opacity: 0;
+}
 </style>
 
 <style>
-    .table-topbar .v-toolbar__content {
-        padding: 16px;
-    }
+.table-topbar .v-toolbar__content {
+    padding: 16px;
+}
 </style>

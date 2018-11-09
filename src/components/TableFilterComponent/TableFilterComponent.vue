@@ -4,7 +4,7 @@
         @shortkey="shortkeyHandler"
         v-if="filter.active"
     >
-        <div
+        <!-- <div
             v-if="filter.appearance != filterAppearance['AllFilters'] || filter.inputType == filterInputTypes['Button']"
             style="position: relative"
         >
@@ -15,7 +15,8 @@
                 small
                 @click="applyFilter"
             >Применить</v-btn>
-        </div>
+        </div>-->
+
         <template>
             <v-flex
                 class="filter"

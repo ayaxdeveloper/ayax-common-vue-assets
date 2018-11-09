@@ -15,7 +15,7 @@ export class TableFilterComponentItem {
     hint?: string;
     buttonText?: string;
     buttonClickedText?: string;
-    buttonsForToggle?: Array<{text: string, value: any}>;
+    buttonsForToggle?: Array<{ text: string; value: any }>;
     largeInput = false;
     placeholder?: string;
     selectItems?: SelectItem[];
@@ -23,11 +23,12 @@ export class TableFilterComponentItem {
     selectItemsFromPromise: Promise<SelectItem[]>;
     values: any[] = [];
     active = true;
+    groupName: string = null;
 
     constructor(init: Partial<TableFilterComponentItem>) {
         Object.assign(this, init);
     }
-    
+
     public FormRequestFilters(): Filter[] | Filter | null {
         switch (this.requestType) {
             case TableFilterComponentItemType.Eq:
@@ -48,7 +49,7 @@ export class TableFilterComponentItem {
                 }
                 break;
             default:
-            return null;
+                return null;
         }
         return null;
     }

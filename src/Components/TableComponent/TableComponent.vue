@@ -7,6 +7,7 @@
             :darkTopbar="options.darkTopbar"
             :itemsQuantity="options.pagination.totalItems"
             :filters.sync="options.filters"
+            :filterGroups="options.filterGroups"
             @apply-filter="applyFilter()"
             @relocate-actionbar="updateActionbar++"
         >
