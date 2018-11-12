@@ -185,7 +185,8 @@
                                 </v-btn>
                                 <v-list dark dense>
                                     <v-list-tile
-                                        v-for="action in options.actions.filter(action => action.single && action.active)"
+                                        v-for="action in options.actions.filter(action => action.single && action.active 
+                                            && (action.condition === undefined || action.condition(props.item) === true))"
                                         :key="action.name"
                                         @click="executeSingleAction(action.name, props.item)"
                                     >
@@ -458,6 +459,17 @@ export default class TableComponent extends Vue {
             const firstTd = document.querySelector(`#${this.options.tableName} tbody tr td`)as any;
             firstTd.colSpan = `${headersCount}`;
         }
+    }
+
+    @Watch("selectedItems")
+    onChange(val: any[]) {
+        this.options.actions.filter(x => !x.single && x.condition !== undefined).forEach(action => {
+            if (val.find(x => action.condition(x) === false)) {
+                action.disabled = true;
+            } else {
+                action.disabled = false;
+            }
+        });
     }
 
     @Emit()

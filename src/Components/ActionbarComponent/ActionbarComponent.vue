@@ -3,39 +3,56 @@
         <v-toolbar :dark="darkActionbar" :class="actionbarColor" dense>
             <template v-for="action in actions">
                 <v-toolbar-items :key="action.name">
-                    <v-btn v-if="!action.children"
+                    <v-btn
+                        v-if="!action.children"
                         :title="action.hint"
-                        :disabled="action.needSelectedItem && selectedItems.length === 0" 
-                        flat 
+                        :disabled="action.needSelectedItem && selectedItems.length === 0 || action.disabled"
+                        flat
                         @click="executeAction(action)"
                         :loading="action.loading"
                         :class="hideButtonText ? 'iconButtonMinWidth' : ''"
                     >
-                        <v-icon :class="hideButtonText ? 'hiddenButtonText' : ''" left v-if="action.icon">{{action.icon}}</v-icon>
+                        <v-icon
+                            :class="hideButtonText ? 'hiddenButtonText' : ''"
+                            left
+                            v-if="action.icon"
+                        >{{action.icon}}</v-icon>
                         <template v-if="!hideButtonText || !action.icon">{{action.title}}</template>
                     </v-btn>
-                    <v-menu top offset-y 
-                        :disabled="action.needSelectedItem && selectedItems.length === 0" 
+                    <v-menu
+                        top
+                        offset-y
+                        :disabled="action.needSelectedItem && selectedItems.length === 0 || action.disabled"
                         v-if="action.children"
                     >
-                        <v-btn slot="activator"
-                        :title="action.hint"
-                        :loading="action.loading"
-                        :disabled="action.needSelectedItem && selectedItems.length === 0" flat
-                        :class="hideButtonText ? 'iconButtonMinWidth' : ''">
-                        <v-icon :class="hideButtonText ? 'hiddenButtonText' : ''" left v-if="action.icon">{{action.icon}}</v-icon>
-                        <template v-if="!hideButtonText || !action.icon">{{action.title}}</template>
-                    </v-btn>
-                    <v-list dense>
-                        <v-list-tile :disabled="child.needSelectedItem && selectedItems.length === 0" 
-                            :title="action.hint" 
-                            v-for="child in action.children" 
-                            :key="child.name"  
-                            @click="executeAction(child)"
+                        <v-btn
+                            slot="activator"
+                            :title="action.hint"
+                            :loading="action.loading"
+                            :disabled="action.needSelectedItem && selectedItems.length === 0 || action.disabled"
+                            flat
+                            :class="hideButtonText ? 'iconButtonMinWidth' : ''"
                         >
-                            <v-list-tile-action v-if="child.icon"><v-icon>{{child.icon}}</v-icon></v-list-tile-action>
-                            <v-list-tile-title>{{ child.title }}</v-list-tile-title>
-                        </v-list-tile>
+                            <v-icon
+                                :class="hideButtonText ? 'hiddenButtonText' : ''"
+                                left
+                                v-if="action.icon"
+                            >{{action.icon}}</v-icon>
+                            <template v-if="!hideButtonText || !action.icon">{{action.title}}</template>
+                        </v-btn>
+                        <v-list dense>
+                            <v-list-tile
+                                :disabled="child.needSelectedItem && selectedItems.length === 0 || action.disabled"
+                                :title="action.hint"
+                                v-for="child in action.children"
+                                :key="child.name"
+                                @click="executeAction(child)"
+                            >
+                                <v-list-tile-action v-if="child.icon">
+                                    <v-icon>{{child.icon}}</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-title>{{ child.title }}</v-list-tile-title>
+                            </v-list-tile>
                         </v-list>
                     </v-menu>
                 </v-toolbar-items>
@@ -182,25 +199,25 @@ export default class ActionbarComponent extends Vue{
 </script>
 
 <style scoped>
-    .actionbarFixed {
-        position: fixed;
-        bottom: 0;
-    }
-    .actionbar {
-        overflow: hidden;
-    }
-    .hiddenButtonText {
-        margin-right: 0px;
-    }
-    .iconButtonMinWidth {
-        min-width: 50px;
-    }
+.actionbarFixed {
+    position: fixed;
+    bottom: 0;
+}
+.actionbar {
+    overflow: hidden;
+}
+.hiddenButtonText {
+    margin-right: 0px;
+}
+.iconButtonMinWidth {
+    min-width: 50px;
+}
 </style>
 
 <style>
-    .actionbar .v-toolbar__content {
-        padding: 0px;
-    }
+.actionbar .v-toolbar__content {
+    padding: 0px;
+}
 </style>
 
 

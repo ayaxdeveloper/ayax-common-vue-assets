@@ -4,6 +4,8 @@ export class ActionItem {
     icon: string;
     single = false;
     children: ActionItem[];
+    condition?: (item: any) => boolean;
+    disabled: boolean;
     action: Function;
     needSelectedItem = false;
     active = true;

@@ -108,6 +108,15 @@ export default class TableTestLayout extends Vue {
                 needSelectedItem: true,
                 title: "Удалить", 
                 name: "delete",
+                condition: (item) => item.id % 2 === 0 ? false : true,
+                action: (asd) => console.log(asd)
+            }),
+            new ActionItem({
+                icon: "mdi-delete",
+                title: "Удалить", 
+                name: "deleteSingle",
+                single: true,
+                condition: (item) => item.id % 2 === 0 ? false : true,
                 action: (asd) => console.log(asd)
             }),
             new ActionItem({
