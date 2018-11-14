@@ -14,6 +14,44 @@
             </v-toolbar-title>
             <v-toolbar-items v-if="filters.length > 0">
                 <v-layout row>
+                    <v-flex class="pl-3">
+                        <div style="font-size: 13px;">Быстрый поиск</div>
+                        <v-menu bottom offset-y>
+                            <v-btn slot="activator" light class="quick-filter">
+                                <span class="quick-filter-text">{{ quickFilterText }}</span>
+                                <v-icon right>mdi-chevron-down</v-icon>
+                            </v-btn>
+                            <v-list dense>
+                                <v-list-tile
+                                    @click="clearAllFilters(); quickFilterText = 'Не выбрано'"
+                                >
+                                    <v-list-tile-title>Не выбрано</v-list-tile-title>
+                                </v-list-tile>
+                                <v-list-tile
+                                    @click="applyQuickFilter(filter)"
+                                    v-for="(filter) in quickFilters.filter(el => !el.custom)"
+                                    :key="filter.text"
+                                >
+                                    <v-list-tile-title>{{filter.text}}</v-list-tile-title>
+                                </v-list-tile>
+                                <v-divider></v-divider>
+                                <v-list-tile
+                                    @click="applyQuickFilter(filter)"
+                                    v-for="(filter) in quickFilters.filter(el => el.custom)"
+                                    :key="filter.text"
+                                >
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>{{filter.text}}</v-list-tile-title>
+                                    </v-list-tile-content>
+                                    <v-list-tile-action>
+                                        <v-btn icon ripple>
+                                            <v-icon color="grey darken-1">mdi-delete</v-icon>
+                                        </v-btn>
+                                    </v-list-tile-action>
+                                </v-list-tile>
+                            </v-list>
+                        </v-menu>
+                    </v-flex>
                     <a-table-filter
                         class="ml-3"
                         v-for="(topbarFilter, index) in filters.filter(filter => filter.appearance === filterAppearance['Topbar'])"
@@ -146,6 +184,26 @@ export default class TableTopbarComponent extends Vue {
     filterInputTypes: {[name: string]: TableFilterComponentItemInputType} = {};
     filterTypes: {[name: string]: TableFilterComponentItemType} = {};
 
+    quickFilterText = "Не выбрано";
+    quickFilters: Array<{text: string, custom?: boolean, filters: Array<{filterName: string, filterValue: any[]}>}> = [
+        {text: "My filter", filters: [
+            {filterName: "streetFilter", filterValue: ["asd"]},
+            {filterName: "qqFilter", filterValue: [1]}
+        ]},
+        {text: "My filter 2", filters: [
+            {filterName: "streetFilter", filterValue: ["wwww"]},
+            {filterName: "qqFilter", filterValue: [3]}
+        ]},
+        {text: "My filter 3", custom: true, filters: [
+            {filterName: "streetFilter", filterValue: ["a123sd"]},
+            {filterName: "qqFilter", filterValue: [4]}
+        ]},
+        {text: "My filter 4", custom: true, filters: [
+            {filterName: "streetFilter", filterValue: ["w123123www"]},
+            {filterName: "qqFilter", filterValue: [5]}
+        ]}
+    ];
+
     created() {
         try {
             Object.keys(TableFilterComponentItemAppearance).forEach(item => {
@@ -199,6 +257,7 @@ export default class TableTopbarComponent extends Vue {
         if (filterCount > 0) {
             this.applyFilter();
         }
+
         setTimeout(() => this.appliedFromQuery = false, 1000);
     }
 
@@ -253,10 +312,7 @@ export default class TableTopbarComponent extends Vue {
     }
 
     clearAllFilters() {
-        this.filters.forEach(filter => {
-            filter.values = [];
-        });
-        this.$router.push({ path: this.$route.path, query: {}});
+        this.$router.push({ path: this.$route.path });
         this.applyFilter();
     }
 
@@ -264,6 +320,16 @@ export default class TableTopbarComponent extends Vue {
         this.showAllFilters = !this.showAllFilters;
         localStorage.setItem(`${this.title}_show-all-filters`, JSON.stringify(this.showAllFilters));
         setTimeout(() => this.relocateActionbar(), 500);
+    }
+
+    applyQuickFilter(filter) {
+        let newQuery = {};
+        filter.filters.forEach(el => {
+            newQuery[el.filterName] = JSON.stringify(el.filterValue);
+        });
+        
+        this.$router.push({path: this.$route.path, query: newQuery});
+        this.quickFilterText = filter.text;
     }
 }
 </script>
@@ -296,6 +362,21 @@ export default class TableTopbarComponent extends Vue {
 </style>
 
 <style>
+.quick-filter {
+    width: 180px;
+}
+.quick-filter .v-btn__content {
+    display: flex;
+    justify-content: space-between;
+}
+.quick-filter-text {
+    max-width: 148;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-left: 8px;
+    font-size: 13px;
+}
 .table-topbar .v-toolbar__content {
     padding: 16px;
 }

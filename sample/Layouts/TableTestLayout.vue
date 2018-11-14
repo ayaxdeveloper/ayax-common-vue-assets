@@ -207,22 +207,22 @@ export default class TableTestLayout extends Vue {
                 inputType: TableFilterComponentItemInputType.Date,
                 label: "Дата создания",
             }),
-            new TableFilterComponentItem({
-                name: "buttomFilter",
-                requestName: "buttonFilter", 
-                appearance: TableFilterComponentItemAppearance.Topbar, 
-                inputType: TableFilterComponentItemInputType.Button,
-                buttonText: "Кнопка",
-                label: "Кнопка"
-            }),
-            new TableFilterComponentItem({
-                name: "buttomFilter2",
-                requestName: "buttonFilter2", 
-                appearance: TableFilterComponentItemAppearance.Topbar, 
-                inputType: TableFilterComponentItemInputType.Button,
-                buttonText: "Отжата",
-                buttonClickedText: "Нажата"
-            }),
+            // new TableFilterComponentItem({
+            //     name: "buttomFilter",
+            //     requestName: "buttonFilter", 
+            //     appearance: TableFilterComponentItemAppearance.Topbar, 
+            //     inputType: TableFilterComponentItemInputType.Button,
+            //     buttonText: "Кнопка",
+            //     label: "Кнопка"
+            // }),
+            // new TableFilterComponentItem({
+            //     name: "buttomFilter2",
+            //     requestName: "buttonFilter2", 
+            //     appearance: TableFilterComponentItemAppearance.Topbar, 
+            //     inputType: TableFilterComponentItemInputType.Button,
+            //     buttonText: "Отжата",
+            //     buttonClickedText: "Нажата"
+            // }),
             new TableFilterComponentItem({
                 requestName: "qqfilter", 
                 name: "qqFilter",
