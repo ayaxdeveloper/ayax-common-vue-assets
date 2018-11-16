@@ -30,7 +30,7 @@
                                 <v-list-tile
                                     @click="applyQuickFilter(quickfilter.filter)"
                                     v-for="(quickfilter) in quickFilters.filter(el => !el.custom)"
-                                    :key="quickfilter.filter.text"
+                                    :key="quickfilter.filter.id"
                                 >
                                     <v-list-tile-title>{{quickfilter.filter.text}}</v-list-tile-title>
                                 </v-list-tile>
@@ -38,14 +38,14 @@
                                 <v-list-tile
                                     @click="applyQuickFilter(quickfilter.filter)"
                                     v-for="(quickfilter) in quickFilters.filter(el => el.custom)"
-                                    :key="quickfilter.filter.text"
+                                    :key="quickfilter.filter.id"
                                 >
                                     <v-list-tile-content>
                                         <v-list-tile-title>{{quickfilter.filter.text}}</v-list-tile-title>
                                     </v-list-tile-content>
                                     <v-list-tile-action>
                                         <v-btn
-                                            @click.stop="quickFilterForRemove = quickfilter.filter; quickFilterRemoveDialog = true"
+                                            @click.stop="quickFilterForRemove = quickfilter; quickFilterRemoveDialog = true"
                                             icon
                                             ripple
                                         >
@@ -391,6 +391,7 @@ export default class TableTopbarComponent extends Vue {
             }).then(x => x.ensureSuccess());
             
             this.quickFilterSaveDialog = false;
+            this.notificationProvider.Success("Фильтр сохранен");
             
             await this.getQuickFilters();
         } catch (error) {
@@ -424,6 +425,7 @@ export default class TableTopbarComponent extends Vue {
 
             this.quickFilterRemoveDialog = false;
             await this.getQuickFilters();
+            this.notificationProvider.Success("Фильтр удален");
         } catch (error) {
             this.notificationProvider.Error(error);
         } finally {
