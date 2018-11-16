@@ -45,7 +45,9 @@
                                     </v-list-tile-content>
                                     <v-list-tile-action>
                                         <v-btn
-                                            @click.stop="quickFilterForRemove = quickfilter; quickFilterRemoveDialog = true"
+                                            @click.stop="quickFilterForRemove = quickfilter; 
+                                                quickFilterForRemove['text'] = quickfilter.filter.text;
+                                                quickFilterRemoveDialog = true"
                                             icon
                                             ripple
                                         >
@@ -382,7 +384,7 @@ export default class TableTopbarComponent extends Vue {
                 return;
             }
             this.filters.filter(x => x.values.length > 0).forEach(filter => {
-                this.newQuickFilter.filters.push({filterName: filter.requestName, filterValue: filter.values});
+                this.newQuickFilter.filters.push({filterName: filter.name, filterValue: filter.values});
             });
 
             await this.operationService.post("/quickfilter/add", {
@@ -409,9 +411,7 @@ export default class TableTopbarComponent extends Vue {
             if (response) {
                 response.data.forEach(el => {
                     el.filter = JSON.parse(el.filter);
-                })
-                console.log(response.data);
-                
+                })                
                 this.quickFilters = response.data;
             }
         } catch (error) {
@@ -422,14 +422,13 @@ export default class TableTopbarComponent extends Vue {
     async removeQuickFilter() {
         try {
             await this.operationService.delete(`/quickfilter/delete/${this.quickFilterForRemove.id}`).then(x => x.ensureSuccess());
-
-            this.quickFilterRemoveDialog = false;
             await this.getQuickFilters();
             this.notificationProvider.Success("Фильтр удален");
         } catch (error) {
             this.notificationProvider.Error(error);
         } finally {
             this.quickFilterForRemove = { id: 0, text: ""};
+            this.quickFilterRemoveDialog = false;
         }
     }
 }
