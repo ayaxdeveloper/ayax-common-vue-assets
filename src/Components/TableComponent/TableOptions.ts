@@ -11,6 +11,7 @@ export class TableOptions {
     actions: ActionItem[] = [];
     filters: TableFilterComponentItem[] = [];
     filterGroups: string[] = [];
+    quickFilters = false;
     selectable = true;
     selectableSingle = false;
     clearSelected = 0;

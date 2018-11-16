@@ -3,11 +3,13 @@
         <a-table-topbar
             v-show="!loading"
             :title="options.title"
+            :tableName="options.tableName"
             :topbarColor="options.topbarColor"
             :darkTopbar="options.darkTopbar"
             :itemsQuantity="options.pagination.totalItems"
             :filters.sync="options.filters"
             :filterGroups="options.filterGroups"
+            :showQuickFilters="options.quickFilters"
             @apply-filter="applyFilter()"
             @relocate-actionbar="updateActionbar++"
         >
