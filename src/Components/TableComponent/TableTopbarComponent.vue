@@ -241,6 +241,8 @@ export default class TableTopbarComponent extends Vue {
 
     created() {
         try {
+            console.log("topbar created");
+            
             if (this.showQuickFilters) {
                 this.getQuickFilters();
             }
@@ -292,7 +294,7 @@ export default class TableTopbarComponent extends Vue {
                 }
             }
         });
-        if (this.quickFilters.length > 0) {
+        if (this.showQuickFilters) {
             this.checkQuickFilter();
         }
         if (filterCount > 0) {
