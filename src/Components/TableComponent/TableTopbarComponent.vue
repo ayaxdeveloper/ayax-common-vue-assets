@@ -224,7 +224,7 @@ export default class TableTopbarComponent extends Vue {
     filterInputTypes: {[name: string]: TableFilterComponentItemInputType} = {};
     filterTypes: {[name: string]: TableFilterComponentItemType} = {};
 
-    quickFilterText = "Не выбрано";
+    quickFilterText = "";
     quickFilters: QuickFilterItem[] = [];
     quickFilterSaveDialog = false;
     quickFilterRemoveDialog = false;
