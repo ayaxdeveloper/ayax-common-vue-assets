@@ -434,7 +434,7 @@ export default class TableTopbarComponent extends Vue {
         const query = JSON.parse(JSON.stringify(this.$route.query));
 
         if (query.hasOwnProperty("quickFilterId")) {
-            const quickFilter = this.quickFilters.find(x => x.id === query.quickFilterId);
+            const quickFilter = this.quickFilters.find(x => x.id == query.quickFilterId);
             if (quickFilter) {
                 this.quickFilterText = quickFilter.name;
                 return;
