@@ -224,7 +224,7 @@ export default class TableTopbarComponent extends Vue {
     filterInputTypes: {[name: string]: TableFilterComponentItemInputType} = {};
     filterTypes: {[name: string]: TableFilterComponentItemType} = {};
 
-    quickFilterText = "";
+    quickFilterText = "Не выбрано";
     quickFilters: QuickFilterItem[] = [];
     quickFilterSaveDialog = false;
     quickFilterRemoveDialog = false;
@@ -371,8 +371,9 @@ export default class TableTopbarComponent extends Vue {
             newQuery[el.filterName] = JSON.stringify(el.filterValue);
         });
         newQuery["quickFilterId"] = quickFilter.id;
-        this.$router.push({path: this.$route.path, query: newQuery});
         this.quickFilterText = quickFilter.name;
+        this.$router.push({path: this.$route.path, query: newQuery});
+        
     }
 
     async saveQuickFilter() {
