@@ -339,7 +339,7 @@ export default class TableComponent extends Vue {
     async created() {
         console.log("table created");
         
-        await this.loadHeaders();
+        //await this.loadHeaders();
     }
 
     applyFilter() {
@@ -524,7 +524,7 @@ export default class TableComponent extends Vue {
 
     async loadData() {
         try {
-            this.tableLoading = true;
+            //this.tableLoading = true;
             const filteredRequest = this.AddFilter();
             const request = this.options.searchData 
                 ? await this.options.searchData(filteredRequest)
