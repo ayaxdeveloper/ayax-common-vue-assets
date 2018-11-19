@@ -1,6 +1,7 @@
 <template>
     <div :id="options.tableName" class="actionbarContainer" style="position: relative">
         <a-table-topbar
+            v-if="!loading"
             :title="options.title"
             :tableName="options.tableName"
             :topbarColor="options.topbarColor"
