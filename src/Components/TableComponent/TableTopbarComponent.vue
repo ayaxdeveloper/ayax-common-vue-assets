@@ -28,25 +28,25 @@
                                     <v-list-tile-title>Не выбрано</v-list-tile-title>
                                 </v-list-tile>
                                 <v-list-tile
-                                    @click="applyQuickFilter(quickfilter.filter)"
+                                    @click="applyQuickFilter(quickfilter)"
                                     v-for="(quickfilter) in quickFilters.filter(el => !el.custom)"
-                                    :key="quickfilter.filter.id"
+                                    :key="quickfilter.id"
                                 >
-                                    <v-list-tile-title>{{quickfilter.filter.text}}</v-list-tile-title>
+                                    <v-list-tile-title>{{quickfilter.name}}</v-list-tile-title>
                                 </v-list-tile>
-                                <v-divider></v-divider>
+                                <v-divider v-if="quickFilters.filter(el => el.custom).length > 0"></v-divider>
                                 <v-list-tile
-                                    @click="applyQuickFilter(quickfilter.filter)"
+                                    @click="applyQuickFilter(quickfilter)"
                                     v-for="(quickfilter) in quickFilters.filter(el => el.custom)"
-                                    :key="quickfilter.filter.id"
+                                    :key="quickfilter.id"
                                 >
                                     <v-list-tile-content>
-                                        <v-list-tile-title>{{quickfilter.filter.text}}</v-list-tile-title>
+                                        <v-list-tile-title>{{quickfilter.name}}</v-list-tile-title>
                                     </v-list-tile-content>
                                     <v-list-tile-action>
                                         <v-btn
                                             @click.stop="quickFilterForRemove = quickfilter; 
-                                                quickFilterForRemove['text'] = quickfilter.filter.text;
+                                                quickFilterForRemove['text'] = quickfilter.name;
                                                 quickFilterRemoveDialog = true"
                                             icon
                                             ripple
@@ -67,8 +67,6 @@
                         :filter="topbarFilter"
                         :index="index"
                         @emit-filter="applyEmittedFilter"
-                        :applied-from-query="appliedFromQuery"
-                        :applyFilterButtonVisibility="applyFilterButtonVisibility"
                     ></a-table-filter>
                     <template v-if="!showAllFilters">
                         <v-btn class="topbar-button ml-3" light @click="clearAllFilters()">Очистить</v-btn>
@@ -115,7 +113,6 @@
                                         :filter.sync="filter"
                                         :index="index"
                                         @emit-filter="applyEmittedFilter"
-                                        :applied-from-query="appliedFromQuery"
                                     ></a-table-filter>
                                 </v-flex>
                             </template>
@@ -130,7 +127,6 @@
                                     :filter.sync="filter"
                                     :index="index"
                                     @emit-filter="applyEmittedFilter"
-                                    :applied-from-query="appliedFromQuery"
                                 ></a-table-filter>
                             </v-flex>
                         </template>
@@ -145,7 +141,6 @@
                                     :filter.sync="filter"
                                     :index="index"
                                     @emit-filter="applyEmittedFilter"
-                                    :applied-from-query="appliedFromQuery"
                                 ></a-table-filter>
                             </v-flex>
                         </template>
@@ -170,7 +165,7 @@
                     <v-text-field
                         maxlength="50"
                         label="Название филтра"
-                        v-model="newQuickFilter.text"
+                        v-model="newQuickFilter.name"
                     ></v-text-field>
                 </v-card-text>
                 <v-card-actions>
@@ -224,8 +219,6 @@ export default class TableTopbarComponent extends Vue {
     @Prop() showQuickFilters: boolean;
 
     showAllFilters = false;
-    applyFilterButtonVisibility = true;
-    appliedFromQuery = false;
 
     filterAppearance: {[name: string]: TableFilterComponentItemAppearance} = {};
     filterInputTypes: {[name: string]: TableFilterComponentItemInputType} = {};
@@ -237,13 +230,13 @@ export default class TableTopbarComponent extends Vue {
     quickFilterRemoveDialog = false;
 
     newQuickFilter = {
-        text: "", 
+        name: "", 
         filters: []
     }
 
     quickFilterForRemove = {
         id: 0,
-        text: ""
+        name: ""
     };
 
     created() {
@@ -280,12 +273,12 @@ export default class TableTopbarComponent extends Vue {
         }
         finally {
             this.applyFilter();
+            this.checkQuickFilter();
         }
     }
 
     @Watch("$route.query")
     applyQuery() {
-        this.appliedFromQuery = true;
         let filterCount = 0;
         this.filters.forEach(filter => {
             const filterInQuery = Object.keys(JSON.parse(JSON.stringify(this.$route.query))).findIndex(key => key === filter.name);
@@ -299,11 +292,12 @@ export default class TableTopbarComponent extends Vue {
                 }
             }
         });
+        if (this.quickFilters.length > 0) {
+            this.checkQuickFilter();
+        }
         if (filterCount > 0) {
             this.applyFilter();
         }
-
-        setTimeout(() => this.appliedFromQuery = false, 1000);
     }
 
     changeQuery(query, filter) {
@@ -325,9 +319,7 @@ export default class TableTopbarComponent extends Vue {
     }
 
     @Emit()
-    applyFilter() {
-        this.applyFilterButtonVisibility = false;
-    }
+    applyFilter() {}
 
     @Emit()
     relocateActionbar() {}
@@ -343,6 +335,9 @@ export default class TableTopbarComponent extends Vue {
             }
             const query = JSON.parse(JSON.stringify(this.$route.query));
             this.changeQuery(query, filter);
+            if (query.hasOwnProperty("quickFilterId")) {
+                delete query["quickFilterId"];
+            }
             this.$router.push({ path: this.$route.path, query });
         }
     }
@@ -353,6 +348,9 @@ export default class TableTopbarComponent extends Vue {
         this.filters.forEach(filter => {
             this.changeQuery(query, filter);
         });
+        if (query.hasOwnProperty("quickFilterId")) {
+            delete query["quickFilterId"];
+        }
         this.$router.push({ path: this.$route.path, query });
     }
 
@@ -367,19 +365,19 @@ export default class TableTopbarComponent extends Vue {
         setTimeout(() => this.relocateActionbar(), 500);
     }
 
-    applyQuickFilter(filter) {
+    applyQuickFilter(quickFilter) {
         let newQuery = {};
-        filter.filters.forEach(el => {
+        quickFilter.filter.forEach(el => {
             newQuery[el.filterName] = JSON.stringify(el.filterValue);
         });
-        
+        newQuery["quickFilterId"] = quickFilter.id;
         this.$router.push({path: this.$route.path, query: newQuery});
-        this.quickFilterText = filter.text;
+        this.quickFilterText = quickFilter.name;
     }
 
     async saveQuickFilter() {
         try {
-            if (this.newQuickFilter.text.length === 0) {
+            if (this.newQuickFilter.name.length === 0) {
                 this.notificationProvider.Error("Введите название фильтра");
                 return;
             }
@@ -388,7 +386,8 @@ export default class TableTopbarComponent extends Vue {
             });
 
             await this.operationService.post("/quickfilter/add", {
-                filter: JSON.stringify(this.newQuickFilter), 
+                name: this.newQuickFilter.name,
+                filter: JSON.stringify(this.newQuickFilter.filters), 
                 table: this.tableName
             }).then(x => x.ensureSuccess());
             
@@ -396,10 +395,9 @@ export default class TableTopbarComponent extends Vue {
             this.notificationProvider.Success("Фильтр сохранен");
             
             await this.getQuickFilters();
+            this.newQuickFilter = { name: "", filters: []};
         } catch (error) {
             this.notificationProvider.Error(error);
-        } finally {
-            this.newQuickFilter = { text: "", filters: []};
         }
     }
 
@@ -424,12 +422,26 @@ export default class TableTopbarComponent extends Vue {
             await this.operationService.delete(`/quickfilter/delete/${this.quickFilterForRemove.id}`).then(x => x.ensureSuccess());
             await this.getQuickFilters();
             this.notificationProvider.Success("Фильтр удален");
+            this.quickFilterForRemove = { id: 0, name: ""};
         } catch (error) {
             this.notificationProvider.Error(error);
         } finally {
-            this.quickFilterForRemove = { id: 0, text: ""};
             this.quickFilterRemoveDialog = false;
         }
+    }
+
+    checkQuickFilter() {
+        const query = JSON.parse(JSON.stringify(this.$route.query));
+
+        if (query.hasOwnProperty("quickFilterId")) {
+            const quickFilter = this.quickFilters.find(x => x.id === query.quickFilterId);
+            if (quickFilter) {
+                this.quickFilterText = quickFilter.name;
+                return;
+            }
+        }
+
+        this.quickFilterText = "Не выбрано";
     }
 }
 </script>
