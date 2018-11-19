@@ -1,7 +1,7 @@
 <template>
     <div :id="options.tableName" class="actionbarContainer" style="position: relative">
         <a-table-topbar
-            v-show="!loading"
+            v-if="!loading"
             :title="options.title"
             :tableName="options.tableName"
             :topbarColor="options.topbarColor"
@@ -336,6 +336,10 @@ export default class TableComponent extends Vue {
         return selectedOnPage;
     }
 
+    async created() {
+        await this.loadHeaders();
+    }
+
     applyFilter() {
         if (this.options.pagination.page === 1) {
             this.loadData();
@@ -520,7 +524,6 @@ export default class TableComponent extends Vue {
     async loadData() {
         try {
             this.tableLoading = true;
-            await this.loadHeaders();
             const filteredRequest = this.AddFilter();
             const request = this.options.searchData 
                 ? await this.options.searchData(filteredRequest)
