@@ -311,7 +311,7 @@ export default class TableComponent extends Vue {
     @Prop({default: () => ({ tableIndex: null, toggleValue: false })}) slotToggle;
     
     items = [];
-    loading = false;
+    loading = true;
     tableLoading = true;
     fixedTableHeader: HTMLElement;
     customPagination = [10, 20, 30, 50, 100];
@@ -339,7 +339,7 @@ export default class TableComponent extends Vue {
     async created() {
         console.log("table created");
         
-        //await this.loadHeaders();
+        await this.loadHeaders();
     }
 
     applyFilter() {
@@ -351,6 +351,7 @@ export default class TableComponent extends Vue {
     }
 
     async loadHeaders() {
+        this.loading = true;
         const headerPromises = this.options.headers.filter(x => (x.dictionary || x.dictionaryPromise) && !x.items)
             .map(x => {
             return new Promise((resolve) => {
@@ -524,7 +525,7 @@ export default class TableComponent extends Vue {
 
     async loadData() {
         try {
-            //this.tableLoading = true;
+            this.tableLoading = true;
             const filteredRequest = this.AddFilter();
             const request = this.options.searchData 
                 ? await this.options.searchData(filteredRequest)

@@ -239,12 +239,12 @@ export default class TableTopbarComponent extends Vue {
         name: ""
     };
 
-    created() {
+    async created() {
         try {
             console.log("topbar created");
             
             if (this.showQuickFilters) {
-                this.getQuickFilters();
+               await this.getQuickFilters();
             }
             Object.keys(TableFilterComponentItemAppearance).forEach(item => {
                 this.filterAppearance[item] = TableFilterComponentItemAppearance[item];
