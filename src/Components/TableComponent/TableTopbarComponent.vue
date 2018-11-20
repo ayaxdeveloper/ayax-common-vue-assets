@@ -241,8 +241,6 @@ export default class TableTopbarComponent extends Vue {
 
     async created() {
         try {
-            console.log("topbar created");
-            
             if (this.showQuickFilters) {
                await this.getQuickFilters();
             }
@@ -425,6 +423,9 @@ export default class TableTopbarComponent extends Vue {
             await this.operationService.delete(`/quickfilter/delete/${this.quickFilterForRemove.id}`).then(x => x.ensureSuccess());
             await this.getQuickFilters();
             this.notificationProvider.Success("Фильтр удален");
+            if (this.quickFilterForRemove.name === this.quickFilterText) {
+                this.clearAllFilters();
+            }
             this.quickFilterForRemove = { id: 0, name: ""};
         } catch (error) {
             this.notificationProvider.Error(error);
@@ -438,8 +439,6 @@ export default class TableTopbarComponent extends Vue {
 
         if (query.hasOwnProperty("quickFilterId")) {
             const quickFilter = this.quickFilters.find(x => x.id == query.quickFilterId);
-            console.log(quickFilter);
-            console.log(this.quickFilters);
             
             if (quickFilter) {
                 this.quickFilterText = quickFilter.name;

@@ -337,8 +337,6 @@ export default class TableComponent extends Vue {
     }
 
     async created() {
-        console.log("table created");
-        
         await this.loadHeaders();
     }
 
