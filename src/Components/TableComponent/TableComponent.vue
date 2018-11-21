@@ -711,13 +711,8 @@ export default class TableComponent extends Vue {
     overflow-y: scroll;
 }
 
-.a-table-component table.v-table tbody tr td:first-child,
-.a-table-component table.v-table thead tr th:first-child {
-    padding: 0 0 0 24px;
-}
-
-.a-table-component table.v-table tbody tr td:not(:first-child),
-.a-table-component table.v-table thead tr th:not(:first-child) {
+.a-table-component table.v-table tbody tr td,
+.a-table-component table.v-table thead tr th {
     padding: 0 8px;
 }
 
