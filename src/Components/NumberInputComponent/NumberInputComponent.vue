@@ -22,7 +22,7 @@ import { Component, Prop, Watch, Emit } from "vue-property-decorator";
     name: "a-number-input"
 })
 export default class NumberInputComponent extends Vue {
-    @Prop({ default: "" }) value: any;
+    @Prop({ type: String }) value;
     @Prop({ default: 2 }) numbersAfterComma: number;
 
     formattedValue: string = this.value.toString();
@@ -78,7 +78,7 @@ export default class NumberInputComponent extends Vue {
         if (this.formattedValue) {
             result = this.formattedValue.replace(/\s/g, "");
         }
-        this.emitValue(parseFloat(result));
+        this.emitValue(result);
     }
 
     @Emit("input")
