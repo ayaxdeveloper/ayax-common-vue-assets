@@ -1,17 +1,17 @@
 <template>
-  <div>
-    <v-text-field
-      v-model="formattedValue"
-      @keydown="formatInput()"
-      @keyup="formatInput()"
-      @keypress="formatInput()"
-      @input="formatInput()"
-      @blur="formatInput()"
-      @focus="formatInput()"
-      v-bind="$attrs"
-      ref="number-input"
-    ></v-text-field>
-  </div>
+    <div>
+        <v-text-field
+            v-model="formattedValue"
+            @keydown="formatInput()"
+            @keyup="formatInput()"
+            @keypress="formatInput()"
+            @input="formatInput()"
+            @blur="formatInput()"
+            @focus="formatInput()"
+            v-bind="$attrs"
+            ref="number-input"
+        ></v-text-field>
+    </div>
 </template>
 
 <script lang="ts">
@@ -20,12 +20,12 @@ import { Component, Prop, Watch, Emit } from "vue-property-decorator";
 
 @Component
 export default class NumberInputComponent extends Vue {
-    @Prop({default: ""}) value;
-    @Prop({default: 2}) numbersAfterComma: number;
+    @Prop({ default: "" }) value: any;
+    @Prop({ default: 2 }) numbersAfterComma: number;
 
     formattedValue: string = this.value.toString();
 
-    created () {
+    created() {
         this.formatInput(true);
     }
 
@@ -49,17 +49,22 @@ export default class NumberInputComponent extends Vue {
                     }
                     inputValue = str.join("");
                 } else {
-                    inputValue = inputValue.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+                    inputValue = inputValue.replace(
+                        /\B(?=(\d{3})+(?!\d))/g,
+                        " "
+                    );
                 }
             } else {
                 inputValue = inputValue.replace(/([^\d])/g, "");
                 inputValue = inputValue.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
             }
-            
+
             this.formattedValue = inputValue;
             if (!initial) {
                 setTimeout(() => {
-                    this.$refs["number-input"]["$refs"]["input"].value = inputValue;
+                    this.$refs["number-input"]["$refs"][
+                        "input"
+                    ].value = inputValue;
                 }, 0);
             }
         }
