@@ -18,7 +18,9 @@
 import Vue from "vue";
 import { Component, Prop, Watch, Emit } from "vue-property-decorator";
 
-@Component
+@Component({
+    name: "a-number-input"
+})
 export default class NumberInputComponent extends Vue {
     @Prop({ default: "" }) value: any;
     @Prop({ default: 2 }) numbersAfterComma: number;
