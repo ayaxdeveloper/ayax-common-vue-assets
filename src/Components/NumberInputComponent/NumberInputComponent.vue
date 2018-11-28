@@ -32,24 +32,30 @@ export default class NumberInputComponent extends Vue {
     formatInput(initial = false) {
         if (this.formattedValue) {
             let inputValue = this.formattedValue.replace(/^\D/g, "");
-            inputValue = inputValue.replace(/,/g, ".");
-            inputValue = inputValue.replace(/([^\d,.])/g, "");
 
-            if (inputValue.includes(".")) {
-                let str = inputValue.split(".", 2);
-                str[0] = str[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-                str[0] += ".";
-                if (str.length > 1) {
-                    str[1].replace(".", "");
-                    if (str[1].length > this.numbersAfterComma) {
-                        str[1] = str[1].slice(0, this.numbersAfterComma);
+            if (this.numbersAfterComma > 0) {
+                inputValue = inputValue.replace(/,/g, ".");
+                inputValue = inputValue.replace(/([^\d,.])/g, "");
+
+                if (inputValue.includes(".")) {
+                    let str = inputValue.split(".", 2);
+                    str[0] = str[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+                    str[0] += ".";
+                    if (str.length > 1) {
+                        str[1].replace(".", "");
+                        if (str[1].length > this.numbersAfterComma) {
+                            str[1] = str[1].slice(0, this.numbersAfterComma);
+                        }
                     }
+                    inputValue = str.join("");
+                } else {
+                    inputValue = inputValue.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
                 }
-                inputValue = str.join("");
             } else {
+                inputValue = inputValue.replace(/([^\d])/g, "");
                 inputValue = inputValue.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
             }
-
+            
             this.formattedValue = inputValue;
             if (!initial) {
                 setTimeout(() => {
