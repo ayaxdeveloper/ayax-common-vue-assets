@@ -24,7 +24,7 @@ export class TableFilterComponentItem {
     values: any[] = [];
     active = true;
     groupName: string = null;
-
+    numbersAfterComma?: number;
     constructor(init: Partial<TableFilterComponentItem>) {
         Object.assign(this, init);
     }

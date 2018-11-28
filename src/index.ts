@@ -1,4 +1,3 @@
-
 import Vue from "vue";
 import Vuetify from "vuetify";
 import ActionbarComponent from "./Components/ActionbarComponent/ActionbarComponent.vue";
@@ -7,13 +6,15 @@ import BusyLoadingComponent from "./Components/BusyLoadingComponent/BusyLoadingC
 import FormComponent from "./Components/FormComponent/FormComponent.vue";
 import FormControlComponent from "./Components/FormComponent/FormControlComponent.vue";
 import NotificationComponent from "./Components/NotificationComponent/NotificationComponent.vue";
+import NumberInputComponent from "./Components/NumberInputComponent/NumberInputComponent.vue";
 import SidebarComponent from "./Components/SidebarComponent/SidebarComponent.vue";
 import TableComponent from "./Components/TableComponent/TableComponent.vue";
 import TableTopbarComponent from "./Components/TableComponent/TableTopbarComponent.vue";
 import TableFilterComponent from "./Components/TableFilterComponent/TableFilterComponent.vue";
 import UserProfileComponent from "./Components/UserProfileComponent/UserProfileComponent.vue";
+
 Vue.use(Vuetify, {
-    iconfont: "mdi"
+    iconfont: "mdi",
 });
 
 export default {
@@ -30,7 +31,8 @@ export default {
         Vue.component("a-busy-loading", BusyLoadingComponent);
         Vue.component("a-user-profile", UserProfileComponent);
         Vue.component("a-actionbar", ActionbarComponent);
-    }
+        Vue.component("a-number-input", NumberInputComponent);
+    },
 };
 
 export * from "./Helpers/FormComponentHelper";
@@ -49,15 +51,16 @@ export * from "./Components/TableComponent/TableHeader";
 export * from "./Components/TableComponent/TableOptions";
 export * from "./Components/ActionbarComponent/ActionItem";
 
-export { 
-    TableComponent, 
-    TableFilterComponent, 
-    FormComponent, 
-    NotificationComponent, 
-    FormControlComponent, 
+export {
+    TableComponent,
+    TableFilterComponent,
+    FormComponent,
+    NotificationComponent,
+    FormControlComponent,
     SidebarComponent,
     BreadcrumbsComponent,
     UserProfileComponent,
     ActionbarComponent,
-    BusyLoadingComponent
+    BusyLoadingComponent,
+    NumberInputComponent,
 };
