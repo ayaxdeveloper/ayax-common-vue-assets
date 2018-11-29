@@ -16,7 +16,7 @@
                 <v-layout row>
                     <v-flex
                         v-if="quickFilters.length > 0"
-                        :class="[getClientWidth > 1300 ? 'pl-3' : '']"
+                        :class="[getClientWidth > 1300 && showAllFilters ? 'pl-3' : '']"
                     >
                         <div style="font-size: 13px;">Быстрый поиск</div>
                         <v-menu bottom offset-y>
