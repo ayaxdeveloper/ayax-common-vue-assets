@@ -25,6 +25,7 @@ export class TableFilterComponentItem {
     active = true;
     groupName: string = null;
     numbersAfterComma?: number;
+    width = 180;
     constructor(init: Partial<TableFilterComponentItem>) {
         Object.assign(this, init);
     }
