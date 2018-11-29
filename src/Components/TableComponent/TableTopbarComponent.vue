@@ -14,7 +14,10 @@
             </v-toolbar-title>
             <v-toolbar-items v-if="filters.length > 0">
                 <v-layout row>
-                    <v-flex v-if="quickFilters.length > 0" class="pl-3">
+                    <v-flex
+                        v-if="quickFilters.length > 0"
+                        :class="[getClientWidth > 1300 ? 'pl-3' : '']"
+                    >
                         <div style="font-size: 13px;">Быстрый поиск</div>
                         <v-menu bottom offset-y>
                             <v-btn slot="activator" light class="quick-filter">
@@ -250,6 +253,10 @@ export default class TableTopbarComponent extends Vue {
         id: 0,
         name: ""
     };
+
+    get getClientWidth() {
+        return window.innerWidth;
+    }
 
     async created() {
         try {
