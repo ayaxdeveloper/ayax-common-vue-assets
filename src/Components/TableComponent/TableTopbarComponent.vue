@@ -70,9 +70,15 @@
                         @emit-filter="applyEmittedFilter"
                     ></a-table-filter>
                     <template v-if="!showAllFilters">
-                        <v-btn class="topbar-button ml-3" light @click="clearAllFilters()">Очистить</v-btn>
                         <v-btn
-                            class="topbar-button ml-2"
+                            class="topbar-button ml-3"
+                            style="min-width: 70px"
+                            light
+                            @click="clearAllFilters()"
+                        >Очистить</v-btn>
+                        <v-btn
+                            class="topbar-button ml-1"
+                            style="min-width: 80px"
                             color="primary"
                             @click="applyAllFilters()"
                         >Применить</v-btn>
@@ -85,6 +91,7 @@
                 <v-btn
                     v-if="filters.filter(filter => filter.appearance === filterAppearance['AllFilters']).length > 0"
                     class="ml-2"
+                    style="font-size: 12px"
                     small
                     flat
                     @click="showAllFiltersBtn()"
@@ -502,8 +509,8 @@ export default class TableTopbarComponent extends Vue {
 <style scoped>
 .topbar-button {
     margin: 10px 0;
-    padding: 0 2px;
-    font-size: 12px;
+    padding: 1px 0 0 0;
+    font-size: 11px;
 }
 .filter-group-name {
     border-bottom: 2px solid #ccc;
@@ -528,7 +535,7 @@ export default class TableTopbarComponent extends Vue {
 
 <style>
 .quick-filter {
-    width: 180px;
+    width: 150px;
 }
 .quick-filter .v-btn__content {
     display: flex;

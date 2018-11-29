@@ -602,7 +602,7 @@ export default class TableFilterComponent extends Vue {
 }
 .filter .el-date-editor .el-range-input {
     color: inherit;
-    font-size: 14px;
+    font-size: 12px;
     padding-top: 6px;
 }
 .filter .el-date-editor .el-range-input:first-of-type {
