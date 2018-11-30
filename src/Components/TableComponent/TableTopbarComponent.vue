@@ -14,10 +14,7 @@
             </v-toolbar-title>
             <v-toolbar-items v-if="filters.length > 0">
                 <v-layout row>
-                    <v-flex
-                        v-if="quickFilters.length > 0"
-                        :class="[getClientWidth < 1300 && showAllFilters || getClientWidth > 1300 ? 'pl-3' : '']"
-                    >
+                    <v-flex v-if="quickFilters.length > 0" style="paddin-left: 12px">
                         <div style="font-size: 13px;">Быстрый поиск</div>
                         <v-menu bottom offset-y>
                             <v-btn slot="activator" light class="quick-filter">
@@ -62,12 +59,12 @@
                         </v-menu>
                     </v-flex>
                     <a-table-filter
-                        class="ml-3"
                         v-for="(topbarFilter, index) in filters.filter(filter => filter.appearance === filterAppearance['Topbar'])"
                         :key="topbarFilter.name"
                         :style="{width: topbarFilter.inputType == filterInputTypes['Button'] 
                             || topbarFilter.inputType == filterInputTypes['ButtonToggle'] 
-                            || topbarFilter.inputType == filterInputTypes['ButtonDropdown'] ? 'initial' : `${topbarFilter.width}px`}"
+                            || topbarFilter.inputType == filterInputTypes['ButtonDropdown'] ? 'initial' : `${topbarFilter.width}px`, 
+                            paddingLeft: '12px'}"
                         :filter="topbarFilter"
                         :index="index"
                         @emit-filter="applyEmittedFilter"
@@ -253,10 +250,6 @@ export default class TableTopbarComponent extends Vue {
         id: 0,
         name: ""
     };
-
-    get getClientWidth() {
-        return window.innerWidth;
-    }
 
     async created() {
         try {
