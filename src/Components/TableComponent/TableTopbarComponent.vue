@@ -14,7 +14,7 @@
             </v-toolbar-title>
             <v-toolbar-items v-if="filters.length > 0">
                 <v-layout row>
-                    <v-flex v-if="quickFilters.length > 0" style="paddin-left: 12px">
+                    <v-flex v-if="quickFilters.length > 0" style="padding-left: 12px">
                         <div style="font-size: 13px;">Быстрый поиск</div>
                         <v-menu bottom offset-y>
                             <v-btn slot="activator" light class="quick-filter">
