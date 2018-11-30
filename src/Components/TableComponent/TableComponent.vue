@@ -298,7 +298,7 @@ import { ICacheService } from "ayax-common-cache";
     components: {
         "a-table-topbar": TableTopbarComponent,
         "a-actionbar": ActionbarComponent,
-        "draggable": vuedraggable
+        draggable: vuedraggable
     },
     directives: {
         resize
@@ -307,9 +307,10 @@ import { ICacheService } from "ayax-common-cache";
 export default class TableComponent extends Vue {
     @Inject() notificationProvider: INotificationProvider;
     @Inject() cacheService: ICacheService;
-    @Prop({default: () => new TableOptions()}) options: TableOptions;
-    @Prop({default: () => ({ tableIndex: null, toggleValue: false })}) slotToggle;
-    
+    @Prop({ default: () => new TableOptions() }) options: TableOptions;
+    @Prop({ default: () => ({ tableIndex: null, toggleValue: false }) })
+    slotToggle;
+
     items = [];
     loading = true;
     tableLoading = true;
@@ -321,9 +322,12 @@ export default class TableComponent extends Vue {
     selectedItems = [];
     lastFilteredRequest = {};
     updateActionbar = 0;
+    isPerPageFromStorage = false;
 
     get visibleHeaders() {
-        return this.options.headers.filter(header => header.isVisible) as TableComponentHeader[];
+        return this.options.headers.filter(
+            header => header.isVisible
+        ) as TableComponentHeader[];
     }
 
     get selectedItemsOnPage() {
@@ -337,6 +341,13 @@ export default class TableComponent extends Vue {
     }
 
     async created() {
+        const perPage = localStorage.getItem(
+            `${this.options.tableName}_perPage`
+        );
+        if (perPage) {
+            this.isPerPageFromStorage = true;
+            this.options.pagination.perPage = parseInt(perPage);
+        }
         await this.loadHeaders();
     }
 
@@ -350,44 +361,48 @@ export default class TableComponent extends Vue {
 
     async loadHeaders() {
         this.loading = true;
-        const headerPromises = this.options.headers.filter(x => (x.dictionary || x.dictionaryPromise) && !x.items)
+        const headerPromises = this.options.headers
+            .filter(x => (x.dictionary || x.dictionaryPromise) && !x.items)
             .map(x => {
-            return new Promise((resolve) => {
-                if (x.dictionary) {
-                    this.cacheService.List(x.dictionary)
-                    .then(z => {
-                        x.items = z;
-                        resolve();
-                    });
-                } else if (x.dictionaryPromise) {
-                    x.dictionaryPromise
-                    .then(z => {
-                        x.items = z;
-                        resolve();
-                    });
-                }
+                return new Promise(resolve => {
+                    if (x.dictionary) {
+                        this.cacheService.List(x.dictionary).then(z => {
+                            x.items = z;
+                            resolve();
+                        });
+                    } else if (x.dictionaryPromise) {
+                        x.dictionaryPromise.then(z => {
+                            x.items = z;
+                            resolve();
+                        });
+                    }
+                });
             });
-        });
         await Promise.all(headerPromises);
-        
+
         const filterPromises = this.options.filters
-            .filter(x => !x.selectItems && (x.selectItemsFromDictionary || x.selectItemsFromPromise)).map(x => {
-            return new Promise((resolve) => {
-                if (x.selectItemsFromDictionary) {
-                    this.cacheService.ListAsSelectItems(x.selectItemsFromDictionary)
-                    .then(z => {
-                        x.selectItems = z;
-                        resolve();
-                    });
-                } else if (x.selectItemsFromPromise) {
-                    x.selectItemsFromPromise
-                    .then(z => {
-                        x.selectItems = z;
-                        resolve();
-                    });
-                }
+            .filter(
+                x =>
+                    !x.selectItems &&
+                    (x.selectItemsFromDictionary || x.selectItemsFromPromise)
+            )
+            .map(x => {
+                return new Promise(resolve => {
+                    if (x.selectItemsFromDictionary) {
+                        this.cacheService
+                            .ListAsSelectItems(x.selectItemsFromDictionary)
+                            .then(z => {
+                                x.selectItems = z;
+                                resolve();
+                            });
+                    } else if (x.selectItemsFromPromise) {
+                        x.selectItemsFromPromise.then(z => {
+                            x.selectItems = z;
+                            resolve();
+                        });
+                    }
+                });
             });
-        });
 
         await Promise.all(filterPromises);
 
@@ -397,7 +412,9 @@ export default class TableComponent extends Vue {
         }
 
         if (localStorage.getItem(`${this.options.title}_header_settings`)) {
-            const data = JSON.parse(localStorage.getItem(`${this.options.title}_header_settings`));
+            const data = JSON.parse(
+                localStorage.getItem(`${this.options.title}_header_settings`)
+            );
             data.forEach(item => {
                 this.options.headers.forEach(header => {
                     if (item.value === header.value) {
@@ -412,9 +429,15 @@ export default class TableComponent extends Vue {
     }
 
     mounted() {
-        this.fixedTableHeader = document.querySelector(`#${this.options.tableName} .fixedTableHeader`) as HTMLElement;
-        const tableScroll = document.querySelector(`#${this.options.tableName} .v-table__overflow`) as HTMLElement;
-        tableScroll.addEventListener("scroll", () => this.onTableScroll(tableScroll.scrollTop));
+        this.fixedTableHeader = document.querySelector(
+            `#${this.options.tableName} .fixedTableHeader`
+        ) as HTMLElement;
+        const tableScroll = document.querySelector(
+            `#${this.options.tableName} .v-table__overflow`
+        ) as HTMLElement;
+        tableScroll.addEventListener("scroll", () =>
+            this.onTableScroll(tableScroll.scrollTop)
+        );
     }
 
     @Watch("options.pagination.page")
@@ -427,10 +450,17 @@ export default class TableComponent extends Vue {
     @Watch("options.pagination.perPage")
     onPerPageChange() {
         if (this.options.pagination.page === 1) {
-            this.loadData();
+            if (!this.isPerPageFromStorage) {
+                this.loadData();
+            }
         } else {
             this.options.pagination.page = 1;
         }
+        localStorage.setItem(
+            `${this.options.tableName}_perPage`,
+            this.options.pagination.perPage.toString()
+        );
+        this.isPerPageFromStorage = false;
     }
 
     @Watch("slotToggle")
@@ -461,21 +491,27 @@ export default class TableComponent extends Vue {
     @Watch("items.length")
     onEmpty() {
         if (this.items.length === 0) {
-            const headersCount = document.querySelectorAll(`#${this.options.tableName + "-static-header"} th`).length;
-            const firstTd = document.querySelector(`#${this.options.tableName} tbody tr td`)as any;
+            const headersCount = document.querySelectorAll(
+                `#${this.options.tableName + "-static-header"} th`
+            ).length;
+            const firstTd = document.querySelector(
+                `#${this.options.tableName} tbody tr td`
+            ) as any;
             firstTd.colSpan = `${headersCount}`;
         }
     }
 
     @Watch("selectedItems")
     onChange(val: any[]) {
-        this.options.actions.filter(x => !x.single && x.condition !== undefined).forEach(action => {
-            if (val.find(x => action.condition(x) === false)) {
-                action.disabled = true;
-            } else {
-                action.disabled = false;
-            }
-        });
+        this.options.actions
+            .filter(x => !x.single && x.condition !== undefined)
+            .forEach(action => {
+                if (val.find(x => action.condition(x) === false)) {
+                    action.disabled = true;
+                } else {
+                    action.disabled = false;
+                }
+            });
     }
 
     @Emit()
@@ -483,8 +519,10 @@ export default class TableComponent extends Vue {
 
     executeSingleAction(actionName: string, item: any) {
         if (actionName) {
-            const singleAction = this.options.actions.find(action => action.name === actionName);
-            
+            const singleAction = this.options.actions.find(
+                action => action.name === actionName
+            );
+
             if (singleAction) {
                 singleAction.action(item);
             }
@@ -492,8 +530,10 @@ export default class TableComponent extends Vue {
     }
 
     firstSingleAction(item) {
-        const firstAction = this.options.actions.filter(action => action.single)[0];
-        
+        const firstAction = this.options.actions.filter(
+            action => action.single
+        )[0];
+
         if (firstAction && firstAction.action) {
             firstAction.action(item);
         }
@@ -501,12 +541,16 @@ export default class TableComponent extends Vue {
 
     resizeFixedHeader() {
         const staticHeader = document
-            .querySelector(`#${this.options.tableName} #${this.options.tableName + "-static-header"}`)
+            .querySelector(
+                `#${this.options.tableName} #${this.options.tableName +
+                    "-static-header"}`
+            )
             .querySelectorAll("th");
 
-        const header = document
-            .querySelectorAll(`#${this.options.tableName} .fixedTableHeader th`) as HTMLCollectionOf<HTMLElement>;
-        
+        const header = document.querySelectorAll(
+            `#${this.options.tableName} .fixedTableHeader th`
+        ) as HTMLCollectionOf<HTMLElement>;
+
         for (let i = 0; i < staticHeader.length; i++) {
             header[i].style.width = `${staticHeader[i].offsetWidth}px`;
             header[i].style.minWidth = `${staticHeader[i].offsetWidth}px`;
@@ -525,20 +569,24 @@ export default class TableComponent extends Vue {
         try {
             this.tableLoading = true;
             const filteredRequest = this.AddFilter();
-            const request = this.options.searchData 
+            const request = this.options.searchData
                 ? await this.options.searchData(filteredRequest)
                 : await this.options.rawData(filteredRequest).then(x => {
-                    return {
-                        data: x,
-                        total: x.length
-                    }
-                });
+                      return {
+                          data: x,
+                          total: x.length
+                      };
+                  });
 
             for (let i = 0; i < request.data.length; i++) {
                 request.data[i].tableIndex = i;
                 request.data[i].slotToggle = false;
 
-                if (this.selectedItems.findIndex(selectedItem => selectedItem.id === request.data[i].id) > -1) {
+                if (
+                    this.selectedItems.findIndex(
+                        selectedItem => selectedItem.id === request.data[i].id
+                    ) > -1
+                ) {
                     request.data[i].selected = true;
                 } else {
                     request.data[i].selected = false;
@@ -550,7 +598,6 @@ export default class TableComponent extends Vue {
             delete filteredRequest.page;
             delete filteredRequest.perPage;
             this.lastFilteredRequest = filteredRequest;
-
         } catch (e) {
             this.notificationProvider.Error("Ошибка получения данных");
             console.error(e);
@@ -564,21 +611,26 @@ export default class TableComponent extends Vue {
     }
 
     AddFilter() {
-        const filteredRequest = {...{
-            page: this.options.pagination.page, 
-            perPage: this.options.pagination.perPage
-        }};
-        this.options.filters.filter(x => x.values.length > 0)
-        .forEach((filter) => {           
-            const filters = filter.FormRequestFilters();
-            if (filters) {
-                filteredRequest[filter.requestName] = filters;
+        const filteredRequest = {
+            ...{
+                page: this.options.pagination.page,
+                perPage: this.options.pagination.perPage
             }
-        });
-        this.options.headers.filter(x => x.sortBy).forEach((header) => {
-            filteredRequest[`${header.value}sort`] = header.sortBy;
-        });
-        return filteredRequest; 
+        };
+        this.options.filters
+            .filter(x => x.values.length > 0)
+            .forEach(filter => {
+                const filters = filter.FormRequestFilters();
+                if (filters) {
+                    filteredRequest[filter.requestName] = filters;
+                }
+            });
+        this.options.headers
+            .filter(x => x.sortBy)
+            .forEach(header => {
+                filteredRequest[`${header.value}sort`] = header.sortBy;
+            });
+        return filteredRequest;
     }
 
     @Emit()
@@ -586,18 +638,24 @@ export default class TableComponent extends Vue {
 
     selectItem(item) {
         if (this.options.selectableSingle) {
-            if (this.selectedItems.length > 0 && this.selectedItems[0].id && this.selectedItems[0].id === item.id) {
+            if (
+                this.selectedItems.length > 0 &&
+                this.selectedItems[0].id &&
+                this.selectedItems[0].id === item.id
+            ) {
                 this.selectedItems = [];
                 item.selected = false;
             } else {
-                this.items.forEach(item => item.selected = false);
+                this.items.forEach(item => (item.selected = false));
                 item.selected = true;
                 this.selectedItems = [item];
             }
             this.onSelectItem(item);
             return;
         }
-        const itemIndex = this.selectedItems.findIndex(selectedItem => selectedItem.id === item.id);
+        const itemIndex = this.selectedItems.findIndex(
+            selectedItem => selectedItem.id === item.id
+        );
         if (itemIndex > -1) {
             this.selectedItems.splice(itemIndex, 1);
             item.selected = false;
@@ -615,7 +673,9 @@ export default class TableComponent extends Vue {
             });
         } else {
             this.items.forEach(item => {
-                const itemIndex = this.selectedItems.findIndex(selectedItem => selectedItem.id === item.id);
+                const itemIndex = this.selectedItems.findIndex(
+                    selectedItem => selectedItem.id === item.id
+                );
                 if (itemIndex > -1) {
                     this.selectedItems.splice(itemIndex, 1);
                     item.selected = false;
@@ -654,27 +714,34 @@ export default class TableComponent extends Vue {
                 return val.name ? val.name : val.title;
             }
         }
-        
+
         return "Нет";
     }
 
     getTotalPages() {
-        return this.options.pagination.perPage && this.options.pagination.totalItems ? 
-            Math.ceil(this.options.pagination.totalItems / this.options.pagination.perPage) : 1;
+        return this.options.pagination.perPage &&
+            this.options.pagination.totalItems
+            ? Math.ceil(
+                  this.options.pagination.totalItems /
+                      this.options.pagination.perPage
+              )
+            : 1;
     }
 
     changeSort(headerValue: string) {
-        this.options.headers.filter(el => el.sortable).forEach(header => {
-            if (header.value === headerValue) {
-                if (!header.sortBy) {
-                    header.sortBy = new SortableField();
-                    header.sortBy.isdesc = false;
+        this.options.headers
+            .filter(el => el.sortable)
+            .forEach(header => {
+                if (header.value === headerValue) {
+                    if (!header.sortBy) {
+                        header.sortBy = new SortableField();
+                        header.sortBy.isdesc = false;
+                    }
+                    header.sortBy.isdesc = !header.sortBy.isdesc;
+                } else {
+                    header.sortBy = undefined;
                 }
-                header.sortBy.isdesc = !header.sortBy.isdesc;
-            } else {
-                header.sortBy = undefined;
-            }
-        });
+            });
         this.loadData();
     }
 
@@ -682,7 +749,10 @@ export default class TableComponent extends Vue {
         for (let i = 0; i < this.options.headers.length; i++) {
             this.options.headers[i].order = i;
         }
-        localStorage.setItem(`${this.options.title}_header_settings`, JSON.stringify(this.options.headers));
+        localStorage.setItem(
+            `${this.options.title}_header_settings`,
+            JSON.stringify(this.options.headers)
+        );
     }
 
     resetTableSettings() {
