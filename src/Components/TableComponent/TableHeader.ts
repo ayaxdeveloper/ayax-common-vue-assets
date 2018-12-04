@@ -18,11 +18,14 @@ export class TableComponentHeader {
     type: TableComponentHeaderType = TableComponentHeaderType.string;
     order: number;
     custom = false;
+    wrap = true;
+
     constructor(init?: Partial<TableComponentHeader>) {
         if (init) {
             Object.assign(this, init);
         }
     }
+
     public static String(init: Partial<TableComponentHeader>) {
         return new TableComponentHeader(init);
     }
@@ -55,6 +58,7 @@ export class TableComponentHeader {
             return val;
         };
         init.type = TableComponentHeaderType.phone;
+        init.wrap = false;
         return new TableComponentHeader(init);
     }
 }

@@ -206,7 +206,7 @@
                     <td
                         v-for="(header, index) in visibleHeaders"
                         :key="index"
-                        :style="{paddingTop: '10px', textAlign: header.align}"
+                        :style="{paddingTop: '10px', textAlign: header.align, whiteSpace: header.wrap ? '' : 'nowrap'}"
                         @dblclick="firstSingleAction(props.item)"
                     >
                         <slot :name="header.value" :item="props.item">
