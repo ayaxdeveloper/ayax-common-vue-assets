@@ -28,26 +28,41 @@ export class TableComponentHeader {
     }
 
     public static Date(init: Partial<TableComponentHeader>) {
-        init.formatter = (value) => DateHelper.formatDate(value);
+        init.formatter = value => DateHelper.formatDate(value);
         init.type = TableComponentHeaderType.date;
         return new TableComponentHeader(init);
     }
 
     public static DateTime(init: Partial<TableComponentHeader>) {
-        init.formatter = (value) => DateHelper.formatDate(value, "DD.MM.YYYY HH:mm");
+        init.formatter = value => DateHelper.formatDate(value, "DD.MM.YYYY HH:mm");
         init.type = TableComponentHeaderType.datetime;
         return new TableComponentHeader(init);
     }
 
     public static Boolean(init: Partial<TableComponentHeader>) {
         init.formatter = (value: boolean) => {
-            return value === true ? "Да" : "Нет"; 
+            return value === true ? "Да" : "Нет";
         };
         init.type = TableComponentHeaderType.boolean;
+        return new TableComponentHeader(init);
+    }
+
+    public static Phone(init: Partial<TableComponentHeader>) {
+        init.formatter = (val: string) => {
+            if (val.length >= 11) {
+                val = `+${val[0]}(${val.slice(1, 4)})${val.slice(4, 7)}-${val.slice(7, 9)}-${val.slice(9, 11)}`;
+            }
+            return val;
+        };
+        init.type = TableComponentHeaderType.phone;
         return new TableComponentHeader(init);
     }
 }
 
 export enum TableComponentHeaderType {
-    string, date, datetime, boolean
+    string,
+    date,
+    datetime,
+    boolean,
+    phone,
 }
