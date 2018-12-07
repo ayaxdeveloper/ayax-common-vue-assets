@@ -49,11 +49,18 @@
                 ></a-number-input>
             </v-flex>
             <template v-else-if="filter.requestType == filterTypes['Range']">
-                <v-flex class="filter" v-if="filter.inputType == filterInputTypes['Date']">
-                    <div class="filterLabel">{{ filter.label }}</div>
+                <v-flex
+                    style="position: relative"
+                    class="filter"
+                    v-if="filter.inputType == filterInputTypes['Date']"
+                >
+                    <div
+                        style="position: absolute; z-index: 1"
+                        class="filterLabel"
+                    >{{ filter.label }}</div>
                     <el-date-picker
                         :class="['date-range']"
-                        style="margin-top: 1px"
+                        style="margin-top: 13px"
                         v-model="filter.values"
                         type="daterange"
                         format="dd.MM.yyyy"
@@ -61,11 +68,31 @@
                         size="small"
                         clearable
                         unlink-panels
-                        :picker-options="{firstDayOfWeek: 1}"
+                        :picker-options="dateFilterPickerOptions"
                         align="center"
                         start-placeholder="Начало"
                         end-placeholder="Конец"
                     ></el-date-picker>
+                    <div
+                        :style="{position: 'absolute', 
+                        top: filter.appearance == filterAppearance['Topbar'] ? '13px' : '16px', 
+                        left: '0', 
+                        right: '0', 
+                        padding: filter.appearance == filterAppearance['Topbar'] ? '0' : '0 4px',
+                        pointerEvents: 'none'}"
+                        class="secondary"
+                        v-if="quickDatePicked"
+                    >
+                        <v-text-field
+                            class="filterInput"
+                            :name="filter.requestName"
+                            v-model="filter.values[0]"
+                            append-icon="mdi-close"
+                            @click:append.stop="() => {filter.values[0] = undefined; quickDatePicked = false}"
+                            single-line
+                            readonly
+                        ></v-text-field>
+                    </div>
                 </v-flex>
                 <template v-else-if="filter.inputType == filterInputTypes['Text']">
                     <v-flex class="filter">
@@ -356,6 +383,37 @@ export default class TableFilterComponent extends Vue {
     applyFilterButton = false;
     buttonText = "";
     initialSelectItems: SelectItem[] = [];
+    quickDatePicked = false;
+
+    dateFilterPickerOptions = {
+        firstDayOfWeek: 1,
+        shortcuts: [
+            {
+                text: "Сегодня",
+                onClick(picker) {
+                    picker.$emit("pick", ["Сегодня"]);
+                }
+            },
+            {
+                text: "Завтра",
+                onClick(picker) {
+                    picker.$emit("pick", ["Завтра"]);
+                }
+            },
+            {
+                text: "Неделя",
+                onClick(picker) {
+                    picker.$emit("pick", ["Неделя"]);
+                }
+            },
+            {
+                text: "Месяц",
+                onClick(picker) {
+                    picker.$emit("pick", ["Месяц"]);
+                }
+            }
+        ]
+    };
 
     created() {
         Object.keys(TableFilterComponentItemType).forEach(item => {
@@ -376,6 +434,17 @@ export default class TableFilterComponent extends Vue {
             this.initialSelectItems = JSON.parse(
                 JSON.stringify(this.filter.selectItems)
             );
+        }
+        if (
+            this.filter.values[0] &&
+            (this.filter.values[0] === "Сегодня" ||
+                this.filter.values[0] === "Завтра" ||
+                this.filter.values[0] === "Неделя" ||
+                this.filter.values[0] === "Месяц")
+        ) {
+            this.quickDatePicked = true;
+        } else {
+            this.quickDatePicked = false;
         }
     }
 
@@ -422,6 +491,17 @@ export default class TableFilterComponent extends Vue {
         if (this.filter.inputType === this.filterInputTypes["Date"]) {
             if (!this.filter.values) {
                 this.filter.values = [undefined];
+            }
+            if (
+                this.filter.values[0] &&
+                (this.filter.values[0] === "Сегодня" ||
+                    this.filter.values[0] === "Завтра" ||
+                    this.filter.values[0] === "Неделя" ||
+                    this.filter.values[0] === "Месяц")
+            ) {
+                this.quickDatePicked = true;
+            } else {
+                this.quickDatePicked = false;
             }
         }
         if (newVal) {

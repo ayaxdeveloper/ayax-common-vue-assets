@@ -157,7 +157,7 @@
                 <v-layout>
                     <v-spacer></v-spacer>
                     <v-btn
-                        v-if="filters.find(x => x.values.length && x.values.length > 0)"
+                        v-if="showSaveFilterButton"
                         color="success"
                         @click="quickFilterSaveDialog = true"
                     >Сохранить фильтр</v-btn>
@@ -251,6 +251,13 @@ export default class TableTopbarComponent extends Vue {
         name: ""
     };
 
+    get showSaveFilterButton() {
+        if (this.filters.find(x => x.values && (x.values[0] || x.values[1]))) {
+            return true;
+        }
+        return false;
+    }
+
     async created() {
         try {
             if (this.showQuickFilters) {
@@ -310,7 +317,7 @@ export default class TableTopbarComponent extends Vue {
                 filter.values = JSON.parse(this.$route.query[`${filter.name}`]);
                 filterCount++;
             } else {
-                if (filter.values.length > 0) {
+                if (filter.values && filter.values.length > 0) {
                     filter.values = [];
                     filterCount++;
                 }
@@ -369,7 +376,7 @@ export default class TableTopbarComponent extends Vue {
                 filter.requestType === this.filterTypes["Range"] &&
                 filter.inputType === this.filterInputTypes["Date"]
             ) {
-                if (filter.values.length >= 2) {
+                if (filter.values && filter.values.length >= 2) {
                     filter.values[1] =
                         filter.values[1].substr(0, 10) + " 23:59:59";
                 }
