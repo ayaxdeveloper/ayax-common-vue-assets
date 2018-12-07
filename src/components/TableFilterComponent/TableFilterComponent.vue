@@ -76,8 +76,9 @@
                     <div
                         :style="{position: 'absolute', 
                         top: filter.appearance == filterAppearance['Topbar'] ? '13px' : '16px', 
-                        left: '0', 
-                        right: '0', 
+                        left: 0, 
+                        right: 0,
+                        bottom: 0, 
                         padding: filter.appearance == filterAppearance['Topbar'] ? '0' : '0 4px',
                         pointerEvents: 'none'}"
                         class="secondary"
