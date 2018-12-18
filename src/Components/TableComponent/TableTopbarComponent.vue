@@ -293,6 +293,21 @@ export default class TableTopbarComponent extends Vue {
                 ).forEach(key => {
                     const filter = this.filters.find(x => x.name === key);
                     if (filter) {
+                        if (
+                            filter.requestType === this.filterTypes["Range"] &&
+                            filter.inputType === this.filterInputTypes["Date"]
+                        ) {
+                            const quickDate = filter.quickDates.find(
+                                x =>
+                                    x[2] ===
+                                    JSON.parse(this.$route.query[`${key}`])[0]
+                            );
+                            if (quickDate) {
+                                filter.values = quickDate;
+                                filterCount++;
+                                return;
+                            }
+                        }
                         filter.values = JSON.parse(this.$route.query[`${key}`]);
                         filterCount++;
                     }
@@ -314,8 +329,25 @@ export default class TableTopbarComponent extends Vue {
                 JSON.parse(JSON.stringify(this.$route.query))
             ).findIndex(key => key === filter.name);
             if (filterInQuery > -1) {
-                filter.values = JSON.parse(this.$route.query[`${filter.name}`]);
-                filterCount++;
+                if (
+                    filter.requestType === this.filterTypes["Range"] &&
+                    filter.inputType === this.filterInputTypes["Date"]
+                ) {
+                    const quickDate = filter.quickDates.find(
+                        x =>
+                            x[2] ===
+                            JSON.parse(this.$route.query[`${filter.name}`])[0]
+                    );
+                    if (quickDate) {
+                        filter.values = quickDate;
+                        filterCount++;
+                    }
+                } else {
+                    filter.values = JSON.parse(
+                        this.$route.query[`${filter.name}`]
+                    );
+                    filterCount++;
+                }
             } else {
                 if (filter.values && filter.values.length > 0) {
                     filter.values = [];
@@ -356,6 +388,12 @@ export default class TableTopbarComponent extends Vue {
                 if (filter.values.length >= 2) {
                     filter.values[1] =
                         filter.values[1].substr(0, 10) + " 23:59:59";
+                }
+                if (filter.values.length === 3) {
+                    query[`${filter.name}`] = JSON.stringify([
+                        filter.values[2]
+                    ]);
+                    return;
                 }
             }
             query[`${filter.name}`] = JSON.stringify(filter.values);

@@ -82,14 +82,14 @@
                         padding: filter.appearance == filterAppearance['Topbar'] ? '0' : '0 4px',
                         pointerEvents: 'none'}"
                         class="secondary"
-                        v-if="quickDatePicked"
+                        v-if="filter.values[2]"
                     >
                         <v-text-field
                             class="filterInput"
                             :name="filter.requestName"
-                            v-model="filter.values[0]"
+                            v-model="filter.values[2]"
                             append-icon="mdi-close"
-                            @click:append.stop="() => {filter.values[0] = undefined; quickDatePicked = false}"
+                            @click:append.stop="() => filter.values = []"
                             single-line
                             readonly
                         ></v-text-field>
@@ -384,36 +384,10 @@ export default class TableFilterComponent extends Vue {
     applyFilterButton = false;
     buttonText = "";
     initialSelectItems: SelectItem[] = [];
-    quickDatePicked = false;
 
     dateFilterPickerOptions = {
         firstDayOfWeek: 1,
-        shortcuts: [
-            {
-                text: "Сегодня",
-                onClick(picker) {
-                    picker.$emit("pick", ["Сегодня"]);
-                }
-            },
-            {
-                text: "Завтра",
-                onClick(picker) {
-                    picker.$emit("pick", ["Завтра"]);
-                }
-            },
-            {
-                text: "Неделя",
-                onClick(picker) {
-                    picker.$emit("pick", ["Неделя"]);
-                }
-            },
-            {
-                text: "Месяц",
-                onClick(picker) {
-                    picker.$emit("pick", ["Месяц"]);
-                }
-            }
-        ]
+        shortcuts: []
     };
 
     created() {
@@ -437,15 +411,17 @@ export default class TableFilterComponent extends Vue {
             );
         }
         if (
-            this.filter.values[0] &&
-            (this.filter.values[0] === "Сегодня" ||
-                this.filter.values[0] === "Завтра" ||
-                this.filter.values[0] === "Неделя" ||
-                this.filter.values[0] === "Месяц")
+            this.filter.inputType === this.filterInputTypes["Date"] &&
+            this.filter.requestType === this.filterTypes["Range"]
         ) {
-            this.quickDatePicked = true;
-        } else {
-            this.quickDatePicked = false;
+            this.dateFilterPickerOptions.shortcuts = this.filter.quickDates.map(
+                x => ({
+                    text: x[2],
+                    onClick(picker) {
+                        picker.$emit("pick", [x[0], x[1], x[2]]);
+                    }
+                })
+            );
         }
     }
 
@@ -492,17 +468,6 @@ export default class TableFilterComponent extends Vue {
         if (this.filter.inputType === this.filterInputTypes["Date"]) {
             if (!this.filter.values) {
                 this.filter.values = [undefined];
-            }
-            if (
-                this.filter.values[0] &&
-                (this.filter.values[0] === "Сегодня" ||
-                    this.filter.values[0] === "Завтра" ||
-                    this.filter.values[0] === "Неделя" ||
-                    this.filter.values[0] === "Месяц")
-            ) {
-                this.quickDatePicked = true;
-            } else {
-                this.quickDatePicked = false;
             }
         }
         if (newVal) {

@@ -623,54 +623,6 @@ export default class TableComponent extends Vue {
         }
     }
 
-    transformQuickDateFilter(filter: TableFilterComponentItem) {
-        const currentDate = new Date();
-
-        switch (filter.values[0]) {
-            case "Сегодня":
-                {
-                    const d = moment(currentDate).format("YYYY.MM.DD");
-                    filter.values = [d, d + " 23:59:59"];
-                }
-                break;
-            case "Завтра":
-                {
-                    const d = moment(currentDate)
-                        .add(1, "days")
-                        .format("YYYY.MM.DD");
-                    filter.values = [d, d + " 23:59:59"];
-                }
-                break;
-            case "Неделя":
-                {
-                    const start = moment(currentDate)
-                        .startOf("isoWeek")
-                        .format("YYYY.MM.DD");
-
-                    const end = moment(currentDate)
-                        .endOf("isoWeek")
-                        .format("YYYY.MM.DD");
-
-                    filter.values = [start, end + " 23:59:59"];
-                }
-                break;
-            case "Месяц":
-                {
-                    const start = moment(currentDate)
-                        .startOf("month")
-                        .format("YYYY.MM.DD");
-
-                    const end = moment(currentDate)
-                        .endOf("month")
-                        .format("YYYY.MM.DD");
-
-                    filter.values = [start, end + " 23:59:59"];
-                }
-                break;
-            default:
-        }
-    }
-
     AddFilter() {
         const filteredRequest = {
             ...{
@@ -689,9 +641,6 @@ export default class TableComponent extends Vue {
         filtersCopy
             .filter(x => x.values.length > 0)
             .forEach(filter => {
-                if (filter.inputType === this.filterInputTypes["Date"]) {
-                    this.transformQuickDateFilter(filter);
-                }
                 const filters = filter.FormRequestFilters();
                 if (filters) {
                     filteredRequest[filter.requestName] = filters;

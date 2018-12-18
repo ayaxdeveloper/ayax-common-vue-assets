@@ -1,4 +1,5 @@
 import { SelectItem } from "ayax-common-types";
+import * as moment from "moment";
 import { Filter } from "./Filter";
 import { TableFilterComponentItemAppearance } from "./TableFilterComponentItemAppearance";
 import { TableFilterComponentItemInputType } from "./TableFilterComponentItemInputType";
@@ -26,6 +27,37 @@ export class TableFilterComponentItem {
     groupName: string = null;
     numbersAfterComma?: number;
     width = 180;
+    quickDates = [
+        [moment(new Date()).format("YYYY.MM.DD"), moment(new Date()).format("YYYY.MM.DD"), "Сегодня"],
+        [
+            moment(new Date())
+                .add(1, "days")
+                .format("YYYY.MM.DD"),
+            moment(new Date())
+                .add(1, "days")
+                .format("YYYY.MM.DD"),
+            "Завтра",
+        ],
+        [
+            moment(new Date())
+                .startOf("isoWeek")
+                .format("YYYY.MM.DD"),
+            moment(new Date())
+                .endOf("isoWeek")
+                .format("YYYY.MM.DD"),
+            "Неделя",
+        ],
+        [
+            moment(new Date())
+                .startOf("month")
+                .format("YYYY.MM.DD"),
+            moment(new Date())
+                .endOf("month")
+                .format("YYYY.MM.DD"),
+            "Месяц",
+        ],
+    ];
+
     constructor(init: Partial<TableFilterComponentItem>) {
         Object.assign(this, init);
     }
