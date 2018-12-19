@@ -15,9 +15,15 @@
             <v-toolbar-items v-if="filters.length > 0">
                 <v-layout row>
                     <v-flex v-if="quickFilters.length > 0" style="padding-left: 12px">
-                        <div style="font-size: 13px;">Быстрый поиск</div>
+                        <div style="font-size: 13px; height: 12px; margin-top: 1px">Быстрый поиск</div>
                         <v-menu bottom offset-y>
-                            <v-btn slot="activator" light class="quick-filter">
+                            <v-btn
+                                style="height: 22px; margin-top: 7px"
+                                slot="activator"
+                                color="white"
+                                light
+                                class="quick-filter"
+                            >
                                 <span class="quick-filter-text">{{ quickFilterText }}</span>
                                 <v-icon right>mdi-chevron-down</v-icon>
                             </v-btn>
@@ -329,25 +335,25 @@ export default class TableTopbarComponent extends Vue {
                 JSON.parse(JSON.stringify(this.$route.query))
             ).findIndex(key => key === filter.name);
             if (filterInQuery > -1) {
+                let quickDate;
                 if (
                     filter.requestType === this.filterTypes["Range"] &&
                     filter.inputType === this.filterInputTypes["Date"]
                 ) {
-                    const quickDate = filter.quickDates.find(
+                    quickDate = filter.quickDates.find(
                         x =>
                             x[2] ===
                             JSON.parse(this.$route.query[`${filter.name}`])[0]
                     );
-                    if (quickDate) {
-                        filter.values = quickDate;
-                        filterCount++;
-                    }
+                }
+                if (quickDate) {
+                    filter.values = quickDate;
                 } else {
                     filter.values = JSON.parse(
                         this.$route.query[`${filter.name}`]
                     );
-                    filterCount++;
                 }
+                filterCount++;
             } else {
                 if (filter.values && filter.values.length > 0) {
                     filter.values = [];
@@ -385,7 +391,7 @@ export default class TableTopbarComponent extends Vue {
                 filter.requestType === this.filterTypes["Range"] &&
                 filter.inputType === this.filterInputTypes["Date"]
             ) {
-                if (filter.values.length >= 2) {
+                if (filter.values.length === 2) {
                     filter.values[1] =
                         filter.values[1].substr(0, 10) + " 23:59:59";
                 }
@@ -414,7 +420,7 @@ export default class TableTopbarComponent extends Vue {
                 filter.requestType === this.filterTypes["Range"] &&
                 filter.inputType === this.filterInputTypes["Date"]
             ) {
-                if (filter.values && filter.values.length >= 2) {
+                if (filter.values && filter.values.length === 2) {
                     filter.values[1] =
                         filter.values[1].substr(0, 10) + " 23:59:59";
                 }

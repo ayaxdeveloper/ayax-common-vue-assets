@@ -23,7 +23,9 @@
             >
                 <div class="filterLabel">{{ filter.label }}</div>
                 <v-text-field
-                    class="filterInput"
+                    :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput']"
+                    :solo="filter.appearance === filterAppearance['Topbar']"
+                    :light="filter.appearance === filterAppearance['Topbar']"
                     :name="filter.requestName"
                     :placeholder="filter.placeholder"
                     :prepend-icon="filter.icon"
@@ -38,7 +40,9 @@
             >
                 <div class="filterLabel">{{ filter.label }}</div>
                 <a-number-input
-                    class="filterInput"
+                    :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput']"
+                    :solo="filter.appearance === filterAppearance['Topbar']"
+                    :light="filter.appearance === filterAppearance['Topbar']"
                     :name="filter.requestName"
                     :placeholder="filter.placeholder"
                     :prepend-icon="filter.icon"
@@ -59,7 +63,7 @@
                         class="filterLabel"
                     >{{ filter.label }}</div>
                     <el-date-picker
-                        :class="['date-range']"
+                        :class="['date-range', filter.appearance === filterAppearance['Topbar'] ? 'topbar-date-filter' : '']"
                         style="margin-top: 13px"
                         v-model="filter.values"
                         type="daterange"
@@ -85,7 +89,9 @@
                         v-if="filter.values[2]"
                     >
                         <v-text-field
-                            class="filterInput"
+                            :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput']"
+                            :solo="filter.appearance === filterAppearance['Topbar']"
+                            :light="filter.appearance === filterAppearance['Topbar']"
                             :name="filter.requestName"
                             v-model="filter.values[2]"
                             append-icon="mdi-close"
@@ -100,7 +106,9 @@
                         <div class="filterLabel">{{ filter.label }}</div>
                         <div style="display: flex; flex-direction: row">
                             <v-text-field
-                                class="filterInput filterInputRange"
+                                :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'filterInputRange']"
+                                :solo="filter.appearance === filterAppearance['Topbar']"
+                                :light="filter.appearance === filterAppearance['Topbar']"
                                 :name="filter.requestName"
                                 single-line
                                 placeholder="От"
@@ -111,7 +119,9 @@
                             ></v-text-field>
                             <div class="pa-2">-</div>
                             <v-text-field
-                                class="filterInput filterInputRange"
+                                :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'filterInputRange']"
+                                :solo="filter.appearance === filterAppearance['Topbar']"
+                                :light="filter.appearance === filterAppearance['Topbar']"
                                 @input="applyFilterButton = filter.values[1]"
                                 :name="filter.requestName"
                                 single-line
@@ -129,7 +139,9 @@
                         <div class="filterLabel">{{ filter.label }}</div>
                         <div style="display: flex; flex-direction: row">
                             <a-number-input
-                                class="filterInput"
+                                :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'filterInputRange']"
+                                :solo="filter.appearance === filterAppearance['Topbar']"
+                                :light="filter.appearance === filterAppearance['Topbar']"
                                 :name="filter.requestName"
                                 :numbersAfterComma="filter.numbersAfterComma"
                                 single-line
@@ -139,7 +151,9 @@
                             ></a-number-input>
                             <div class="pa-2">-</div>
                             <a-number-input
-                                class="filterInput"
+                                :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'filterInputRange']"
+                                :solo="filter.appearance === filterAppearance['Topbar']"
+                                :light="filter.appearance === filterAppearance['Topbar']"
                                 @input="applyFilterButton = filter.values[1]"
                                 :name="filter.requestName"
                                 :numbersAfterComma="filter.numbersAfterComma"
@@ -159,7 +173,9 @@
                 <div class="filterLabel">{{ filter.label }}</div>
                 <v-autocomplete
                     :id="filter.requestName"
-                    class="filterInput selectFilter"
+                    :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'selectFilter']"
+                    :solo="filter.appearance === filterAppearance['Topbar']"
+                    :light="filter.appearance === filterAppearance['Topbar']"
                     :name="filter.requestName"
                     :items="filter.selectItems"
                     v-model="filter.values[0]"
@@ -180,7 +196,9 @@
                     :id="filter.requestName"
                     :name="filter.requestName"
                     :items="filter.selectItems"
-                    class="filterInput selectFilter"
+                    :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'selectFilter']"
+                    :solo="filter.appearance === filterAppearance['Topbar']"
+                    :light="filter.appearance === filterAppearance['Topbar']"
                     v-model="filter.values"
                     :prepend-icon="filter.icon"
                     clearable
@@ -191,9 +209,14 @@
                     no-data-text="Нет совпадений"
                 >
                     <template slot="selection" slot-scope="data">
-                        <span class="selectionValue pt-2">
+                        <span
+                            :class="['selectionValue', filter.appearance === filterAppearance['Topbar'] ? 'topbar-selection-value' : 'pt-2']"
+                        >
                             Выбрано
-                            <span class="selectionChip">{{ filter.values.length }}</span>
+                            <span
+                                class="selectionChip"
+                                :style="{backgroundColor: filter.appearance === filterAppearance['Topbar'] ? '#ccc' : '#fff'}"
+                            >{{ filter.values.length }}</span>
                         </span>
                     </template>
                     <template slot="item" slot-scope="data">
@@ -535,6 +558,10 @@ export default class TableFilterComponent extends Vue {
 .selectionValue:not(:first-child) {
     display: none;
 }
+.topbar-selection-value {
+    padding-top: 1px !important;
+    color: #202020;
+}
 .selectBlack {
     color: #000 !important;
 }
@@ -586,6 +613,51 @@ export default class TableFilterComponent extends Vue {
 </style>
 
 <style>
+.topbar-filter .v-input__control {
+    margin-top: 7px;
+    height: 30px;
+    min-height: inherit !important;
+}
+
+.topbar-filter input {
+    padding-top: 1px !important;
+}
+
+.topbar-filter .v-input__slot {
+    padding: 0 6px !important;
+}
+
+.topbar-date-filter {
+    padding: 0 0 0 6px !important;
+    margin-top: 19px !important;
+    border-radius: 2px !important;
+    background-color: #fff !important;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+        0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    border-bottom: none !important;
+    height: 22px !important;
+}
+
+.topbar-date-filter .el-range-input {
+    color: #202020 !important;
+    font-size: 12px !important;
+    padding-top: 1px !important;
+}
+
+.topbar-date-filter .el-range-input::placeholder {
+    color: #c5c5c5 !important;
+}
+
+.topbar-date-filter .el-range-separator {
+    color: #202020 !important;
+}
+
+.topbar-date-filter .el-range__close-icon {
+    width: 20px;
+    padding-top: 0px !important;
+    padding-right: 6px !important;
+}
+
 .filterBtnToggle {
 }
 

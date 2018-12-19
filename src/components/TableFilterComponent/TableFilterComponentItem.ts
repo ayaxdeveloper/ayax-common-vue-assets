@@ -28,14 +28,14 @@ export class TableFilterComponentItem {
     numbersAfterComma?: number;
     width = 180;
     quickDates = [
-        [moment(new Date()).format("YYYY.MM.DD"), moment(new Date()).format("YYYY.MM.DD"), "Сегодня"],
+        [moment(new Date()).format("YYYY.MM.DD"), moment(new Date()).format("YYYY.MM.DD") + " 23:59:59", "Сегодня"],
         [
             moment(new Date())
                 .add(1, "days")
                 .format("YYYY.MM.DD"),
             moment(new Date())
                 .add(1, "days")
-                .format("YYYY.MM.DD"),
+                .format("YYYY.MM.DD") + " 23:59:59",
             "Завтра",
         ],
         [
@@ -44,7 +44,7 @@ export class TableFilterComponentItem {
                 .format("YYYY.MM.DD"),
             moment(new Date())
                 .endOf("isoWeek")
-                .format("YYYY.MM.DD"),
+                .format("YYYY.MM.DD") + " 23:59:59",
             "Неделя",
         ],
         [
@@ -53,7 +53,7 @@ export class TableFilterComponentItem {
                 .format("YYYY.MM.DD"),
             moment(new Date())
                 .endOf("month")
-                .format("YYYY.MM.DD"),
+                .format("YYYY.MM.DD") + " 23:59:59",
             "Месяц",
         ],
     ];
