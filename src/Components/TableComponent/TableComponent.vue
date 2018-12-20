@@ -501,7 +501,7 @@ export default class TableComponent extends Vue {
         this.loadData();
     }
 
-    @Watch("options.reloadData")
+    @Watch("options.resizeHeader")
     onResize() {
         this.resizeFixedHeader();
     }
