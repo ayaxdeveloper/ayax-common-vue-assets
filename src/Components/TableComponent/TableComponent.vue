@@ -140,6 +140,7 @@
                         <v-icon>mdi-dots-horizontal</v-icon>
                     </th>
                     <th
+                        v-resize="onTableResize"
                         v-for="header in props.headers.filter(x => x.isVisible)"
                         :key="header.value"
                         :style="{color: '#fff !important', backgroundColor: '#fff !important', textAlign: header.align}"
