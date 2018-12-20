@@ -15,6 +15,7 @@ export class TableOptions {
     selectable = true;
     selectableSingle = false;
     clearSelected = 0;
+    resizeHeader = 0;
     reloadData = 0;
     title = "";
     topbarColor = "secondary";
