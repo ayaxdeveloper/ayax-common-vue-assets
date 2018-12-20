@@ -208,7 +208,7 @@
                         :key="index"
                         :style="{paddingTop: '10px', textAlign: header.align, whiteSpace: header.wrap ? '' : 'nowrap'}"
                         @dblclick="firstSingleAction(props.item)"
-                        v-resize="onTableResize"
+                        v-resize="index && index === 0 ? onTableResize : () => null"
                     >
                         <slot :name="header.value" :item="props.item">
                             <template
