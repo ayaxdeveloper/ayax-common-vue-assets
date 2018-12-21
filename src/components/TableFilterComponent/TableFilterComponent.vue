@@ -30,6 +30,7 @@
                     :placeholder="filter.placeholder"
                     :prepend-icon="filter.icon"
                     v-model="filter.values[0]"
+                    :mask="filter.mask"
                     clearable
                     single-line
                 ></v-text-field>
@@ -113,7 +114,7 @@
                                 single-line
                                 placeholder="От"
                                 return-masked-value
-                                :mask="getMask()"
+                                :mask="filter.mask"
                                 clearable
                                 v-model="filter.values[0]"
                             ></v-text-field>
@@ -127,7 +128,7 @@
                                 single-line
                                 placeholder="До"
                                 return-masked-value
-                                :mask="getMask()"
+                                :mask="filter.mask"
                                 clearable
                                 v-model="filter.values[1]"
                             ></v-text-field>

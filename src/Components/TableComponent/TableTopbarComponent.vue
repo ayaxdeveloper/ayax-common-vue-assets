@@ -322,7 +322,7 @@ export default class TableTopbarComponent extends Vue {
         } catch (e) {
             console.error(e);
         } finally {
-            this.applyFilter();
+            this.applyFilter(true);
             this.checkQuickFilter();
         }
     }
@@ -407,7 +407,7 @@ export default class TableTopbarComponent extends Vue {
     }
 
     @Emit()
-    applyFilter() {}
+    applyFilter(initial = false) {}
 
     @Emit()
     relocateActionbar() {}

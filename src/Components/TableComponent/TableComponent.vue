@@ -10,7 +10,7 @@
             :filters.sync="options.filters"
             :filterGroups="options.filterGroups"
             :showQuickFilters="options.quickFilters"
-            @apply-filter="applyFilter()"
+            @apply-filter="applyFilter"
             @relocate-actionbar="updateActionbar++"
         >
             <template slot="topbar-items">
@@ -364,11 +364,20 @@ export default class TableComponent extends Vue {
         await this.loadHeaders();
     }
 
-    applyFilter() {
-        if (this.options.pagination.page === 1) {
-            this.loadData();
+    applyFilter(initial = false) {
+        if (initial) {
+            let query = JSON.parse(JSON.stringify(this.$route.query));
+            if (query[`${this.options.tableName}_page`]) {
+                this.options.pagination.page = +query[
+                    `${this.options.tableName}_page`
+                ];
+            }
         } else {
-            this.options.pagination.page = 1;
+            if (this.options.pagination.page === 1) {
+                this.loadData();
+            } else {
+                this.options.pagination.page = 1;
+            }
         }
     }
 
@@ -457,6 +466,17 @@ export default class TableComponent extends Vue {
     onPageChange(newVal, oldVal) {
         if (newVal !== oldVal) {
             this.loadData();
+            const query = JSON.parse(JSON.stringify(this.$route.query));
+            query[`${this.options.tableName}_page`] = newVal;
+            this.$router.push({ path: this.$route.path, query });
+        }
+    }
+
+    @Watch("$route.query")
+    onQueryChange(val) {
+        let page = val[`${this.options.tableName}_page`];
+        if (page) {
+            this.options.pagination.page = +page;
         }
     }
 

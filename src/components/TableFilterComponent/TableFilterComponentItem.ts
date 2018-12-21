@@ -27,6 +27,7 @@ export class TableFilterComponentItem {
     groupName: string = null;
     numbersAfterComma?: number;
     width = 180;
+    mask: string;
     quickDates = [
         [moment(new Date()).format("YYYY.MM.DD"), moment(new Date()).format("YYYY.MM.DD") + " 23:59:59", "Сегодня"],
         [
