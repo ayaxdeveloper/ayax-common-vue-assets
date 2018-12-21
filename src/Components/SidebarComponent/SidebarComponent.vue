@@ -1,39 +1,57 @@
 <template>
-    <v-navigation-drawer class="sidebarComponent" app :dark="darkTheme" :mini-variant.sync="mini" mini-variant-width="60" permanent fixed :width="width">
+    <v-navigation-drawer
+        class="sidebarComponent"
+        app
+        :dark="darkTheme"
+        :mini-variant.sync="mini"
+        mini-variant-width="60"
+        permanent
+        fixed
+        :width="width"
+    >
         <v-layout justify-center>
             <div v-show="!mini" class="userPhotoContainer mt-3">
                 <v-card flat>
-                    <img class="userPhoto mx-auto" :src="currentUser.profilePictureUrl ? currentUser.profilePictureUrl : noAvatarImage" 
-                    alt="avatar">
+                    <img
+                        class="userPhoto mx-auto"
+                        :src="currentUser.profilePictureUrl ? currentUser.profilePictureUrl : noAvatarImage"
+                        alt="avatar"
+                    >
                 </v-card>
-                <div class="mt-2" style="text-align: center; color: #fff; font-size: 13px">
-                    {{currentUser && currentUser.name}}
-                </div>
+                <div
+                    class="mt-2"
+                    style="text-align: center; color: #fff; font-size: 13px"
+                >{{currentUser && currentUser.name}}</div>
             </div>
         </v-layout>
         <v-layout>
             <v-flex class="sidebar-content">
                 <v-list dense>
-                    <v-list-group v-for="item in items.filter(x=>x.isSystem && x.visible)" 
-                    :key="item.title"
-                    :prepend-icon="item.icon"
-                    append-icon=""
-                    :value="item.expanded"  
-                    @click="click($event, item)"
-                    @click.middle="clickMiddle($event, item)">
+                    <v-list-group
+                        v-for="item in items.filter(x=>x.isSystem && x.visible)"
+                        :key="item.title"
+                        :prepend-icon="item.icon"
+                        append-icon
+                        :value="item.expanded"
+                        @click="click($event, item)"
+                        @click.middle="clickMiddle($event, item)"
+                    >
                         <v-list-tile slot="activator">
                             <v-list-tile-content>
                                 <v-list-tile-title :title="item.title">{{ item.title }}</v-list-tile-title>
                             </v-list-tile-content>
-                            <v-list-tile-action>
-                                <v-btn v-if="item.subItems.length > 0" icon @click.stop="toogleList(item)">
+                            <v-list-tile-action v-if="item.subItems.length > 0">
+                                <v-btn icon @click.stop="toogleList(item)">
                                     <v-icon>{{ item.arrowDirection }}</v-icon>
                                 </v-btn>
                             </v-list-tile-action>
                         </v-list-tile>
-                        <v-list-tile v-if="item.subItems.length > 0"
-                            v-for="subItem in item.subItems.filter(subItem => subItem.visible)" :key="subItem.title" 
-                            @click="click($event, subItem)">
+                        <v-list-tile
+                            v-if="item.subItems.length > 0"
+                            v-for="subItem in item.subItems.filter(subItem => subItem.visible)"
+                            :key="subItem.title"
+                            @click="click($event, subItem)"
+                        >
                             <v-list-tile-action @click.middle="clickMiddle($event, subItem)">
                                 <v-icon>{{ subItem.icon }}</v-icon>
                             </v-list-tile-action>
@@ -47,28 +65,33 @@
         </v-layout>
         <v-divider></v-divider>
         <v-list dense>
-            <v-list-group v-for="item in items.filter(item => !item.isSystem && item.visible)" 
-            :key="item.title" 
-            :prepend-icon="item.icon"
-            append-icon=""
-            :value="item.expanded"  
-            :class="[item.selected ? 'selected' : '']"
-            @click="click($event, item)"
-            @click.middle="clickMiddle($event, item)">
+            <v-list-group
+                v-for="item in items.filter(item => !item.isSystem && item.visible)"
+                :key="item.title"
+                :prepend-icon="item.icon"
+                append-icon
+                :value="item.expanded"
+                :class="[item.selected ? 'selected' : '']"
+                @click="click($event, item)"
+                @click.middle="clickMiddle($event, item)"
+            >
                 <v-list-tile slot="activator">
                     <v-list-tile-content>
                         <v-list-tile-title :title="item.title">{{ item.title }}</v-list-tile-title>
                     </v-list-tile-content>
-                    <v-list-tile-action>
-                        <v-btn v-if="item.subItems.length > 0" icon @click.stop="toogleList(item)">
+                    <v-list-tile-action v-if="item.subItems.length > 0">
+                        <v-btn icon @click.stop="toogleList(item)">
                             <v-icon>{{ item.arrowDirection }}</v-icon>
                         </v-btn>
                     </v-list-tile-action>
                 </v-list-tile>
-                <v-list-tile v-for="subItem in item.subItems" :key="subItem.title" 
+                <v-list-tile
+                    v-for="subItem in item.subItems"
+                    :key="subItem.title"
                     :class="[subItem.selected ? 'selected' : '']"
-                    @click="click($event, subItem)">
-                    <v-list-tile-action  @click.middle="clickMiddle($event, subItem)" >
+                    @click="click($event, subItem)"
+                >
+                    <v-list-tile-action @click.middle="clickMiddle($event, subItem)">
                         <v-icon>{{ subItem.icon }}</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content @click.middle="clickMiddle($event, subItem)">
@@ -93,15 +116,15 @@ import { SidebarComponentItem } from "./SidebarItem";
 })
 export default class SidebarComponent extends Vue {
     @Inject() authService: IAuthService;
-    @Prop({default: () => []}) modules: string[];
+    @Prop({ default: () => [] }) modules: string[];
     @Prop() items: SidebarComponentItem[];
-    @Prop({default: true}) darkTheme: boolean;
-    @Prop({default: 256}) width: number;
-    @Prop({default: false}) value: boolean;
+    @Prop({ default: true }) darkTheme: boolean;
+    @Prop({ default: 256 }) width: number;
+    @Prop({ default: false }) value: boolean;
     mini = this.value;
     currentUser: AuthUser = new AuthUser();
     noAvatarImage = require("../../assets/image/no_avatar_image.png");
-    
+
     async created() {
         this.currentUser = await this.authService.GetCurrentUser();
         this.$router.afterEach((to, from) => {
@@ -113,27 +136,34 @@ export default class SidebarComponent extends Vue {
         this.FillActiveItemFromRoute(this.$router.currentRoute.path);
     }
 
-    FillActiveItemFromRoute(routePath : string) {
+    FillActiveItemFromRoute(routePath: string) {
         this.items.forEach(element => {
             element.selected = false;
             element.subItems.forEach(subElement => {
                 subElement.selected = false;
             });
         });
-        this.items.filter(x => !x.isSystem).some(item => {
-            if (item.route === routePath) {
-                item.selected = true;
-                return true;
-            } else if (item.subItems && item.subItems.length > 0) {
-                if (item.subItems.some(subItem => subItem.selected = subItem.route === routePath)) {
-                    item.expanded = true;
+        this.items
+            .filter(x => !x.isSystem)
+            .some(item => {
+                if (item.route === routePath) {
+                    item.selected = true;
                     return true;
-                } else {
-                    return false;
+                } else if (item.subItems && item.subItems.length > 0) {
+                    if (
+                        item.subItems.some(
+                            subItem =>
+                                (subItem.selected = subItem.route === routePath)
+                        )
+                    ) {
+                        item.expanded = true;
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
-            }
-            return false;
-        });
+                return false;
+            });
     }
 
     @Watch("value")
@@ -142,7 +172,7 @@ export default class SidebarComponent extends Vue {
     }
 
     @Watch("mini")
-    onStateChanged(val: boolean, oldVal: boolean) { 
+    onStateChanged(val: boolean, oldVal: boolean) {
         this.$emit("input", this.mini);
         if (val === true) {
             this.items.forEach(element => {
@@ -153,16 +183,17 @@ export default class SidebarComponent extends Vue {
     }
 
     toogleList(item: SidebarComponentItem) {
-        
         this.items.forEach(element => {
             if (element !== item) {
                 element.expanded = false;
-                element.arrowDirection = "mdi-chevron-down";    
-            } 
+                element.arrowDirection = "mdi-chevron-down";
+            }
         });
 
         item.expanded = !item.expanded;
-        item.arrowDirection === "mdi-chevron-down" ? item.arrowDirection = "mdi-chevron-up" : item.arrowDirection = "mdi-chevron-down";
+        item.arrowDirection === "mdi-chevron-down"
+            ? (item.arrowDirection = "mdi-chevron-up")
+            : (item.arrowDirection = "mdi-chevron-down");
     }
 
     click(e, item: SidebarComponentItem) {
@@ -174,13 +205,13 @@ export default class SidebarComponent extends Vue {
             if (item.newTab || e.ctrlKey || e.which === 2 || e.button === 4) {
                 window.open(item.route);
             } else {
-                this.$router.push({path: item.route});
+                this.$router.push({ path: item.route });
             }
         } else if (item.href != null) {
             if (item.newTab || e.ctrlKey || e.which === 2 || e.button === 4) {
                 window.open(item.href);
             } else {
-                location.href = item.href;                
+                location.href = item.href;
             }
         }
     }
@@ -197,14 +228,13 @@ export default class SidebarComponent extends Vue {
         this.click(e, item);
     }
 
-
-    moveToNewWindow(item : SidebarComponentItem) {
+    moveToNewWindow(item: SidebarComponentItem) {
         if (item.route == null && item.href == null) {
             this.toogleList(item);
             this.mini = false;
         } else if (item.route != null) {
             window.open(item.route);
-        }else if (item.href != null) {
+        } else if (item.href != null) {
             window.open(item.href);
         }
     }
@@ -212,59 +242,59 @@ export default class SidebarComponent extends Vue {
 </script>
 
 <style scoped>
-    .sidebarComponent::-webkit-scrollbar {
-        width: 8px;
-    }
+.sidebarComponent::-webkit-scrollbar {
+    width: 8px;
+}
 
-    .sidebarComponent::-webkit-scrollbar-thumb {
-        background-color: #ccc; 
-        border-radius: 8px;
-        border: 2px solid #464646;
-    }
+.sidebarComponent::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 8px;
+    border: 2px solid #464646;
+}
 
-    .sidebar-switcher {
-        max-width:60px;
-    }
+.sidebar-switcher {
+    max-width: 60px;
+}
 
-    .list__tile__action {
-        min-width: 32px !important;
-    }
+.list__tile__action {
+    min-width: 32px !important;
+}
 
-    .list__tile__title {
-        color: #FFFFFF;
-    }
-    .collapseBtn { 
-        margin-left: 12px;
-    }
+.list__tile__title {
+    color: #ffffff;
+}
+.collapseBtn {
+    margin-left: 12px;
+}
 
-    .userPhoto {
-        display: block;
-        max-width: 100%;
-        height: auto;
-        width: auto; 
-        max-height: 144px;
-        border: 1px solid #fff;
-    }
+.userPhoto {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    width: auto;
+    max-height: 144px;
+    border: 1px solid #fff;
+}
 
-    .userPhotoContainer {
-        width: 224px; 
-    }
+.userPhotoContainer {
+    width: 224px;
+}
 
-    .v-list__group.selected {
-        background-color: rgb(250, 250, 250);
-        color: rgba(0, 0, 0, 0.87);
-    }
+.v-list__group.selected {
+    background-color: rgb(250, 250, 250);
+    color: rgba(0, 0, 0, 0.87);
+}
 
-    .v-list__group.selected >>> .v-icon {
-        color: rgba(0, 0, 0, 0.87);
-    }
+.v-list__group.selected >>> .v-icon {
+    color: rgba(0, 0, 0, 0.87);
+}
 
-    .selected {
-        background-color: rgb(250, 250, 250);
-        color: rgba(0, 0, 0, 0.87);
-    }
+.selected {
+    background-color: rgb(250, 250, 250);
+    color: rgba(0, 0, 0, 0.87);
+}
 
-    .selected >>> .v-icon {
-        color: rgba(0, 0, 0, 0.87);
-    }
+.selected >>> .v-icon {
+    color: rgba(0, 0, 0, 0.87);
+}
 </style>
