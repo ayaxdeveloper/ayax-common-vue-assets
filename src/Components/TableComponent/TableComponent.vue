@@ -367,10 +367,15 @@ export default class TableComponent extends Vue {
     applyFilter(initial = false) {
         if (initial) {
             let query = JSON.parse(JSON.stringify(this.$route.query));
-            if (query[`${this.options.tableName}_page`]) {
+            if (
+                query[`${this.options.tableName}_page`] &&
+                +query[`${this.options.tableName}_page`] !== 1
+            ) {
                 this.options.pagination.page = +query[
                     `${this.options.tableName}_page`
                 ];
+            } else {
+                this.loadData();
             }
         } else {
             if (this.options.pagination.page === 1) {
@@ -636,6 +641,10 @@ export default class TableComponent extends Vue {
             delete filteredRequest.page;
             delete filteredRequest.perPage;
             this.lastFilteredRequest = filteredRequest;
+
+            if (this.options.pagination.page > this.getTotalPages()) {
+                this.options.pagination.page = 1;
+            }
         } catch (e) {
             this.notificationProvider.Error("Ошибка получения данных");
             console.error(e);

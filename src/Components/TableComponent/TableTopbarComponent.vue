@@ -448,7 +448,6 @@ export default class TableTopbarComponent extends Vue {
 
     clearAllFilters() {
         this.$router.push({ path: this.$route.path });
-        this.applyFilter();
     }
 
     showAllFiltersBtn() {
