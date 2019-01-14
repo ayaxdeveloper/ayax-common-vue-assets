@@ -685,6 +685,12 @@ export default class TableComponent extends Vue {
             .forEach(header => {
                 filteredRequest[`${header.value}sort`] = header.sortBy;
             });
+
+        if (this.options.hiddenFilters.length > 0) {
+            this.options.hiddenFilters.forEach(filter => {
+                filteredRequest[filter.requestName] = filter.FormRequestFilters();
+            })
+        }
         return filteredRequest;
     }
 
