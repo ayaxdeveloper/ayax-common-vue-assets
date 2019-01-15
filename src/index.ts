@@ -5,6 +5,7 @@ import BreadcrumbsComponent from "./Components/BreadcrumbsComponent/BreadcrumbsC
 import BusyLoadingComponent from "./Components/BusyLoadingComponent/BusyLoadingComponent.vue";
 import FormComponent from "./Components/FormComponent/FormComponent.vue";
 import FormControlComponent from "./Components/FormComponent/FormControlComponent.vue";
+import GroupSelectComponent from "./Components/GroupSelectComponent/GroupSelectComponent.vue";
 import NotificationComponent from "./Components/NotificationComponent/NotificationComponent.vue";
 import NumberInputComponent from "./Components/NumberInputComponent/NumberInputComponent.vue";
 import SidebarComponent from "./Components/SidebarComponent/SidebarComponent.vue";
@@ -32,6 +33,7 @@ export default {
         Vue.component("a-user-profile", UserProfileComponent);
         Vue.component("a-actionbar", ActionbarComponent);
         Vue.component("a-number-input", NumberInputComponent);
+        Vue.component("a-group-select", GroupSelectComponent);
     },
 };
 
@@ -63,4 +65,5 @@ export {
     ActionbarComponent,
     BusyLoadingComponent,
     NumberInputComponent,
+    GroupSelectComponent,
 };
