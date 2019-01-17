@@ -43,10 +43,6 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-        <div style="width: 250px">
-            <a-group-select :multiple="true" dense v-model="qq" :items="asd"></a-group-select>
-            <v-select clearable multiple dense v-model="qq" :items="asd"></v-select>
-        </div>
     </div>
 </template>
 
@@ -78,24 +74,6 @@ import TestDataService from "../Services/TestDataService/TestDataService";
 export default class TableTestLayout extends Vue {
     @Inject() operationService: IOperationService;
     @Inject() cacheService: ICacheService;
-
-    asd = [
-        new SelectItem({
-            text: "asd",
-            value: 111
-        }),
-        new SelectItem({
-            text: "awhawrharh",
-            value: 222
-        })
-    ];
-
-    qq = [];
-
-    @Watch("qq")
-    qwer() {
-        console.log(this.qq);
-    }
 
     testDataService = new TestDataService();
     editDialog = false;
