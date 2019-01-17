@@ -8,6 +8,7 @@
                     title="Количество записей"
                     label
                     small
+                    color="white"
                     v-if="itemsQuantity"
                     class="black--text"
                 >{{ itemsQuantity }}</v-chip>
