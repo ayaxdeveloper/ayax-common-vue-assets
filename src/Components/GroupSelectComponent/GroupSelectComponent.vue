@@ -70,10 +70,19 @@ export default class GroupSelectComponent extends Vue {
         this.emitValue(this.innerValue);
     }
 
+    @Watch("items")
+    onItemsChange() {
+        this.setGroupedItems();
+    }
+
     @Emit("input")
     emitValue(value) {}
 
     created() {
+        this.setGroupedItems();
+    }
+
+    setGroupedItems() {
         this.items
             .filter(item => item.group)
             .forEach(item => {
