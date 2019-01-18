@@ -43,6 +43,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <a-group-select :items="selectItems" v-model="selectedValues"></a-group-select>
     </div>
 </template>
 
@@ -76,7 +77,9 @@ export default class TableTestLayout extends Vue {
     @Inject() cacheService: ICacheService;
 
     testDataService = new TestDataService();
+    selectItems: SelectItem[] = [];
     editDialog = false;
+    selectedValues = 1;
     options: TableOptions = new TableOptions({
         title: "Тестовая таблица",
         pagination: new Pagination({ page: 1, perPage: 10 }),
@@ -318,6 +321,16 @@ export default class TableTestLayout extends Vue {
             })
         ]
     });
+
+    created() {
+        this.selectItems = this.testDataService
+            .getDictionary()
+            .map(x => new SelectItem({
+                text: x.title,
+                value: x.id,
+                group: "group"
+            }));
+    }
 
     currentModel = {};
 

@@ -54,7 +54,7 @@ export default class GroupSelectComponent extends Vue {
     @Prop({ default: () => [] }) items: SelectItem[];
     @Prop({ default: true }) multiple: boolean;
 
-    innerValue = this.multiple ? [] : "";
+    innerValue;
     groups: Set<string> = new Set();
     groupedItems = [];
 
@@ -79,6 +79,7 @@ export default class GroupSelectComponent extends Vue {
     emitValue(value) {}
 
     created() {
+        this.innerValue = this.value ? this.value : this.multiple ? [] : "";
         this.setGroupedItems();
     }
 
@@ -109,6 +110,17 @@ export default class GroupSelectComponent extends Vue {
             );
         } else {
             this.groupedItems = this.items;
+        }
+        if(Array.isArray(this.innerValue)) {
+            this.innerValue.forEach(element => {
+                this.groupedItems.filter(x => x.value === element).forEach(groupedItem => {
+                    groupedItem.selected = true;
+                });
+            });
+        } else {
+            this.groupedItems.filter(x => x.value === this.innerValue).forEach(groupedItem => {
+                    groupedItem.selected = true;
+                });
         }
     }
 
