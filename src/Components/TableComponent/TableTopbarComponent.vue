@@ -8,6 +8,7 @@
                     title="Количество записей"
                     label
                     small
+                    color="white"
                     v-if="itemsQuantity"
                     class="black--text"
                 >{{ itemsQuantity }}</v-chip>
@@ -75,16 +76,18 @@
                         :index="index"
                         @emit-filter="applyEmittedFilter"
                     ></a-table-filter>
-                    <template v-if="!showAllFilters">
+                    <template
+                        v-if="!showAllFilters && filters.filter(filter => filter.appearance === filterAppearance['Topbar']).length > 0"
+                    >
                         <v-btn
                             class="topbar-button ml-3"
-                            style="min-width: 70px"
+                            style="min-width: 70px; height: 28px"
                             light
                             @click="clearAllFilters()"
                         >Очистить</v-btn>
                         <v-btn
                             class="topbar-button ml-1"
-                            style="min-width: 80px"
+                            style="min-width: 80px; height: 28px"
                             color="primary"
                             @click="applyAllFilters()"
                         >Применить</v-btn>

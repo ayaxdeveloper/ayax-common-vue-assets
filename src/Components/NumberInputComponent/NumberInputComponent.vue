@@ -1,17 +1,15 @@
 <template>
-    <div>
-        <v-text-field
-            v-model="formattedValue"
-            @keydown="formatInput()"
-            @keyup="formatInput()"
-            @keypress="formatInput()"
-            @input="formatInput()"
-            @blur="formatInput()"
-            @focus="formatInput()"
-            v-bind="$attrs"
-            ref="number-input"
-        ></v-text-field>
-    </div>
+    <v-text-field
+        v-model="formattedValue"
+        @keydown="formatInput()"
+        @keyup="formatInput()"
+        @keypress="formatInput()"
+        @input="formatInput()"
+        @blur="formatInput()"
+        @focus="formatInput()"
+        v-bind="$attrs"
+        ref="number-input"
+    ></v-text-field>
 </template>
 
 <script lang="ts">

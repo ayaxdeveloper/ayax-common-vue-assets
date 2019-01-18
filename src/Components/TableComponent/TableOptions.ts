@@ -10,6 +10,7 @@ export class TableOptions {
     headers: TableComponentHeader[] = [];
     actions: ActionItem[] = [];
     filters: TableFilterComponentItem[] = [];
+    hiddenFilters: TableFilterComponentItem[] = [];
     filterGroups: string[] = [];
     quickFilters = false;
     selectable = true;
