@@ -364,7 +364,7 @@ export default class TableComponent extends Vue {
         await this.loadHeaders();
     }
 
-    applyFilter(initial = false) {
+    async applyFilter(initial = false) {
         if (initial) {
             let query = JSON.parse(JSON.stringify(this.$route.query));
             if (
@@ -375,14 +375,10 @@ export default class TableComponent extends Vue {
                     `${this.options.tableName}_page`
                 ];
             } else {
-                this.loadData();
+                await this.loadData();
             }
         } else {
-            if (this.options.pagination.page === 1) {
-                this.loadData();
-            } else {
-                this.options.pagination.page = 1;
-            }
+            await this.loadData();
         }
     }
 
@@ -688,8 +684,10 @@ export default class TableComponent extends Vue {
 
         if (this.options.hiddenFilters.length > 0) {
             this.options.hiddenFilters.forEach(filter => {
-                filteredRequest[filter.requestName] = filter.FormRequestFilters();
-            })
+                filteredRequest[
+                    filter.requestName
+                ] = filter.FormRequestFilters();
+            });
         }
         return filteredRequest;
     }
