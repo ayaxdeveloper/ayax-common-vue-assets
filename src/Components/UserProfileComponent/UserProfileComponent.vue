@@ -11,7 +11,8 @@
       {{currentUser && currentUser.name}}
       <v-icon>mdi-menu-down</v-icon>
     </v-btn>
-    <v-list dark>
+    <v-list :dark="dark">
+      <slot></slot>
       <v-list-tile @click="logout()">
         <v-list-tile-action>
           <v-icon>mdi-logout</v-icon>
@@ -35,6 +36,7 @@ export default class UserProfileComponent extends Vue {
   @Inject() tokenService: ITokenService;
   @Prop({ default: null }) modules?: string[];
   @Prop({ default: true }) showAvatar: boolean;
+  @Prop({ default: true }) dark: boolean;
   currentUser: AuthUser = new AuthUser();
   async created() {
     this.currentUser = await this.authService.GetCurrentUser();
