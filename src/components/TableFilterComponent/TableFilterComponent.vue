@@ -53,6 +53,24 @@
                     single-line
                 ></a-number-input>
             </v-flex>
+            <v-flex
+                class="filter"
+                v-if="(filter.requestType == filterTypes['Eq'] || filter.requestType == filterTypes['Like']) && filter.inputType == filterInputTypes['Phone']"
+            >
+                <div class="filterLabel">{{ filter.label }}</div>
+                <a-phone-input
+                    :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput']"
+                    :solo="filter.appearance === filterAppearance['Topbar']"
+                    :light="filter.appearance === filterAppearance['Topbar']"
+                    :name="filter.requestName"
+                    :placeholder="filter.placeholder"
+                    :prepend-icon="filter.icon"
+                    v-model="filter.values[0]"
+                    :numbersAfterComma="filter.numbersAfterComma"
+                    clearable
+                    single-line
+                ></a-phone-input>
+            </v-flex>
             <template v-else-if="filter.requestType == filterTypes['Range']">
                 <v-flex
                     style="position: relative"

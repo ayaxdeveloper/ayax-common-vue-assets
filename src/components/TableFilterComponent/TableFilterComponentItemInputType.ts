@@ -7,4 +7,5 @@ export enum TableFilterComponentItemInputType {
     Select,
     ButtonDropdown,
     Number,
+    Phone,
 }

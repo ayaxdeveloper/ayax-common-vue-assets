@@ -171,7 +171,7 @@
                         @click="quickFilterSaveDialog = true"
                     >Сохранить фильтр</v-btn>
                     <v-btn light @click="clearAllFilters()">Очистить</v-btn>
-                    <v-btn color="primary" @click="applyAllFilters()">Применить</v-btn>
+                    <v-btn color="primary" @click="applyAllFilters(); showAllFiltersBtn()">Применить</v-btn>
                 </v-layout>
             </v-card>
         </transition>
@@ -367,9 +367,7 @@ export default class TableTopbarComponent extends Vue {
         if (this.showQuickFilters) {
             this.checkQuickFilter();
         }
-        if (filterCount > 0) {
-            this.applyFilter();
-        }
+        this.applyFilter();
     }
 
     changeQuery(query, filter) {

@@ -8,6 +8,7 @@ import FormControlComponent from "./Components/FormComponent/FormControlComponen
 import GroupSelectComponent from "./Components/GroupSelectComponent/GroupSelectComponent.vue";
 import NotificationComponent from "./Components/NotificationComponent/NotificationComponent.vue";
 import NumberInputComponent from "./Components/NumberInputComponent/NumberInputComponent.vue";
+import PhoneInputComponent from "./Components/PhoneInputComponent/PhoneInputComponent.vue";
 import SidebarComponent from "./Components/SidebarComponent/SidebarComponent.vue";
 import TableComponent from "./Components/TableComponent/TableComponent.vue";
 import TableTopbarComponent from "./Components/TableComponent/TableTopbarComponent.vue";
@@ -33,6 +34,7 @@ export default {
         Vue.component("a-user-profile", UserProfileComponent);
         Vue.component("a-actionbar", ActionbarComponent);
         Vue.component("a-number-input", NumberInputComponent);
+        Vue.component("a-phone-input", PhoneInputComponent);
         Vue.component("a-group-select", GroupSelectComponent);
     },
 };
@@ -66,4 +68,5 @@ export {
     BusyLoadingComponent,
     NumberInputComponent,
     GroupSelectComponent,
+    PhoneInputComponent,
 };

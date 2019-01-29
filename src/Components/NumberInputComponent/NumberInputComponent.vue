@@ -36,7 +36,7 @@ export default class NumberInputComponent extends Vue {
             (keyEvent && keyEvent.keyCode !== 8 && keyEvent.keyCode !== 46)
         ) {
             if (this.formattedValue) {
-                let inputValue = this.formattedValue.replace(/^\D/g, "");
+                let inputValue = this.formattedValue.replace(/\D/g, "");
 
                 if (this.numbersAfterComma > 0) {
                     inputValue = inputValue.replace(/,/g, ".");
