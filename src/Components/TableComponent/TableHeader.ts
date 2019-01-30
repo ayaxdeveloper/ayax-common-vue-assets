@@ -53,7 +53,7 @@ export class TableComponentHeader {
     public static Phone(init: Partial<TableComponentHeader>) {
         init.formatter = (val: string) => {
             if (val.length >= 11) {
-                val = `${val[0]}(${val.slice(1, 4)})${val.slice(4, 7)}-${val.slice(7, 9)}-${val.slice(9, 11)}`;
+                val = `${val[0]} (${val.slice(1, 4)}) ${val.slice(4, 7)}-${val.slice(7, 9)}-${val.slice(9, 11)}`;
             }
             return val;
         };
