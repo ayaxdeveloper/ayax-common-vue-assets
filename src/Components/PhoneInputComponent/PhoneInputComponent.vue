@@ -29,6 +29,10 @@ export default class PhoneInputComponent extends Vue {
         this.formatInput(true);
     }
 
+    mounted() {
+        this.formatInput(true);
+    }
+
     formatInput(initial = false) {
         const inputEvent = event as any;
         if (
