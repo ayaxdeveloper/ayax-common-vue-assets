@@ -25,15 +25,11 @@ export default class PhoneInputComponent extends Vue {
 
     formattedValue: string = this.value.toString();
 
-    created() {
-        this.formatInput(true);
-    }
-
     mounted() {
-        this.formatInput(true);
+        setTimeout(this.formatInput, 500);
     }
 
-    formatInput(initial = false) {
+    formatInput() {
         const inputEvent = event as any;
         if (
             !inputEvent ||
