@@ -40,7 +40,11 @@ export default class PhoneInputComponent extends Vue {
             let inputValue = this.formattedValue.replace(/\D/g, "");
 
             if (this.formattedValue) {
-                if (inputEvent.inputType === "insertFromPaste") {
+                if (
+                    inputEvent &&
+                    inputEvent.inputType &&
+                    inputEvent.inputType === "insertFromPaste"
+                ) {
                     let pasteValue = inputEvent.target.value.replace(/\D/g, "");
                     if (pasteValue.length < 11) {
                         inputValue =
@@ -52,13 +56,12 @@ export default class PhoneInputComponent extends Vue {
                 inputValue = inputValue.replace(reg, "8 ($2) $3-$4-$5");
 
                 this.formattedValue = inputValue;
-                if (!initial) {
-                    setTimeout(() => {
-                        this.$refs["phone-input"]["$refs"][
-                            "input"
-                        ].value = inputValue;
-                    }, 0);
-                }
+
+                setTimeout(() => {
+                    this.$refs["phone-input"]["$refs"][
+                        "input"
+                    ].value = inputValue;
+                }, 0);
             }
         }
     }
