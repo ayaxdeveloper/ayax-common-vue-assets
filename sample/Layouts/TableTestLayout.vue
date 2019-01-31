@@ -79,7 +79,8 @@ export default class TableTestLayout extends Vue {
     testDataService = new TestDataService();
     selectItems: SelectItem[] = [];
     editDialog = false;
-    selectedValues = 1;
+    selectedValues = [];
+
     options: TableOptions = new TableOptions({
         title: "Тестовая таблица",
         pagination: new Pagination({ page: 1, perPage: 10 }),
@@ -323,13 +324,14 @@ export default class TableTestLayout extends Vue {
     });
 
     created() {
-        this.selectItems = this.testDataService
-            .getDictionary()
-            .map(x => new SelectItem({
-                text: x.title,
-                value: x.id,
-                group: "group"
-            }));
+        this.selectItems = this.testDataService.getDictionary().map(
+            x =>
+                new SelectItem({
+                    text: x.title,
+                    value: x.id,
+                    group: "group"
+                })
+        );
     }
 
     currentModel = {};
