@@ -46,6 +46,7 @@ export default class PhoneInputComponent extends Vue {
             if (initial) {
                 if (inputValue.length < 11) {
                     inputValue = "8" + inputValue.substring(0, inputValue.length);
+                }
             }
 
             if (this.formattedValue) {
