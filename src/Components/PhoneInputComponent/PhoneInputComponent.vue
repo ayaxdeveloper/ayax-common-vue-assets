@@ -1,16 +1,16 @@
 <template>
-    <v-text-field
-        v-model="formattedValue"
-        @keydown="formatInput()"
-        @keyup="formatInput()"
-        @keypress="formatInput()"
-        @input="formatInput()"
-        @blur="formatInput()"
-        @focus="formatInput()"
-        v-bind="$attrs"
-        ref="phone-input"
-        maxlength="17"
-    ></v-text-field>
+  <v-text-field
+    v-model="formattedValue"
+    @keydown="formatInput()"
+    @keyup="formatInput()"
+    @keypress="formatInput()"
+    @input="formatInput()"
+    @blur="formatInput()"
+    @focus="formatInput()"
+    v-bind="$attrs"
+    ref="phone-input"
+    maxlength="17"
+  ></v-text-field>
 </template>
 
 <script lang="ts">
@@ -26,14 +26,14 @@ export default class PhoneInputComponent extends Vue {
     formattedValue: string = this.value.toString();
 
     created() {
-        this.formatInput();
+        this.formatInput(true);
     }
 
     mounted() {
-        setTimeout(this.formatInput, 500);
+        setTimeout(this.formatInput(true), 500);
     }
 
-    formatInput() {
+    formatInput(initial = false) {
         const inputEvent = event as any;
         if (
             !inputEvent ||
@@ -42,6 +42,11 @@ export default class PhoneInputComponent extends Vue {
                 inputEvent.inputType !== "deleteContentForward")
         ) {
             let inputValue = this.formattedValue.replace(/\D/g, "");
+
+            if (initial) {
+                if (inputValue.length < 11) {
+                    inputValue = "8" + inputValue.substring(0, inputValue.length);
+            }
 
             if (this.formattedValue) {
                 if (
