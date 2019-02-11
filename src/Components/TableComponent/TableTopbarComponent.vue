@@ -115,7 +115,7 @@
         </v-toolbar>
         <transition name="slide">
             <v-card class="pa-2" v-show="showAllFilters" dark flat style="border-radius: 0">
-                <v-container fluid grid-list-md>
+                <v-container fluid grid-list-md class="pa-1">
                     <v-layout row wrap>
                         <template v-if="filterGroups.length > 0">
                             <template v-for="(group, index) in filterGroups">
@@ -168,10 +168,17 @@
                     <v-btn
                         v-if="showSaveFilterButton"
                         color="success"
+                        class="mx-1 my-0"
+                        small
                         @click="quickFilterSaveDialog = true"
                     >Сохранить фильтр</v-btn>
-                    <v-btn light @click="clearAllFilters()">Очистить</v-btn>
-                    <v-btn color="primary" @click="applyAllFilters(); showAllFiltersBtn()">Применить</v-btn>
+                    <v-btn light small class="mx-1 my-0" @click="clearAllFilters()">Очистить</v-btn>
+                    <v-btn
+                        small
+                        color="primary"
+                        class="mx-1 my-0"
+                        @click="applyAllFilters(); showAllFiltersBtn()"
+                    >Применить</v-btn>
                 </v-layout>
             </v-card>
         </transition>
@@ -571,7 +578,7 @@ export default class TableTopbarComponent extends Vue {
     font-weight: 100;
 }
 .filter-group-name:not(:first-child) {
-    margin-top: 24px;
+    margin-top: 12px;
 }
 .slide-enter-active,
 .slide-leave-active {

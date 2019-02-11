@@ -236,7 +236,7 @@
                 :updateActionbar="updateActionbar"
             ></a-actionbar>
         </div>
-        <v-layout v-show="!loading" class="text-xs-center mt-2">
+        <v-layout v-show="!loading" class="text-xs-center mt-1">
             <v-flex xs6>
                 <v-layout justify-start>
                     <v-card
@@ -261,6 +261,7 @@
             </v-flex>
             <v-flex>
                 <v-pagination
+                    :class="{ 'pagination_dense' : options.densePagination}"
                     v-if="options.pagination"
                     total-visible="10"
                     v-model="options.pagination.page"
@@ -269,11 +270,12 @@
             </v-flex>
             <v-flex xs6>
                 <v-layout justify-end>
-                    <div class="pt-2 pr-3 d-inline-block">Cтрок на странице:</div>
+                    <div class="pt-2 pr-3 d-inline-block">На странице:</div>
                     <v-select
                         v-model="options.pagination.perPage"
                         style="margin-top: 4px; max-width: 54px; padding-top: 0px"
                         dense
+                        hide-details
                         :items="customPagination"
                     ></v-select>
                 </v-layout>
@@ -874,6 +876,8 @@ export default class TableComponent extends Vue {
 }
 .actionbarAnchor {
     height: 48px;
+}
+.bottom-bar__block {
 }
 </style>
 
