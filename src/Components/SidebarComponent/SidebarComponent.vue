@@ -65,7 +65,7 @@
     </v-layout>
     <v-divider></v-divider>
     <v-text-field
-      v-if="searchbar"
+      v-if="searchbar && !mini"
       class="mx-3 my-2"
       style="padding-top: 0"
       v-model="searchQuery"
@@ -164,7 +164,6 @@ export default class SidebarComponent extends Vue {
         return false;
       }
     }
-    item.expanded = false;
     return true;
   }
 
