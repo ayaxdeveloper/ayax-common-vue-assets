@@ -47,7 +47,6 @@
               </v-list-tile-action>
             </v-list-tile>
             <v-list-tile
-              v-if="item.subItems.length > 0"
               v-for="subItem in item.subItems.filter(subItem => subItem.visible)"
               :key="subItem.title"
               @click="click($event, subItem)"
@@ -76,13 +75,13 @@
       clearable
       @click:clear="clearSearch"
     ></v-text-field>
-    <v-list dense>
+    <v-list dense expand>
       <v-list-group
         v-for="item in items.filter(item => !item.isSystem && item.visible && searchResult(item))"
         :key="item.title"
         :prepend-icon="item.icon"
         append-icon
-        :value="item.expanded"
+        v-model="item.expanded"
         :class="[item.selected ? 'selected' : '']"
         @click="click($event, item)"
         @click.middle="clickMiddle($event, item)"
@@ -141,6 +140,16 @@ export default class SidebarComponent extends Vue {
 
   searchQuery = "";
 
+  @Watch("searchQuery")
+  onSearch(val: string, oldVal: string) {
+    if (val.length === 0 && oldVal.length > 0) {
+      this.items.forEach(item => {
+        item.expanded = false;
+        item.arrowDirection = "mdi-chevron-down";
+      });
+    }
+  }
+
   searchResult(item: SidebarComponentItem) {
     if (this.searchQuery.length > 0) {
       if (item.subItems.length > 0) {
@@ -152,6 +161,7 @@ export default class SidebarComponent extends Vue {
           ).length > 0
         ) {
           item.expanded = true;
+          item.arrowDirection = "mdi-chevron-up";
           return true;
         } else {
           return false;
