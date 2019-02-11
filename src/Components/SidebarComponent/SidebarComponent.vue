@@ -81,6 +81,7 @@
         :key="item.title"
         :prepend-icon="item.icon"
         append-icon
+        :title="item.title"
         v-model="item.expanded"
         :class="[item.selected ? 'selected' : '']"
         @click="click($event, item)"
