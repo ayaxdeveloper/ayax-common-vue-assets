@@ -202,6 +202,9 @@ export default class SidebarComponent extends Vue {
         subElement.selected = false;
       });
     });
+    const sidebarObj = localStorage.getItem("sidebar");
+    const sidebar = sidebarObj ? <boolean>JSON.parse(sidebarObj) : true;
+
     this.items
       .filter(x => !x.isSystem)
       .some(item => {
@@ -220,7 +223,10 @@ export default class SidebarComponent extends Vue {
                   (!subItem.path && subItem.route === routePath))
             )
           ) {
-            item.expanded = true;
+            if (!sidebar) {
+              item.expanded = true;
+            }
+
             return true;
           } else {
             return false;
