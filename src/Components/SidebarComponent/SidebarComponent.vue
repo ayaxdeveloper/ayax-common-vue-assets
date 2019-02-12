@@ -205,13 +205,19 @@ export default class SidebarComponent extends Vue {
     this.items
       .filter(x => !x.isSystem)
       .some(item => {
-        if (item.route === routePath) {
+        if (
+          (item.path && item.path === routePath) ||
+          (!item.path && item.route === routePath)
+        ) {
           item.selected = true;
           return true;
         } else if (item.subItems && item.subItems.length > 0) {
           if (
             item.subItems.some(
-              subItem => (subItem.selected = subItem.route === routePath)
+              subItem =>
+                (subItem.selected =
+                  (subItem.path && subItem.path === routePath) ||
+                  (!subItem.path && subItem.route === routePath))
             )
           ) {
             item.expanded = true;
