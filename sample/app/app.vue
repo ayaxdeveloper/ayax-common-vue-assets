@@ -73,6 +73,10 @@ export default class App extends VueInjection {
       route: "/table-test"
     }),
     new SidebarComponentItem({
+      title: "Click me!",
+      action: () => alert("BOOM!")
+    }),
+    new SidebarComponentItem({
       title: "НАСТРОЙКИ",
       icon: "mdi-wrench",
       subItems: [

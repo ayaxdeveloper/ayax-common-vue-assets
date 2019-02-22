@@ -3,6 +3,7 @@ export class SidebarComponentItem {
   isSystem = false;
   visible = true;
   route?: string = null;
+  action?: () => void;
   href?: string = null;
   icon?: string;
   subItems?: SidebarComponentItem[] = [];

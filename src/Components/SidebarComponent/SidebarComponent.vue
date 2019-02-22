@@ -268,9 +268,11 @@ export default class SidebarComponent extends Vue {
 
   click(e, item: SidebarComponentItem) {
     e = e || window.event;
-    if (item.route == null && item.href == null) {
+    if (item.route == null && item.href == null && item.action == null) {
       this.toogleList(item);
       this.mini = false;
+    } else if (item.action) {
+      item.action();
     } else if (item.route != null) {
       if (item.newTab || e.ctrlKey || e.which === 2 || e.button === 4) {
         window.open(item.route);
