@@ -425,9 +425,9 @@ export default class TableTopbarComponent extends Vue {
     this.filters.forEach(filter => {
       this.changeQuery(query, filter);
     });
-    if (query.hasOwnProperty("quickFilterId")) {
-      delete query["quickFilterId"];
-    }
+    // if (query.hasOwnProperty("quickFilterId")) {
+    //   delete query["quickFilterId"];
+    // }
     this.$router.push({ path: this.$route.path, query });
   }
 
