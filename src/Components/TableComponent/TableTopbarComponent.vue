@@ -412,9 +412,9 @@ export default class TableTopbarComponent extends Vue {
       }
       const query = JSON.parse(JSON.stringify(this.$route.query));
       this.changeQuery(query, filter);
-      if (query.hasOwnProperty("quickFilterId")) {
-        delete query["quickFilterId"];
-      }
+      // if (query.hasOwnProperty("quickFilterId")) {
+      //   delete query["quickFilterId"];
+      // }
       this.$router.push({ path: this.$route.path, query });
     }
   }
