@@ -29,6 +29,7 @@ export class TableFilterComponentItem {
   width = 180;
   mask: string;
   quickDates = [
+    [moment(new Date()).subtract(1, "days").format("YYYY.MM.DD"), moment(new Date()).subtract(1, "days").format("YYYY.MM.DD") + " 23:59:59", "Вчера"],
     [moment(new Date()).format("YYYY.MM.DD"), moment(new Date()).format("YYYY.MM.DD") + " 23:59:59", "Сегодня"],
     [
       moment(new Date())
