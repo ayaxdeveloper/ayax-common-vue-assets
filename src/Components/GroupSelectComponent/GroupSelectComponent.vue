@@ -51,7 +51,7 @@ import { SelectItem } from "ayax-common-types";
   name: "a-group-select"
 })
 export default class GroupSelectComponent extends Vue {
-  @Prop() value;
+  @Prop({ type: Array || String}) value: Array<any> | string;
   @Prop({ default: () => [] }) items: SelectItem[];
   @Prop({ default: true }) multiple: boolean;
   @Prop({ default: false }) useSelectionSlot: boolean;
