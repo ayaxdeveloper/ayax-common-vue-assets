@@ -21,7 +21,7 @@ import { Component, Prop, Watch, Emit } from "vue-property-decorator";
   name: "a-phone-input"
 })
 export default class PhoneInputComponent extends Vue {
-  @Prop({ type: String, default: "" }) value;
+  @Prop({ type: String || Number, default: "" }) value: string | number;
   @Prop({ type: Number, default: 0 }) forceFormatting: number;
 
   formattedValue: string = this.value.toString();
