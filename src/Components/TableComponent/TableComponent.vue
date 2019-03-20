@@ -490,7 +490,7 @@ export default class TableComponent extends Vue {
 
   @Watch("visibleHeaders.length")
   onChangeVisible() {
-    setTimeout(() => this.resizeFixedHeader(), 0);
+    setTimeout(() => this.resizeFixedHeader(), 500);
   }
 
   @Watch("options.clearSelected")
@@ -520,7 +520,9 @@ export default class TableComponent extends Vue {
       const firstTd = document.querySelector(
         `#${this.options.tableName} tbody tr td`
       ) as any;
-      firstTd.colSpan = `${headersCount}`;
+      if (firstTd) {
+        firstTd.colSpan = `${headersCount}`;
+      }
     }
   }
 
@@ -566,15 +568,18 @@ export default class TableComponent extends Vue {
         `#${this.options.tableName} #${this.options.tableName +
           "-static-header"}`
       )
-      .querySelectorAll("th");
 
     const header = document.querySelectorAll(
       `#${this.options.tableName} .fixedTableHeader th`
     ) as HTMLCollectionOf<HTMLElement>;
 
-    for (let i = 0; i < staticHeader.length; i++) {
-      header[i].style.width = `${staticHeader[i].offsetWidth}px`;
-      header[i].style.minWidth = `${staticHeader[i].offsetWidth}px`;
+    if (staticHeader) {
+      const staticHeaderTh = staticHeader.querySelectorAll("th");
+
+      for (let i = 0; i < staticHeaderTh.length; i++) {
+        header[i].style.width = `${staticHeaderTh[i].offsetWidth}px`;
+        header[i].style.minWidth = `${staticHeaderTh[i].offsetWidth}px`;
+      }
     }
   }
 
@@ -629,7 +634,7 @@ export default class TableComponent extends Vue {
     } finally {
       this.tableLoading = false;
       this.loading = false;
-      setTimeout(() => this.resizeFixedHeader(), 0);
+      setTimeout(() => this.resizeFixedHeader(), 500);
       this.onEmpty();
       this.loadingIsReady();
     }

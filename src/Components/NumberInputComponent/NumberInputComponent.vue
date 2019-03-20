@@ -20,7 +20,7 @@ import { Component, Prop, Watch, Emit } from "vue-property-decorator";
     name: "a-number-input"
 })
 export default class NumberInputComponent extends Vue {
-    @Prop({ type: String, default: "" }) value;
+    @Prop({ type: String, default: "" }) value: string | number;
     @Prop({ default: 2 }) numbersAfterComma: number;
 
     formattedValue: string = this.value.toString();
