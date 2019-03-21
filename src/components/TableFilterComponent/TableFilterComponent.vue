@@ -684,6 +684,7 @@ export default class TableFilterComponent extends Vue {
 }
 
 .topbar-filter .v-input__slot {
+  height: 22px !important;
   padding: 0 6px !important;
 }
 
