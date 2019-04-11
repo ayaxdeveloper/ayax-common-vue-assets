@@ -358,12 +358,10 @@ export default class TableComponent extends Vue {
         +query[`${this.options.tableName}_page`] !== 1
       ) {
         this.options.pagination.page = +query[`${this.options.tableName}_page`];
-      } else {
-        await this.loadData();
+        return;
       }
-    } else {
-      await this.loadData();
     }
+    await this.loadData();
   }
 
   async loadHeaders() {
@@ -450,7 +448,7 @@ export default class TableComponent extends Vue {
   @Watch("options.pagination.page")
   onPageChange(newVal, oldVal) {
     if (newVal !== oldVal) {
-      this.loadData();
+      // this.loadData();
       const query = JSON.parse(JSON.stringify(this.$route.query));
       query[`${this.options.tableName}_page`] = newVal;
       this.$router.push({ path: this.$route.path, query });
@@ -563,11 +561,9 @@ export default class TableComponent extends Vue {
   }
 
   resizeFixedHeader() {
-    const staticHeader = document
-      .querySelector(
-        `#${this.options.tableName} #${this.options.tableName +
-          "-static-header"}`
-      )
+    const staticHeader = document.querySelector(
+      `#${this.options.tableName} #${this.options.tableName + "-static-header"}`
+    );
 
     const header = document.querySelectorAll(
       `#${this.options.tableName} .fixedTableHeader th`
@@ -593,6 +589,8 @@ export default class TableComponent extends Vue {
 
   async loadData() {
     try {
+      console.log("AAAAAA AAAAAAAAAA AAAAAAAAAAA");
+
       this.tableLoading = true;
       const filteredRequest = this.AddFilter();
       const request = this.options.searchData
