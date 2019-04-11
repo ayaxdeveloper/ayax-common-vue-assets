@@ -358,7 +358,6 @@ export default class TableComponent extends Vue {
         +query[`${this.options.tableName}_page`] !== 1
       ) {
         this.options.pagination.page = +query[`${this.options.tableName}_page`];
-        return;
       }
     }
     await this.loadData();
@@ -589,8 +588,6 @@ export default class TableComponent extends Vue {
 
   async loadData() {
     try {
-      console.log("AAAAAA AAAAAAAAAA AAAAAAAAAAA");
-
       this.tableLoading = true;
       const filteredRequest = this.AddFilter();
       const request = this.options.searchData
