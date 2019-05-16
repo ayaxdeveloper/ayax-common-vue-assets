@@ -21,6 +21,7 @@ export class NotificationProvider implements INotificationProvider {
                 (closeAfterClick = closeAfterClick),
             ),
         );
+        console.error(message);
     }
 
     public Success(message?: any, title?: any, dismissAfter?: number, onClick?: Function, closeAfterClick?: boolean) {
