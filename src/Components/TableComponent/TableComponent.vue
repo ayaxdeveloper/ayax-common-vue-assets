@@ -10,6 +10,7 @@
       :filters.sync="options.filters"
       :filterGroups="options.filterGroups"
       :showQuickFilters="options.quickFilters"
+      :quickFilterPromise="options.quickFilterPromise"
       @apply-filter="applyFilter"
       @relocate-actionbar="updateActionbar++"
     >

@@ -235,6 +235,7 @@ export default class TableTopbarComponent extends Vue {
   @Prop({ default: () => [] }) filters: TableFilterComponentItem[];
   @Prop({ default: () => [] }) filterGroups: string[];
   @Prop() showQuickFilters: boolean;
+  @Prop({ default: null }) quickFilterPromise: (request) => Promise<any[]> | null
 
   showAllFilters = false;
 
@@ -489,15 +490,17 @@ export default class TableTopbarComponent extends Vue {
 
   async getQuickFilters() {
     try {
-      const response = await this.operationService
+      const filters = this.quickFilterPromise 
+      ? await this.quickFilterPromise({ table: this.tableName }) 
+      : await this.operationService
         .search<any[]>("/quickfilter/search", { table: this.tableName })
-        .then(x => x.ensureSuccess());
+        .then(x => x.ensureSuccess().data);
 
-      if (response) {
-        response.data.forEach(el => {
+      if (filters) {
+        filters.forEach(el => {
           el.filter = JSON.parse(el.filter);
         });
-        this.quickFilters = response.data;
+        this.quickFilters = filters;
       }
     } catch (error) {
       this.notificationProvider.Error(error);

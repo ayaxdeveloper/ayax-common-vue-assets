@@ -13,6 +13,7 @@ export class TableOptions {
     hiddenFilters: TableFilterComponentItem[] = [];
     filterGroups: string[] = [];
     quickFilters = false;
+    quickFilterPromise: (request) => Promise<any[]> | null = null;
     selectable = true;
     selectableSingle = false;
     clearSelected = 0;
