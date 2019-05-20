@@ -73,24 +73,35 @@ export class TableFilterComponentItem {
     switch (this.requestType) {
       case TableFilterComponentItemType.Eq:
         if (this.values[0]) {
-          return Filter.Eq(this.values[0]);
+          return Filter.Eq(this.formatterValues[0]);
         }
         break;
       case TableFilterComponentItemType.Like:
         if (this.values[0]) {
-          return Filter.Like(this.values[0]);
+          return Filter.Like(this.formatterValues[0]);
         }
         break;
       case TableFilterComponentItemType.Range:
-        return Filter.Range(this.values);
+        return Filter.Range(this.formatterValues);
       case TableFilterComponentItemType.In:
         if (this.values.length > 0) {
-          return Filter.In(this.values);
+          return Filter.In(this.formatterValues);
         }
         break;
       default:
         return null;
     }
     return null;
+  }
+
+  private get formatterValues() {
+    return this.values.map(x => {
+      switch (x) {
+        case "null":
+          return null;
+        default:
+          return x;
+      }
+    });
   }
 }
