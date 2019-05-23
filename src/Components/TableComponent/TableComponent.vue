@@ -383,7 +383,6 @@ export default class TableComponent extends Vue {
           }
         });
       });
-    await Promise.all(headerPromises);
 
     const filterPromises = this.options.filters
       .filter(
@@ -409,7 +408,10 @@ export default class TableComponent extends Vue {
         });
       });
 
-    await Promise.all(filterPromises);
+    await Promise.all([
+      Promise.all(headerPromises),
+      Promise.all(filterPromises)
+    ]);
 
     this.originalHeaders = JSON.parse(JSON.stringify(this.options.headers));
     for (let i = 0; i < this.originalHeaders.length; i++) {
