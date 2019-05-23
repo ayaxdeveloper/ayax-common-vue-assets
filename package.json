@@ -1,6 +1,6 @@
 {
   "name": "ayax-common-vue-assets",
-  "version": "4.1.42",
+  "version": "4.1.44",
   "main": "dist/build.js",
   "description": "Ayax Common Vue Assets package for Vue Typescript projects",
   "scripts": {
