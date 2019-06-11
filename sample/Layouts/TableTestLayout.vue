@@ -44,7 +44,6 @@
       </v-card>
     </v-dialog>
     <a-group-select :items="selectItems" v-model="selectedValues"></a-group-select>
-    <a-phone-input v-model="phoneInputValue"></a-phone-input>
   </div>
 </template>
 
@@ -81,7 +80,6 @@ export default class TableTestLayout extends Vue {
   selectItems: SelectItem[] = [];
   editDialog = false;
   selectedValues = [];
-  phoneInputValue = "88005550000";
 
   options: TableOptions = new TableOptions({
     title: "Тестовая таблица",

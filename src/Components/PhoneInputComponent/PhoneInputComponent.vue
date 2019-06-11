@@ -90,11 +90,5 @@ export default class PhoneInputComponent extends Vue {
 
   @Emit("input")
   emitValue(value) {}
-
-  @Watch("value")
-  onValueChange(value) {
-    this.formattedValue = value.toString();
-    this.formatInput(true);
-  }
 }
 </script>
