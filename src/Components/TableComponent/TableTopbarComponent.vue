@@ -184,7 +184,7 @@
       <v-card>
         <v-card-title class="headline">Сохранить быстрый фильтр</v-card-title>
         <v-card-text>
-          <v-text-field maxlength="50" label="Название филтра" v-model="newQuickFilter.name"></v-text-field>
+          <v-text-field maxlength="50" label="Название фильтра" v-model="newQuickFilter.name"></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
