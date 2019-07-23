@@ -671,7 +671,6 @@ export default class TableComponent extends Vue {
   }
 
   async loadDataMethod(): Promise<void> {
-    console.log(new Date().getMinutes() +' мин ' + new Date().getSeconds() + ' сек');
     try {
       this.tableLoading = true;
       const filteredRequest = this.AddFilter();
