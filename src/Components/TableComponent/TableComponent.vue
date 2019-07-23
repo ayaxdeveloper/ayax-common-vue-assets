@@ -624,12 +624,13 @@ export default class TableComponent extends Vue {
   onChangeAutoRefreshEnable(): void {
     if (!this.options.autoRefreshEnable) {
       this.options.autoRefresh = 0;
-    if (this.timerAutoRefreshId) {
-      clearTimeout(this.timerAutoRefreshId);
+      if (this.timerAutoRefreshId) {
+        clearInterval(this.timerAutoRefreshId);
       }
     } else {
       if (this.options.autoRefresh === 0)
         {this.options.autoRefresh = 30;}
+      this.runLoadDataAgain();
     }
     localStorage.setItem(
       `${this.options.title}_auto_refresh_enable`,
@@ -646,9 +647,7 @@ export default class TableComponent extends Vue {
   @Watch('options.autoRefresh')
   onChangeAutoRefresh(): void {
     if (this.options.autoRefresh>0) {
-        if (this.timerAutoRefreshId) {
-          clearTimeout(this.timerAutoRefreshId);
-        }       
+      this.runLoadDataAgain()
     }
     localStorage.setItem(
     `${this.options.title}_auto_refresh`,
@@ -659,9 +658,9 @@ export default class TableComponent extends Vue {
   private runLoadDataAgain(): void {
     if (this.options.autoRefresh>0) {
       if (this.timerAutoRefreshId) {
-          clearTimeout(this.timerAutoRefreshId);
+          clearInterval(this.timerAutoRefreshId);
       }
-      this.timerAutoRefreshId = setTimeout(() => {this.loadDataMethod();},
+      this.timerAutoRefreshId = setInterval(() => {this.loadDataMethod();},
       this.options.autoRefresh * 1000);
     }  
   }
