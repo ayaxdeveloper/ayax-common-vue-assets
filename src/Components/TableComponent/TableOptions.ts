@@ -4,8 +4,8 @@ import { TableFilterComponentItem } from "../TableFilterComponent/TableFilterCom
 import { TableComponentHeader } from "./TableHeader";
 
 export class TableOptions {
-    autoRefreshEnable = false; 
-    autoRefresh = 0; 
+    autoRefreshEnable = true; 
+    autoRefresh = 30; 
     autoRefreshOptions: number[] = [30, 60, 120]
     searchData: (request) => Promise<SearchResponse<any[]>>;
     rawData: (request) => Promise<any[]>;

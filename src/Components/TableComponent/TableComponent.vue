@@ -22,10 +22,10 @@
           bottom
           offset-y
           left
-           offset-x
+          offset-x
           :close-on-content-click="false"
           :value="isTableMenuVisible"
-         >
+        >
           <v-btn
             class="ml-2"
             flat
@@ -39,18 +39,18 @@
             <v-icon>mdi-settings</v-icon>
           </v-btn>
           <v-layout row>
-             <v-flex>
+            <v-flex>
               <v-card height = "100%">
                 <v-container>
-                     <v-list-tile>
+                  <v-list-tile>
                     <v-list-tile-title>Автообновление</v-list-tile-title>
                   </v-list-tile>
-                   <v-divider></v-divider>
-                <v-switch v-model="options.autoRefreshEnable" :label="options.autoRefreshEnable ? 'Выключить' : 'Включить'"></v-switch>
-                <v-radio-group v-model="options.autoRefresh" v-if="options.autoRefreshEnable">
-                  <v-radio v-for="option in options.autoRefreshOptions" :key="option" :label="`${option} сек`" :value="option"></v-radio>
-                </v-radio-group>
-                 </v-container>         
+                  <v-divider></v-divider>
+                  <v-switch v-model="options.autoRefreshEnable" :label="options.autoRefreshEnable ? 'Выключить' : 'Включить'"></v-switch>
+                  <v-radio-group v-model="options.autoRefresh" v-if="options.autoRefreshEnable" :value="options.autoRefresh" >
+                    <v-radio v-for="option in options.autoRefreshOptions" :key="option"  :label="`${option} сек`" :value=option></v-radio>
+                  </v-radio-group>
+                </v-container>         
               </v-card>
             </v-flex>
 
@@ -354,7 +354,6 @@ export default class TableComponent extends Vue {
     ) as TableComponentHeader[];
   }
 
-
   get selectedItemsOnPage() {
     const selectedOnPage = [];
     this.selectedItems.forEach(selectedItem => {
@@ -366,6 +365,12 @@ export default class TableComponent extends Vue {
   }
 
   async created() {
+    this.options.autoRefreshEnable = JSON.parse(
+        localStorage.getItem(`${this.options.title}_auto_refresh_enable`)
+      );
+    this.options.autoRefresh = JSON.parse(
+        localStorage.getItem(`${this.options.title}_auto_refresh`)
+      );   
     Object.keys(TableFilterComponentItemInputType).forEach(item => {
       this.filterInputTypes[item] = TableFilterComponentItemInputType[item];
     });
@@ -374,7 +379,7 @@ export default class TableComponent extends Vue {
       this.isPerPageFromStorage = true;
       this.options.pagination.perPage = parseInt(perPage);
     }
-    await this.loadHeaders();
+    await this.loadHeaders();    
   }
 
   async applyFilter(initial = false) {
@@ -470,7 +475,7 @@ export default class TableComponent extends Vue {
     ) as HTMLElement;
     tableScroll.addEventListener("scroll", () =>
       this.onTableScroll(tableScroll.scrollTop)
-    );
+    );    
   }
 
   @Watch("options.pagination.page")
@@ -616,29 +621,40 @@ export default class TableComponent extends Vue {
   }
 
   @Watch('options.autoRefreshEnable')
-  onChangeAutoRefreshEnable() {
+  onChangeAutoRefreshEnable(): void {
     if (!this.options.autoRefreshEnable) {
       this.options.autoRefresh = 0;
-      if (this.timerAutoRefreshId) {
-        clearTimeout(this.timerAutoRefreshId);
-
+    if (this.timerAutoRefreshId) {
+      clearTimeout(this.timerAutoRefreshId);
       }
     } else {
-      this.options.autoRefresh = 30;   
+      if (this.options.autoRefresh === 0)
+        {this.options.autoRefresh = 30;}
     }
+    localStorage.setItem(
+      `${this.options.title}_auto_refresh_enable`,
+      JSON.stringify(this.options.autoRefreshEnable)
+    );
+    localStorage.setItem(
+      `${this.options.title}_auto_refresh`,
+      JSON.stringify(this.options.autoRefresh)
+    );
   }
 
   private timerAutoRefreshId: number =  null;
 
   @Watch('options.autoRefresh')
   onChangeAutoRefresh(): void {
-     if (this.options.autoRefresh>0) {
+    if (this.options.autoRefresh>0) {
         if (this.timerAutoRefreshId) {
           clearTimeout(this.timerAutoRefreshId);
-       }       
-      }  
-   }
-
+        }       
+    }
+    localStorage.setItem(
+    `${this.options.title}_auto_refresh`,
+      JSON.stringify(this.options.autoRefresh)
+    );
+  }
 
   private runLoadDataAgain(): void {
     if (this.options.autoRefresh>0) {
@@ -656,6 +672,7 @@ export default class TableComponent extends Vue {
   }
 
   async loadDataMethod(): Promise<void> {
+    console.log(new Date().getMinutes() +' мин ' + new Date().getSeconds() + ' сек');
     try {
       this.tableLoading = true;
       const filteredRequest = this.AddFilter();
@@ -667,11 +684,9 @@ export default class TableComponent extends Vue {
               total: x.length
             };
           });
-   
       for (let i = 0; i < request.data.length; i++) {
         request.data[i].tableIndex = i;
         request.data[i].slotToggle = false;
-
         if (
           this.selectedItems.findIndex(
             selectedItem => selectedItem.id === request.data[i].id
@@ -701,7 +716,6 @@ export default class TableComponent extends Vue {
       setTimeout(() => this.resizeFixedHeader(), 500);
       this.onEmpty();
       this.loadingIsReady();
-      
     }
   }
 
@@ -873,6 +887,10 @@ export default class TableComponent extends Vue {
 
   resetTableSettings() {
     localStorage.removeItem(`${this.options.title}_header_settings`);
+    this.options.autoRefreshEnable = false;
+    this.options.autoRefresh = 0;
+    localStorage.removeItem(`${this.options.title}_auto_refresh`);
+    localStorage.removeItem(`${this.options.title}_auto_refresh_enable`);
     this.options.headers.forEach(header => {
       this.originalHeaders.forEach(originalHeader => {
         if (header.value === originalHeader.value) {
