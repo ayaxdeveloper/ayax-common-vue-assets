@@ -39,23 +39,23 @@
             <v-icon>mdi-settings</v-icon>
           </v-btn>
           <v-layout row>
-            <v-flex>
-              <v-card height = "100%">
-                <v-container>
-                  <v-list-tile>
-                    <v-list-tile-title>Автообновление</v-list-tile-title>
-                  </v-list-tile>
+            <v-flex v-if="options.autoRefreshEnable">
+              <v-card flat class="autorefresh-options">
+                <v-card-title class="pb-0">
+                  Автообновление
+                </v-card-title>
+                <v-card-text>
                   <v-divider></v-divider>
-                  <v-switch v-model="options.autoRefreshEnable" :label="options.autoRefreshEnable ? 'Выключить' : 'Включить'"></v-switch>
-                  <v-radio-group v-model="options.autoRefresh" v-if="options.autoRefreshEnable" :value="options.autoRefresh" >
+                  <v-switch v-model="autoRefreshEnableInner" :label="options.autoRefresh ? 'Выключить' : 'Включить'"></v-switch>
+                  <v-radio-group v-model="options.autoRefresh" v-if="options.autoRefresh" class="mt-0">
                     <v-radio v-for="option in options.autoRefreshOptions" :key="option"  :label="`${option} сек`" :value=option></v-radio>
                   </v-radio-group>
-                </v-container>         
+                </v-card-text>
               </v-card>
             </v-flex>
 
             <v-flex>
-              <v-card>
+              <v-card flat>
                 <v-list dense>
                   <draggable :list="options.headers" @update="onUpdateDraggable">
                     <v-list-tile v-for="header in options.headers" :key="header.value" @click.stop>
@@ -365,9 +365,6 @@ export default class TableComponent extends Vue {
   }
 
   async created() {
-    this.options.autoRefreshEnable = JSON.parse(
-        localStorage.getItem(`${this.options.title}_auto_refresh_enable`)
-      );
     this.options.autoRefresh = JSON.parse(
         localStorage.getItem(`${this.options.title}_auto_refresh`)
       );   
@@ -620,26 +617,28 @@ export default class TableComponent extends Vue {
     this.resizeFixedHeader();
   }
 
-  @Watch('options.autoRefreshEnable')
-  onChangeAutoRefreshEnable(): void {
-    if (!this.options.autoRefreshEnable) {
+  get autoRefreshEnableInner() {
+    return this.options.autoRefresh > 0;
+  }
+
+  set autoRefreshEnableInner(value: boolean) {
+    if(!value) {
       this.options.autoRefresh = 0;
       if (this.timerAutoRefreshId) {
         clearInterval(this.timerAutoRefreshId);
       }
     } else {
       if (this.options.autoRefresh === 0)
-        {this.options.autoRefresh = 30;}
+        {
+          this.options.autoRefresh = 30;
+        }
       this.runLoadDataAgain();
+
+      localStorage.setItem(
+        `${this.options.title}_auto_refresh`,
+        JSON.stringify(this.options.autoRefresh)
+      );
     }
-    localStorage.setItem(
-      `${this.options.title}_auto_refresh_enable`,
-      JSON.stringify(this.options.autoRefreshEnable)
-    );
-    localStorage.setItem(
-      `${this.options.title}_auto_refresh`,
-      JSON.stringify(this.options.autoRefresh)
-    );
   }
 
   private timerAutoRefreshId: number =  null;
@@ -949,6 +948,11 @@ export default class TableComponent extends Vue {
   height: 48px;
 }
 .bottom-bar__block {
+}
+
+.autorefresh-options {
+  height: 100%;
+  width: 165px;
 }
 </style>
 
