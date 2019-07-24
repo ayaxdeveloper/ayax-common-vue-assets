@@ -82,6 +82,7 @@ export default class TableTestLayout extends Vue {
   selectedValues = [];
 
   options: TableOptions = new TableOptions({
+    autoRefreshEnable: true,
     title: "Тестовая таблица",
     pagination: new Pagination({ page: 1, perPage: 10 }),
     searchData: request =>

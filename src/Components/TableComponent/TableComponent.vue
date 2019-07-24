@@ -38,21 +38,46 @@
           >
             <v-icon>mdi-settings</v-icon>
           </v-btn>
-          <v-list dense>
-            <draggable :list="options.headers" @update="onUpdateDraggable">
-              <v-list-tile v-for="header in options.headers" :key="header.value" @click.stop>
-                <v-list-tile-action>
-                  <v-checkbox color="primary" v-if="header.hiddenable" v-model="header.isVisible"></v-checkbox>
-                  <v-checkbox v-else input-value="true" disabled></v-checkbox>
-                </v-list-tile-action>
-                <v-list-tile-title>{{ header.text }}</v-list-tile-title>
-              </v-list-tile>
-            </draggable>
-            <v-divider></v-divider>
-            <v-list-tile @click="resetTableSettings()">
-              <v-list-tile-title>Сбросить настройки таблицы</v-list-tile-title>
-            </v-list-tile>
-          </v-list>
+          <v-layout row>
+            <v-flex v-if="options.autoRefreshEnable">
+              <v-card flat class="autorefresh-options">
+                <v-card-title class="pb-0">
+                  Автообновление
+                </v-card-title>
+                <v-card-text>
+                  <v-divider></v-divider>
+                  <v-switch v-model="autoRefreshEnableInner" :label="options.autoRefresh ? 'Выключить' : 'Включить'"></v-switch>
+                  <v-radio-group v-model="options.autoRefresh" v-if="options.autoRefresh" class="mt-0">
+                    <v-radio v-for="option in options.autoRefreshOptions" :key="option"  :label="`${option} сек`" :value=option></v-radio>
+                  </v-radio-group>
+                </v-card-text>
+              </v-card>
+            </v-flex>
+
+            <v-flex>
+              <v-card flat>
+                <v-list dense>
+                  <draggable :list="options.headers" @update="onUpdateDraggable">
+                    <v-list-tile v-for="header in options.headers" :key="header.value" @click.stop>
+                      <v-list-tile-action>
+                        <v-checkbox
+                          color="primary"
+                          v-if="header.hiddenable"
+                          v-model="header.isVisible"
+                        ></v-checkbox>
+                        <v-checkbox v-else input-value="true" disabled></v-checkbox>
+                      </v-list-tile-action>
+                      <v-list-tile-title>{{ header.text }}</v-list-tile-title>
+                    </v-list-tile>
+                  </draggable>
+                  <v-divider></v-divider>
+                  <v-list-tile @click="resetTableSettings()">
+                    <v-list-tile-title>Сбросить настройки таблицы</v-list-tile-title>
+                  </v-list-tile>
+                </v-list>
+              </v-card>
+            </v-flex>
+          </v-layout>
         </v-menu>
       </template>
     </a-table-topbar>
@@ -340,6 +365,12 @@ export default class TableComponent extends Vue {
   }
 
   async created() {
+    if (localStorage.getItem(`${this.options.title}_auto_refresh`))
+    {
+      this.options.autoRefresh = JSON.parse(
+        localStorage.getItem(`${this.options.title}_auto_refresh`)
+      );
+    }   
     Object.keys(TableFilterComponentItemInputType).forEach(item => {
       this.filterInputTypes[item] = TableFilterComponentItemInputType[item];
     });
@@ -348,7 +379,7 @@ export default class TableComponent extends Vue {
       this.isPerPageFromStorage = true;
       this.options.pagination.perPage = parseInt(perPage);
     }
-    await this.loadHeaders();
+    await this.loadHeaders();    
   }
 
   async applyFilter(initial = false) {
@@ -444,7 +475,7 @@ export default class TableComponent extends Vue {
     ) as HTMLElement;
     tableScroll.addEventListener("scroll", () =>
       this.onTableScroll(tableScroll.scrollTop)
-    );
+    );    
   }
 
   @Watch("options.pagination.page")
@@ -589,7 +620,59 @@ export default class TableComponent extends Vue {
     this.resizeFixedHeader();
   }
 
-  async loadData() {
+  get autoRefreshEnableInner() {
+    return this.options.autoRefresh > 0;
+  }
+
+  set autoRefreshEnableInner(value: boolean) {
+    if(!value) {
+      this.options.autoRefresh = 0;
+      if (this.timerAutoRefreshId) {
+        clearInterval(this.timerAutoRefreshId);
+      }
+    } else {
+      if (this.options.autoRefresh === 0)
+        {
+          this.options.autoRefresh = 30;
+        }
+      this.runLoadDataAgain();
+
+      localStorage.setItem(
+        `${this.options.title}_auto_refresh`,
+        JSON.stringify(this.options.autoRefresh)
+      );
+    }
+  }
+
+  private timerAutoRefreshId: number =  null;
+
+  @Watch('options.autoRefresh')
+  onChangeAutoRefresh(): void {
+    if (this.options.autoRefresh>0) {
+      this.runLoadDataAgain()
+    }
+    localStorage.setItem(
+    `${this.options.title}_auto_refresh`,
+      JSON.stringify(this.options.autoRefresh)
+    );
+  }
+
+  private runLoadDataAgain(): void {
+    if (this.options.autoRefresh>0) {
+      if (this.timerAutoRefreshId) {
+          clearInterval(this.timerAutoRefreshId);
+      }
+      this.timerAutoRefreshId = setInterval(() => {this.loadDataMethod();},
+      this.options.autoRefresh * 1000);
+    }  
+  }
+
+  async loadData(): Promise<void> {
+    await this.loadDataMethod();
+    this.runLoadDataAgain();
+  }
+
+  async loadDataMethod(): Promise<void> {
     try {
       this.tableLoading = true;
       const filteredRequest = this.AddFilter();
@@ -601,11 +684,9 @@ export default class TableComponent extends Vue {
               total: x.length
             };
           });
-
       for (let i = 0; i < request.data.length; i++) {
         request.data[i].tableIndex = i;
         request.data[i].slotToggle = false;
-
         if (
           this.selectedItems.findIndex(
             selectedItem => selectedItem.id === request.data[i].id
@@ -806,6 +887,8 @@ export default class TableComponent extends Vue {
 
   resetTableSettings() {
     localStorage.removeItem(`${this.options.title}_header_settings`);
+    this.options.autoRefresh = 0;
+    localStorage.removeItem(`${this.options.title}_auto_refresh`);
     this.options.headers.forEach(header => {
       this.originalHeaders.forEach(originalHeader => {
         if (header.value === originalHeader.value) {
@@ -866,6 +949,11 @@ export default class TableComponent extends Vue {
   height: 48px;
 }
 .bottom-bar__block {
+}
+
+.autorefresh-options {
+  height: 100%;
+  width: 165px;
 }
 </style>
 
