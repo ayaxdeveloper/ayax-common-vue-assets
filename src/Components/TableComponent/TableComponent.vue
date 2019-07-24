@@ -365,9 +365,12 @@ export default class TableComponent extends Vue {
   }
 
   async created() {
-    this.options.autoRefresh = JSON.parse(
+    if (localStorage.getItem(`${this.options.title}_auto_refresh`))
+    {
+      this.options.autoRefresh = JSON.parse(
         localStorage.getItem(`${this.options.title}_auto_refresh`)
-      );   
+      );
+    }   
     Object.keys(TableFilterComponentItemInputType).forEach(item => {
       this.filterInputTypes[item] = TableFilterComponentItemInputType[item];
     });
@@ -884,10 +887,8 @@ export default class TableComponent extends Vue {
 
   resetTableSettings() {
     localStorage.removeItem(`${this.options.title}_header_settings`);
-    this.options.autoRefreshEnable = false;
     this.options.autoRefresh = 0;
     localStorage.removeItem(`${this.options.title}_auto_refresh`);
-    localStorage.removeItem(`${this.options.title}_auto_refresh_enable`);
     this.options.headers.forEach(header => {
       this.originalHeaders.forEach(originalHeader => {
         if (header.value === originalHeader.value) {
