@@ -317,6 +317,38 @@ export default class TableTestLayout extends Vue {
         label: "Выбор районов",
         placeholder: "Выберите"
       }),
+
+    new TableFilterComponentItem({
+        requestName: "routeIdFilter",
+        name: "routeIdFilter",
+        appearance: TableFilterComponentItemAppearance.AllFilters,
+        requestType: TableFilterComponentItemType.In,
+        inputType: TableFilterComponentItemInputType.TreeSelect,
+        groupName: "Обращение",
+        selectItemsFromPromiseForTreeSelect:  [
+          { id: 1, label: "Аякс", ids:[12, 21],  children: [
+            {id: 12, label: "Главный", number: "89624033427"},
+            {id: 21, label: "Офис", number: "89624033428"}            
+            ]},
+          { id: 2, label: "Офис", ids:[9, 10],  children: [
+            {id: 9, label: "Офис1", number: "89624008888"},
+            {id: 10, label: "Офис2", number: "89623009090"}            
+            ]},
+           { id: 3, label: "Интернет", ids:[22, 25],  children: [
+            {id: 22, label: "Интернет 1", number: "89624001111"},
+            {id: 25, label: "Интернет 2", number: "89623002222"}            
+            ]},
+             { id: 4, label: "Расклейка", ids:[41, 42],  children: [
+            {id: 41, label: "Расклейка 1", number: "89624003333"},
+            {id: 42, label: "Расклейка 2", number: "89623004444"}            
+            ]}
+
+        ],
+        label: "Выбор маршрута",
+        placeholder: "Выберите"
+      }),
+
+
       new TableFilterComponentItem({
         requestName: "roomFilter",
         name: "roomFilter",

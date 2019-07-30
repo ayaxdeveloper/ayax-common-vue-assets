@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/ayaxdeveloper/ayax-common-vue-assets#readme",
   "dependencies": {
+    "@riophae/vue-treeselect": "0.0.38",
     "ayax-common-auth": "^3.0.38",
     "ayax-common-cache": "^3.1.1",
     "ayax-common-helpers": "^2.2.11",

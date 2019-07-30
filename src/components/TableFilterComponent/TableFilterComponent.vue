@@ -433,6 +433,22 @@
       >
         <v-checkbox style="margin-top: 0px" :label="filter.label" v-model="filter.values[0]"></v-checkbox>
       </v-flex>
+      <v-flex class="flex-treeselect" v-else-if="filter.inputType == filterInputTypes['TreeSelect']">
+        <!-- <label class="treeselect__label">{{ filter.label }}</label> -->
+        <tree-select 
+           v-model="filter.values[0]"        
+           :multiple = true           
+           :matchKeys = "['id', 'label', 'number']"        
+           :instanceId="filter.requestName"
+           :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'selectFilter']"
+           :name="filter.requestName"
+           :options="filter.selectItemsFromPromiseForTreeSelect"
+           :placeholder="filter.placeholder"        
+           class="my-treeselect"      
+           :showCount = true
+           :valueConsistsOf = valueConsisting
+        ></tree-select>
+      </v-flex>
     </template>
   </div>
 </template>
@@ -448,9 +464,14 @@ import { TableFilterComponentItem } from "./TableFilterComponentItem";
 import { TableFilterComponentItemAppearance } from "./TableFilterComponentItemAppearance";
 import { TableFilterComponentItemInputType } from "./TableFilterComponentItemInputType";
 import { TableFilterComponentItemType } from "./TableFilterComponentItemType";
+import TreeSelect from '@riophae/vue-treeselect';
+import '@riophae/vue-treeselect/dist/vue-treeselect.css';
 
 @Component({
-  name: "a-table-filter"
+  name: "a-table-filter",
+  components: {
+    "tree-select": TreeSelect,
+  }
 })
 export default class TableFilterComponent extends Vue {
   @Prop({ required: true }) filter: TableFilterComponentItem;
@@ -477,6 +498,8 @@ export default class TableFilterComponent extends Vue {
     firstDayOfWeek: 1,
     shortcuts: []
   };
+
+  valueConsisting = 'LEAF_PRIORITY';
 
   created() {
     Object.keys(TableFilterComponentItemType).forEach(item => {
@@ -510,7 +533,7 @@ export default class TableFilterComponent extends Vue {
       );
     }
   }
-
+  
   changeBtnValue() {
     this.filter.values[0] = !this.filter.values[0];
     if (this.filter.buttonClickedText) {
@@ -670,6 +693,10 @@ export default class TableFilterComponent extends Vue {
   height: 20px !important;
   left: 0;
 }
+
+.flex-treeselect {
+  margin-top: 21px;
+}
 </style>
 
 <style>
@@ -797,5 +824,106 @@ export default class TableFilterComponent extends Vue {
 .filter .el-date-editor .el-range__close-icon {
   width: 20px;
   padding-top: 4px;
+}
+
+.vue-treeselect__multi-value,
+.vue-treeselect__value-container, 
+.vue-treeselect__control-arrow-container, 
+.vue-treeselect__control {
+    background-color: #424242 !important;
+    padding-bottom: 0px;
+}
+
+.vue-treeselect__value-container {
+  padding-top:8px;
+}
+
+
+div.vue-treeselect__placeholder {
+  top: 8px;
+  left: -10px;
+}
+
+.vue-treeselect__menu {
+color: black;
+}
+
+.vue-treeselect__control {
+  border-radius: 0;
+  border-top: none;
+  border-left:none;
+  border-right:none;
+  margin-top: -16px;
+  position:relative;
+}
+
+.vue-treeselect__control::after {
+  content: "Выбор маршрута";
+  height: 12px;
+  font-size: 13px;
+  color: #fff;
+  display: block;
+  top:-5px;
+  left: 0;
+  position: absolute;
+}
+
+.treeselect__label {
+    height: 12px;
+    font-size: 13px;
+    color: #fff;
+}
+
+span.vue-treeselect__checkbox {
+  height: 16px;
+  width: 16px;
+  margin: 2px;
+  border-radius: 2px solid gray;
+}
+
+span.vue-treeselect__checkbox--unchecked {
+  height: 16px;
+  width: 16px;
+  display:block;
+  border-radius: 2px solid gray;
+}
+
+span.vue-treeselect__minus-mark {
+  font-size: 24px;
+  margin: 2px;
+  border-radius: 2px solid gray;
+}
+
+div.vue-treeselect__menu {
+   border-radius: 0px !important;
+}
+
+label.vue-treeselect__label {
+  padding-left: 15px;
+}
+
+
+.vue-treeselect__check-mark {
+  width: 12px;
+  height: 12px;
+  background-size: 100%;
+}
+  
+.vue-treeselect__input {
+  padding-top: 7px;
+}
+
+
+.vue-treeselect__value-container .vue-treeselect__multi-value {
+  padding-bottom: 0px;
+  margin-bottom: 2px;
+}
+
+.vue-treeselect__control {
+  line-height: 1;
+}
+
+.vue-treeselect__multi-value-label {
+  line-height: 1.2;
 }
 </style>

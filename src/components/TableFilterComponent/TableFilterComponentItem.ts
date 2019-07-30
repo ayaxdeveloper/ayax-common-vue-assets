@@ -22,6 +22,7 @@ export class TableFilterComponentItem {
   selectItems?: SelectItem[];
   selectItemsFromDictionary: string;
   selectItemsFromPromise: Promise<SelectItem[]>;
+  selectItemsFromPromiseForTreeSelect: Promise<any> | Array<{}>;
   values: any[] = [];
   active = true;
   groupName: string = null;
