@@ -436,7 +436,7 @@
       <v-flex class="flex-treeselect" v-else-if="filter.inputType == filterInputTypes['TreeSelect']">
         <!-- <label class="treeselect__label">{{ filter.label }}</label> -->
         <tree-select 
-           v-model="filter.values[0]"        
+           v-model="filter.values"        
            :multiple = true           
            :matchKeys = "['id', 'label', 'number']"        
            :instanceId="filter.requestName"
