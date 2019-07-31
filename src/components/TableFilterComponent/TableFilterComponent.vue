@@ -447,7 +447,11 @@
            class="my-treeselect"      
            :showCount = true
            :valueConsistsOf = valueConsisting
-        ></tree-select>
+           @input = "treeSelectChange(filter.values)"
+        >  
+        <div slot="value-label"  slot-scope="{ node }" v-if="filter.values.length>2"></div>       
+
+        </tree-select>
       </v-flex>
     </template>
   </div>
@@ -498,6 +502,8 @@ export default class TableFilterComponent extends Vue {
     firstDayOfWeek: 1,
     shortcuts: []
   };
+  spanEl = document.createElement("span");
+
 
   valueConsisting = 'LEAF_PRIORITY';
 
@@ -533,6 +539,9 @@ export default class TableFilterComponent extends Vue {
       );
     }
   }
+
+  treeSelectPlaceholder!:any;
+
   
   changeBtnValue() {
     this.filter.values[0] = !this.filter.values[0];
@@ -555,6 +564,22 @@ export default class TableFilterComponent extends Vue {
   clickDropdown(value: any) {
     this.filter.values = [];
     this.filter.values.push(value);
+  }
+
+  treeSelectChange() {
+    this.treeSelectPlaceholder = document.querySelector('.vue-treeselect__placeholder vue-treeselect-helper-zoom-effect-off');
+    this.spanEl.classList.add('treeselect-count-span', 'selectionValue');
+    console.log('this.$refs.treeSelectRef => ',this.$refs.treeSelectRef);
+    console.log("tree select changed", this.filter.values);
+    const treeSelectText = document.querySelector('.vue-treeselect__input-container');     
+    if (this.filter.values.length > 0) {
+      console.log('values.length.toString',treeSelectText);
+      this.spanEl.innerHTML = `Выбрано <span class="treeSelectSelectionChip" style="background-color: rgb(255, 255, 255);">${this.filter.values.length.toString()}</span>`;
+      treeSelectText.insertBefore(this.spanEl, treeSelectText.firstChild); 
+    } else {
+        this.spanEl.innerHTML = '';
+        treeSelectText.appendChild(this.treeSelectPlaceholder);      
+    }    
   }
 
   @Watch("filter.values")
@@ -697,6 +722,11 @@ export default class TableFilterComponent extends Vue {
 .flex-treeselect {
   margin-top: 21px;
 }
+
+.vue-treeselect__control:hover {
+  border-color:#1976d2
+}
+
 </style>
 
 <style>
@@ -832,16 +862,17 @@ export default class TableFilterComponent extends Vue {
 .vue-treeselect__control {
     background-color: #424242 !important;
     padding-bottom: 0px;
+
 }
 
 .vue-treeselect__value-container {
-  padding-top:8px;
+  padding-top:2px;
 }
 
 
 div.vue-treeselect__placeholder {
   top: 8px;
-  left: -10px;
+  left: -5px;
 }
 
 .vue-treeselect__menu {
@@ -855,6 +886,7 @@ color: black;
   border-right:none;
   margin-top: -16px;
   position:relative;
+  padding-left: 0px;
 }
 
 .vue-treeselect__control::after {
@@ -910,7 +942,10 @@ label.vue-treeselect__label {
 }
   
 .vue-treeselect__input {
-  padding-top: 7px;
+  font-size: 1rem;
+  height: 18px;
+  margin-top: 5px;
+  
 }
 
 
@@ -926,4 +961,61 @@ label.vue-treeselect__label {
 .vue-treeselect__multi-value-label {
   line-height: 1.2;
 }
+
+.vue-treeselect__multi-value-item-container{
+  display:none;
+}
+
+.vue-treeselect__multi-value {
+  display: flex;
+  
+}
+
+.vue-treeselect__multi-value > * {
+  align-self: flex-end;
+      
+}
+
+.treeSelectSelectionChip {
+  background-color: #fff;
+  padding: 0 4px 0 4px;
+  border-radius: 4px;
+  color: #000;
+  font-weight: bold;
+  font-size: 13px;
+  text-align: center;
+  height: 16px;
+  margin-left: 6px;
+  margin-right: 10px;
+}
+
+div.vue-treeselect__input-container {
+  padding-top:2px;
+  display: flex !important;
+}
+
+.treeselect-count-span {
+  height: 18px;
+  font-size: 1rem;
+  align-self: flex-end;
+}
+
+.vue-treeselect--searchable.vue-treeselect--multi.vue-treeselect--has-value .vue-treeselect__input-container {
+  padding-top: 2px;
+}
+
+
+.vue-treeselect__x {
+  margin-top: 10px;  
+  width:12px;
+  height: 12px;
+}
+
+.vue-treeselect svg {
+  fill: white;
+}
+
+
+
+
 </style>
