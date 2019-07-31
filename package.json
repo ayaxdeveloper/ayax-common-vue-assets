@@ -1,6 +1,6 @@
 {
   "name": "ayax-common-vue-assets",
-  "version": "4.1.55",
+  "version": "4.1.56",
   "main": "dist/build.js",
   "description": "Ayax Common Vue Assets package for Vue Typescript projects",
   "scripts": {
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/ayaxdeveloper/ayax-common-vue-assets#readme",
   "dependencies": {
+    "a-vue-treeselect": "0.0.42",
     "ayax-common-auth": "^3.0.38",
     "ayax-common-cache": "^3.1.1",
     "ayax-common-helpers": "^2.2.11",
