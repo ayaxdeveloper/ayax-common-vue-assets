@@ -389,10 +389,8 @@ export default class TableTopbarComponent extends Vue {
           return;
         }
       }
-      console.log(' filter.values => ', filter.values);
       query[`${filter.name}`] = JSON.stringify(filter.values);
     }
-    console.log('query from changequery =>',query);
   }
 
   @Emit()

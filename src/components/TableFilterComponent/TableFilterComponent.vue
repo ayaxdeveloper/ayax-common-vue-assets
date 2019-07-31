@@ -435,7 +435,7 @@
       </v-flex>
       <v-flex class="flex-treeselect" v-else-if="filter.inputType == filterInputTypes['TreeSelect']">
         <!-- <label class="treeselect__label">{{ filter.label }}</label> -->
-        <tree-select 
+    <!--     <tree-select 
            v-model="filter.values"        
            :multiple = true           
            :matchKeys = "['id', 'label', 'number']"        
@@ -451,7 +451,25 @@
         >  
         <div slot="value-label"  slot-scope="{ node }" v-if="filter.values.length>2"></div>       
 
-        </tree-select>
+        </tree-select> -->
+
+        <a-tree-select 
+           v-model="filter.values"        
+           :multiple = true           
+           :matchKeys = "['id', 'label', 'number']"        
+           :instanceId="filter.requestName"
+           :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'selectFilter']"
+           :name="filter.requestName"
+           :options="filter.selectItemsFromPromiseForTreeSelect"
+           :placeholder="filter.placeholder"        
+           class="my-treeselect"      
+           :showCount = true
+           :valueConsistsOf = valueConsisting
+           @input = "treeSelectChange(filter.values)"
+        >  
+        <div slot="value-label"  slot-scope="{ node }" v-if="filter.values.length>2"></div>       
+
+        </a-tree-select>
       </v-flex>
     </template>
   </div>
@@ -468,15 +486,16 @@ import { TableFilterComponentItem } from "./TableFilterComponentItem";
 import { TableFilterComponentItemAppearance } from "./TableFilterComponentItemAppearance";
 import { TableFilterComponentItemInputType } from "./TableFilterComponentItemInputType";
 import { TableFilterComponentItemType } from "./TableFilterComponentItemType";
-import TreeSelect from '@riophae/vue-treeselect';
-import '@riophae/vue-treeselect/dist/vue-treeselect.css';
+import ATreeSelect from 'a-vue-treeselect';
+import 'a-vue-treeselect/dist/vue-treeselect.css';
 
 @Component({
   name: "a-table-filter",
   components: {
-    "tree-select": TreeSelect,
+    "a-tree-select": ATreeSelect,
   }
 })
+
 export default class TableFilterComponent extends Vue {
   @Prop({ required: true }) filter: TableFilterComponentItem;
   @Prop() value: any;
@@ -502,11 +521,12 @@ export default class TableFilterComponent extends Vue {
     firstDayOfWeek: 1,
     shortcuts: []
   };
+
+  treeSelectPlaceholder!:any;
   spanEl = document.createElement("span");
-
-
   valueConsisting = 'LEAF_PRIORITY';
-
+  treeSelectText = document.querySelector('.vue-treeselect__input-container');   
+  
   created() {
     Object.keys(TableFilterComponentItemType).forEach(item => {
       this.filterTypes[item] = TableFilterComponentItemType[item];
@@ -537,12 +557,27 @@ export default class TableFilterComponent extends Vue {
           }
         })
       );
-    }
+    }    
   }
 
-  treeSelectPlaceholder!:any;
-
-  
+  mounted() {
+    this.treeSelectPlaceholder = document.querySelector('.vue-treeselect__placeholder');
+    this.treeSelectText = document.querySelector('.vue-treeselect__input-container');    
+    this.spanEl.classList.add('treeselect-count-span', 'selectionValue');
+    if (this.treeSelectText) { 
+      if (this.filter.values.length > 0) {
+        this.spanEl.innerHTML = `Выбрано <span class="treeSelectSelectionChip" style="background-color: rgb(255, 255, 255);">${this.filter.values.length.toString()}</span>`;
+        this.treeSelectText.insertBefore(this.spanEl, this.treeSelectText.firstChild); 
+      } else {
+        this.spanEl.innerHTML = '';
+        if (this.treeSelectPlaceholder) {
+          this.treeSelectText.appendChild(this.treeSelectPlaceholder);
+          this.treeSelectText.insertBefore(this.spanEl, this.treeSelectText.firstChild);
+        }
+      }
+    }
+  }
+ 
   changeBtnValue() {
     this.filter.values[0] = !this.filter.values[0];
     if (this.filter.buttonClickedText) {
@@ -566,20 +601,18 @@ export default class TableFilterComponent extends Vue {
     this.filter.values.push(value);
   }
 
+  changeTreeSelectLabel() {
+    if (this.treeSelectText) { 
+      if (this.filter.values.length > 0) {
+        this.spanEl.innerHTML = `Выбрано <span class="treeSelectSelectionChip" style="background-color: rgb(255, 255, 255);">${this.filter.values.length.toString()}</span>`;
+      } else {
+          this.spanEl.innerHTML = '';
+      }          
+    }
+  }
+
   treeSelectChange() {
-    this.treeSelectPlaceholder = document.querySelector('.vue-treeselect__placeholder vue-treeselect-helper-zoom-effect-off');
-    this.spanEl.classList.add('treeselect-count-span', 'selectionValue');
-    console.log('this.$refs.treeSelectRef => ',this.$refs.treeSelectRef);
-    console.log("tree select changed", this.filter.values);
-    const treeSelectText = document.querySelector('.vue-treeselect__input-container');     
-    if (this.filter.values.length > 0) {
-      console.log('values.length.toString',treeSelectText);
-      this.spanEl.innerHTML = `Выбрано <span class="treeSelectSelectionChip" style="background-color: rgb(255, 255, 255);">${this.filter.values.length.toString()}</span>`;
-      treeSelectText.insertBefore(this.spanEl, treeSelectText.firstChild); 
-    } else {
-        this.spanEl.innerHTML = '';
-        treeSelectText.appendChild(this.treeSelectPlaceholder);      
-    }    
+    this.changeTreeSelectLabel();      
   }
 
   @Watch("filter.values")
@@ -869,12 +902,6 @@ export default class TableFilterComponent extends Vue {
   padding-top:2px;
 }
 
-
-div.vue-treeselect__placeholder {
-  top: 8px;
-  left: -5px;
-}
-
 .vue-treeselect__menu {
 color: black;
 }
@@ -892,10 +919,10 @@ color: black;
 .vue-treeselect__control::after {
   content: "Выбор маршрута";
   height: 12px;
-  font-size: 13px;
+  font-size: 12px;
   color: #fff;
   display: block;
-  top:-5px;
+  top:-3px;
   left: 0;
   position: absolute;
 }
@@ -934,7 +961,6 @@ label.vue-treeselect__label {
   padding-left: 15px;
 }
 
-
 .vue-treeselect__check-mark {
   width: 12px;
   height: 12px;
@@ -947,7 +973,6 @@ label.vue-treeselect__label {
   margin-top: 5px;
   
 }
-
 
 .vue-treeselect__value-container .vue-treeselect__multi-value {
   padding-bottom: 0px;
@@ -1004,18 +1029,27 @@ div.vue-treeselect__input-container {
   padding-top: 2px;
 }
 
-
-.vue-treeselect__x {
-  margin-top: 10px;  
-  width:12px;
-  height: 12px;
+.vue-treeselect__control-arrow-container {
+  vertical-align: bottom;
+}
+.vue-treeselect__control-arrow-container svg {
+  margin-bottom: 7px;
 }
 
-.vue-treeselect svg {
-  fill: white;
+.vue-treeselect__input {
+  margin-left: -4px;
+  
 }
 
-
-
+.vue-treeselect__x-container {
+  vertical-align: bottom;
+  width: 29px;
+}
+div.vue-treeselect__placeholder {
+  top: 7px;
+  left: -5px;
+  color: hsla(0,0%,100%,.45);
+  font-size: 1rem;
+}
 
 </style>
