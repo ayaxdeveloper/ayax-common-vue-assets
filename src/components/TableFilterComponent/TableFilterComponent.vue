@@ -434,24 +434,6 @@
         <v-checkbox style="margin-top: 0px" :label="filter.label" v-model="filter.values[0]"></v-checkbox>
       </v-flex>
       <v-flex class="flex-treeselect" v-else-if="filter.inputType == filterInputTypes['TreeSelect']">
-        <!-- <label class="treeselect__label">{{ filter.label }}</label> -->
-    <!--     <tree-select 
-           v-model="filter.values"        
-           :multiple = true           
-           :matchKeys = "['id', 'label', 'number']"        
-           :instanceId="filter.requestName"
-           :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'selectFilter']"
-           :name="filter.requestName"
-           :options="filter.selectItemsFromPromiseForTreeSelect"
-           :placeholder="filter.placeholder"        
-           class="my-treeselect"      
-           :showCount = true
-           :valueConsistsOf = valueConsisting
-           @input = "treeSelectChange(filter.values)"
-        >  
-        <div slot="value-label"  slot-scope="{ node }" v-if="filter.values.length>2"></div>       
-
-        </tree-select> -->
 
         <a-tree-select 
            v-model="filter.values"        
@@ -460,7 +442,7 @@
            :instanceId="filter.requestName"
            :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'selectFilter']"
            :name="filter.requestName"
-           :options="filter.selectItemsFromPromiseForTreeSelect"
+           :options="filter.anyItemsFromPromise"
            :placeholder="filter.placeholder"        
            class="my-treeselect"      
            :showCount = true
@@ -893,8 +875,8 @@ export default class TableFilterComponent extends Vue {
 .vue-treeselect__value-container, 
 .vue-treeselect__control-arrow-container, 
 .vue-treeselect__control {
-    background-color: #424242 !important;
-    padding-bottom: 0px;
+  background-color: #424242 !important;
+  padding-bottom: 0px;
 
 }
 
@@ -903,7 +885,7 @@ export default class TableFilterComponent extends Vue {
 }
 
 .vue-treeselect__menu {
-color: black;
+  color: black;
 }
 
 .vue-treeselect__control {
@@ -928,9 +910,9 @@ color: black;
 }
 
 .treeselect__label {
-    height: 12px;
-    font-size: 13px;
-    color: #fff;
+  height: 12px;
+  font-size: 13px;
+  color: #fff;
 }
 
 span.vue-treeselect__checkbox {
@@ -954,7 +936,7 @@ span.vue-treeselect__minus-mark {
 }
 
 div.vue-treeselect__menu {
-   border-radius: 0px !important;
+  border-radius: 0px !important;
 }
 
 label.vue-treeselect__label {
@@ -970,8 +952,7 @@ label.vue-treeselect__label {
 .vue-treeselect__input {
   font-size: 1rem;
   height: 18px;
-  margin-top: 5px;
-  
+  margin-top: 5px;  
 }
 
 .vue-treeselect__value-container .vue-treeselect__multi-value {
@@ -992,13 +973,11 @@ label.vue-treeselect__label {
 }
 
 .vue-treeselect__multi-value {
-  display: flex;
-  
+  display: flex;  
 }
 
 .vue-treeselect__multi-value > * {
-  align-self: flex-end;
-      
+  align-self: flex-end;      
 }
 
 .treeSelectSelectionChip {
@@ -1037,19 +1016,18 @@ div.vue-treeselect__input-container {
 }
 
 .vue-treeselect__input {
-  margin-left: -4px;
-  
+  margin-left: -4px;  
 }
 
 .vue-treeselect__x-container {
   vertical-align: bottom;
   width: 29px;
 }
+
 div.vue-treeselect__placeholder {
   top: 7px;
   left: -5px;
   color: hsla(0,0%,100%,.45);
   font-size: 1rem;
 }
-
 </style>
