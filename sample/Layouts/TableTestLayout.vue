@@ -325,7 +325,7 @@ export default class TableTestLayout extends Vue {
         requestType: TableFilterComponentItemType.In,
         inputType: TableFilterComponentItemInputType.TreeSelect,
         groupName: "Обращение",
-        selectItemsFromPromiseForTreeSelect:  [
+        anyItemsFromPromise:  [
           { id: 1, label: "Аякс", ids:[12, 21],  children: [
             {id: 12, label: "Главный", number: "89624033427"},
             {id: 21, label: "Офис", number: "89624033428"}            
