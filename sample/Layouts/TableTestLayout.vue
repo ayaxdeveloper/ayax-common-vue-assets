@@ -75,7 +75,7 @@ import TestDataService from "../Services/TestDataService/TestDataService";
 export default class TableTestLayout extends Vue {
   @Inject() operationService: IOperationService;
   @Inject() cacheService: ICacheService;
-
+  
   testDataService = new TestDataService();
   selectItems: SelectItem[] = [];
   editDialog = false;
@@ -325,25 +325,7 @@ export default class TableTestLayout extends Vue {
         requestType: TableFilterComponentItemType.In,
         inputType: TableFilterComponentItemInputType.TreeSelect,
         groupName: "Обращение",
-        anyItemsFromPromise:  [
-          { id: 1, label: "Аякс", ids:[12, 21],  children: [
-            {id: 12, label: "Главный", number: "89624033427"},
-            {id: 21, label: "Офис", number: "89624033428"}            
-            ]},
-          { id: 2, label: "Офис", ids:[9, 10],  children: [
-            {id: 9, label: "Офис1", number: "89624008888"},
-            {id: 10, label: "Офис2", number: "89623009090"}            
-            ]},
-           { id: 3, label: "Интернет", ids:[22, 25],  children: [
-            {id: 22, label: "Интернет 1", number: "89624001111"},
-            {id: 25, label: "Интернет 2", number: "89623002222"}            
-            ]},
-             { id: 4, label: "Расклейка", ids:[41, 42],  children: [
-            {id: 41, label: "Расклейка 1", number: "89624003333"},
-            {id: 42, label: "Расклейка 2", number: "89623004444"}            
-            ]}
-
-        ],
+        anyItems: this.ListGroupAsSelectedItems(),       
         label: "Выбор маршрута",
         placeholder: "Выберите"
       }),
@@ -369,6 +351,17 @@ export default class TableTestLayout extends Vue {
           group: "group"
         })
     );
+  }
+
+  ListGroupAsSelectedItems():any {
+     return [
+     {
+        id: 1, label: "Аякс", ids: [12, 21], children: [
+          { id: 12, label: "Главный", number: "89624033427" },
+          { id: 21, label: "Офис", number: "89624033428" }
+        ]
+      },
+    ]
   }
 
   currentModel = {};
