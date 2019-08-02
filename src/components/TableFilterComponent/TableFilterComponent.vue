@@ -442,7 +442,7 @@
            :instanceId="filter.requestName"
            :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'selectFilter']"
            :name="filter.requestName"
-           :options="filter.anyItemsFromPromise"
+           :options="filter.anyItems"
            :placeholder="filter.placeholder"        
            class="my-treeselect"      
            :limit=0
@@ -707,6 +707,11 @@ export default class TableFilterComponent extends Vue {
   border-color:#1976d2
 }
 
+.flex-treeselect {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
 </style>
 
 <style>
@@ -841,6 +846,7 @@ export default class TableFilterComponent extends Vue {
 .my-treeselect {
   margin-top: 12px;
 }
+
 
 
 </style>
