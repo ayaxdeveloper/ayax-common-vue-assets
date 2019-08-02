@@ -447,7 +447,8 @@
            class="my-treeselect"      
            :limit=0
            :showCount = true
-           valueConsistsOf = LEAF_PRIORITY           
+           valueConsistsOf = LEAF_PRIORITY     
+           :data-label-attr="filter.label"     
           >
           </a-tree-select>   
         </v-flex>
