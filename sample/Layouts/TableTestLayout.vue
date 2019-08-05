@@ -75,7 +75,7 @@ import TestDataService from "../Services/TestDataService/TestDataService";
 export default class TableTestLayout extends Vue {
   @Inject() operationService: IOperationService;
   @Inject() cacheService: ICacheService;
-  
+
   testDataService = new TestDataService();
   selectItems: SelectItem[] = [];
   editDialog = false;
@@ -293,7 +293,11 @@ export default class TableTestLayout extends Vue {
         inputType: TableFilterComponentItemInputType.Select,
         groupName: "Обращение",
         selectItems: [
-          new SelectItem({ value: 1, text: "Район 1" }),
+          new SelectItem({
+            value: 1,
+            text: "Район 1",
+            className: ["deleted-item"]
+          }),
           new SelectItem({ value: 2, text: "Район 2" }),
           new SelectItem({ value: 3, text: "Район 3" }),
           new SelectItem({ value: 4, text: "Район 4" }),
@@ -318,18 +322,17 @@ export default class TableTestLayout extends Vue {
         placeholder: "Выберите"
       }),
 
-    new TableFilterComponentItem({
+      new TableFilterComponentItem({
         requestName: "routeIdFilter",
         name: "routeIdFilter",
         appearance: TableFilterComponentItemAppearance.AllFilters,
         requestType: TableFilterComponentItemType.In,
         inputType: TableFilterComponentItemInputType.TreeSelect,
         groupName: "Обращение",
-        anyItems: this.ListGroupAsSelectedItems(),       
+        anyItems: this.ListGroupAsSelectedItems(),
         label: "Выбор маршрута",
         placeholder: "Выберите"
       }),
-
 
       new TableFilterComponentItem({
         requestName: "roomFilter",
@@ -353,15 +356,18 @@ export default class TableTestLayout extends Vue {
     );
   }
 
-  ListGroupAsSelectedItems():any {
-     return [
-     {
-        id: 1, label: "Аякс", ids: [12, 21], children: [
+  ListGroupAsSelectedItems(): any {
+    return [
+      {
+        id: 1,
+        label: "Аякс",
+        ids: [12, 21],
+        children: [
           { id: 12, label: "Главный", number: "89624033427" },
           { id: 21, label: "Офис", number: "89624033428" }
         ]
-      },
-    ]
+      }
+    ];
   }
 
   currentModel = {};
