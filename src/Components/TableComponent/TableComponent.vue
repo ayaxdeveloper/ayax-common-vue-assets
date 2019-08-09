@@ -41,14 +41,24 @@
           <v-layout row>
             <v-flex v-if="options.autoRefreshEnable">
               <v-card flat class="autorefresh-options">
-                <v-card-title class="pb-0">
-                  Автообновление
-                </v-card-title>
+                <v-card-title class="pb-0">Автообновление</v-card-title>
                 <v-card-text>
                   <v-divider></v-divider>
-                  <v-switch v-model="autoRefreshEnableInner" :label="options.autoRefresh ? 'Выключить' : 'Включить'"></v-switch>
-                  <v-radio-group v-model="options.autoRefresh" v-if="options.autoRefresh" class="mt-0">
-                    <v-radio v-for="option in options.autoRefreshOptions" :key="option"  :label="`${option} сек`" :value=option></v-radio>
+                  <v-switch
+                    v-model="autoRefreshEnableInner"
+                    :label="options.autoRefresh ? 'Выключить' : 'Включить'"
+                  ></v-switch>
+                  <v-radio-group
+                    v-model="options.autoRefresh"
+                    v-if="options.autoRefresh"
+                    class="mt-0"
+                  >
+                    <v-radio
+                      v-for="option in options.autoRefreshOptions"
+                      :key="option"
+                      :label="`${option} сек`"
+                      :value="option"
+                    ></v-radio>
                   </v-radio-group>
                 </v-card-text>
               </v-card>
@@ -365,12 +375,11 @@ export default class TableComponent extends Vue {
   }
 
   async created() {
-    if (localStorage.getItem(`${this.options.title}_auto_refresh`))
-    {
+    if (localStorage.getItem(`${this.options.title}_auto_refresh`)) {
       this.options.autoRefresh = JSON.parse(
         localStorage.getItem(`${this.options.title}_auto_refresh`)
       );
-    }   
+    }
     Object.keys(TableFilterComponentItemInputType).forEach(item => {
       this.filterInputTypes[item] = TableFilterComponentItemInputType[item];
     });
@@ -379,7 +388,7 @@ export default class TableComponent extends Vue {
       this.isPerPageFromStorage = true;
       this.options.pagination.perPage = parseInt(perPage);
     }
-    await this.loadHeaders();    
+    await this.loadHeaders();
   }
 
   async applyFilter(initial = false) {
@@ -419,7 +428,9 @@ export default class TableComponent extends Vue {
       .filter(
         x =>
           !x.selectItems &&
-          (x.selectItemsFromDictionary || x.selectItemsFromPromise || x.anyItemsFromPromise)
+          (x.selectItemsFromDictionary ||
+            x.selectItemsFromPromise ||
+            x.anyItemsFromPromise)
       )
       .map(x => {
         return new Promise(resolve => {
@@ -439,7 +450,7 @@ export default class TableComponent extends Vue {
             x.anyItemsFromPromise.then(z => {
               x.anyItems = z;
               resolve();
-          });
+            });
           }
         });
       });
@@ -480,7 +491,7 @@ export default class TableComponent extends Vue {
     ) as HTMLElement;
     tableScroll.addEventListener("scroll", () =>
       this.onTableScroll(tableScroll.scrollTop)
-    );    
+    );
   }
 
   @Watch("options.pagination.page")
@@ -630,16 +641,15 @@ export default class TableComponent extends Vue {
   }
 
   set autoRefreshEnableInner(value: boolean) {
-    if(!value) {
+    if (!value) {
       this.options.autoRefresh = 0;
       if (this.timerAutoRefreshId) {
         clearInterval(this.timerAutoRefreshId);
       }
     } else {
-      if (this.options.autoRefresh === 0)
-        {
-          this.options.autoRefresh = 30;
-        }
+      if (this.options.autoRefresh === 0) {
+        this.options.autoRefresh = 30;
+      }
       this.runLoadDataAgain();
 
       localStorage.setItem(
@@ -649,27 +659,28 @@ export default class TableComponent extends Vue {
     }
   }
 
-  private timerAutoRefreshId: number =  null;
+  private timerAutoRefreshId: number = null;
 
-  @Watch('options.autoRefresh')
+  @Watch("options.autoRefresh")
   onChangeAutoRefresh(): void {
-    if (this.options.autoRefresh>0) {
-      this.runLoadDataAgain()
+    if (this.options.autoRefresh > 0) {
+      this.runLoadDataAgain();
     }
     localStorage.setItem(
-    `${this.options.title}_auto_refresh`,
+      `${this.options.title}_auto_refresh`,
       JSON.stringify(this.options.autoRefresh)
     );
   }
 
   private runLoadDataAgain(): void {
-    if (this.options.autoRefresh>0) {
+    if (this.options.autoRefresh > 0) {
       if (this.timerAutoRefreshId) {
-          clearInterval(this.timerAutoRefreshId);
+        clearInterval(this.timerAutoRefreshId);
       }
-      this.timerAutoRefreshId = setInterval(() => {this.loadDataMethod();},
-      this.options.autoRefresh * 1000);
-    }  
+      this.timerAutoRefreshId = setInterval(() => {
+        this.loadDataMethod();
+      }, this.options.autoRefresh * 1000);
+    }
   }
 
   async loadData(): Promise<void> {
