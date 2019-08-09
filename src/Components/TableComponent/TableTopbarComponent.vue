@@ -597,7 +597,11 @@ export default class TableTopbarComponent extends Vue {
 /*styles for filters layout*/
 .filter-wrapper__group {
   display: grid;
-  grid-template-columns: minmax(33%, auto) minmax(33%, auto) minmax(33%, auto);
+  grid-template-columns:
+    minmax(25%, auto)
+    minmax(25%, auto)
+    minmax(25%, auto)
+    minmax(25%, auto);
 }
 </style>
 
