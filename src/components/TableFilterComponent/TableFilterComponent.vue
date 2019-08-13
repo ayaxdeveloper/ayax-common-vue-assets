@@ -84,11 +84,14 @@
             size="small"
             clearable
             unlink-panels
+            v-maskForDateRange
             :picker-options="dateFilterPickerOptions"
             align="center"
-            start-placeholder="Начало"
-            end-placeholder="Конец"
+            start-placeholder="Начало - dd.mm.yyyy"
+            end-placeholder="Конец - dd.mm.yyyy"
+            @blur="onDateFocusOut"
           ></el-date-picker>
+
           <div
             :style="{position: 'absolute', 
                         top: filter.appearance == filterAppearance['Topbar'] ? '13px' : '16px', 
@@ -479,6 +482,46 @@ import "a-vue-treeselect/dist/vue-treeselect.css";
   name: "a-table-filter",
   components: {
     "a-tree-select": ATreeSelect
+  },
+  directives: {
+    maskForDateRange: {
+      inserted: function(el) {
+        const arrOfInputEl = el.querySelectorAll("input");
+        const parentOfInput = el.querySelector(".el-range-editor");
+        arrOfInputEl.forEach(inputEl => {
+          inputEl.setAttribute("maxlength", "10");
+
+          const input = inputEl;
+
+          const dateInputMask = function dateInputMask(elm) {
+            elm.addEventListener("keypress", function(e) {
+              const len = elm.value.length;
+              if (e.keyCode < 47 || e.keyCode > 57) {
+                el.classList.add("wrong-input");
+                e.preventDefault();
+              } else {
+                el.classList.remove("wrong-input");
+              }
+
+              if (len !== 1 || len !== 3) {
+                if (e.keyCode == 47) {
+                  e.preventDefault();
+                }
+              }
+
+              if (len === 2) {
+                elm.value += ".";
+              }
+
+              if (len === 5) {
+                elm.value += ".";
+              }
+            });
+          };
+          dateInputMask(input);
+        });
+      }
+    }
   }
 })
 export default class TableFilterComponent extends Vue {
@@ -488,6 +531,7 @@ export default class TableFilterComponent extends Vue {
   @Prop({ default: true }) applyFilterButtonVisibility: boolean;
   @Prop({ default: "grey lighten-1" }) color: string;
   @Prop({ default: false }) appliedFromQuery: boolean;
+
   focus: false;
   filterTypes: { [name: string]: TableFilterComponentItemType } = {};
   headerTypes: { [name: string]: TableComponentHeaderType } = {};
@@ -537,6 +581,12 @@ export default class TableFilterComponent extends Vue {
           }
         })
       );
+    }
+  }
+
+  onDateFocusOut(element) {
+    if (element.userInput !== null && element.value.length === 0) {
+      element.userInput = [...[]];
     }
   }
 
@@ -849,5 +899,10 @@ export default class TableFilterComponent extends Vue {
 
 .my-treeselect {
   margin-top: 12px;
+}
+
+/* Class for wrong input*/
+.wrong-input {
+  border-bottom: 1px solid red !important;
 }
 </style>

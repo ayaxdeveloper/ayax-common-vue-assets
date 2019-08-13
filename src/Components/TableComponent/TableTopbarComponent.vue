@@ -457,6 +457,12 @@ export default class TableTopbarComponent extends Vue {
   }
 
   clearAllFilters() {
+    this.filters.filter(o => {
+      if (o.values.length > 0) {
+        o.values = [...[]];
+      }
+    });
+
     this.$router.push({ path: this.$route.path });
   }
 
