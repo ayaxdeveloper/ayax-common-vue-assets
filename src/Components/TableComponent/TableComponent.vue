@@ -43,8 +43,8 @@
               <v-card flat>
                 <v-list dense>
                   <v-menu
-                    :offset-x="true"
-                    :left="true"
+                    offset-x
+                    left
                     :close-on-content-click="false"
                     nudge-top="4px"
                     content-class="autorefresh-menu menu-settings"
@@ -88,13 +88,12 @@
                   <v-divider></v-divider>
 
                   <v-menu
-                    :offset-x="true"
-                    :left="true"
+                    offset-x
+                    left
                     :close-on-content-click="false"
-                    nudge-left="-7px"
                     nudge-top="2px"
                     content-class="headers-menu menu-settings"
-                    min-width="170px"
+                    min-width="230px"
                   >
                     <v-list-tile full-width slot="activator">
                       <v-list-tile-title
@@ -116,10 +115,13 @@
                                 color="primary"
                                 v-if="header.hiddenable"
                                 v-model="header.isVisible"
+                                @change="tableHeadersShowCheck()"
                               ></v-checkbox>
                               <v-checkbox v-else input-value="true" disabled></v-checkbox>
                             </v-list-tile-action>
-                            <v-list-tile-title>{{ header.text }}</v-list-tile-title>
+                            <v-list-tile-title
+                              class="menu-settings-headers__list-item"
+                            >{{ header.text }}</v-list-tile-title>
                           </v-list-tile>
                         </draggable>
                       </v-list>
@@ -923,6 +925,13 @@ export default class TableComponent extends Vue {
     );
   }
 
+  tableHeadersShowCheck() {
+    localStorage.setItem(
+      `${this.options.title}_header_settings`,
+      JSON.stringify(this.options.headers)
+    );
+  }
+
   resetTableSettings() {
     localStorage.removeItem(`${this.options.title}_header_settings`);
     this.options.autoRefresh = 0;
@@ -1016,6 +1025,14 @@ export default class TableComponent extends Vue {
 
 .v-list__tile__title {
   font-size: 14px;
+}
+
+.menu-settings-headers__list-item {
+  text-transform: lowercase;
+}
+
+.menu-settings-headers__list-item::first-letter {
+  text-transform: uppercase;
 }
 </style>
 
