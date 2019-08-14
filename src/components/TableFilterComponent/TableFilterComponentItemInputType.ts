@@ -8,5 +8,6 @@ export enum TableFilterComponentItemInputType {
     ButtonDropdown,
     Number,
     Phone,
-    GroupSelect
+    GroupSelect,
+    TreeSelect
 }

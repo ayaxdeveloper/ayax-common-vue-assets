@@ -475,7 +475,9 @@ export default class TableComponent extends Vue {
       .filter(
         x =>
           !x.selectItems &&
-          (x.selectItemsFromDictionary || x.selectItemsFromPromise)
+          (x.selectItemsFromDictionary ||
+            x.selectItemsFromPromise ||
+            x.anyItemsFromPromise)
       )
       .map(x => {
         return new Promise(resolve => {
@@ -489,6 +491,11 @@ export default class TableComponent extends Vue {
           } else if (x.selectItemsFromPromise) {
             x.selectItemsFromPromise.then(z => {
               x.selectItems = z;
+              resolve();
+            });
+          } else if (x.anyItemsFromPromise) {
+            x.anyItemsFromPromise.then(z => {
+              x.anyItems = z;
               resolve();
             });
           }

@@ -290,19 +290,21 @@
           </template>
           <template slot="item" slot-scope="data">
             <template>
-              <v-list-tile-action
-                :class="[`${filter.requestName}`]"
-                style="margin-left: -16px; padding-left: 16px"
-              >
-                <v-icon
-                  :class="[data.item.selected ? 'selectPrimary' : 'selectGray']"
-                >{{ data.item.selected === true ? 'mdi-checkbox-marked' : 'mdi-checkbox-blank-outline' }}</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content
-                style="margin-right: -16px; padding-right: 16px"
-                :class="[data.item.selected ? 'selectPrimary' : 'selectBlack']"
-                v-text="data.item.text"
-              ></v-list-tile-content>
+              <v-layout raw fill-height :class="data.item.className">
+                <v-list-tile-action
+                  :class="[`${filter.requestName}`]"
+                  style="margin-left: -16px; padding-left: 16px"
+                >
+                  <v-icon
+                    :class="[data.item.selected ? 'selectPrimary' : 'selectGray']"
+                  >{{ data.item.selected === true ? 'mdi-checkbox-marked' : 'mdi-checkbox-blank-outline' }}</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content
+                  style="margin-right: -16px; padding-right: 16px"
+                  :class="[data.item.selected ? 'selectPrimary' : 'selectBlack']"
+                  v-text="data.item.text"
+                ></v-list-tile-content>
+              </v-layout>
             </template>
           </template>
         </v-autocomplete>
@@ -433,6 +435,28 @@
       >
         <v-checkbox style="margin-top: 0px" :label="filter.label" v-model="filter.values[0]"></v-checkbox>
       </v-flex>
+      <v-layout
+        class="flex-treeselect"
+        v-else-if="filter.inputType == filterInputTypes['TreeSelect']"
+      >
+        <v-flex class="filter">
+          <a-tree-select
+            v-model="filter.values"
+            :multiple="true"
+            :matchKeys="['id', 'label', 'number']"
+            :instanceId="filter.requestName"
+            :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'selectFilter']"
+            :name="filter.requestName"
+            :options="filter.anyItems"
+            :placeholder="filter.placeholder"
+            class="my-treeselect"
+            :limit="0"
+            :showCount="true"
+            valueConsistsOf="LEAF_PRIORITY"
+            :data-label-attr="filter.label"
+          ></a-tree-select>
+        </v-flex>
+      </v-layout>
     </template>
   </div>
 </template>
@@ -448,9 +472,14 @@ import { TableFilterComponentItem } from "./TableFilterComponentItem";
 import { TableFilterComponentItemAppearance } from "./TableFilterComponentItemAppearance";
 import { TableFilterComponentItemInputType } from "./TableFilterComponentItemInputType";
 import { TableFilterComponentItemType } from "./TableFilterComponentItemType";
+import ATreeSelect from "a-vue-treeselect";
+import "a-vue-treeselect/dist/vue-treeselect.css";
 
 @Component({
-  name: "a-table-filter"
+  name: "a-table-filter",
+  components: {
+    "a-tree-select": ATreeSelect
+  }
 })
 export default class TableFilterComponent extends Vue {
   @Prop({ required: true }) filter: TableFilterComponentItem;
@@ -670,6 +699,19 @@ export default class TableFilterComponent extends Vue {
   height: 20px !important;
   left: 0;
 }
+
+.flex-treeselect {
+  margin-top: 7px;
+}
+
+.vue-treeselect__control:hover {
+  border-color: #1976d2;
+}
+
+.flex-treeselect {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
 </style>
 
 <style>
@@ -797,5 +839,15 @@ export default class TableFilterComponent extends Vue {
 .filter .el-date-editor .el-range__close-icon {
   width: 20px;
   padding-top: 4px;
+}
+
+.deleted-item {
+  opacity: 0.5;
+}
+
+/*Styles for a-vue-treeselect */
+
+.my-treeselect {
+  margin-top: 12px;
 }
 </style>

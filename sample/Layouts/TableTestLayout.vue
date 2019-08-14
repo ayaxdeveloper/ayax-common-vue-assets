@@ -196,7 +196,8 @@ export default class TableTestLayout extends Vue {
         placeholder: "Введите",
         label: "Название улицы",
         largeInput: true,
-        groupName: "Запрос клиента"
+        groupName: "Запрос клиента",
+        itemClassName: ["column-1"]
       }),
       // new TableFilterComponentItem({
       //     requestName: "titlefilter",
@@ -251,7 +252,8 @@ export default class TableTestLayout extends Vue {
         appearance: TableFilterComponentItemAppearance.AllFilters,
         requestType: TableFilterComponentItemType.Range,
         inputType: TableFilterComponentItemInputType.Date,
-        label: "Дата создания"
+        label: "Дата создания",
+        itemClassName: ["column-1"]
       }),
       // new TableFilterComponentItem({
       //     name: "buttomFilter",
@@ -283,7 +285,8 @@ export default class TableTestLayout extends Vue {
           new SelectItem({ value: 5, text: "Район 5" })
         ],
         label: "Выбор района",
-        placeholder: "Выберите"
+        placeholder: "Выберите",
+        itemClassName: ["column-1"]
       }),
       new TableFilterComponentItem({
         requestName: "wwfilter",
@@ -293,7 +296,63 @@ export default class TableTestLayout extends Vue {
         inputType: TableFilterComponentItemInputType.Select,
         groupName: "Обращение",
         selectItems: [
-          new SelectItem({ value: 1, text: "Район 1" }),
+          new SelectItem({
+            value: 1,
+            text: "Район 1",
+            className: ["deleted-item"]
+          }),
+          new SelectItem({ value: 2, text: "Район 2" }),
+          new SelectItem({ value: 3, text: "Район 3" }),
+          new SelectItem({ value: 4, text: "Район 4" }),
+          new SelectItem({ value: 5, text: "Район 5" }),
+          new SelectItem({ value: 6, text: "Район 6" }),
+          new SelectItem({ value: 7, text: "Район 7" }),
+          new SelectItem({ value: 8, text: "Район 8" }),
+          new SelectItem({ value: 9, text: "Район 9" }),
+          new SelectItem({ value: 10, text: "Район 10" }),
+          new SelectItem({ value: 11, text: "Район 11" }),
+          new SelectItem({ value: 12, text: "Район 12" }),
+          new SelectItem({ value: 13, text: "Район 13" }),
+          new SelectItem({ value: 14, text: "Район 14" }),
+          new SelectItem({ value: 15, text: "Район 15" }),
+          new SelectItem({ value: 16, text: "Район 16" }),
+          new SelectItem({ value: 17, text: "Район 17" }),
+          new SelectItem({ value: 18, text: "Район 18" }),
+          new SelectItem({ value: 19, text: "Район 19" }),
+          new SelectItem({ value: 20, text: "Район 20" })
+        ],
+        label: "Выбор районов",
+        placeholder: "Выберите",
+        itemClassName: ["column-1"]
+      }),
+
+      new TableFilterComponentItem({
+        requestName: "routeIdFilter",
+        name: "routeIdFilter",
+        appearance: TableFilterComponentItemAppearance.AllFilters,
+        requestType: TableFilterComponentItemType.In,
+        inputType: TableFilterComponentItemInputType.TreeSelect,
+        groupName: "Обращение",
+        anyItems: this.ListGroupAsSelectedItems(),
+        label: "Выбор маршрута",
+        placeholder: "Выберите",
+        itemClassName: ["column-1"]
+      }),
+
+      new TableFilterComponentItem({
+        requestName: "wwfilter",
+        name: "wwFilter",
+        appearance: TableFilterComponentItemAppearance.AllFilters,
+        requestType: TableFilterComponentItemType.In,
+        inputType: TableFilterComponentItemInputType.Select,
+        groupName: "Обращение",
+        itemClassName: ["column-2"],
+        selectItems: [
+          new SelectItem({
+            value: 1,
+            text: "Район 1",
+            className: ["deleted-item"]
+          }),
           new SelectItem({ value: 2, text: "Район 2" }),
           new SelectItem({ value: 3, text: "Район 3" }),
           new SelectItem({ value: 4, text: "Район 4" }),
@@ -317,13 +376,28 @@ export default class TableTestLayout extends Vue {
         label: "Выбор районов",
         placeholder: "Выберите"
       }),
+
+      new TableFilterComponentItem({
+        requestName: "routeIdFilter",
+        name: "routeIdFilter",
+        appearance: TableFilterComponentItemAppearance.AllFilters,
+        requestType: TableFilterComponentItemType.In,
+        inputType: TableFilterComponentItemInputType.TreeSelect,
+        groupName: "Обращение",
+        itemClassName: ["column-2"],
+        anyItems: this.ListGroupAsSelectedItems(),
+        label: "Выбор маршрута",
+        placeholder: "Выберите"
+      }),
+
       new TableFilterComponentItem({
         requestName: "roomFilter",
         name: "roomFilter",
         appearance: TableFilterComponentItemAppearance.AllFilters,
         requestType: TableFilterComponentItemType.Range,
         label: "Комнат в доме",
-        groupName: "Запрос клиента"
+        groupName: "Запрос клиента",
+        itemClassName: ["column-1"]
       })
     ]
   });
@@ -337,6 +411,20 @@ export default class TableTestLayout extends Vue {
           group: "group"
         })
     );
+  }
+
+  ListGroupAsSelectedItems(): any {
+    return [
+      {
+        id: 1,
+        label: "Аякс",
+        ids: [12, 21],
+        children: [
+          { id: 12, label: "Главный", number: "89624033427" },
+          { id: 21, label: "Офис", number: "89624033428" }
+        ]
+      }
+    ];
   }
 
   currentModel = {};

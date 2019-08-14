@@ -102,7 +102,8 @@
           small
           flat
           @click="showAllFiltersBtn()"
-        >Все фильтры
+        >
+          Все фильтры
           <v-icon v-if="!showAllFilters">mdi-menu-down</v-icon>
           <v-icon v-if="showAllFilters">mdi-menu-up</v-icon>
         </v-btn>
@@ -114,15 +115,63 @@
     <transition name="slide">
       <v-card class="pa-2" v-show="showAllFilters" dark flat style="border-radius: 0">
         <v-container fluid grid-list-md class="pa-1">
-          <v-layout row wrap>
-            <template v-if="filterGroups.length > 0">
-              <template v-for="(group, index) in filterGroups">
-                <v-flex xs12 class="filter-group-name" :key="index">{{ group }}</v-flex>
+          <v-layout class="all-filters-wrapper" row wrap>
+            <v-flex v-if="filterGroups.length > 0" class="filter-group-with-title">
+              <template v-for="(group, groupIndex) in filterGroups">
+                <div :key="groupIndex">
+                  <v-layout
+                    :class="['filter-group-title', 'filter-group-title__group-'+groupIndex]"
+                  >
+                    <v-flex xs12 class="filter-group-name">{{ group }}</v-flex>
+                  </v-layout>
+
+                  <v-layout
+                    :class="['filter-wrapper__group', 'filter-wrapper__titled-group', 'filter-wrapper__group-'+groupIndex]"
+                  >
+                    <v-flex
+                      v-for="(filter, index) in filters.filter(filter => filter.appearance === filterAppearance['AllFilters'] && filter.groupName === group)"
+                      :key="filter.name+index"
+                      :class="['filter-item', 'filter-item__titled-group', 'filter-item__group-'+groupIndex, filter.itemClassName]"
+                    >
+                      <a-table-filter
+                        :filter.sync="filter"
+                        :index="index"
+                        @emit-filter="applyEmittedFilter"
+                      ></a-table-filter>
+                    </v-flex>
+                  </v-layout>
+                </div>
+
+                <v-layout
+                  :key="'divider-'+groupIndex"
+                  :class="['filter-divider', 'filter-divider-group-'+groupIndex]"
+                >
+                  <v-flex v-if="filterGroups.length > 0" xs12 style="margin-top: 16px"></v-flex>
+                </v-layout>
+                <v-layout
+                  :class="['filter-wrapper__group', 'filter-wrapper__no-titled-group', 'filter-wrapper__group-'+groupIndex]"
+                  :key="'no-title-group-'+groupIndex"
+                >
+                  <v-flex
+                    v-for="(filter, index) in filters.filter(filter => filter.appearance === filterAppearance['AllFilters'] && !filter.groupName)"
+                    :key="filter.name"
+                    :class="['filter-item', 'filter-item__no-titled-group', 'filter-item__group-'+groupIndex, filter.itemClassName]"
+                  >
+                    <a-table-filter
+                      :filter.sync="filter"
+                      :index="index"
+                      @emit-filter="applyEmittedFilter"
+                    ></a-table-filter>
+                  </v-flex>
+                </v-layout>
+              </template>
+            </v-flex>
+            <v-flex v-else>
+              <v-layout :class="['filter-wrapper__group', 'filter-wrapper__no-group']">
                 <v-flex
-                  :xs6="filter.largeInput"
-                  :xs3="!filter.largeInput"
-                  v-for="(filter, index) in filters.filter(filter => filter.appearance === filterAppearance['AllFilters'] && filter.groupName === group)"
+                  v-for="(filter, index) in filters.filter(filter => filter.appearance === filterAppearance['AllFilters'])"
                   :key="filter.name"
+                  :class="['filter-item', 'filter-item__no-group', filter.itemClassName]"
                 >
                   <a-table-filter
                     :filter.sync="filter"
@@ -130,35 +179,8 @@
                     @emit-filter="applyEmittedFilter"
                   ></a-table-filter>
                 </v-flex>
-              </template>
-              <v-flex v-if="filterGroups.length > 0" xs12 style="margin-top: 16px"></v-flex>
-              <v-flex
-                :xs6="filter.largeInput"
-                :xs3="!filter.largeInput"
-                v-for="(filter, index) in filters.filter(filter => filter.appearance === filterAppearance['AllFilters'] && !filter.groupName)"
-                :key="filter.name"
-              >
-                <a-table-filter
-                  :filter.sync="filter"
-                  :index="index"
-                  @emit-filter="applyEmittedFilter"
-                ></a-table-filter>
-              </v-flex>
-            </template>
-            <template v-else>
-              <v-flex
-                :xs6="filter.largeInput"
-                :xs3="!filter.largeInput"
-                v-for="(filter, index) in filters.filter(filter => filter.appearance === filterAppearance['AllFilters'])"
-                :key="filter.name"
-              >
-                <a-table-filter
-                  :filter.sync="filter"
-                  :index="index"
-                  @emit-filter="applyEmittedFilter"
-                ></a-table-filter>
-              </v-flex>
-            </template>
+              </v-layout>
+            </v-flex>
           </v-layout>
         </v-container>
         <v-layout>
@@ -235,7 +257,9 @@ export default class TableTopbarComponent extends Vue {
   @Prop({ default: () => [] }) filters: TableFilterComponentItem[];
   @Prop({ default: () => [] }) filterGroups: string[];
   @Prop() showQuickFilters: boolean;
-  @Prop({ default: null }) quickFilterPromise: (request) => Promise<any[]> | null
+  @Prop({ default: null }) quickFilterPromise: (
+    request
+  ) => Promise<any[]> | null;
 
   showAllFilters = false;
 
@@ -490,11 +514,11 @@ export default class TableTopbarComponent extends Vue {
 
   async getQuickFilters() {
     try {
-      const filters = this.quickFilterPromise 
-      ? await this.quickFilterPromise({ table: this.tableName }) 
-      : await this.operationService
-        .search<any[]>("/quickfilter/search", { table: this.tableName })
-        .then(x => x.ensureSuccess().data);
+      const filters = this.quickFilterPromise
+        ? await this.quickFilterPromise({ table: this.tableName })
+        : await this.operationService
+            .search<any[]>("/quickfilter/search", { table: this.tableName })
+            .then(x => x.ensureSuccess().data);
 
       if (filters) {
         filters.forEach(el => {
@@ -569,6 +593,16 @@ export default class TableTopbarComponent extends Vue {
   transform: translateY(-5px);
   opacity: 0;
 }
+
+/*styles for filters layout*/
+.filter-wrapper__group {
+  display: grid;
+  grid-template-columns:
+    minmax(25%, auto)
+    minmax(25%, auto)
+    minmax(25%, auto)
+    minmax(25%, auto);
+}
 </style>
 
 <style>
@@ -591,3 +625,7 @@ export default class TableTopbarComponent extends Vue {
   padding: 16px;
 }
 </style>
+
+
+
+
