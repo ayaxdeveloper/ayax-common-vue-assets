@@ -119,7 +119,7 @@
         <template v-else-if="filter.inputType == filterInputTypes['Text']">
           <v-flex class="filter">
             <div class="filterLabel">{{ filter.label }}</div>
-            <div style="display: flex; flex-direction: row">
+            <!--        <div style="display: flex; flex-direction: row">
               <v-text-field
                 :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'filterInputRange']"
                 :solo="filter.appearance === filterAppearance['Topbar']"
@@ -132,7 +132,7 @@
                 clearable
                 v-model="filter.values[0]"
               ></v-text-field>
-              <div class="pa-2">-</div>
+              <div class="pa-2">- {{ filter.values[1] }}</div>
               <v-text-field
                 :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'filterInputRange']"
                 :solo="filter.appearance === filterAppearance['Topbar']"
@@ -146,6 +146,34 @@
                 clearable
                 v-model="filter.values[1]"
               ></v-text-field>
+            </div>-->
+            <div style="display: flex; flex-direction: row">
+              <a-number-input
+                :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'filterInputRange']"
+                :solo="filter.appearance === filterAppearance['Topbar']"
+                :light="filter.appearance === filterAppearance['Topbar']"
+                :name="filter.requestName"
+                :numbersAfterComma="filter.numbersAfterComma"
+                single-line
+                placeholder="От"
+                clearable
+                v-model="filter.values[0]"
+                :value="filter.values[0]"
+              ></a-number-input>
+              <div class="pa-2">-</div>
+              <a-number-input
+                :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'filterInputRange']"
+                :solo="filter.appearance === filterAppearance['Topbar']"
+                :light="filter.appearance === filterAppearance['Topbar']"
+                @input="applyFilterButton = filter.values[1]"
+                :name="filter.requestName"
+                :numbersAfterComma="filter.numbersAfterComma"
+                single-line
+                placeholder="До"
+                clearable
+                :value="filter.values[1]"
+                @change="filter.values[1] = $event.target.value"
+              ></a-number-input>
             </div>
           </v-flex>
         </template>
@@ -175,7 +203,8 @@
                 single-line
                 placeholder="До"
                 clearable
-                v-model="filter.values[1]"
+                :value="filter.values[1]"
+                @change="filter.values[1] = $event.target.value"
               ></a-number-input>
             </div>
           </v-flex>
