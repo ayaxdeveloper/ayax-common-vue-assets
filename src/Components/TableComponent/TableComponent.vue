@@ -50,20 +50,15 @@
                     open-on-click
                     nudge-top="4px"
                     content-class="autorefresh-menu menu-settings"
+                    style="min-width: 210px"
                   >
                     <v-list-tile full-width slot="activator">
                       <v-list-tile-title full-width class="menu-settings__item-title">Автообновление</v-list-tile-title>
                     </v-list-tile>
 
-                    <v-card
-                      flat
-                      class="autorefresh-options"
-                      v-if="options.autoRefreshEnable"
-                      outlined
-                      tile
-                    >
-                      <v-card-text>
-                        <v-radio-group v-model="options.autoRefresh" class="mt-1 mb-0">
+                    <v-card flat class="autorefresh-options" outlined tile>
+                      <template>
+                        <v-radio-group v-model="options.autoRefresh" class="mt-0 mb-0">
                           <v-radio
                             v-for="option in options.autoRefreshOptions.filter(item => item >0)"
                             :key="option"
@@ -72,7 +67,8 @@
                           ></v-radio>
                         </v-radio-group>
                         <v-divider></v-divider>
-                        <v-btn
+                        <v-list-tile
+                          full-width
                           flat
                           block
                           text
@@ -80,9 +76,14 @@
                           class="text-transform-none btn-cancel"
                           @click="autoRefreshDisable()"
                         >
-                          <v-icon>mdi-close</v-icon>Отключить
-                        </v-btn>
-                      </v-card-text>
+                          <v-list-tile-action>
+                            <v-icon>mdi-close</v-icon>
+                          </v-list-tile-action>
+                          <v-list-tile-content>
+                            <v-list-tile-title full-width>Отключить</v-list-tile-title>
+                          </v-list-tile-content>
+                        </v-list-tile>
+                      </template>
                     </v-card>
                   </v-menu>
                   <v-divider></v-divider>
@@ -93,6 +94,7 @@
                     :close-on-content-click="false"
                     nudge-top="2px"
                     content-class="headers-menu menu-settings"
+                    style="min-width: 210px"
                   >
                     <v-list-tile full-width slot="activator">
                       <v-list-tile-title
@@ -957,9 +959,6 @@ export default class TableComponent extends Vue {
 }
 </script>
 
-
-
-
 <style scoped>
 .line-action {
   width: 48px !important;
@@ -985,52 +984,15 @@ export default class TableComponent extends Vue {
   height: 48px;
 }
 
-.menu-settings {
-  box-shadow: none;
-  border: 1px solid rgb(177, 177, 177);
-  border-top-right-radius: unset;
-}
-
 .v-menu__activator.v-menu__activator--active div {
   width: 100%;
 }
 .text-transform-none {
   text-transform: none;
 }
-.btn-cancel {
-  font-size: 14px;
-  background: none;
-  color: #999999;
-  padding-left: 0px;
-  padding-right: 20px;
-}
 
-.autorefresh-options > .v-card__text {
-  padding-bottom: 3px;
-}
-
-.btn-cancel i {
-  color: #999999;
-}
 .headers-options {
   overflow-y: hidden;
-  font-size: 14px;
-  padding: 15px 0;
-}
-
-.menu-settings__item-title {
-  font-size: 14px;
-}
-
-.menu-settings .v-menu {
-  width: 100%;
-}
-
-.menu-settings .v-menu:hover {
-  background: rgba(0, 0, 0, 0.04);
-}
-
-.v-list__tile__title {
   font-size: 14px;
 }
 
@@ -1044,11 +1006,52 @@ export default class TableComponent extends Vue {
 </style>
 
 <style>
+.autorefresh-options > .v-card__text {
+  padding-bottom: 1px;
+}
+
+.btn-cancel {
+  font-size: 14px;
+  background: none;
+}
+
+.btn-cancel[disabled] * {
+  color: #999999;
+}
+
+.btn-cancel:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.btn-cancel a > div {
+  display: flex;
+  align-content: center;
+}
+
+.menu-settings .v-list__tile__title,
+.main-menu-settings .v-list__tile__title {
+  font-size: 14px;
+}
+.menu-settings .v-menu {
+  width: 100%;
+}
+
+.menu-settings__item-title {
+  font-size: 14px;
+}
+
+.menu-settings .v-menu:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
 .main-menu-settings .v-menu.v-menu--inline,
 .main-menu-settings .v-menu.v-menu--inline * {
   width: 100%;
 }
 
+.menu-settings a.v-list__tile {
+  height: 40px;
+}
 .v-menu__activator--active {
   background-color: rgba(0, 0, 0, 0.08);
 }
@@ -1078,11 +1081,8 @@ export default class TableComponent extends Vue {
 .autorefresh-options .v-messages {
   display: none;
 }
-.v-list__tile__action {
+.menu-settings .v-list__tile__action {
   min-width: 36px;
-}
-.headers-menu .v-list__tile--link {
-  height: 42px;
 }
 
 .headers-menu .v-list__tile--link:hover {
@@ -1092,6 +1092,43 @@ export default class TableComponent extends Vue {
 .autorefresh-options .v-label {
   color: rgba(0, 0, 0, 0.87);
 }
+
+.autorefresh-options .v-input__slot {
+  margin-bottom: 0px;
+}
+
+.autorefresh-options
+  .v-input--selection-controls:not(.v-input--hide-details)
+  .v-input__slot {
+  margin-bottom: 0px;
+}
+
+.autorefresh-options .v-input--selection-controls .v-input__control {
+  flex-grow: 1;
+}
+
+.autorefresh-options .v-radio {
+  padding-left: 16px;
+  margin: 0px;
+  padding-right: 16px;
+  height: 40px;
+  padding-bottom: 0px;
+}
+
+.autorefresh-options
+  .v-input--radio-group--column
+  .v-radio:not(:last-child):not(:only-child) {
+  margin-bottom: 0px;
+}
+
+.autorefresh-options .v-input--radio-group {
+  padding-bottom: 0px;
+}
+.autorefresh-options .v-input--selection-controls__ripple {
+  margin: 0px;
+}
+
+.autorefresh-options {
+  padding-bottom: 4px;
+}
 </style>
-
-
