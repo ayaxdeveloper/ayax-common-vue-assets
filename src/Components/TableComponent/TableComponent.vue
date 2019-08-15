@@ -25,7 +25,7 @@
           offset-x
           :close-on-content-click="false"
           :value="isTableMenuVisible"
-          z-index="2"
+          content-class="main-menu-settings"
         >
           <v-btn
             class="ml-2"
@@ -35,7 +35,7 @@
             icon
             title="Настройки таблицы"
             slot="activator"
-            @click="onClickClassToggle(); isTableMenuVisible=true"
+            @click="isTableMenuVisible=true"
           >
             <v-icon>mdi-settings</v-icon>
           </v-btn>
@@ -50,19 +50,10 @@
                     open-on-click
                     nudge-top="4px"
                     content-class="autorefresh-menu menu-settings"
-                    z-index=2
-              
-                
                   >
-                    <!-- <v-list-tile full-width slot="activator" @click="onClickClassToggle">
-                      <v-list-tile-title full-width class="menu-settings__item-title"  >Автообновление</v-list-tile-title>
-                    </v-list-tile> -->
-                  <template slot="activator" slot-scope="{ on }">
-                    <v-list-tile full-width  v-on="on" @click="onClickClassToggle">
-                      <v-list-tile-title full-width class="menu-settings__item-title">Автообновление {{ on.isActive }}</v-list-tile-title>
+                    <v-list-tile full-width slot="activator">
+                      <v-list-tile-title full-width class="menu-settings__item-title">Автообновление</v-list-tile-title>
                     </v-list-tile>
-                  </template>
-           
 
                     <v-card
                       flat
@@ -89,8 +80,7 @@
                           class="text-transform-none btn-cancel"
                           @click="autoRefreshDisable()"
                         >
-                          <v-icon>mdi-close</v-icon>
-                          Отключить
+                          <v-icon>mdi-close</v-icon>Отключить
                         </v-btn>
                       </v-card-text>
                     </v-card>
@@ -103,9 +93,8 @@
                     :close-on-content-click="false"
                     nudge-top="2px"
                     content-class="headers-menu menu-settings"
-                    z-index=2                  
                   >
-                    <v-list-tile full-width slot="activator" @click="onClickClassToggle">
+                    <v-list-tile full-width slot="activator">
                       <v-list-tile-title
                         full-width
                         class="menu-settings__item-title"
@@ -666,18 +655,6 @@ export default class TableComponent extends Vue {
     }
   }
 
-  onClickClassToggle(event = null) { 
-    const itemsWithClass = document.querySelectorAll(".v-menu .menu__selected-item");
-    itemsWithClass.forEach(item => {
-      if (event === null || item !== event.target.parentElement) {
-         item.classList.remove("menu__selected-item");
-      }
-    });
-    if (event !== null) {
-      event.target.parentElement.classList.toggle("menu__selected-item"); 
-    }      
-  }
-
   firstSingleAction(item) {
     const firstAction = this.options.actions.filter(action => action.single)[0];
 
@@ -1045,11 +1022,11 @@ export default class TableComponent extends Vue {
   font-size: 14px;
 }
 
-.settings-menu .v-menu {
+.menu-settings .v-menu {
   width: 100%;
 }
 
-.settings-menu .v-menu:hover {
+.menu-settings .v-menu:hover {
   background: rgba(0, 0, 0, 0.04);
 }
 
@@ -1064,11 +1041,15 @@ export default class TableComponent extends Vue {
 .menu-settings-headers__list-item::first-letter {
   text-transform: uppercase;
 }
-
 </style>
 
 <style>
-.menu__selected-item {
+.main-menu-settings .v-menu.v-menu--inline,
+.main-menu-settings .v-menu.v-menu--inline * {
+  width: 100%;
+}
+
+.v-menu__activator--active {
   background-color: rgba(0, 0, 0, 0.08);
 }
 
@@ -1111,11 +1092,6 @@ export default class TableComponent extends Vue {
 .autorefresh-options .v-label {
   color: rgba(0, 0, 0, 0.87);
 }
-
-.v-menu.v-menu--inline, .v-menu.v-menu--inline *  {
-    width: 100%;
-}
-
 </style>
 
 
