@@ -34,7 +34,7 @@
             icon
             title="Настройки таблицы"
             slot="activator"
-            @click="isTableMenuVisible=true"
+            @click="onClickClassToggle(); isTableMenuVisible=true"
           >
             <v-icon>mdi-settings</v-icon>
           </v-btn>
@@ -46,13 +46,21 @@
                     offset-x
                     left
                     :close-on-content-click="false"
+                    open-on-click
                     nudge-top="4px"
                     content-class="autorefresh-menu menu-settings"
-                    min-width="170px"
+              
+                
                   >
-                    <v-list-tile full-width slot="activator">
-                      <v-list-tile-title full-width class="menu-settings__item-title">Автообновление</v-list-tile-title>
+                    <!-- <v-list-tile full-width slot="activator" @click="onClickClassToggle">
+                      <v-list-tile-title full-width class="menu-settings__item-title"  >Автообновление</v-list-tile-title>
+                    </v-list-tile> -->
+                  <template slot="activator" slot-scope="{ on }">
+                    <v-list-tile full-width  v-on="on" @click="onClickClassToggle">
+                      <v-list-tile-title full-width class="menu-settings__item-title">Автообновление {{ on.isActive }}</v-list-tile-title>
                     </v-list-tile>
+                  </template>
+           
 
                     <v-card
                       flat
@@ -80,7 +88,7 @@
                           @click="autoRefreshDisable()"
                         >
                           <v-icon>mdi-close</v-icon>
-                          <v-spacer></v-spacer>Отключить
+                          Отключить
                         </v-btn>
                       </v-card-text>
                     </v-card>
@@ -93,9 +101,9 @@
                     :close-on-content-click="false"
                     nudge-top="2px"
                     content-class="headers-menu menu-settings"
-                    min-width="230px"
+                  
                   >
-                    <v-list-tile full-width slot="activator">
+                    <v-list-tile full-width slot="activator" @click="onClickClassToggle">
                       <v-list-tile-title
                         full-width
                         class="menu-settings__item-title"
@@ -389,6 +397,7 @@ export default class TableComponent extends Vue {
   @Prop({ default: () => ({ tableIndex: null, toggleValue: false }) })
   slotToggle;
 
+  scope = {};
   items = [];
   loading = true;
   tableLoading = true;
@@ -653,6 +662,18 @@ export default class TableComponent extends Vue {
         singleAction.action(item);
       }
     }
+  }
+
+  onClickClassToggle(event = null) { 
+    const itemsWithClass = document.querySelectorAll(".v-menu .menu__selected-item");
+    itemsWithClass.forEach(item => {
+      if (event === null || item !== event.target.parentElement) {
+         item.classList.remove("menu__selected-item");
+      }
+    });
+    if (event !== null) {
+      event.target.parentElement.classList.toggle("menu__selected-item"); 
+    }      
   }
 
   firstSingleAction(item) {
@@ -1041,9 +1062,14 @@ export default class TableComponent extends Vue {
 .menu-settings-headers__list-item::first-letter {
   text-transform: uppercase;
 }
+
 </style>
 
 <style>
+.menu__selected-item {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
 .scrollableTable .v-table__overflow {
   max-height: var(--maxHeight);
   position: relative;
@@ -1083,6 +1109,11 @@ export default class TableComponent extends Vue {
 .autorefresh-options .v-label {
   color: rgba(0, 0, 0, 0.87);
 }
+
+.v-menu.v-menu--inline, .v-menu.v-menu--inline *  {
+    width: 100%;
+}
+
 </style>
 
 
