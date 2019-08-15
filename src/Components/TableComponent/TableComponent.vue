@@ -25,6 +25,7 @@
           offset-x
           :close-on-content-click="false"
           :value="isTableMenuVisible"
+          z-index="2"
         >
           <v-btn
             class="ml-2"
@@ -49,6 +50,7 @@
                     open-on-click
                     nudge-top="4px"
                     content-class="autorefresh-menu menu-settings"
+                    z-index=2
               
                 
                   >
@@ -101,7 +103,7 @@
                     :close-on-content-click="false"
                     nudge-top="2px"
                     content-class="headers-menu menu-settings"
-                  
+                    z-index=2                  
                   >
                     <v-list-tile full-width slot="activator" @click="onClickClassToggle">
                       <v-list-tile-title
