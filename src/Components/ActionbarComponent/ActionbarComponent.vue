@@ -41,18 +41,20 @@
                             <template v-if="!hideButtonText || !action.icon">{{action.title}}</template>
                         </v-btn>
                         <v-list dense>
-                            <v-list-tile
-                                :disabled="child.needSelectedItem && selectedItems.length === 0 || action.disabled"
-                                :title="action.hint"
-                                v-for="child in action.children"
-                                :key="child.name"
-                                @click="executeAction(child)"
-                            >
-                                <v-list-tile-action v-if="child.icon">
-                                    <v-icon>{{child.icon}}</v-icon>
-                                </v-list-tile-action>
-                                <v-list-tile-title>{{ child.title }}</v-list-tile-title>
-                            </v-list-tile>
+                           <template v-for="(child, index) in action.children">
+                                <v-list-tile
+                                    :disabled="child.needSelectedItem && selectedItems.length === 0 || action.disabled"
+                                    :title="action.hint" 
+                                    :key="child.name"
+                                    @click="executeAction(child)"
+                                >
+                                    <v-list-tile-action v-if="child.icon">
+                                        <v-icon>{{child.icon}}</v-icon>
+                                    </v-list-tile-action>
+                                    <v-list-tile-title v-bind:style="child.style">{{child.title}}</v-list-tile-title>
+                                </v-list-tile>
+                                <hr :key="index" v-if="child.separator">
+                            </template>
                         </v-list>
                     </v-menu>
                 </v-toolbar-items>

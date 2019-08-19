@@ -171,6 +171,19 @@ export default class TableTestLayout extends Vue {
         icon: "mdi-upload",
         children: [
           new ActionItem({
+            name: "Pdf",
+            title: "Экспорт выбранного в PDF",
+            icon: "mdi-upload",
+            action: (asd, qq) => console.log(qq)
+          }),
+          new ActionItem({
+            name: "PdfAll",
+            title: "Экспорт всего в PDF",
+            icon: "mdi-upload",
+            separator: true,
+            action: (asd, qq) => console.log(qq)
+          }),
+          new ActionItem({
             name: "Excel",
             title: "Экспорт выбранного в Excel",
             icon: "mdi-upload",
@@ -181,6 +194,7 @@ export default class TableTestLayout extends Vue {
             name: "ExcelAll",
             title: "Экспорт всего в Excel",
             icon: "mdi-upload",
+            style: {color: "red"},
             action: asd => console.log(asd)
           })
         ]
