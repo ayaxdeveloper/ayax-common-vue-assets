@@ -53,7 +53,7 @@
                                     </v-list-tile-action>
                                     <v-list-tile-title v-bind:style="child.style">{{child.title}}</v-list-tile-title>
                                 </v-list-tile>
-                                <hr :key="index" v-if="child.separator">
+                                <v-divider :key="index" v-if="child.separator"></v-divider>
                             </template>
                         </v-list>
                     </v-menu>
