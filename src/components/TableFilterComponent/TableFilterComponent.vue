@@ -139,7 +139,7 @@
                 :light="filter.appearance === filterAppearance['Topbar']"
                 :name="filter.requestName"
                 single-line
-                placeholder="От"
+                placeholder="от"
                 return-masked-value
                 :mask="filter.mask"
                 clearable
@@ -156,7 +156,7 @@
                 @input="applyFilterButton = filter.values[1]"
                 :name="filter.requestName"
                 single-line
-                placeholder="До"
+                placeholder="до"
                 return-masked-value
                 :mask="filter.mask"
                 v-digital-mask="{numbersAfterComma:filter.numbersAfterComma | 0}"
@@ -173,7 +173,7 @@
                 :numbersAfterComma="filter.numbersAfterComma"
                 single-line
                 v-digital-mask="{numbersAfterComma:filter.numbersAfterComma | 0}"
-                placeholder="От"
+                placeholder="от"
                 clearable
                 v-model="filter.values[0]"
               ></v-text-field>
@@ -186,7 +186,7 @@
                 :name="filter.requestName"
                 :numbersAfterComma="filter.numbersAfterComma"
                 single-line
-                placeholder="До"
+                placeholder="до"
                 v-digital-mask="{numbersAfterComma:filter.numbersAfterComma | 0}"
                 clearable
                 v-model="filter.values[1]"
@@ -206,7 +206,7 @@
                 :numbersAfterComma="filter.numbersAfterComma"
                 single-line
                 v-digital-mask="{numbersAfterComma:filter.numbersAfterComma | 0}"
-                placeholder="От"
+                placeholder="от"
                 clearable
                 v-model="filter.values[0]"
               ></v-text-field>
@@ -220,7 +220,7 @@
                 :numbersAfterComma="filter.numbersAfterComma"
                 single-line
                 v-digital-mask="{numbersAfterComma:filter.numbersAfterComma | 0}"
-                placeholder="До"
+                placeholder="до"
                 clearable
                 v-model="filter.values[1]"
               ></v-text-field>
@@ -580,6 +580,7 @@ import "a-vue-treeselect/dist/vue-treeselect.css";
           autoGroup: true,
           positionCaretOnClick: `radixFocus`,
           clearMaskOnLostFocus: true,
+          showMaskOnHover: false,
           autoUnmask: true,
           digitsOptional: true,
           digits: binding.value.numbersAfterComma
