@@ -36,7 +36,19 @@
         v-if="(filter.requestType == filterTypes['Eq'] || filter.requestType == filterTypes['Like']) && filter.inputType == filterInputTypes['Number']"
       >
         <div class="filterLabel">{{ filter.label }}</div>
-        <a-number-input
+        <!--   <a-number-input
+          :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput']"
+          :solo="filter.appearance === filterAppearance['Topbar']"
+          :light="filter.appearance === filterAppearance['Topbar']"
+          :name="filter.requestName"
+          :placeholder="filter.placeholder"
+          :prepend-icon="filter.icon"
+          v-model="filter.values[0]"         
+          :numbersAfterComma="filter.numbersAfterComma"
+          clearable
+          single-line
+        ></a-number-input>-->
+        <v-text-field
           :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput']"
           :solo="filter.appearance === filterAppearance['Topbar']"
           :light="filter.appearance === filterAppearance['Topbar']"
@@ -44,17 +56,17 @@
           :placeholder="filter.placeholder"
           :prepend-icon="filter.icon"
           v-model="filter.values[0]"
-          :numbersAfterComma="filter.numbersAfterComma"
+          v-digital-mask="{numbersAfterComma:filter.numbersAfterComma | 0}"
           clearable
           single-line
-        ></a-number-input>
+        ></v-text-field>
       </v-flex>
       <v-flex
         class="filter"
         v-if="(filter.requestType == filterTypes['Eq'] || filter.requestType == filterTypes['Like']) && filter.inputType == filterInputTypes['Phone']"
       >
         <div class="filterLabel">{{ filter.label }}</div>
-        <a-phone-input
+        <v-text-field
           :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput']"
           :solo="filter.appearance === filterAppearance['Topbar']"
           :light="filter.appearance === filterAppearance['Topbar']"
@@ -63,9 +75,10 @@
           :prepend-icon="filter.icon"
           v-model="filter.values[0]"
           :numbersAfterComma="filter.numbersAfterComma"
+          v-phone-mask
           clearable
           single-line
-        ></a-phone-input>
+        ></v-text-field>
       </v-flex>
       <template v-else-if="filter.requestType == filterTypes['Range']">
         <v-flex
@@ -84,11 +97,11 @@
             size="small"
             clearable
             unlink-panels
-            v-maskForDateRange
+            v-date-mask
             :picker-options="dateFilterPickerOptions"
             align="center"
-            start-placeholder="Начало - dd.mm.yyyy"
-            end-placeholder="Конец - dd.mm.yyyy"
+            start-placeholder="дд.мм.гггг"
+            end-placeholder="дд.мм.гггг"
             @blur="onDateFocusOut"
           ></el-date-picker>
 
@@ -119,7 +132,7 @@
         <template v-else-if="filter.inputType == filterInputTypes['Text']">
           <v-flex class="filter">
             <div class="filterLabel">{{ filter.label }}</div>
-            <!--        <div style="display: flex; flex-direction: row">
+            <div style="display: flex; flex-direction: row">
               <v-text-field
                 :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'filterInputRange']"
                 :solo="filter.appearance === filterAppearance['Topbar']"
@@ -130,9 +143,12 @@
                 return-masked-value
                 :mask="filter.mask"
                 clearable
+                v-digital-mask="{numbersAfterComma:filter.numbersAfterComma | 0}"
                 v-model="filter.values[0]"
-              ></v-text-field>
-              <div class="pa-2">- {{ filter.values[1] }}</div>
+              >
+                <div>any value</div>
+              </v-text-field>
+              <div class="pa-2">-</div>
               <v-text-field
                 :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'filterInputRange']"
                 :solo="filter.appearance === filterAppearance['Topbar']"
@@ -143,25 +159,26 @@
                 placeholder="До"
                 return-masked-value
                 :mask="filter.mask"
+                v-digital-mask="{numbersAfterComma:filter.numbersAfterComma | 0}"
                 clearable
                 v-model="filter.values[1]"
               ></v-text-field>
-            </div>-->
+            </div>
             <div style="display: flex; flex-direction: row">
-              <a-number-input
+              <v-text-field
                 :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'filterInputRange']"
                 :solo="filter.appearance === filterAppearance['Topbar']"
                 :light="filter.appearance === filterAppearance['Topbar']"
                 :name="filter.requestName"
                 :numbersAfterComma="filter.numbersAfterComma"
                 single-line
+                v-digital-mask="{numbersAfterComma:filter.numbersAfterComma | 0}"
                 placeholder="От"
                 clearable
                 v-model="filter.values[0]"
-                :value="filter.values[0]"
-              ></a-number-input>
+              ></v-text-field>
               <div class="pa-2">-</div>
-              <a-number-input
+              <v-text-field
                 :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'filterInputRange']"
                 :solo="filter.appearance === filterAppearance['Topbar']"
                 :light="filter.appearance === filterAppearance['Topbar']"
@@ -170,10 +187,10 @@
                 :numbersAfterComma="filter.numbersAfterComma"
                 single-line
                 placeholder="До"
+                v-digital-mask="{numbersAfterComma:filter.numbersAfterComma | 0}"
                 clearable
-                :value="filter.values[1]"
-                @change="filter.values[1] = $event.target.value"
-              ></a-number-input>
+                v-model="filter.values[1]"
+              ></v-text-field>
             </div>
           </v-flex>
         </template>
@@ -181,19 +198,20 @@
           <v-flex class="filter">
             <div class="filterLabel">{{ filter.label }}</div>
             <div style="display: flex; flex-direction: row">
-              <a-number-input
+              <v-text-field
                 :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'filterInputRange']"
                 :solo="filter.appearance === filterAppearance['Topbar']"
                 :light="filter.appearance === filterAppearance['Topbar']"
                 :name="filter.requestName"
                 :numbersAfterComma="filter.numbersAfterComma"
                 single-line
+                v-digital-mask="{numbersAfterComma:filter.numbersAfterComma | 0}"
                 placeholder="От"
                 clearable
                 v-model="filter.values[0]"
-              ></a-number-input>
+              ></v-text-field>
               <div class="pa-2">-</div>
-              <a-number-input
+              <v-text-field
                 :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'filterInputRange']"
                 :solo="filter.appearance === filterAppearance['Topbar']"
                 :light="filter.appearance === filterAppearance['Topbar']"
@@ -201,11 +219,12 @@
                 :name="filter.requestName"
                 :numbersAfterComma="filter.numbersAfterComma"
                 single-line
+                v-digital-mask="{numbersAfterComma:filter.numbersAfterComma | 0}"
                 placeholder="До"
                 clearable
                 :value="filter.values[1]"
                 @change="filter.values[1] = $event.target.value"
-              ></a-number-input>
+              ></v-text-field>
             </div>
           </v-flex>
         </template>
@@ -505,6 +524,7 @@ import { TableFilterComponentItemAppearance } from "./TableFilterComponentItemAp
 import { TableFilterComponentItemInputType } from "./TableFilterComponentItemInputType";
 import { TableFilterComponentItemType } from "./TableFilterComponentItemType";
 import ATreeSelect from "a-vue-treeselect";
+import Inputmask from "inputmask";
 import "a-vue-treeselect/dist/vue-treeselect.css";
 
 @Component({
@@ -513,7 +533,7 @@ import "a-vue-treeselect/dist/vue-treeselect.css";
     "a-tree-select": ATreeSelect
   },
   directives: {
-    maskForDateRange: {
+    "date-mask": {
       inserted: function(el) {
         const arrOfInputEl = el.querySelectorAll("input");
         const parentOfInput = el.querySelector(".el-range-editor");
@@ -549,6 +569,46 @@ import "a-vue-treeselect/dist/vue-treeselect.css";
           };
           dateInputMask(input);
         });
+      }
+    },
+    "digital-mask": {
+      inserted: function(element, binding) {
+        const inputEl = element.querySelector("input") as HTMLElement;
+        let im = new Inputmask("decimal", {
+          radixPoint: ".",
+          groupSeparator: " ",
+          groupSize: 3,
+          autoGroup: true,
+          positionCaretOnClick: `radixFocus`,
+          clearMaskOnLostFocus: true,
+          autoUnmask: true,
+          digitsOptional: true,
+          digits: binding.value.numbersAfterComma
+        });
+        im.mask(inputEl);
+      }
+    },
+    "phone-mask": {
+      inserted: function(element, binding) {
+        const inputEl = element.querySelector("input") as HTMLElement;
+
+        let im = new Inputmask("tel", {
+          mask: "8-(999)-999-99-99",
+          rightAlign: true,
+          clearMaskOnLostFocus: true,
+          placeholder: "#",
+          showMaskOnFocus: true,
+          greedy: true,
+          autoUnmask: true,
+          clearIncomplete: true,
+          onUnMask: function(
+            maskedValue: string,
+            unmaskedValue: string
+          ): string {
+            return "8" + unmaskedValue;
+          }
+        });
+        im.mask(inputEl);
       }
     }
   }
@@ -822,7 +882,7 @@ export default class TableFilterComponent extends Vue {
 
 .topbar-date-filter .el-range-input {
   color: #202020 !important;
-  font-size: 12px !important;
+  font-size: 14px !important;
   padding-top: 1px !important;
 }
 
@@ -902,7 +962,7 @@ export default class TableFilterComponent extends Vue {
 }
 .filter .el-date-editor .el-range-input {
   color: inherit;
-  font-size: 12px;
+  font-size: 14px;
   padding-top: 6px;
 }
 .filter .el-date-editor .el-range-input:first-of-type {
@@ -933,5 +993,13 @@ export default class TableFilterComponent extends Vue {
 /* Class for wrong input*/
 .wrong-input {
   border-bottom: 1px solid red !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: #ffff !important;
 }
 </style>
