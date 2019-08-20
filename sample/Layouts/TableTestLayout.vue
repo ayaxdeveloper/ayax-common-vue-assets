@@ -412,6 +412,16 @@ export default class TableTestLayout extends Vue {
         label: "Комнат в доме",
         groupName: "Запрос клиента",
         itemClassName: ["column-1"]
+      }),
+      new TableFilterComponentItem({
+        requestName: "roomFilter",
+        name: "roomFilter",
+        appearance: TableFilterComponentItemAppearance.AllFilters,
+        requestType: TableFilterComponentItemType.Range,
+        label: "Цена",
+        groupName: "Запрос клиента",
+        numbersAfterComma: 2,
+        itemClassName: ["column-1"]
       })
     ]
   });

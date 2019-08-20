@@ -5,3 +5,5 @@
 *.d.ts
 *.js.map
 debug.log
+slnx.sqlite
+*.suo
