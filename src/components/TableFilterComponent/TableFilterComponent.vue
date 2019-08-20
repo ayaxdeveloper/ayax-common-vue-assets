@@ -222,8 +222,7 @@
                 v-digital-mask="{numbersAfterComma:filter.numbersAfterComma | 0}"
                 placeholder="До"
                 clearable
-                :value="filter.values[1]"
-                @change="filter.values[1] = $event.target.value"
+                v-model="filter.values[1]"             
               ></v-text-field>
             </div>
           </v-flex>
