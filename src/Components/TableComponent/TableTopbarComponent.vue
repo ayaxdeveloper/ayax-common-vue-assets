@@ -462,10 +462,10 @@ export default class TableTopbarComponent extends Vue {
     this.filters.filter(o => {
       if (o.values.length > 0) {
         console.log("o.values before =>", o.values);
-        for (let i = 0; i <= length; i++) {
+        /* for (let i = 0; i <= length; i++) {
           o.values.pop();
-        }
-        //  o.values = [...[]];
+        } */
+        o.values = [...[]];
 
         console.log("o.values after =>", o.values);
       }

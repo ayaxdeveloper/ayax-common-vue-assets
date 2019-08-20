@@ -222,7 +222,7 @@
                 v-digital-mask="{numbersAfterComma:filter.numbersAfterComma | 0}"
                 placeholder="До"
                 clearable
-                v-model="filter.values[1]"             
+                v-model="filter.values[1]"
               ></v-text-field>
             </div>
           </v-flex>
@@ -593,18 +593,21 @@ import "a-vue-treeselect/dist/vue-treeselect.css";
 
         let im = new Inputmask("tel", {
           mask: "8-(999)-999-99-99",
-          rightAlign: true,
           clearMaskOnLostFocus: true,
           placeholder: "#",
           showMaskOnFocus: true,
           greedy: true,
           autoUnmask: true,
+          positionCaretOnClick: `select`,
           clearIncomplete: true,
           onUnMask: function(
             maskedValue: string,
             unmaskedValue: string
           ): string {
-            return "8" + unmaskedValue;
+            if (unmaskedValue.length === 10) {
+              return "8" + unmaskedValue;
+            }
+            return "";
           }
         });
         im.mask(inputEl);
@@ -897,9 +900,6 @@ export default class TableFilterComponent extends Vue {
   width: 20px;
   padding-top: 0px !important;
   padding-right: 6px !important;
-}
-
-.filterBtnToggle {
 }
 
 .filterBtn.released {

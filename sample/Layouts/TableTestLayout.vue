@@ -408,6 +408,16 @@ export default class TableTestLayout extends Vue {
         groupName: "Запрос клиента",
         numbersAfterComma: 2,
         itemClassName: ["column-1"]
+      }),
+      new TableFilterComponentItem({
+        name: "leadContactPhone",
+        requestName: "contactPhoneFilter",
+        appearance: TableFilterComponentItemAppearance.AllFilters,
+        label: "Телефон",
+        inputType: TableFilterComponentItemInputType.Phone,
+        placeholder: "Введите",
+        groupName: "Обращение",
+        itemClassName: ["filter-item-column-4"]
       })
     ]
   });
