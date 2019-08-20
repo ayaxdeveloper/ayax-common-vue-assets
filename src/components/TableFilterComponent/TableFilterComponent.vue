@@ -592,7 +592,7 @@ import "a-vue-treeselect/dist/vue-treeselect.css";
         const inputEl = element.querySelector("input") as HTMLElement;
 
         let im = new Inputmask("tel", {
-          mask: "8-(999)-999-99-99",
+          mask: "[8]-(999)-999-99-99",
           clearMaskOnLostFocus: true,
           placeholder: "#",
           showMaskOnFocus: true,
@@ -606,6 +606,8 @@ import "a-vue-treeselect/dist/vue-treeselect.css";
           ): string {
             if (unmaskedValue.length === 10) {
               return "8" + unmaskedValue;
+            } else if (unmaskedValue.length === 11) {
+              return unmaskedValue;
             }
             return "";
           }
