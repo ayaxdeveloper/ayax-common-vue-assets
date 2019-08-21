@@ -257,9 +257,8 @@ export default class TableTopbarComponent extends Vue {
   @Prop({ default: () => [] }) filters: TableFilterComponentItem[];
   @Prop({ default: () => [] }) filterGroups: string[];
   @Prop() showQuickFilters: boolean;
-  @Prop({ default: null }) quickFilterPromise: (
-    request
-  ) => Promise<any[]> | null;
+  @Prop({ default: null }) quickFilterPromise: (request) => Promise<any[]> | null;
+  @Prop({ default: () => [] }) quickFilterItems: QuickFilterItem[];
 
   showAllFilters = false;
 
@@ -297,6 +296,7 @@ export default class TableTopbarComponent extends Vue {
     try {
       if (this.showQuickFilters) {
         await this.getQuickFilters();
+        this.addToQuickFilter(this.quickFilterItems);
       }
       Object.keys(TableFilterComponentItemAppearance).forEach(item => {
         this.filterAppearance[item] = TableFilterComponentItemAppearance[item];
@@ -519,6 +519,10 @@ export default class TableTopbarComponent extends Vue {
   }
 
   async getQuickFilters() {
+    if (!this.quickFilterPromise) {
+      return;
+    }
+
     try {
       const filters = this.quickFilterPromise
         ? await this.quickFilterPromise({ table: this.tableName })
@@ -570,6 +574,14 @@ export default class TableTopbarComponent extends Vue {
     }
 
     this.quickFilterText = "Все";
+  }
+
+  addToQuickFilter(filters: QuickFilterItem[]) {
+      if (filters) {
+        filters.forEach(element => {
+          this.quickFilters.push(element);
+        });
+      }
   }
 }
 </script>

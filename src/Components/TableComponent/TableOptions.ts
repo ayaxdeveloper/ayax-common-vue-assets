@@ -2,6 +2,7 @@ import { Pagination, SearchResponse } from "ayax-common-types";
 import { ActionItem } from "../ActionbarComponent/ActionItem";
 import { TableFilterComponentItem } from "../TableFilterComponent/TableFilterComponentItem";
 import { TableComponentHeader } from "./TableHeader";
+import { QuickFilterItem } from "./QuickFilterItem";
 
 export class TableOptions {
     autoRefreshEnable = false;
@@ -17,6 +18,7 @@ export class TableOptions {
     filterGroups: string[] = [];
     quickFilters = false;
     quickFilterPromise: (request) => Promise<any[]> | null = null;
+    quickFilterItems: QuickFilterItem[] = [];
     selectable = true;
     selectableSingle = false;
     clearSelected = 0;
