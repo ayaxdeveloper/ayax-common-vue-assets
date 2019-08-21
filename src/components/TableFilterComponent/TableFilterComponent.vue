@@ -997,10 +997,10 @@ export default class TableFilterComponent extends Vue {
   border-bottom: 1px solid red !important;
 }
 
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
+.filter input:-webkit-autofill,
+.filter input:-webkit-autofill:hover,
+.filter input:-webkit-autofill:focus,
+.filter input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
   -webkit-text-fill-color: #ffff !important;
 }
