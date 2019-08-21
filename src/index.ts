@@ -53,6 +53,7 @@ export * from "./Components/TableFilterComponent/FilterOperation";
 export * from "./Components/TableFilterComponent/FilterValue";
 export * from "./Components/TableComponent/TableHeader";
 export * from "./Components/TableComponent/TableOptions";
+export * from "./Components/TableComponent/QuickFilterItem";
 export * from "./Components/ActionbarComponent/ActionItem";
 
 export {
