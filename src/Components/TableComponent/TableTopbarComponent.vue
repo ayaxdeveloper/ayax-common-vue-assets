@@ -296,7 +296,7 @@ export default class TableTopbarComponent extends Vue {
     try {
       if (this.showQuickFilters) {
         await this.getQuickFilters();
-        this.addToQuickFilter(this.quickFilterItems);
+        this.replaceQuickFilterItems(this.quickFilterItems);
       }
       Object.keys(TableFilterComponentItemAppearance).forEach(item => {
         this.filterAppearance[item] = TableFilterComponentItemAppearance[item];
@@ -576,11 +576,9 @@ export default class TableTopbarComponent extends Vue {
     this.quickFilterText = "Все";
   }
 
-  addToQuickFilter(filters: QuickFilterItem[]) {
+  replaceQuickFilterItems(filters: QuickFilterItem[]) {
       if (filters) {
-        filters.forEach(element => {
-          this.quickFilters.push(element);
-        });
+        this.quickFilters = filters;
       }
   }
 }
