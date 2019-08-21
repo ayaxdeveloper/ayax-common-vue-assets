@@ -11,6 +11,7 @@
       :filterGroups="options.filterGroups"
       :showQuickFilters="options.quickFilters"
       :quickFilterPromise="options.quickFilterPromise"
+      :quickFilterItems="options.quickFilterItems"
       @apply-filter="applyFilter"
       @relocate-actionbar="updateActionbar++"
     >
