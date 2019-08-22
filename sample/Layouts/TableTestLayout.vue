@@ -70,6 +70,7 @@ import { TableOptions } from "../../src/Components/TableComponent/TableOptions";
 import { FormComponentItem } from "../../src/Components/FormComponent/FormItem";
 import { ICacheService, CacheItem } from "ayax-common-cache/dist";
 import TestDataService from "../Services/TestDataService/TestDataService";
+import { QuickFilterItem } from "../../src/Components/TableComponent/QuickFilterItem";
 
 @Component
 export default class TableTestLayout extends Vue {
@@ -432,6 +433,19 @@ export default class TableTestLayout extends Vue {
         placeholder: "Введите",
         groupName: "Обращение",
         itemClassName: ["filter-item-column-4"]
+      })
+    ],
+    quickFilters: true,
+    quickFilterItems: [
+      new QuickFilterItem ({
+        id: 0,
+        name: "string",
+        filter: [{"filterName":"ownership", "filterValue":["myBuyers"]}]
+      }),
+      new QuickFilterItem ({
+        id: 1,
+        name: "string1",
+        filter: [{"filterName":"ownership", "filterValue":["myBuyers"]}]
       })
     ]
   });
