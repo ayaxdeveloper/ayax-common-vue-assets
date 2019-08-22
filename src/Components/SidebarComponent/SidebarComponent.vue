@@ -184,6 +184,7 @@ export default class SidebarComponent extends Vue {
     this.$router.afterEach((to, from) => {
       this.FillActiveItemFromRoute(to.path);
     });
+    this.changeTabIndexAtr();
   }
 
   mounted() {
