@@ -8,6 +8,7 @@
     permanent
     fixed
     :width="width"
+    ref="navigationDrawer"
   >
     <v-layout justify-center>
       <div v-show="!mini" class="userPhotoContainer mt-3">
@@ -183,6 +184,7 @@ export default class SidebarComponent extends Vue {
     this.$router.afterEach((to, from) => {
       this.FillActiveItemFromRoute(to.path);
     });
+    this.changeTabIndexAtr();
   }
 
   mounted() {
@@ -236,9 +238,19 @@ export default class SidebarComponent extends Vue {
       });
   }
 
+  changeTabIndexAtr() {
+    const buttonsEl = document.querySelectorAll(".sidebarComponent button");
+    if (this.mini && buttonsEl.length >0) {
+      buttonsEl.forEach(element => (element as HTMLElement).tabIndex = -1);
+    } else if (!this.mini && buttonsEl.length >0) {
+      buttonsEl.forEach(element => (element as HTMLElement).tabIndex = 0);
+    } 
+  }
+
   @Watch("value")
   onChange() {
     this.mini = this.value;
+    this.changeTabIndexAtr();     
   }
 
   @Watch("mini")

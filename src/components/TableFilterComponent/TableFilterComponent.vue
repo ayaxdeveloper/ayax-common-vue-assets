@@ -582,7 +582,8 @@ import "a-vue-treeselect/dist/vue-treeselect.css";
           clearMaskOnLostFocus: true,
           showMaskOnHover: false,
           autoUnmask: true,
-          digitsOptional: true,
+          rightAlign: false,
+          digitsOptional: true,          
           digits: binding.value.numbersAfterComma
         });
         im.mask(inputEl);
