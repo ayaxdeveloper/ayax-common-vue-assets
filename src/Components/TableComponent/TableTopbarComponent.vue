@@ -303,14 +303,16 @@ export default class TableTopbarComponent extends Vue {
     try {
       if (this.showQuickFilters) {
         await this.getQuickFilters();
-        this.replaceQuickFilterItems(this.quickFilterItems);
       }
+
       Object.keys(TableFilterComponentItemAppearance).forEach(item => {
         this.filterAppearance[item] = TableFilterComponentItemAppearance[item];
       });
+      
       Object.keys(TableFilterComponentItemInputType).forEach(item => {
         this.filterInputTypes[item] = TableFilterComponentItemInputType[item];
       });
+      
       Object.keys(TableFilterComponentItemType).forEach(item => {
         this.filterTypes[item] = TableFilterComponentItemType[item];
       });
@@ -527,7 +529,7 @@ export default class TableTopbarComponent extends Vue {
 
   async getQuickFilters() {
     if (!this.quickFilterPromise) {
-      return;
+      return this.replaceQuickFilterItems(this.quickFilterItems);
     }
 
     try {
@@ -546,6 +548,8 @@ export default class TableTopbarComponent extends Vue {
     } catch (error) {
       this.notificationProvider.Error(error);
     }
+
+    return true;
   }
 
   async removeQuickFilter() {
@@ -584,9 +588,11 @@ export default class TableTopbarComponent extends Vue {
   }
 
   replaceQuickFilterItems(filters: QuickFilterItem[]) {
-      if (filters) {
+      if (filters.length > 0) {
         this.quickFilters = filters;
       }
+
+      return false;
   }
 }
 </script>
