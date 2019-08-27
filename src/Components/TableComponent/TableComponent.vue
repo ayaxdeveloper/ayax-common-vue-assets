@@ -12,6 +12,7 @@
       :showQuickFilters="options.quickFilters"
       :quickFilterPromise="options.quickFilterPromise"
       :quickFilterItems="options.quickFilterItems"
+      :quickFilterTooltipText="options.quickFilterTooltipText"
       @apply-filter="applyFilter"
       @relocate-actionbar="updateActionbar++"
     >

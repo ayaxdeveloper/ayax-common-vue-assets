@@ -19,6 +19,7 @@ export class TableOptions {
     quickFilters = false;
     quickFilterPromise: (request) => Promise<any[]> | null = null;
     quickFilterItems: QuickFilterItem[] = [];
+    quickFilterTooltipText: string = "";
     selectable = true;
     selectableSingle = false;
     clearSelected = 0;
