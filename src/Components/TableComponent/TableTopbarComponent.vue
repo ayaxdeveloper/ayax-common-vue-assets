@@ -529,7 +529,8 @@ export default class TableTopbarComponent extends Vue {
 
   async getQuickFilters() {
     if (!this.quickFilterPromise) {
-      return this.replaceQuickFilterItems(this.quickFilterItems);
+      this.replaceQuickFilterItems(this.quickFilterItems);
+      return;
     }
 
     try {
@@ -548,8 +549,6 @@ export default class TableTopbarComponent extends Vue {
     } catch (error) {
       this.notificationProvider.Error(error);
     }
-
-    return true;
   }
 
   async removeQuickFilter() {
@@ -591,8 +590,6 @@ export default class TableTopbarComponent extends Vue {
       if (filters.length > 0) {
         this.quickFilters = filters;
       }
-
-      return false;
   }
 }
 </script>
