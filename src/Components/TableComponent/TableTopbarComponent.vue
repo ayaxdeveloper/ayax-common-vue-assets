@@ -16,7 +16,7 @@
       <v-toolbar-items v-if="filters.length > 0">
         <v-layout row>
           <v-flex v-if="quickFilters.length > 0" style="padding-left: 12px">
-            <div style="font-size: 13px; height: 12px; margin-top: 1px">Быстрый поиск</div>
+            <div style="font-size: 13px; margin-top: 1px" :style="{ height: quickFilterTooltipText ? '10px' : '12px'}">Быстрый поиск</div>
             <v-menu bottom offset-y>
               <v-btn
                 style="height: 22px; margin-top: 7px"
@@ -62,6 +62,12 @@
                 </v-list-tile>
               </v-list>
             </v-menu>
+            <v-tooltip v-if="quickFilterTooltipText" bottom>
+              <template slot="activator">
+                <v-icon class="quick-filter-toolbar-icon">mdi-help-circle-outline</v-icon>
+              </template>
+              <div>{{ quickFilterTooltipText }}</div>
+           </v-tooltip>
           </v-flex>
           <a-table-filter
             v-for="(topbarFilter, index) in filters.filter(filter => filter.appearance === filterAppearance['Topbar'])"
@@ -259,6 +265,7 @@ export default class TableTopbarComponent extends Vue {
   @Prop() showQuickFilters: boolean;
   @Prop({ default: null }) quickFilterPromise: (request) => Promise<any[]> | null;
   @Prop({ default: () => [] }) quickFilterItems: QuickFilterItem[];
+  @Prop() quickFilterTooltipText: string;
 
   showAllFilters = false;
 
@@ -639,6 +646,13 @@ export default class TableTopbarComponent extends Vue {
 }
 .table-topbar .v-toolbar__content {
   padding: 16px;
+}
+.v-tooltip__content {
+    white-space: pre-line;
+}
+.quick-filter-toolbar-icon {
+  position: relative;
+  top: 8px;
 }
 </style>
 

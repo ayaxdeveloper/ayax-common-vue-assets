@@ -447,7 +447,8 @@ export default class TableTestLayout extends Vue {
         name: "string1",
         filter: [{"filterName":"ownership", "filterValue":["myBuyers"]}]
       })
-    ]
+    ],
+    quickFilterTooltipText: "Quick search\nTest help text"
   });
 
   created() {
