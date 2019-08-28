@@ -528,7 +528,8 @@ export default class TableTopbarComponent extends Vue {
   }
 
   async getQuickFilters() {
-    if (!this.quickFilterPromise) {
+    // This if will rewrite Promises!
+    if (this.quickFilterItems.length > 0) {
       this.replaceQuickFilterItems(this.quickFilterItems);
       return;
     }
