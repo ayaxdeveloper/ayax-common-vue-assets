@@ -215,7 +215,7 @@
           <th
             v-for="header in props.headers.filter(x => x.isVisible)"
             :key="header.value"
-            :style="{color: '#fff !important', backgroundColor: '#fff !important', textAlign: header.align, whiteSpace: header.wrap ? 'normal' : '', width: header.width ? header.width : ''}"
+            :style="{color: '#fff !important', backgroundColor: '#fff !important', textAlign: header.align, whiteSpace: header.wrap ? 'normal' : '', 'min-width': header.width ? header.width : ''}"
           >
             {{ header.text.toUpperCase() }}
             <v-icon
@@ -281,7 +281,7 @@
           <td
             v-for="(header, index) in visibleHeaders"
             :key="index"
-            :style="{paddingTop: '10px', textAlign: header.align, whiteSpace: header.wrap ? '' : 'nowrap', width: header.width ? header.width : ''}"
+            :style="{paddingTop: '10px', textAlign: header.align, whiteSpace: header.wrap ? '' : 'nowrap', 'width': header.width ? header.width : ''}"
             @dblclick="firstSingleAction(props.item)"
           >
             <slot :name="header.value" :item="props.item">
@@ -678,10 +678,18 @@ export default class TableComponent extends Vue {
 
     if (staticHeader) {
       const staticHeaderTh = staticHeader.querySelectorAll("th");
-
       for (let i = 0; i < staticHeaderTh.length; i++) {
-        header[i].style.width = `${staticHeaderTh[i].offsetWidth}px`;
-        header[i].style.minWidth = `${staticHeaderTh[i].offsetWidth}px`;
+        if (i >= 2) {
+          header[i].style.width = this.options.headers[i - 2].width
+            ? (this.options.headers[i - 2].width as string)
+            : `${staticHeaderTh[i].offsetWidth}px`;
+          header[i].style.minWidth = this.options.headers[i - 2].width
+            ? (this.options.headers[i - 2].width as string)
+            : `${staticHeaderTh[i].offsetWidth}px`;
+        } else {
+          header[i].style.width = `${staticHeaderTh[i].offsetWidth}px`;
+          header[i].style.minWidth = `${staticHeaderTh[i].offsetWidth}px`;
+        }
       }
     }
   }
