@@ -680,12 +680,16 @@ export default class TableComponent extends Vue {
       const staticHeaderTh = staticHeader.querySelectorAll("th");
       for (let i = 0; i < staticHeaderTh.length; i++) {
         if (i >= 2) {
-          header[i].style.width = this.options.headers[i - 2].width
-            ? (this.options.headers[i - 2].width as string)
-            : `${staticHeaderTh[i].offsetWidth}px`;
-          header[i].style.minWidth = this.options.headers[i - 2].width
-            ? (this.options.headers[i - 2].width as string)
-            : `${staticHeaderTh[i].offsetWidth}px`;
+          header[i].style.width =
+            this.options.headers[i - 2].width &&
+            this.options.headers[i - 2].width >= staticHeaderTh[i].offsetWidth
+              ? (this.options.headers[i - 2].width as string)
+              : `${staticHeaderTh[i].offsetWidth}px`;
+          header[i].style.minWidth =
+            this.options.headers[i - 2].width &&
+            this.options.headers[i - 2].width >= staticHeaderTh[i].offsetWidth
+              ? (this.options.headers[i - 2].width as string)
+              : `${staticHeaderTh[i].offsetWidth}px`;
         } else {
           header[i].style.width = `${staticHeaderTh[i].offsetWidth}px`;
           header[i].style.minWidth = `${staticHeaderTh[i].offsetWidth}px`;
@@ -949,6 +953,7 @@ export default class TableComponent extends Vue {
       `${this.options.title}_header_settings`,
       JSON.stringify(this.options.headers)
     );
+    this.resizeFixedHeader();
   }
 
   resetTableSettings() {
@@ -965,6 +970,7 @@ export default class TableComponent extends Vue {
     });
     this.options.headers.sort((a, b) => a.order - b.order);
     this.isTableMenuVisible = false;
+    this.resizeFixedHeader();
   }
 }
 </script>

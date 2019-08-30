@@ -119,12 +119,13 @@ export default class TableTestLayout extends Vue {
         value: "qq",
         text: "Статус обращений qq",
         custom: true,
-        width: "100px",
+
         wrap: true
       }),
       TableComponentHeader.Date({
         value: "created",
-        text: "Дата создания"
+        text: "Дата создания",
+        width: "100px"
       }),
       TableComponentHeader.String({
         value: "ww",
