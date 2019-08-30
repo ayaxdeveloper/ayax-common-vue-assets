@@ -185,7 +185,7 @@
           <th
             v-for="header in props.headers.filter(x => x.isVisible)"
             :key="header.value"
-            :style="{textAlign: header.align}"
+            :style="{textAlign: header.align, whiteSpace: header.wrap ? 'normal' : ''}"
           >
             {{ header.text.toUpperCase() }}
             <v-icon
@@ -202,7 +202,7 @@
             :indeterminate="true"
           ></v-progress-linear>
         </tr>
-        <tr :id="options.tableName + '-static-header'" style="height: 36px">
+        <tr :id="options.tableName + '-static-header'" style="min-height: 36px">
           <th v-if="options.selectable" class="select-checkbox">
             <v-checkbox v-if="!options.selectableSingle" primary class="pb-1" hide-details></v-checkbox>
           </th>
@@ -215,7 +215,7 @@
           <th
             v-for="header in props.headers.filter(x => x.isVisible)"
             :key="header.value"
-            :style="{color: '#fff !important', backgroundColor: '#fff !important', textAlign: header.align}"
+            :style="{color: '#fff !important', backgroundColor: '#fff !important', textAlign: header.align, whiteSpace: header.wrap ? 'normal' : '', width: header.width ? header.width : ''}"
           >
             {{ header.text.toUpperCase() }}
             <v-icon
@@ -281,7 +281,7 @@
           <td
             v-for="(header, index) in visibleHeaders"
             :key="index"
-            :style="{paddingTop: '10px', textAlign: header.align, whiteSpace: header.wrap ? '' : 'nowrap'}"
+            :style="{paddingTop: '10px', textAlign: header.align, whiteSpace: header.wrap ? '' : 'nowrap', width: header.width ? header.width : ''}"
             @dblclick="firstSingleAction(props.item)"
           >
             <slot :name="header.value" :item="props.item">
@@ -972,7 +972,7 @@ export default class TableComponent extends Vue {
   padding-left: 16px !important;
 }
 .fixedTableHeader {
-  height: 36px;
+  min-height: 36px;
   background-color: #fff;
   border-bottom: 1px solid #ccc;
   position: absolute;
@@ -980,7 +980,7 @@ export default class TableComponent extends Vue {
   z-index: 1;
 }
 .fixedTableHeader th {
-  height: 36px;
+  min-height: 36px;
 }
 .actionbarAnchor {
   height: 48px;

@@ -118,7 +118,9 @@ export default class TableTestLayout extends Vue {
       TableComponentHeader.String({
         value: "qq",
         text: "Статус обращений qq",
-        custom: true
+        custom: true,
+        width: "100px",
+        wrap: true
       }),
       TableComponentHeader.Date({
         value: "created",
@@ -195,7 +197,7 @@ export default class TableTestLayout extends Vue {
             name: "ExcelAll",
             title: "Экспорт всего в Excel",
             icon: "mdi-upload",
-            style: {color: "red"},
+            style: { color: "red" },
             action: asd => console.log(asd)
           })
         ]
@@ -437,15 +439,15 @@ export default class TableTestLayout extends Vue {
     ],
     quickFilters: true,
     quickFilterItems: [
-      new QuickFilterItem ({
+      new QuickFilterItem({
         id: 0,
         name: "string",
-        filter: [{"filterName":"ownership", "filterValue":["myBuyers"]}]
+        filter: [{ filterName: "ownership", filterValue: ["myBuyers"] }]
       }),
-      new QuickFilterItem ({
+      new QuickFilterItem({
         id: 1,
         name: "string1",
-        filter: [{"filterName":"ownership", "filterValue":["myBuyers"]}]
+        filter: [{ filterName: "ownership", filterValue: ["myBuyers"] }]
       })
     ],
     quickFilterTooltipText: "Quick search\nTest help text"

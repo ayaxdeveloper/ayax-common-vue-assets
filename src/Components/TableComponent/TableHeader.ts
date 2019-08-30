@@ -10,7 +10,7 @@ export class TableComponentHeader {
   items: IListItem[];
   isVisible = true;
   hiddenable = true;
-  width?: number;
+  width?: number | string;
   formatter: (value: any) => void;
   sortBy?: SortableField;
   sortable = false;
