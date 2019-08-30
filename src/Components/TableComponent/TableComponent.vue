@@ -986,6 +986,7 @@ export default class TableComponent extends Vue {
   position: absolute;
   left: 0;
   z-index: 1;
+  width: 100%;
 }
 .fixedTableHeader th {
   min-height: 36px;
