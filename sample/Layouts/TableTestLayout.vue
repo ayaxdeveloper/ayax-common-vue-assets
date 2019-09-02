@@ -359,7 +359,7 @@ export default class TableTestLayout extends Vue {
 
       new TableFilterComponentItem({
         requestName: "wwfilter",
-        name: "wwFilter",
+        name: "wwFilter2",
         appearance: TableFilterComponentItemAppearance.AllFilters,
         requestType: TableFilterComponentItemType.In,
         inputType: TableFilterComponentItemInputType.Select,
@@ -391,7 +391,7 @@ export default class TableTestLayout extends Vue {
           new SelectItem({ value: 19, text: "Район 19" }),
           new SelectItem({ value: 20, text: "Район 20" })
         ],
-        label: "Выбор районов",
+        label: "Выбор районов2",
         placeholder: "Выберите"
       }),
 

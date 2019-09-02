@@ -583,7 +583,7 @@ import "a-vue-treeselect/dist/vue-treeselect.css";
           showMaskOnHover: false,
           autoUnmask: true,
           rightAlign: false,
-          digitsOptional: true,          
+          digitsOptional: true,
           digits: binding.value.numbersAfterComma
         });
         im.mask(inputEl);
@@ -676,6 +676,18 @@ export default class TableFilterComponent extends Vue {
           }
         })
       );
+    }
+    if (
+      this.filter.requestType == this.filterTypes["In"] &&
+      this.filter.inputType == this.filterInputTypes["Select"]
+    ) {
+      if (this.filter.values.length > 0) {
+        this.filter.selectItems.forEach(item =>
+          this.filter.values.find(x => x === item.value)
+            ? (item.selected = true)
+            : (item.selected = false)
+        );
+      }
     }
   }
 
