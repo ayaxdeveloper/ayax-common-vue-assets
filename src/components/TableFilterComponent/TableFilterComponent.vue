@@ -314,7 +314,10 @@
         <v-autocomplete
           :id="filter.requestName"
           :name="filter.requestName"
-          :items="filter.selectItems"
+          :items="filter.selectItems.map((item, index) => {
+            item.selected = filter.values.includes(index+1) ?  true : false; 
+            return item;
+            })"
           :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'selectFilter']"
           :solo="filter.appearance === filterAppearance['Topbar']"
           :light="filter.appearance === filterAppearance['Topbar']"
@@ -583,7 +586,7 @@ import "a-vue-treeselect/dist/vue-treeselect.css";
           showMaskOnHover: false,
           autoUnmask: true,
           rightAlign: false,
-          digitsOptional: true,          
+          digitsOptional: true,
           digits: binding.value.numbersAfterComma
         });
         im.mask(inputEl);
