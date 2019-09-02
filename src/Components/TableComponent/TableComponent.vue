@@ -185,7 +185,7 @@
           <th
             v-for="header in props.headers.filter(x => x.isVisible)"
             :key="header.value"
-            :style="{textAlign: header.align, whiteSpace: header.wrap ? 'normal' : ''}"
+            :style="{textAlign: header.align, whiteSpace: header.wrap ? 'normal' : 'nowrap'}"
           >
             {{ header.text.toUpperCase() }}
             <v-icon
@@ -215,7 +215,7 @@
           <th
             v-for="header in props.headers.filter(x => x.isVisible)"
             :key="header.value"
-            :style="{color: '#fff !important', backgroundColor: '#fff !important', textAlign: header.align, whiteSpace: header.wrap ? 'normal' : '', 'min-width': header.width ? header.width : ''}"
+            :style="{color: '#fff !important', backgroundColor: '#fff !important', textAlign: header.align, whiteSpace: header.wrap ? 'normal' : 'nowrap', 'min-width': header.width ? header.width : ''}"
           >
             {{ header.text.toUpperCase() }}
             <v-icon
@@ -281,7 +281,7 @@
           <td
             v-for="(header, index) in visibleHeaders"
             :key="index"
-            :style="{paddingTop: '10px', textAlign: header.align, whiteSpace: header.wrap ? '' : 'nowrap', 'width': header.width ? header.width : ''}"
+            :style="{paddingTop: '10px', textAlign: header.align, whiteSpace: header.wrap ? 'normal' : 'nowrap', 'width': header.width ? header.width : ''}"
             @dblclick="firstSingleAction(props.item)"
           >
             <slot :name="header.value" :item="props.item">
