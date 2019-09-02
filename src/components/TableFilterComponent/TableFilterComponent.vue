@@ -314,10 +314,7 @@
         <v-autocomplete
           :id="filter.requestName"
           :name="filter.requestName"
-          :items="filter.selectItems.map((item, index) => {
-            item.selected = filter.values.includes(index+1) ?  true : false; 
-            return item;
-            })"
+          :items="filter.selectItems"
           :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'selectFilter']"
           :solo="filter.appearance === filterAppearance['Topbar']"
           :light="filter.appearance === filterAppearance['Topbar']"
@@ -679,6 +676,18 @@ export default class TableFilterComponent extends Vue {
           }
         })
       );
+    }
+    if (
+      this.filter.requestType == this.filterTypes["In"] &&
+      this.filter.inputType == this.filterInputTypes["Select"]
+    ) {
+      if (this.filter.values.length > 0) {
+        this.filter.selectItems.forEach(item =>
+          this.filter.values.find(x => x === item.value)
+            ? (item.selected = true)
+            : (item.selected = false)
+        );
+      }
     }
   }
 
