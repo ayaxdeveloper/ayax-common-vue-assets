@@ -16,7 +16,10 @@
       <v-toolbar-items v-if="filters.length > 0">
         <v-layout row>
           <v-flex v-if="quickFilters.length > 0" style="padding-left: 12px">
-            <div style="font-size: 13px; margin-top: 1px" :style="{ height: quickFilterTooltipText ? '10px' : '12px'}">Быстрый поиск</div>
+            <div
+              style="font-size: 13px; margin-top: 1px"
+              :style="{ height: quickFilterTooltipText ? '10px' : '12px'}"
+            >Быстрый поиск</div>
             <v-menu bottom offset-y>
               <v-btn
                 style="height: 22px; margin-top: 7px"
@@ -67,7 +70,7 @@
                 <v-icon class="quick-filter-toolbar-icon">mdi-help-circle-outline</v-icon>
               </template>
               <div>{{ quickFilterTooltipText }}</div>
-           </v-tooltip>
+            </v-tooltip>
           </v-flex>
           <a-table-filter
             v-for="(topbarFilter, index) in filters.filter(filter => filter.appearance === filterAppearance['Topbar'])"
@@ -135,7 +138,10 @@
                     :class="['filter-wrapper__group', 'filter-wrapper__titled-group', 'filter-wrapper__group-'+groupIndex]"
                   >
                     <v-flex
-                      v-for="(filter, index) in filters.filter(filter => filter.appearance === filterAppearance['AllFilters'] && filter.groupName === group)"
+                      v-for="(filter, index) in filters.filter(
+                          filter => filter.appearance === filterAppearance['AllFilters'] && 
+                          filter.groupName === group && 
+                          filter.active === true)"
                       :key="filter.name+index"
                       :class="['filter-item', 'filter-item__titled-group', 'filter-item__group-'+groupIndex, filter.itemClassName]"
                     >
@@ -159,7 +165,10 @@
                   :key="'no-title-group-'+groupIndex"
                 >
                   <v-flex
-                    v-for="(filter, index) in filters.filter(filter => filter.appearance === filterAppearance['AllFilters'] && !filter.groupName)"
+                    v-for="(filter, index) in filters.filter(
+                          filter => filter.appearance === filterAppearance['AllFilters'] &&
+                          !filter.groupName &&
+                          filter.active === true)"
                     :key="filter.name"
                     :class="['filter-item', 'filter-item__no-titled-group', 'filter-item__group-'+groupIndex, filter.itemClassName]"
                   >
@@ -175,7 +184,9 @@
             <v-flex v-else>
               <v-layout :class="['filter-wrapper__group', 'filter-wrapper__no-group']">
                 <v-flex
-                  v-for="(filter, index) in filters.filter(filter => filter.appearance === filterAppearance['AllFilters'])"
+                  v-for="(filter, index) in filters.filter(
+                      filter => filter.appearance === filterAppearance['AllFilters'] &&
+                      filter.active === true)"
                   :key="filter.name"
                   :class="['filter-item', 'filter-item__no-group', filter.itemClassName]"
                 >
@@ -263,7 +274,9 @@ export default class TableTopbarComponent extends Vue {
   @Prop({ default: () => [] }) filters: TableFilterComponentItem[];
   @Prop({ default: () => [] }) filterGroups: string[];
   @Prop() showQuickFilters: boolean;
-  @Prop({ default: null }) quickFilterPromise: (request) => Promise<any[]> | null;
+  @Prop({ default: null }) quickFilterPromise: (
+    request
+  ) => Promise<any[]> | null;
   @Prop({ default: () => [] }) quickFilterItems: QuickFilterItem[];
   @Prop() quickFilterTooltipText: string;
 
@@ -308,11 +321,11 @@ export default class TableTopbarComponent extends Vue {
       Object.keys(TableFilterComponentItemAppearance).forEach(item => {
         this.filterAppearance[item] = TableFilterComponentItemAppearance[item];
       });
-      
+
       Object.keys(TableFilterComponentItemInputType).forEach(item => {
         this.filterInputTypes[item] = TableFilterComponentItemInputType[item];
       });
-      
+
       Object.keys(TableFilterComponentItemType).forEach(item => {
         this.filterTypes[item] = TableFilterComponentItemType[item];
       });
@@ -588,9 +601,9 @@ export default class TableTopbarComponent extends Vue {
   }
 
   replaceQuickFilterItems(filters: QuickFilterItem[]) {
-      if (filters.length > 0) {
-        this.quickFilters = filters;
-      }
+    if (filters.length > 0) {
+      this.quickFilters = filters;
+    }
   }
 }
 </script>
@@ -652,7 +665,7 @@ export default class TableTopbarComponent extends Vue {
   padding: 16px;
 }
 .v-tooltip__content {
-    white-space: pre-line;
+  white-space: pre-line;
 }
 .quick-filter-toolbar-icon {
   position: relative;
