@@ -354,6 +354,7 @@ export default class TableTestLayout extends Vue {
         anyItems: this.ListGroupAsSelectedItems(),
         label: "Выбор маршрута",
         placeholder: "Выберите",
+        active: false,
         itemClassName: ["column-1"]
       }),
 
