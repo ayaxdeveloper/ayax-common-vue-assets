@@ -119,12 +119,17 @@
                                 v-if="header.hiddenable"
                                 v-model="header.isVisible"
                                 @change="tableHeadersShowCheck()"
+                                :label="header.text"
+                                class="menu-settings-headers__list-item"
                               ></v-checkbox>
-                              <v-checkbox v-else input-value="true" disabled></v-checkbox>
+                              <v-checkbox
+                                v-else
+                                input-value="true"
+                                disabled
+                                :label="header.text"
+                                class="menu-settings-headers__list-item"
+                              ></v-checkbox>
                             </v-list-tile-action>
-                            <v-list-tile-title
-                              class="menu-settings-headers__list-item"
-                            >{{ header.text }}</v-list-tile-title>
                           </v-list-tile>
                         </draggable>
                       </v-list>
