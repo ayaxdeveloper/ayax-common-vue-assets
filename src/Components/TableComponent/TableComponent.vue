@@ -1018,11 +1018,11 @@ export default class TableComponent extends Vue {
   font-size: 14px;
 }
 
-.menu-settings-headers__list-item {
+.menu-settings-headers__list-item label {
   text-transform: lowercase;
 }
 
-.menu-settings-headers__list-item::first-letter {
+.menu-settings-headers__list-item label::first-letter {
   text-transform: uppercase;
 }
 </style>
