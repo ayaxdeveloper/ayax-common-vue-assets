@@ -152,6 +152,15 @@
             </v-flex>
           </v-layout>
         </v-menu>
+        <a-settings-menu
+          mainSettingsButtonTitle="Настройки"
+          :items="menuSettingsItems"
+          :options="options"
+          @cancel="autoRefreshDisable"
+          @listChange="tableHeadersShowCheck"
+          @dragItem="onUpdateDraggable"
+          @clickOnItem="(item) => { item.clickOnItem() }"
+        ></a-settings-menu>
       </template>
     </a-table-topbar>
     <v-progress-linear :active="loading" height="2" style="margin: 0px" :indeterminate="true"></v-progress-linear>
@@ -386,12 +395,15 @@ import { TableOptions } from "./TableOptions";
 import TableTopbarComponent from "./TableTopbarComponent.vue";
 import { ICacheService } from "ayax-common-cache";
 import * as moment from "moment";
+import SettingsMenuComponent from "../SettingsMenuComponent/SettingsMenuComponent.vue";
 
 @Component({
   name: "TableComponent",
   components: {
     "a-table-topbar": TableTopbarComponent,
     "a-actionbar": ActionbarComponent,
+    "a-settings-menu": SettingsMenuComponent,
+
     draggable: vuedraggable
   },
   directives: {
@@ -421,6 +433,32 @@ export default class TableComponent extends Vue {
   filterInputTypes: {
     [name: string]: TableFilterComponentItemInputType;
   } = {};
+
+  menuSettingsItems = [
+    {
+      contentClass: "autorefresh-menu",
+      menuNugTop: "4px",
+      menuWidth: "150px",
+      menuSettingsTitle: "Автообновление",
+      listType: "radioGroupItems"
+    },
+    {
+      contentClass: "menu-settings",
+      menuNugTop: "4px",
+      menuWidth: "150px",
+      menuSettingsTitle: "Настройка колонок",
+      listType: "checkboxItems",
+      listOfOptions: this.options.headers
+    },
+    {
+      contentClass: "menu-settings",
+      menuNugTop: "4px",
+      menuWidth: "150px",
+      menuSettingsTitle: "Сбросить настройки",
+      listType: "simpleItem",
+      clickOnItem: this.resetTableSettings
+    }
+  ];
 
   get visibleHeaders() {
     return this.options.headers.filter(
