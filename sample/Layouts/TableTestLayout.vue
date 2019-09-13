@@ -357,58 +357,6 @@ export default class TableTestLayout extends Vue {
         active: false,
         itemClassName: ["column-1"]
       }),
-
-      new TableFilterComponentItem({
-        requestName: "wwfilter",
-        name: "wwFilter2",
-        appearance: TableFilterComponentItemAppearance.AllFilters,
-        requestType: TableFilterComponentItemType.In,
-        inputType: TableFilterComponentItemInputType.Select,
-        groupName: "Обращение",
-        itemClassName: ["column-2"],
-        selectItems: [
-          new SelectItem({
-            value: 1,
-            text: "Район 1",
-            className: ["deleted-item"]
-          }),
-          new SelectItem({ value: 2, text: "Район 2" }),
-          new SelectItem({ value: 3, text: "Район 3" }),
-          new SelectItem({ value: 4, text: "Район 4" }),
-          new SelectItem({ value: 5, text: "Район 5" }),
-          new SelectItem({ value: 6, text: "Район 6" }),
-          new SelectItem({ value: 7, text: "Район 7" }),
-          new SelectItem({ value: 8, text: "Район 8" }),
-          new SelectItem({ value: 9, text: "Район 9" }),
-          new SelectItem({ value: 10, text: "Район 10" }),
-          new SelectItem({ value: 11, text: "Район 11" }),
-          new SelectItem({ value: 12, text: "Район 12" }),
-          new SelectItem({ value: 13, text: "Район 13" }),
-          new SelectItem({ value: 14, text: "Район 14" }),
-          new SelectItem({ value: 15, text: "Район 15" }),
-          new SelectItem({ value: 16, text: "Район 16" }),
-          new SelectItem({ value: 17, text: "Район 17" }),
-          new SelectItem({ value: 18, text: "Район 18" }),
-          new SelectItem({ value: 19, text: "Район 19" }),
-          new SelectItem({ value: 20, text: "Район 20" })
-        ],
-        label: "Выбор районов2",
-        placeholder: "Выберите"
-      }),
-
-      new TableFilterComponentItem({
-        requestName: "routeIdFilter",
-        name: "routeIdFilter",
-        appearance: TableFilterComponentItemAppearance.AllFilters,
-        requestType: TableFilterComponentItemType.In,
-        inputType: TableFilterComponentItemInputType.TreeSelect,
-        groupName: "Обращение",
-        itemClassName: ["column-2"],
-        anyItems: this.ListGroupAsSelectedItems(),
-        label: "Выбор маршрута",
-        placeholder: "Выберите"
-      }),
-
       new TableFilterComponentItem({
         requestName: "roomFilter",
         name: "roomFilter",

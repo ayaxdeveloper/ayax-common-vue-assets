@@ -107,24 +107,37 @@
 
                     <v-card flat class="headers-options">
                       <v-list dense>
-                        <draggable :list="options.headers" @update="onUpdateDraggable">
+                        <draggable
+                          :list="options.headers"
+                          @update="onUpdateDraggable"
+                          class="headers-options__checkbox-draggable-wrapper"
+                        >
                           <v-list-tile
                             v-for="header in options.headers"
                             :key="header.value"
                             @click.stop
+                            class="checkbox-wrapper"
+                            :ripple="true"
                           >
-                            <v-list-tile-action>
+                            <v-list-tile-action class="checkbox-wrapper__item-action">
                               <v-checkbox
                                 color="primary"
                                 v-if="header.hiddenable"
                                 v-model="header.isVisible"
                                 @change="tableHeadersShowCheck()"
+                                :label="header.text"
+                                class="menu-settings-headers__list-item"
+                                :ripple="false"
                               ></v-checkbox>
-                              <v-checkbox v-else input-value="true" disabled></v-checkbox>
+                              <v-checkbox
+                                v-else
+                                input-value="true"
+                                disabled
+                                :label="header.text"
+                                class="menu-settings-headers__list-item"
+                                :ripple="false"
+                              ></v-checkbox>
                             </v-list-tile-action>
-                            <v-list-tile-title
-                              class="menu-settings-headers__list-item"
-                            >{{ header.text }}</v-list-tile-title>
                           </v-list-tile>
                         </draggable>
                       </v-list>
@@ -1013,11 +1026,11 @@ export default class TableComponent extends Vue {
   font-size: 14px;
 }
 
-.menu-settings-headers__list-item {
+.menu-settings-headers__list-item label {
   text-transform: lowercase;
 }
 
-.menu-settings-headers__list-item::first-letter {
+.menu-settings-headers__list-item label::first-letter {
   text-transform: uppercase;
 }
 </style>
@@ -1049,7 +1062,7 @@ export default class TableComponent extends Vue {
 .main-menu-settings .v-list__tile__title {
   font-size: 14px;
 }
-.menu-settings .v-menu {
+.main-menu-settings .v-menu {
   width: 100%;
 }
 
@@ -1057,7 +1070,7 @@ export default class TableComponent extends Vue {
   font-size: 14px;
 }
 
-.menu-settings .v-menu:hover {
+.main-menu-settings .v-menu:hover {
   background: rgba(0, 0, 0, 0.04);
 }
 
@@ -1144,8 +1157,26 @@ export default class TableComponent extends Vue {
 .autorefresh-options .v-input--selection-controls__ripple {
   margin: 0px;
 }
-
 .autorefresh-options {
   padding-bottom: 4px;
+}
+
+.checkbox-wrapper .v-messages {
+  display: none;
+}
+.checkbox-wrapper label {
+  width: 100%;
+  height: 100% !important;
+}
+
+.headers-options__checkbox-draggable-wrapper .v-list__tile__action,
+.headers-options__checkbox-draggable-wrapper .v-input__control,
+.checkbox-wrapper .v-list__tile__action,
+.checkbox-wrapper .v-input__control {
+  width: 100%;
+}
+
+.checkbox-wrapper div {
+  height: 100%;
 }
 </style>

@@ -83,6 +83,7 @@
             :index="index"
             @emit-filter="applyEmittedFilter"
           ></a-table-filter>
+
           <template
             v-if="!showAllFilters && filters.filter(filter => filter.appearance === filterAppearance['Topbar']).length > 0"
           >
@@ -112,6 +113,10 @@
           flat
           @click="showAllFiltersBtn()"
         >
+          <span
+            v-if="numberOfFilters>0"
+            class="table-topbar__all-filters-button__shoosen-filters-chip"
+          >{{ numberOfFilters }}</span>
           Все фильтры
           <v-icon v-if="!showAllFilters">mdi-menu-down</v-icon>
           <v-icon v-if="showAllFilters">mdi-menu-up</v-icon>
@@ -305,6 +310,23 @@ export default class TableTopbarComponent extends Vue {
     name: ""
   };
 
+  numberOfFilters = 0;
+
+  getNumbersOfFilters() {
+    let filtersCounter = 0;
+    this.filters.forEach(filter => {
+      if (
+        filter.values &&
+        filter.values.length > 0 &&
+        filter.values.filter(x => x !== null).length > 0
+      ) {
+        filtersCounter++;
+      }
+    });
+
+    this.numberOfFilters = filtersCounter;
+  }
+
   get showSaveFilterButton() {
     if (this.filters.find(x => x.values && (x.values[0] || x.values[1]))) {
       return true;
@@ -366,6 +388,7 @@ export default class TableTopbarComponent extends Vue {
     } finally {
       this.applyFilter(true);
       this.checkQuickFilter();
+      this.getNumbersOfFilters();
     }
   }
 
@@ -402,6 +425,7 @@ export default class TableTopbarComponent extends Vue {
     if (this.showQuickFilters) {
       this.checkQuickFilter();
     }
+    this.getNumbersOfFilters();
     this.applyFilter();
   }
 
@@ -484,7 +508,7 @@ export default class TableTopbarComponent extends Vue {
         o.values = [...[]];
       }
     });
-
+    this.numberOfFilters = 0;
     this.$router.push({ path: this.$route.path });
   }
 
@@ -671,8 +695,25 @@ export default class TableTopbarComponent extends Vue {
   position: relative;
   top: 8px;
 }
-</style>
 
+.table-topbar__all-filters-button__choosen-filters > div {
+  color: bisque;
+}
+
+.table-topbar__all-filters-button__shoosen-filters-chip {
+  min-width: 20px;
+  min-height: 20px;
+  padding: 2px;
+  margin-right: 10px;
+  background-color: #4caf50;
+  border-radius: 100%;
+  color: white;
+  box-sizing: content-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>
 
 
 
