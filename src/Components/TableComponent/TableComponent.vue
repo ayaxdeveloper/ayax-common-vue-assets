@@ -127,6 +127,7 @@
                                 @change="tableHeadersShowCheck()"
                                 :label="header.text"
                                 class="menu-settings-headers__list-item"
+                                :ripple="false"
                               ></v-checkbox>
                               <v-checkbox
                                 v-else
@@ -134,6 +135,7 @@
                                 disabled
                                 :label="header.text"
                                 class="menu-settings-headers__list-item"
+                                :ripple="false"
                               ></v-checkbox>
                             </v-list-tile-action>
                           </v-list-tile>
@@ -1164,11 +1166,17 @@ export default class TableComponent extends Vue {
 }
 .checkbox-wrapper label {
   width: 100%;
+  height: 100% !important;
 }
+
 .headers-options__checkbox-draggable-wrapper .v-list__tile__action,
 .headers-options__checkbox-draggable-wrapper .v-input__control,
 .checkbox-wrapper .v-list__tile__action,
 .checkbox-wrapper .v-input__control {
   width: 100%;
+}
+
+.checkbox-wrapper div {
+  height: 100%;
 }
 </style>

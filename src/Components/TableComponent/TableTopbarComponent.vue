@@ -83,6 +83,7 @@
             :index="index"
             @emit-filter="applyEmittedFilter"
           ></a-table-filter>
+
           <template
             v-if="!showAllFilters && filters.filter(filter => filter.appearance === filterAppearance['Topbar']).length > 0"
           >
@@ -700,14 +701,19 @@ export default class TableTopbarComponent extends Vue {
 }
 
 .table-topbar__all-filters-button__shoosen-filters-chip {
-  display: block;
-  min-width: 22px;
-  /* width: 15px; */
-  min-height: calc(min-width);
+  min-width: 20px;
+  min-height: 20px;
   padding: 2px;
-  margin: 10px;
+  margin-right: 10px;
   background-color: #4caf50;
   border-radius: 100%;
   color: white;
+  box-sizing: content-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
+
+
+
