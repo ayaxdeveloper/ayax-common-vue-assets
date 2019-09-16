@@ -81,3 +81,41 @@ export default class CheckboxMenuitemsComponent extends Vue {
   }
 }
 </script>
+
+<style>
+.checkbox-wrapper .v-messages {
+  display: none;
+}
+
+.checkbox-wrapper label {
+  width: 100%;
+  height: 100% !important;
+  padding-left: 26px;
+  padding-right: 16px;
+}
+
+.headers-options__checkbox-draggable-wrapper .v-list__tile__action,
+.headers-options__checkbox-draggable-wrapper .v-input__control,
+.checkbox-wrapper .v-list__tile__action,
+.checkbox-wrapper .v-input__control {
+  width: 100%;
+}
+
+.checkbox-wrapper div {
+  height: 100%;
+}
+
+.checkbox-wrapper a {
+  padding: 0;
+}
+
+.checkbox-wrapper input,
+.checkbox-wrapper i {
+  padding-left: 20px;
+}
+
+.checkbox-wrapper input {
+  width: 44px;
+  transform: translateY(3px) scaleY(1.25);
+}
+</style>

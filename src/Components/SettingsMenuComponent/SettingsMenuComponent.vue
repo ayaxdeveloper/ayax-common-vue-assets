@@ -26,14 +26,14 @@
               v-if="item.listType === 'radioGroupItems'"
               :options="options"
               :item="item"
-              @cancel="cancelRadioGroup"
-              @dragItem="onUpdateDraggable"
+              @radioGroupCancel="radioGroupCancel(item)"
             ></a-radio-group-menu-items>
             <a-checkbox-menu-items
               v-if="item.listType === 'checkboxItems'"
               :options="options"
               :item="item"
-              @listChange="tableHeadersShowCheck"
+              @listChange="tableHeadersShowCheck(item)"
+              @dragItem="onUpdateDraggable(item)"
             ></a-checkbox-menu-items>
             <v-list-tile
               v-if="item.listType === 'simpleItem'"
@@ -74,16 +74,16 @@ export default class SettingsMenuComponent extends Vue {
   @Prop() items;
   @Prop() options;
 
-  cancelRadioGroup() {
-    this.$emit("cancel");
+  radioGroupCancel(item) {
+    this.$emit("radioGroupCancel", item);
   }
 
-  tableHeadersShowCheck() {
-    this.$emit("listChange");
+  tableHeadersShowCheck(item) {
+    this.$emit("listChange", item);
   }
 
-  onUpdateDraggable() {
-    this.$emit("dragItem");
+  onUpdateDraggable(item) {
+    this.$emit("dragItem", item);
   }
 
   clickOnMenuItem(item) {
@@ -91,5 +91,36 @@ export default class SettingsMenuComponent extends Vue {
   }
 }
 </script>
+
+<style>
+.menu-settings .v-list__tile__title,
+.main-menu-settings .v-list__tile__title {
+  font-size: 14px;
+}
+.main-menu-settings .v-menu {
+  width: 100%;
+}
+
+.menu-settings__item-title {
+  font-size: 14px;
+}
+
+.main-menu-settings .v-menu:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.main-menu-settings .v-menu.v-menu--inline,
+.main-menu-settings .v-menu.v-menu--inline * {
+  width: 100%;
+}
+
+.menu-settings a.v-list__tile {
+  height: 40px;
+}
+
+.main-menu-settings .v-list {
+  padding: 0 2px;
+}
+</style>
 
 

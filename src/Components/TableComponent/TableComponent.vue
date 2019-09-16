@@ -156,10 +156,10 @@
           mainSettingsButtonTitle="Настройки"
           :items="menuSettingsItems"
           :options="options"
-          @cancel="autoRefreshDisable"
-          @listChange="tableHeadersShowCheck"
-          @dragItem="onUpdateDraggable"
-          @clickOnItem="(item) => { item.clickOnItem() }"
+          @radioGroupCancel="(item) => { item.radioGroupCancel() }"
+          @listChange="(item) => {item.listChange()}"
+          @dragItem="(item) => {item.dragItem()}"
+          @clickOnItem="(item) => {item.clickOnItem()}"
         ></a-settings-menu>
       </template>
     </a-table-topbar>
@@ -440,7 +440,8 @@ export default class TableComponent extends Vue {
       menuNugTop: "4px",
       menuWidth: "150px",
       menuSettingsTitle: "Автообновление",
-      listType: "radioGroupItems"
+      listType: "radioGroupItems",
+      radioGroupCancel: this.autoRefreshDisable
     },
     {
       contentClass: "menu-settings",
@@ -448,7 +449,9 @@ export default class TableComponent extends Vue {
       menuWidth: "150px",
       menuSettingsTitle: "Настройка колонок",
       listType: "checkboxItems",
-      listOfOptions: this.options.headers
+      listOfOptions: this.options.headers,
+      listChange: this.tableHeadersShowCheck,
+      dragItem: this.onUpdateDraggable
     },
     {
       contentClass: "menu-settings",
@@ -1074,52 +1077,6 @@ export default class TableComponent extends Vue {
 </style>
 
 <style>
-.autorefresh-options > .v-card__text {
-  padding-bottom: 1px;
-}
-
-.btn-cancel {
-  font-size: 14px;
-  background: none;
-}
-
-.btn-cancel[disabled] * {
-  color: #999999;
-}
-
-.btn-cancel:hover {
-  background: rgba(0, 0, 0, 0.04);
-}
-
-.btn-cancel a > div {
-  display: flex;
-  align-content: center;
-}
-
-.menu-settings .v-list__tile__title,
-.main-menu-settings .v-list__tile__title {
-  font-size: 14px;
-}
-.main-menu-settings .v-menu {
-  width: 100%;
-}
-
-.menu-settings__item-title {
-  font-size: 14px;
-}
-
-.main-menu-settings .v-menu:hover {
-  background: rgba(0, 0, 0, 0.04);
-}
-
-.main-menu-settings .v-menu.v-menu--inline,
-.main-menu-settings .v-menu.v-menu--inline * {
-  width: 100%;
-}
-
-.menu-settings a.v-list__tile {
-  height: 40px;
-}
 .v-menu__activator--active {
   background-color: rgba(0, 0, 0, 0.08);
 }
@@ -1146,75 +1103,11 @@ export default class TableComponent extends Vue {
   font-size: 14px;
 }
 
-.autorefresh-options .v-messages {
-  display: none;
-}
 .menu-settings .v-list__tile__action {
   min-width: 36px;
 }
 
 .headers-menu .v-list__tile--link:hover {
   background: rgba(0, 0, 0, 0.04);
-}
-
-.autorefresh-options .v-label {
-  color: rgba(0, 0, 0, 0.87);
-}
-
-.autorefresh-options .v-input__slot {
-  margin-bottom: 0px;
-}
-
-.autorefresh-options
-  .v-input--selection-controls:not(.v-input--hide-details)
-  .v-input__slot {
-  margin-bottom: 0px;
-}
-
-.autorefresh-options .v-input--selection-controls .v-input__control {
-  flex-grow: 1;
-}
-
-.autorefresh-options .v-radio {
-  padding-left: 16px;
-  margin: 0px;
-  padding-right: 16px;
-  height: 40px;
-  padding-bottom: 0px;
-}
-
-.autorefresh-options
-  .v-input--radio-group--column
-  .v-radio:not(:last-child):not(:only-child) {
-  margin-bottom: 0px;
-}
-
-.autorefresh-options .v-input--radio-group {
-  padding-bottom: 0px;
-}
-.autorefresh-options .v-input--selection-controls__ripple {
-  margin: 0px;
-}
-.autorefresh-options {
-  padding-bottom: 4px;
-}
-
-.checkbox-wrapper .v-messages {
-  display: none;
-}
-.checkbox-wrapper label {
-  width: 100%;
-  height: 100% !important;
-}
-
-.headers-options__checkbox-draggable-wrapper .v-list__tile__action,
-.headers-options__checkbox-draggable-wrapper .v-input__control,
-.checkbox-wrapper .v-list__tile__action,
-.checkbox-wrapper .v-input__control {
-  width: 100%;
-}
-
-.checkbox-wrapper div {
-  height: 100%;
 }
 </style>

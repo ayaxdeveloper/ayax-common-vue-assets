@@ -28,7 +28,7 @@
         text
         :disabled="options.autoRefresh == 0 ? true : false"
         class="text-transform-none btn-cancel"
-        @click="cancelRadioGroup"
+        @click="radioGroupCancel"
       >
         <v-list-tile-action>
           <v-icon>mdi-close</v-icon>
@@ -54,8 +54,92 @@ export default class RadioGroupMenuItemsComponent extends Vue {
   @Prop() options;
   @Prop() item;
 
-  cancelRadioGroup() {
-    this.$emit("cancel");
+  radioGroupCancel(item) {
+    this.$emit("radioGroupCancel", item);
   }
 }
 </script>
+
+<style>
+.autorefresh-options .btn-cancel {
+  font-size: 14px;
+  background: none;
+}
+
+.autorefresh-options .btn-cancel[disabled] * {
+  color: #999999;
+}
+
+.autorefresh-options .btn-cancel:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.autorefresh-options .v-label {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.autorefresh-options .v-input__slot {
+  margin-bottom: 0px;
+}
+
+.autorefresh-options
+  .v-input--selection-controls:not(.v-input--hide-details)
+  .v-input__slot {
+  margin-bottom: 0px;
+}
+
+.autorefresh-options .v-input--selection-controls .v-input__control {
+  flex-grow: 1;
+}
+
+.autorefresh-options .v-radio {
+  padding-left: 16px;
+  margin: 0px;
+  padding-right: 16px;
+  height: 40px;
+  padding-bottom: 0px;
+}
+
+.autorefresh-options
+  .v-input--radio-group--column
+  .v-radio:not(:last-child):not(:only-child) {
+  margin-bottom: 0px;
+}
+
+.autorefresh-options .v-input--radio-group {
+  padding-bottom: 0px;
+}
+.autorefresh-options .v-input--selection-controls__ripple {
+  margin: 0px;
+}
+.autorefresh-options {
+  padding-bottom: 4px;
+}
+
+.autorefresh-options .btn-cancel {
+  display: flex;
+}
+
+.autorefresh-options .btn-cancel a div:first-child {
+  min-width: 33px;
+}
+
+.autorefresh-options .btn-cancel a div:last-child div {
+  padding-right: 29px;
+  font-size: 14px;
+}
+
+.autorefresh-options .v-messages {
+  display: none;
+}
+
+.autorefresh-options .btn-cancel a > div {
+  display: flex;
+  align-content: center;
+}
+
+.autorefresh-options > .v-card__text {
+  padding-bottom: 1px;
+}
+</style>
+
