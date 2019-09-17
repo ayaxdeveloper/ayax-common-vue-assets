@@ -12,13 +12,12 @@
     <v-list-tile full-width slot="activator" class="menu-settings__list-tile">
       <v-list-tile-title full-width class="menu-settings__item-title">{{item.menuSettingsTitle}}</v-list-tile-title>
     </v-list-tile>
-    <v-card flat class="headers-options">
+    <v-card flat class="headers-options" v-if="item.isDraggable">
       <v-list dense>
         <draggable
           :list="item.listOfOptions"
           @update="onUpdateDraggable"
           class="headers-options__checkbox-draggable-wrapper"
-          v-if="isDraggable"
         >
           <v-list-tile
             v-for="(option, key) in item.listOfOptions"
@@ -48,13 +47,16 @@
             </v-list-tile-action>
           </v-list-tile>
         </draggable>
+      </v-list>
+    </v-card>
+    <v-card flat class="headers-options" v-else>
+      <v-list dense>
         <v-list-tile
           v-for="(option, key) in item.listOfOptions"
           :key="key+option.text"
           class="checkbox-wrapper"
           :ripple="true"
           @click.stop
-          v-else
         >
           <v-list-tile-action class="checkbox-wrapper__item-action">
             <v-checkbox
@@ -102,13 +104,15 @@ import Vuedraggable from "vuedraggable";
 })
 export default class CheckboxMenuitemsComponent extends Vue {
   @Prop() item: {
+    contentClass: "";
+    menuWidth;
+    isDraggable: true;
     listOfOptions: {
       isVisible;
       text;
       hiddenable;
     }[];
   };
-  @Prop({ type: Boolean, default: true }) isDraggable;
 
   cancelRadioGroup() {
     this.$emit("cancel");
