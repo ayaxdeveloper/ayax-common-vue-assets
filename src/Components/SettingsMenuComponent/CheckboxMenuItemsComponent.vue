@@ -7,6 +7,7 @@
     nudge-top="4px"
     :content-class="item.contentClass"
     :min-width="item.menuWidth"
+    v-if="item.listOfOptions.length > 0"
   >
     <v-list-tile full-width slot="activator" class="menu-settings__list-tile">
       <v-list-tile-title full-width class="menu-settings__item-title">{{item.menuSettingsTitle}}</v-list-tile-title>
@@ -92,16 +93,21 @@ import Vuedraggable from "vuedraggable";
   },
   filters: {
     sentenceToSmallLetters(value) {
-      return value.toLocaleLowerCase();
+      return value ? value.toLowerCase() : "";
     },
     firstLetterToUpperCase(value) {
-      return value.charAt(0).toLocaleUpperCase() + value.substring(1);
+      return value ? value.charAt(0).toUpperCase() + value.substring(1) : "";
     }
   }
 })
 export default class CheckboxMenuitemsComponent extends Vue {
-  @Prop() options;
-  @Prop() item;
+  @Prop() item: {
+    listOfOptions: {
+      isVisible;
+      text;
+      hiddenable;
+    }[];
+  };
   @Prop({ type: Boolean, default: true }) isDraggable;
 
   cancelRadioGroup() {
