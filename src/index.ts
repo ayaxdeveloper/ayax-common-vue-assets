@@ -9,11 +9,14 @@ import GroupSelectComponent from "./Components/GroupSelectComponent/GroupSelectC
 import NotificationComponent from "./Components/NotificationComponent/NotificationComponent.vue";
 import NumberInputComponent from "./Components/NumberInputComponent/NumberInputComponent.vue";
 import PhoneInputComponent from "./Components/PhoneInputComponent/PhoneInputComponent.vue";
+import SettingsMenuComponent from "./Components/SettingsMenuComponent/SettingsMenuComponent.vue";
 import SidebarComponent from "./Components/SidebarComponent/SidebarComponent.vue";
 import TableComponent from "./Components/TableComponent/TableComponent.vue";
 import TableTopbarComponent from "./Components/TableComponent/TableTopbarComponent.vue";
 import TableFilterComponent from "./Components/TableFilterComponent/TableFilterComponent.vue";
 import UserProfileComponent from "./Components/UserProfileComponent/UserProfileComponent.vue";
+
+
 
 Vue.use(Vuetify, {
     iconfont: "mdi",
@@ -36,6 +39,7 @@ export default {
         Vue.component("a-number-input", NumberInputComponent);
         Vue.component("a-phone-input", PhoneInputComponent);
         Vue.component("a-group-select", GroupSelectComponent);
+        Vue.component("a-settings-menu", SettingsMenuComponent);
     },
 };
 
@@ -48,6 +52,7 @@ export * from "./Providers/NotificationProvider/NotificationProvider";
 export * from "./Components/TableFilterComponent/TableFilterComponentItemAppearance";
 export * from "./Components/TableFilterComponent/TableFilterComponentItemInputType";
 export * from "./Components/TableFilterComponent/TableFilterComponentItemType";
+export * from "./Components/SettingsMenuComponent/MenuSettingsType";
 export * from "./Components/TableFilterComponent/Filter";
 export * from "./Components/TableFilterComponent/FilterOperation";
 export * from "./Components/TableFilterComponent/FilterValue";
@@ -70,4 +75,5 @@ export {
     NumberInputComponent,
     GroupSelectComponent,
     PhoneInputComponent,
+    SettingsMenuComponent
 };

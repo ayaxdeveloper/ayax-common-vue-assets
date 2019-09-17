@@ -20,144 +20,12 @@
         <slot name="topbar-items"></slot>
       </template>
       <template slot="settings" v-if="options.configurable">
-        <v-menu
-          bottom
-          offset-y
-          left
-          offset-x
-          :close-on-content-click="false"
-          :value="isTableMenuVisible"
-          content-class="main-menu-settings"
-        >
-          <v-btn
-            class="ml-2"
-            flat
-            style="height: 30px; width: 30px"
-            small
-            icon
-            title="Настройки таблицы"
-            slot="activator"
-            @click="isTableMenuVisible=true"
-          >
-            <v-icon>mdi-settings</v-icon>
-          </v-btn>
-          <v-layout row>
-            <v-flex>
-              <v-card flat>
-                <v-list dense>
-                  <v-menu
-                    offset-x
-                    left
-                    :close-on-content-click="false"
-                    open-on-click
-                    nudge-top="4px"
-                    content-class="autorefresh-menu menu-settings"
-                    style="min-width: 210px"
-                  >
-                    <v-list-tile full-width slot="activator">
-                      <v-list-tile-title full-width class="menu-settings__item-title">Автообновление</v-list-tile-title>
-                    </v-list-tile>
-
-                    <v-card flat class="autorefresh-options" outlined tile>
-                      <template>
-                        <v-radio-group v-model="options.autoRefresh" class="mt-0 mb-0">
-                          <v-radio
-                            v-for="option in options.autoRefreshOptions.filter(item => item >0)"
-                            :key="option"
-                            :label="option == 0 ? 'Отключить' : `${option} сек`"
-                            :value="option"
-                          ></v-radio>
-                        </v-radio-group>
-                        <v-divider></v-divider>
-                        <v-list-tile
-                          full-width
-                          flat
-                          block
-                          text
-                          :disabled="options.autoRefresh == 0 ? true : false"
-                          class="text-transform-none btn-cancel"
-                          @click="autoRefreshDisable()"
-                        >
-                          <v-list-tile-action>
-                            <v-icon>mdi-close</v-icon>
-                          </v-list-tile-action>
-                          <v-list-tile-content>
-                            <v-list-tile-title full-width>Отключить</v-list-tile-title>
-                          </v-list-tile-content>
-                        </v-list-tile>
-                      </template>
-                    </v-card>
-                  </v-menu>
-                  <v-divider></v-divider>
-
-                  <v-menu
-                    offset-x
-                    left
-                    :close-on-content-click="false"
-                    nudge-top="2px"
-                    content-class="headers-menu menu-settings"
-                    style="min-width: 210px"
-                  >
-                    <v-list-tile full-width slot="activator">
-                      <v-list-tile-title
-                        full-width
-                        class="menu-settings__item-title"
-                      >Настройка колонок таблицы</v-list-tile-title>
-                    </v-list-tile>
-
-                    <v-card flat class="headers-options">
-                      <v-list dense>
-                        <draggable
-                          :list="options.headers"
-                          @update="onUpdateDraggable"
-                          class="headers-options__checkbox-draggable-wrapper"
-                        >
-                          <v-list-tile
-                            v-for="header in options.headers"
-                            :key="header.value"
-                            @click.stop
-                            class="checkbox-wrapper"
-                            :ripple="true"
-                          >
-                            <v-list-tile-action class="checkbox-wrapper__item-action">
-                              <v-checkbox
-                                color="primary"
-                                v-if="header.hiddenable"
-                                v-model="header.isVisible"
-                                @change="tableHeadersShowCheck()"
-                                :label="header.text"
-                                class="menu-settings-headers__list-item"
-                                :ripple="false"
-                              ></v-checkbox>
-                              <v-checkbox
-                                v-else
-                                input-value="true"
-                                disabled
-                                :label="header.text"
-                                class="menu-settings-headers__list-item"
-                                :ripple="false"
-                              ></v-checkbox>
-                            </v-list-tile-action>
-                          </v-list-tile>
-                        </draggable>
-                      </v-list>
-                    </v-card>
-                  </v-menu>
-                  <v-divider></v-divider>
-                  <v-list-tile @click="resetTableSettings()">
-                    <v-list-tile-title>Сбросить настройки таблицы</v-list-tile-title>
-                  </v-list-tile>
-                </v-list>
-              </v-card>
-            </v-flex>
-          </v-layout>
-        </v-menu>
         <a-settings-menu
-          mainSettingsButtonTitle="Настройки"
+          mainSettingsButtonTitle="Настройки таблицы"
           :items="menuSettingsItems"
           :options="options"
           @radioGroupCancel="(item) => { item.radioGroupCancel() }"
-          @listChange="(item) => {item.listChange()}"
+          @listChange="(args) => {args[0].listChange(args[1])}"
           @dragItem="(item) => {item.dragItem()}"
           @clickOnItem="(item) => {item.clickOnItem()}"
         ></a-settings-menu>
@@ -396,6 +264,7 @@ import TableTopbarComponent from "./TableTopbarComponent.vue";
 import { ICacheService } from "ayax-common-cache";
 import * as moment from "moment";
 import SettingsMenuComponent from "../SettingsMenuComponent/SettingsMenuComponent.vue";
+import { MenuSettingsType } from "../SettingsMenuComponent/MenuSettingsType";
 
 @Component({
   name: "TableComponent",
@@ -434,33 +303,34 @@ export default class TableComponent extends Vue {
     [name: string]: TableFilterComponentItemInputType;
   } = {};
 
-  menuSettingsItems = [
-    {
+  menuSettingsItems: MenuSettingsType[] = [
+    new MenuSettingsType({
       contentClass: "autorefresh-menu",
-      menuNugTop: "4px",
-      menuWidth: "150px",
+      menuWidth: "230px",
       menuSettingsTitle: "Автообновление",
       listType: "radioGroupItems",
-      radioGroupCancel: this.autoRefreshDisable
-    },
-    {
+      radioGroupCancel: this.autoRefreshDisable,
+      isDivider: true
+    }),
+    new MenuSettingsType({
       contentClass: "menu-settings",
-      menuNugTop: "4px",
-      menuWidth: "150px",
-      menuSettingsTitle: "Настройка колонок",
+      menuWidth: "230px",
+      menuSettingsTitle: "Настройка колонок таблицы",
       listType: "checkboxItems",
       listOfOptions: this.options.headers,
-      listChange: this.tableHeadersShowCheck,
-      dragItem: this.onUpdateDraggable
-    },
-    {
+      listChange: (option = undefined) => {
+        this.tableHeadersShowCheck(option);
+      },
+      dragItem: this.onUpdateDraggable,
+      isDivider: true
+    }),
+    new MenuSettingsType({
       contentClass: "menu-settings",
-      menuNugTop: "4px",
-      menuWidth: "150px",
-      menuSettingsTitle: "Сбросить настройки",
+      menuWidth: "230px",
+      menuSettingsTitle: "Сбросить настройки таблицы",
       listType: "simpleItem",
       clickOnItem: this.resetTableSettings
-    }
+    })
   ];
 
   get visibleHeaders() {
@@ -1002,7 +872,7 @@ export default class TableComponent extends Vue {
     );
   }
 
-  tableHeadersShowCheck() {
+  tableHeadersShowCheck(option) {
     localStorage.setItem(
       `${this.options.title}_header_settings`,
       JSON.stringify(this.options.headers)

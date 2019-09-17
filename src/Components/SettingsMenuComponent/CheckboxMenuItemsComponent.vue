@@ -4,7 +4,7 @@
     left
     :close-on-content-click="false"
     open-on-click
-    :nudge-top="item.menuNudgeTop"
+    nudge-top="4px"
     :content-class="item.contentClass"
     :min-width="item.menuWidth"
   >
@@ -17,10 +17,11 @@
           :list="item.listOfOptions"
           @update="onUpdateDraggable"
           class="headers-options__checkbox-draggable-wrapper"
+          v-if="isDraggable"
         >
           <v-list-tile
-            v-for="(item, key) in item.listOfOptions"
-            :key="key+item.text"
+            v-for="(option, key) in item.listOfOptions"
+            :key="key+option.text"
             class="checkbox-wrapper"
             :ripple="true"
             @click.stop
@@ -28,10 +29,10 @@
             <v-list-tile-action class="checkbox-wrapper__item-action">
               <v-checkbox
                 color="primary"
-                v-if="item.hiddenable"
-                v-model="item.isVisible"
-                @change="tableHeadersShowCheck"
-                :label="item.text"
+                v-if="option.hiddenable"
+                v-model="option.isVisible"
+                @change="tableHeadersShowCheck(option)"
+                :label="option.text | sentenceToSmallLetters | firstLetterToUpperCase"
                 class="menu-settings-headers__list-item"
                 :ripple="false"
               ></v-checkbox>
@@ -39,19 +40,45 @@
                 v-else
                 input-value="true"
                 disabled
-                :label="item.text"
+                :label="option.text | sentenceToSmallLetters | firstLetterToUpperCase"
                 class="menu-settings-headers__list-item"
                 :ripple="false"
               ></v-checkbox>
             </v-list-tile-action>
           </v-list-tile>
         </draggable>
+        <v-list-tile
+          v-for="(option, key) in item.listOfOptions"
+          :key="key+option.text"
+          class="checkbox-wrapper"
+          :ripple="true"
+          @click.stop
+          v-else
+        >
+          <v-list-tile-action class="checkbox-wrapper__item-action">
+            <v-checkbox
+              color="primary"
+              v-if="option.hiddenable"
+              v-model="option.isVisible"
+              @change="tableHeadersShowCheck(option)"
+              :label="option.text | sentenceToSmallLetters | firstLetterToUpperCase"
+              class="menu-settings-headers__list-item"
+              :ripple="false"
+            ></v-checkbox>
+            <v-checkbox
+              v-else
+              input-value="true"
+              disabled
+              :label="option.text | sentenceToSmallLetters | firstLetterToUpperCase"
+              class="menu-settings-headers__list-item"
+              :ripple="false"
+            ></v-checkbox>
+          </v-list-tile-action>
+        </v-list-tile>
       </v-list>
     </v-card>
   </v-menu>
 </template>
-
-
 
 <script lang="ts">
 import Vue from "vue";
@@ -62,11 +89,20 @@ import Vuedraggable from "vuedraggable";
   name: "a-checkbox-menu-items",
   components: {
     draggable: Vuedraggable
+  },
+  filters: {
+    sentenceToSmallLetters(value) {
+      return value.toLocaleLowerCase();
+    },
+    firstLetterToUpperCase(value) {
+      return value.charAt(0).toLocaleUpperCase() + value.substring(1);
+    }
   }
 })
 export default class CheckboxMenuitemsComponent extends Vue {
   @Prop() options;
   @Prop() item;
+  @Prop({ type: Boolean, default: true }) isDraggable;
 
   cancelRadioGroup() {
     this.$emit("cancel");
@@ -76,8 +112,8 @@ export default class CheckboxMenuitemsComponent extends Vue {
     this.$emit("dragItem");
   }
 
-  tableHeadersShowCheck() {
-    this.$emit("listChange");
+  tableHeadersShowCheck(option) {
+    this.$emit("listChange", option);
   }
 }
 </script>
@@ -92,6 +128,10 @@ export default class CheckboxMenuitemsComponent extends Vue {
   height: 100% !important;
   padding-left: 26px;
   padding-right: 16px;
+}
+
+.checkbox-wrapper .checkbox-wrapper__item-action label {
+  color: rgba(0, 0, 0, 1);
 }
 
 .headers-options__checkbox-draggable-wrapper .v-list__tile__action,
@@ -112,10 +152,11 @@ export default class CheckboxMenuitemsComponent extends Vue {
 .checkbox-wrapper input,
 .checkbox-wrapper i {
   padding-left: 20px;
+  cursor: pointer;
 }
 
 .checkbox-wrapper input {
   width: 44px;
-  transform: translateY(3px) scaleY(1.25);
+  height: 40px;
 }
 </style>

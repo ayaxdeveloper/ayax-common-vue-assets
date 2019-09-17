@@ -21,7 +21,7 @@
     <v-layout row>
       <v-flex>
         <v-card flat>
-          <v-list dense v-for="(item, key) in items" :key="key+item.menuSettingsTitle">
+          <v-list dense v-for="(item, index) in items" :key="index+item.menuSettingsTitle">
             <a-radio-group-menu-items
               v-if="item.listType === 'radioGroupItems'"
               :options="options"
@@ -32,7 +32,7 @@
               v-if="item.listType === 'checkboxItems'"
               :options="options"
               :item="item"
-              @listChange="tableHeadersShowCheck(item)"
+              @listChange="(option) => tableHeadersShowCheck(item, option)"
               @dragItem="onUpdateDraggable(item)"
             ></a-checkbox-menu-items>
             <v-list-tile
@@ -45,7 +45,6 @@
                 class="menu-settings__item-title"
               >{{item.menuSettingsTitle}}</v-list-tile-title>
             </v-list-tile>
-
             <v-divider v-if="item.isDivider || false"></v-divider>
           </v-list>
         </v-card>
@@ -71,15 +70,15 @@ import CheckboxMenuitemsComponent from "./CheckboxMenuItemsComponent.vue";
 export default class SettingsMenuComponent extends Vue {
   @Prop({ type: String }) mainSettingsButtonTitle; // тайтл при наведении на иконку меню
   //@Prop({ type: Boolean, default: true }) isTableMenuVisible;
-  @Prop() items;
+  @Prop({ type: Array }) items;
   @Prop() options;
 
   radioGroupCancel(item) {
     this.$emit("radioGroupCancel", item);
   }
 
-  tableHeadersShowCheck(item) {
-    this.$emit("listChange", item);
+  tableHeadersShowCheck(item, option) {
+    this.$emit("listChange", [item, option]);
   }
 
   onUpdateDraggable(item) {

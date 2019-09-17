@@ -4,7 +4,7 @@
     left
     :close-on-content-click="false"
     open-on-click
-    :nudge-top="item.menuNudgeTop"
+    nudge-top="4px"
     :content-class="item.contentClass"
     :min-width="item.menuWidth"
   >
@@ -75,7 +75,8 @@ export default class RadioGroupMenuItemsComponent extends Vue {
 }
 
 .autorefresh-options .v-label {
-  color: rgba(0, 0, 0, 0.87);
+  color: rgba(0, 0, 0, 1);
+  font-weight: 400;
 }
 
 .autorefresh-options .v-input__slot {
