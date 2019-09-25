@@ -354,8 +354,22 @@ export default class TableTestLayout extends Vue {
         anyItems: this.ListGroupAsSelectedItems(),
         label: "Выбор маршрута",
         placeholder: "Выберите",
-        active: false,
+        active: true,
         itemClassName: ["column-1"]
+      }),
+      new TableFilterComponentItem({
+        requestName: "routeIdFilter",
+        name: "routeIdFilter",
+        appearance: TableFilterComponentItemAppearance.Topbar,
+        requestType: TableFilterComponentItemType.In,
+        inputType: TableFilterComponentItemInputType.TreeSelect,
+        groupName: "Обращение",
+        anyItems: this.ListGroupAsSelectedItems(),
+        label: "Выбор маршрута",
+        placeholder: "Выберите",
+        active: true,
+        itemClassName: ["column-1"],
+        width: 240
       }),
       new TableFilterComponentItem({
         requestName: "roomFilter",
