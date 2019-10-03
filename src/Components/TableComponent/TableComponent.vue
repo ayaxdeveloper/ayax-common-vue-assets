@@ -265,6 +265,7 @@ import { ICacheService } from "ayax-common-cache";
 import * as moment from "moment";
 import SettingsMenuComponent from "../SettingsMenuComponent/SettingsMenuComponent.vue";
 import { MenuSettingsType } from "../SettingsMenuComponent/MenuSettingsType";
+import { IOperationService } from "ayax-common-operation";
 
 @Component({
   name: "TableComponent",
@@ -282,6 +283,7 @@ import { MenuSettingsType } from "../SettingsMenuComponent/MenuSettingsType";
 export default class TableComponent extends Vue {
   @Inject() notificationProvider: INotificationProvider;
   @Inject() cacheService: ICacheService;
+  @Inject() operationService: IOperationService;
   @Prop({ default: () => new TableOptions() }) options: TableOptions;
   @Prop({ default: () => ({ tableIndex: null, toggleValue: false }) })
   slotToggle;
@@ -302,6 +304,19 @@ export default class TableComponent extends Vue {
   filterInputTypes: {
     [name: string]: TableFilterComponentItemInputType;
   } = {};
+  listOfKeysForSettings = [
+    "autoRefreshEnable",
+    "autoRefresh",
+    "headers",
+    "autoRefreshOptions"
+  ];
+  tableSettings: {
+    sectionName: string;
+    preferences: any;
+  } = {
+    sectionName: "tableOptions",
+    preferences: undefined
+  };
 
   menuSettingsItems: MenuSettingsType[] = [
     new MenuSettingsType({
@@ -349,12 +364,50 @@ export default class TableComponent extends Vue {
     return selectedOnPage;
   }
 
+  async getTableSettings(): Promise<void> {
+    try {
+      const requestResult = await this.operationService.get<any>(
+        "/UserPreferences/?sectionName=" + this.tableSettings.sectionName
+      );
+      if (requestResult) {
+        this.tableSettings = Object.assign(this.tableSettings, requestResult);
+        this.options = Object.assign(
+          this.options,
+          this.tableSettings.preferences
+        );
+      }
+    } catch (e) {
+      this.notificationProvider.Error(e);
+    }
+  }
+
+  saveTableSettings(): void {
+    try {
+      Object.keys(this.options).forEach(key => {
+        this.listOfKeysForSettings.forEach(item => {
+          if (item === key) {
+            this.tableSettings.preferences = Object.assign(
+              {},
+              this.tableSettings.preferences,
+              { [key]: this.options[key] }
+            );
+          }
+        });
+      });
+      console.log("this.tableSettings =>", this.tableSettings);
+      //  this.operationService.post<any>("/UserPreferences", this.tableSettings);
+    } catch (e) {
+      this.notificationProvider.Error(e);
+    }
+  }
+
   async created() {
-    if (localStorage.getItem(`${this.options.title}_auto_refresh`)) {
+    /*   if (localStorage.getItem(`${this.options.title}_auto_refresh`)) {
       this.options.autoRefresh = JSON.parse(
         localStorage.getItem(`${this.options.title}_auto_refresh`)
       );
-    }
+    } */
+    this.getTableSettings();
     Object.keys(TableFilterComponentItemInputType).forEach(item => {
       this.filterInputTypes[item] = TableFilterComponentItemInputType[item];
     });
@@ -637,10 +690,11 @@ export default class TableComponent extends Vue {
     if (this.options.autoRefresh > 0) {
       this.runLoadAgain();
     }
-    localStorage.setItem(
+    /* localStorage.setItem(
       `${this.options.title}_auto_refresh`,
       JSON.stringify(this.options.autoRefresh)
-    );
+    ); */
+    this.saveTableSettings();
   }
 
   private runLoadAgain(): void {
@@ -866,24 +920,26 @@ export default class TableComponent extends Vue {
     for (let i = 0; i < this.options.headers.length; i++) {
       this.options.headers[i].order = i;
     }
-    localStorage.setItem(
+    /*   localStorage.setItem(
       `${this.options.title}_header_settings`,
       JSON.stringify(this.options.headers)
-    );
+    ); */
+    this.saveTableSettings();
   }
 
   tableHeadersShowCheck(option) {
-    localStorage.setItem(
+    /*  localStorage.setItem(
       `${this.options.title}_header_settings`,
       JSON.stringify(this.options.headers)
-    );
+    ); */
+    this.saveTableSettings();
     this.resizeFixedHeader();
   }
 
   resetTableSettings() {
-    localStorage.removeItem(`${this.options.title}_header_settings`);
+    /*     localStorage.removeItem(`${this.options.title}_header_settings`); */
     this.options.autoRefresh = 0;
-    localStorage.removeItem(`${this.options.title}_auto_refresh`);
+    /*     localStorage.removeItem(`${this.options.title}_auto_refresh`); */
     this.options.headers.forEach(header => {
       this.originalHeaders.forEach(originalHeader => {
         if (header.value === originalHeader.value) {
@@ -893,6 +949,7 @@ export default class TableComponent extends Vue {
       });
     });
     this.options.headers.sort((a, b) => a.order - b.order);
+    this.saveTableSettings();
     this.isTableMenuVisible = false;
     this.resizeFixedHeader();
   }
