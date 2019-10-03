@@ -364,6 +364,8 @@ export default class TableComponent extends Vue {
     return selectedOnPage;
   }
 
+  selectedHeaders = [];
+
   async getTableSettings(): Promise<void> {
     try {
       const requestResult = await this.operationService.get<any>(
@@ -375,6 +377,7 @@ export default class TableComponent extends Vue {
           this.options,
           this.tableSettings.preferences
         );
+        this.selectedHeaders = this.tableSettings.preferences["headers"];
       }
     } catch (e) {
       this.notificationProvider.Error(e);
@@ -394,8 +397,7 @@ export default class TableComponent extends Vue {
           }
         });
       });
-      console.log("this.tableSettings =>", this.tableSettings);
-      //  this.operationService.post<any>("/UserPreferences", this.tableSettings);
+      this.operationService.post<any>("/UserPreferences", this.tableSettings);
     } catch (e) {
       this.notificationProvider.Error(e);
     }
@@ -483,20 +485,16 @@ export default class TableComponent extends Vue {
         });
       });
 
-    await Promise.all([
-      Promise.all(headerPromises),
-      Promise.all(filterPromises)
-    ]);
+    await Promise.all([Promise.all(filterPromises)]);
 
-    this.originalHeaders = JSON.parse(JSON.stringify(this.options.headers));
+    await Promise.all(headerPromises),
+      (this.originalHeaders = JSON.parse(JSON.stringify(this.options.headers)));
     for (let i = 0; i < this.originalHeaders.length; i++) {
       this.originalHeaders[i].order = i;
     }
 
-    if (localStorage.getItem(`${this.options.title}_header_settings`)) {
-      const data = JSON.parse(
-        localStorage.getItem(`${this.options.title}_header_settings`)
-      );
+    if (this.selectedHeaders.length > 0) {
+      const data = this.selectedHeaders;
       data.forEach(item => {
         this.options.headers.forEach(header => {
           if (item.value === header.value) {
@@ -507,6 +505,7 @@ export default class TableComponent extends Vue {
       });
       this.options.headers.sort((a, b) => a.order - b.order);
     }
+
     this.loading = false;
   }
 
