@@ -17,6 +17,7 @@ export class TableComponentHeader {
   mask: string;
   type: TableComponentHeaderType = TableComponentHeaderType.string;
   order: number;
+  initialOrder: number;
   custom = false;
   wrap = true;
 

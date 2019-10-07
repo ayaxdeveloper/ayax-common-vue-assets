@@ -30,7 +30,6 @@
             ></a-radio-group-menu-items>
             <a-checkbox-menu-items
               v-if="item.listType === 'checkboxItems'"
-              :options="options"
               :item="item"
               @listChange="(option) => tableHeadersShowCheck(item, option)"
               @dragItem="onUpdateDraggable(item)"
@@ -52,7 +51,6 @@
     </v-layout>
   </v-menu>
 </template>
-
 
 <script lang="ts">
 import Vue from "vue";
