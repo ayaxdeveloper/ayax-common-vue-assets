@@ -327,65 +327,6 @@ export default class TableComponent extends Vue {
     preferences: undefined
   };
 
-  savedMenuSettings = {
-    preferences: {
-      autoRefresh: 0,
-      autoRefreshEnable: true,
-      autoRefreshOptions: [30, 60, 120],
-
-      headers: [
-        {
-          initialOrder: undefined,
-          isVisible: true,
-          order: undefined,
-          value: "id"
-        },
-        {
-          initialOrder: undefined,
-          isVisible: true,
-          order: undefined,
-          value: "code"
-        },
-
-        {
-          initialOrder: undefined,
-          isVisible: true,
-          order: undefined,
-          value: "title"
-        },
-
-        {
-          initialOrder: undefined,
-          isVisible: false,
-          order: undefined,
-          value: "dictionaryId"
-        },
-
-        {
-          initialOrder: undefined,
-          isVisible: true,
-          order: undefined,
-          value: "qq"
-        },
-
-        {
-          initialOrder: undefined,
-          isVisible: true,
-          order: undefined,
-          value: "created"
-        },
-
-        {
-          initialOrder: undefined,
-          isVisible: true,
-          order: undefined,
-          value: "ww"
-        }
-      ]
-    },
-    sectionName: "tableOptionsTableComponent"
-  };
-
   menuSettingsItems: MenuSettingsType[] = [
     new MenuSettingsType({
       contentClass: "autorefresh-menu",
@@ -445,7 +386,6 @@ export default class TableComponent extends Vue {
       const requestResult = await this.operationService.get<any>(
         "/UserPreferences/?sectionName=" + this.tableSettings.sectionName
       );
-      /*      const requestResult = { ...this.savedMenuSettings }; // для тестирования получения и сохранения настроек меню */
       if (Object.keys(requestResult).length > 0) {
         this.tableSettings = Object.assign(this.tableSettings, requestResult);
         this.options.headers.forEach(item => {
@@ -459,6 +399,7 @@ export default class TableComponent extends Vue {
         this.options = Object.assign(this.options, {
           ..._.omit(this.tableSettings.preferences, "headers")
         });
+        this.options.headers.sort((a, b) => a.order - b.order);
         this.refreshTableSettingsItems();
       }
       this.settingsMenuKey += 1;
@@ -491,8 +432,6 @@ export default class TableComponent extends Vue {
           }
         });
       });
-      /*  this.savedMenuSettings = Object.assign({}, this.tableSettings); // для тестирования получения и сохранения настроек меню */
-
       this.operationService.post<any>("/UserPreferences", this.tableSettings);
     } catch (e) {
       this.notificationProvider.Error(e);
@@ -998,6 +937,12 @@ export default class TableComponent extends Vue {
         }
       });
     this.loadData();
+  }
+
+  beforeDestroy() {
+    if (this.timerAutoRefreshId) {
+      clearInterval(this.timerAutoRefreshId);
+    }
   }
 
   onUpdateDraggable() {
