@@ -688,6 +688,10 @@ export default class TableTopbarComponent extends Vue {
 .table-topbar .v-toolbar__content {
   padding: 16px;
 }
+
+.table-topbar {
+  z-index: 1;
+}
 .v-tooltip__content {
   white-space: pre-line;
 }

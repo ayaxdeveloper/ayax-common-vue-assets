@@ -486,8 +486,9 @@
         <v-checkbox style="margin-top: 0px" :label="filter.label" v-model="filter.values[0]"></v-checkbox>
       </v-flex>
       <v-layout
-        class="flex-treeselect"
+        :class="[filter.appearance === filterAppearance['Topbar'] ? 'flex-treeselect topbar-filter' : 'flex-treeselect']"
         v-else-if="filter.inputType == filterInputTypes['TreeSelect']"
+        style="min-width: 200px;"
       >
         <v-flex class="filter">
           <a-tree-select
@@ -495,12 +496,12 @@
             :multiple="true"
             :matchKeys="['id', 'label', 'number']"
             :instanceId="filter.requestName"
-            :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput', 'selectFilter']"
             :name="filter.requestName"
             :options="filter.anyItems"
             :placeholder="filter.placeholder"
-            class="my-treeselect"
+            :class="[filter.appearance === filterAppearance['Topbar'] ? 'my-treeselect topbar-filter' : 'my-treeselect', 'filterInput', 'selectFilter']"
             :limit="0"
+            :zIndex="998"
             :showCount="true"
             valueConsistsOf="LEAF_PRIORITY"
             :data-label-attr="filter.label"
@@ -1005,6 +1006,76 @@ export default class TableFilterComponent extends Vue {
   margin-top: 12px;
 }
 
+.flex-treeselect.topbar-filter {
+  margin-top: 0px;
+}
+
+.my-treeselect.topbar-filter {
+  margin-top: 8px;
+}
+
+.vue-treeselect__control {
+  padding-right: 7px;
+}
+
+.flex-treeselect.topbar-filter .vue-treeselect__control {
+  background-color: white;
+  height: 22px;
+  margin-top: 19px;
+  border-radius: 2px;
+  border: none;
+}
+
+.vue-treeselect.topbar-filter:after {
+  top: -19px;
+}
+
+.vue-treeselect.topbar-filter .selectionValue {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 14px;
+}
+
+.vue-treeselect.topbar-filter .vue-treeselect__limit-tip {
+  padding-left: 5px;
+  padding-right: 0px;
+  padding-top: 0px;
+}
+
+.vue-treeselect.topbar-filter .vue-treeselect__input {
+  padding-bottom: 0px;
+  color: rgba(0, 0, 0, 0.87);
+  padding-left: 5px;
+}
+
+.vue-treeselect.topbar-filter .vue-treeselect__input-container {
+  padding-top: 0px !important;
+}
+.vue-treeselect.topbar-filter .selectionValue .selectionChip {
+  color: #fff;
+  background-color: #424242 !important;
+}
+
+.vue-treeselect.topbar-filter .vue-treeselect__limit-tip {
+  padding-top: 0px !important;
+}
+
+.vue-treeselect.topbar-filter .vue-treeselect__limit-tip-text {
+  margin: 1px 0;
+}
+
+.my-treeselect.topbar-filter .vue-treeselect__placeholder {
+  padding-left: 5px;
+}
+
+.my-treeselect.topbar-filter svg path {
+  fill: rgba(0, 0, 0, 0.54);
+}
+
+.my-treeselect.topbar-filter svg {
+  height: 22px;
+  margin-bottom: 0px;
+}
+
 /* Class for wrong input*/
 .wrong-input {
   border-bottom: 1px solid red !important;
@@ -1018,3 +1089,6 @@ export default class TableFilterComponent extends Vue {
   -webkit-text-fill-color: #ffff !important;
 }
 </style>
+
+
+
