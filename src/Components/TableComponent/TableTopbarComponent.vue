@@ -9,7 +9,7 @@
           label
           small
           color="white"
-          v-if="itemsQuantity"
+          v-if="itemsQuantity !== null"
           class="black--text"
         >{{ itemsQuantity }}</v-chip>
       </v-toolbar-title>
