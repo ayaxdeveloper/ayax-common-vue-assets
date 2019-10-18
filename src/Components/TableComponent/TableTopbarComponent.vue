@@ -282,7 +282,6 @@ export default class TableTopbarComponent extends Vue {
   @Prop({ default: null }) quickFilterPromise: (
     request
   ) => Promise<any[]> | null;
-  @Prop({ default: () => [] }) quickFilterItems: QuickFilterItem[];
   @Prop() quickFilterTooltipText: string;
 
   showAllFilters = false;
@@ -565,12 +564,6 @@ export default class TableTopbarComponent extends Vue {
   }
 
   async getQuickFilters() {
-    // This if will rewrite Promises!
-    if (this.quickFilterItems.length > 0) {
-      this.replaceQuickFilterItems(this.quickFilterItems);
-      return;
-    }
-
     try {
       const filters = this.quickFilterPromise
         ? await this.quickFilterPromise({ table: this.tableName })
@@ -622,12 +615,6 @@ export default class TableTopbarComponent extends Vue {
     }
 
     this.quickFilterText = "Все";
-  }
-
-  replaceQuickFilterItems(filters: QuickFilterItem[]) {
-    if (filters.length > 0) {
-      this.quickFilters = filters;
-    }
   }
 }
 </script>

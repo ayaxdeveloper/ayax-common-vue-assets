@@ -1,13 +1,13 @@
 import { Pagination, SearchResponse } from "ayax-common-types";
 import { ActionItem } from "../ActionbarComponent/ActionItem";
 import { TableFilterComponentItem } from "../TableFilterComponent/TableFilterComponentItem";
-import { TableComponentHeader } from "./TableHeader";
 import { QuickFilterItem } from "./QuickFilterItem";
+import { TableComponentHeader } from "./TableHeader";
 
 export class TableOptions {
     autoRefreshEnable = false;
     autoRefresh = 0;
-    autoRefreshOptions: number[] = [30, 60, 120]
+    autoRefreshOptions: number[] = [30, 60, 120];
     searchData: (request) => Promise<SearchResponse<any[]>>;
     rawData: (request) => Promise<any[]>;
     tableName = "tableComponent";
@@ -18,10 +18,10 @@ export class TableOptions {
     filterGroups: string[] = [];
     quickFilters = false;
     quickFilterPromise: (request) => Promise<any[]> | null = null;
-    quickFilterItems: QuickFilterItem[] = [];
-    quickFilterTooltipText: string = "";
+    quickFilterTooltipText = "";
     selectable = true;
     selectableSingle = false;
+    takeTableSettingFromDb = true;
     clearSelected = 0;
     resizeHeader = 0;
     reloadData = 0;

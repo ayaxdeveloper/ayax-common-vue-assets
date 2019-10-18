@@ -11,7 +11,6 @@
       :filterGroups="options.filterGroups"
       :showQuickFilters="options.quickFilters"
       :quickFilterPromise="options.quickFilterPromise"
-      :quickFilterItems="options.quickFilterItems"
       :quickFilterTooltipText="options.quickFilterTooltipText"
       @apply-filter="applyFilter"
       @relocate-actionbar="updateActionbar++"
@@ -382,59 +381,80 @@ export default class TableComponent extends Vue {
   }
 
   async getTableSettings(): Promise<void> {
-    try {
-      const requestResult = await this.operationService.get<any>(
-        "/UserPreferences/?sectionName=" + this.tableSettings.sectionName
-      );
-      if (Object.keys(requestResult).length > 0) {
-        this.tableSettings = Object.assign(this.tableSettings, requestResult);
-        this.options.headers.forEach(item => {
-          item = Object.assign(
-            item,
-            this.tableSettings.preferences.headers.find(
-              x => x.value === item.value
-            )
-          );
-        });
-        this.options = Object.assign(this.options, {
-          ..._.omit(this.tableSettings.preferences, "headers")
-        });
-        this.options.headers.sort((a, b) => a.order - b.order);
-        this.refreshTableSettingsItems();
+    if (this.options.takeTableSettingFromDb === true) {
+      try {
+        const requestResult = await this.operationService.get<any>(
+          "/UserPreferences/?sectionName=" + this.tableSettings.sectionName
+        );
+        if (Object.keys(requestResult).length > 0) {
+          this.tableSettings = Object.assign(this.tableSettings, requestResult);
+          this.options.headers.forEach(item => {
+            item = Object.assign(
+              item,
+              this.tableSettings.preferences.headers.find(
+                x => x.value === item.value
+              )
+            );
+          });
+          this.options = Object.assign(this.options, {
+            ..._.omit(this.tableSettings.preferences, "headers")
+          });
+          this.options.headers.sort((a, b) => a.order - b.order);
+          this.refreshTableSettingsItems();
+        }
+        this.settingsMenuKey += 1;
+      } catch (e) {
+        console.error(e);
       }
-      this.settingsMenuKey += 1;
-    } catch (e) {
-      console.error(e);
+    } else {
+      if (localStorage.getItem(`${this.options.title}_auto_refresh`)) {
+        this.options.autoRefresh = JSON.parse(
+          localStorage.getItem(`${this.options.title}_auto_refresh`)
+        );
+      }
     }
   }
 
   saveTableSettings(): void {
-    try {
-      debugger;
-      Object.keys(this.options).forEach(key => {
-        Object.keys(this.listOfKeysForSaveSettings).forEach(item => {
-          if (item === key) {
-            if (key === "headers") {
-              this.tableSettings.preferences[key] = [];
-              let paramArray = Object.keys(this.listOfKeysForSaveSettings[key]);
-              this.options[key].forEach((k, i) => {
-                this.tableSettings.preferences[key].push(
-                  Object.assign({}, _.pick(k, [...paramArray]))
+    if (this.options.takeTableSettingFromDb === true) {
+      try {
+        debugger;
+        Object.keys(this.options).forEach(key => {
+          Object.keys(this.listOfKeysForSaveSettings).forEach(item => {
+            if (item === key) {
+              if (key === "headers") {
+                this.tableSettings.preferences[key] = [];
+                let paramArray = Object.keys(
+                  this.listOfKeysForSaveSettings[key]
                 );
-              });
-            } else {
-              this.tableSettings.preferences = Object.assign(
-                {},
-                this.tableSettings.preferences,
-                { [key]: this.options[key] }
-              );
+                this.options[key].forEach((k, i) => {
+                  this.tableSettings.preferences[key].push(
+                    Object.assign({}, _.pick(k, [...paramArray]))
+                  );
+                });
+              } else {
+                this.tableSettings.preferences = Object.assign(
+                  {},
+                  this.tableSettings.preferences,
+                  { [key]: this.options[key] }
+                );
+              }
             }
-          }
+          });
         });
-      });
-      this.operationService.post<any>("/UserPreferences", this.tableSettings);
-    } catch (e) {
-      this.notificationProvider.Error(e);
+        this.operationService.post<any>("/UserPreferences", this.tableSettings);
+      } catch (e) {
+        this.notificationProvider.Error(e);
+      }
+    } else {
+      localStorage.setItem(
+        `${this.options.title}_auto_refresh`,
+        JSON.stringify(this.options.autoRefresh)
+      );
+      localStorage.setItem(
+        `${this.options.title}_header_settings`,
+        JSON.stringify(this.options.headers)
+      );
     }
   }
 
