@@ -402,18 +402,6 @@ export default class TableTestLayout extends Vue {
       })
     ],
     quickFilters: true,
-    quickFilterItems: [
-      new QuickFilterItem({
-        id: 0,
-        name: "string",
-        filter: [{ filterName: "ownership", filterValue: ["myBuyers"] }]
-      }),
-      new QuickFilterItem({
-        id: 1,
-        name: "string1",
-        filter: [{ filterName: "ownership", filterValue: ["myBuyers"] }]
-      })
-    ],
     quickFilterTooltipText: "Quick search\nTest help text"
   });
 
