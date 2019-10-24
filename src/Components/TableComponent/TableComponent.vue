@@ -384,7 +384,7 @@ export default class TableComponent extends Vue {
     if (this.options.takeTableSettingFromDb === true) {
       try {
         const requestResult = await this.operationService.get<any>(
-          "/UserPreferences/?sectionName=" + this.tableSettings.sectionName
+          "/ClientSettings/user?sectionName=" + this.tableSettings.sectionName
         );
         if (Object.keys(requestResult).length > 0) {
           this.tableSettings = Object.assign(this.tableSettings, requestResult);
@@ -418,7 +418,6 @@ export default class TableComponent extends Vue {
   saveTableSettings(): void {
     if (this.options.takeTableSettingFromDb === true) {
       try {
-        debugger;
         Object.keys(this.options).forEach(key => {
           Object.keys(this.listOfKeysForSaveSettings).forEach(item => {
             if (item === key) {
@@ -442,7 +441,10 @@ export default class TableComponent extends Vue {
             }
           });
         });
-        this.operationService.post<any>("/UserPreferences", this.tableSettings);
+        this.operationService.post<any>(
+          "/ClientSettings/user",
+          this.tableSettings
+        );
       } catch (e) {
         this.notificationProvider.Error(e);
       }
