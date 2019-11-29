@@ -1,4 +1,5 @@
 import { Pagination, SearchResponse } from "ayax-common-types";
+import VueRouter from "vue-router";
 import { ActionItem } from "../ActionbarComponent/ActionItem";
 import { TableFilterComponentItem } from "../TableFilterComponent/TableFilterComponentItem";
 import { QuickFilterItem } from "./QuickFilterItem";
@@ -34,6 +35,8 @@ export class TableOptions {
     configurable = true;
     rowColor: (item) => string = () => "";
     maxHeight = window.innerHeight - 295;
+    leadId?: number;
+    router?: VueRouter;
     constructor(init?: Partial<TableOptions>) {
         if (init) {
             Object.assign(this, init);
