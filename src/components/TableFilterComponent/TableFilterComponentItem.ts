@@ -79,9 +79,19 @@ export class TableFilterComponentItem {
                     return Filter.Eq(this.formatterValues[0]);
                 }
                 break;
+            case TableFilterComponentItemType.NotEq:
+                if (this.values[0]) {
+                    return Filter.NotEq(this.formatterValues[0]);
+                }
+                break;
             case TableFilterComponentItemType.Like:
                 if (this.values[0]) {
                     return Filter.Like(this.formatterValues[0]);
+                }
+                break;
+            case TableFilterComponentItemType.NotLike:
+                if (this.values[0]) {
+                    return Filter.NotLike(this.formatterValues[0]);
                 }
                 break;
             case TableFilterComponentItemType.Range:
@@ -89,6 +99,11 @@ export class TableFilterComponentItem {
             case TableFilterComponentItemType.In:
                 if (this.values.length > 0) {
                     return Filter.In(this.formatterValues);
+                }
+                break;
+            case TableFilterComponentItemType.NotIn:
+                if (this.values.length > 0) {
+                    return Filter.NotIn(this.formatterValues);
                 }
                 break;
             default:

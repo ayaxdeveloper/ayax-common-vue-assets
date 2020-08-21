@@ -1,21 +1,10 @@
 <template>
   <div v-shortkey.once="{applyFilter: ['enter']}" @shortkey="shortkeyHandler" v-if="filter.active">
-    <!-- <div
-            v-if="filter.appearance != filterAppearance['AllFilters'] || filter.inputType == filterInputTypes['Button']"
-            style="position: relative"
-        >
-            <v-btn
-                v-if="applyFilterButton"
-                class="table-filter-apply-btn_topbar"
-                color="blue darken-1"
-                small
-                @click="applyFilter"
-            >Применить</v-btn>
-    </div>-->
     <template>
       <v-flex
         class="filter"
-        v-if="(filter.requestType == filterTypes['Eq'] || filter.requestType == filterTypes['Like']) && filter.inputType == filterInputTypes['Text']"
+        v-if="(filter.requestType == filterTypes['Eq'] || filter.requestType == filterTypes['Like'] 
+        || filter.requestType == filterTypes['NotEq'] || filter.requestType == filterTypes['NotLike']) && filter.inputType == filterInputTypes['Text']"
       >
         <div class="filterLabel">{{ filter.label }}</div>
         <v-text-field
@@ -33,21 +22,10 @@
       </v-flex>
       <v-flex
         class="filter"
-        v-if="(filter.requestType == filterTypes['Eq'] || filter.requestType == filterTypes['Like']) && filter.inputType == filterInputTypes['Number']"
+        v-if="(filter.requestType == filterTypes['Eq'] || filter.requestType == filterTypes['Like']
+         || filter.requestType == filterTypes['NotEq'] || filter.requestType == filterTypes['NotLike']) && filter.inputType == filterInputTypes['Number']"
       >
         <div class="filterLabel">{{ filter.label }}</div>
-        <!--   <a-number-input
-          :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput']"
-          :solo="filter.appearance === filterAppearance['Topbar']"
-          :light="filter.appearance === filterAppearance['Topbar']"
-          :name="filter.requestName"
-          :placeholder="filter.placeholder"
-          :prepend-icon="filter.icon"
-          v-model="filter.values[0]"         
-          :numbersAfterComma="filter.numbersAfterComma"
-          clearable
-          single-line
-        ></a-number-input>-->
         <v-text-field
           :class="[filter.appearance === filterAppearance['Topbar'] ? 'topbar-filter' : 'filterInput']"
           :solo="filter.appearance === filterAppearance['Topbar']"
@@ -63,7 +41,8 @@
       </v-flex>
       <v-flex
         class="filter"
-        v-if="(filter.requestType == filterTypes['Eq'] || filter.requestType == filterTypes['Like']) && filter.inputType == filterInputTypes['Phone']"
+        v-if="(filter.requestType == filterTypes['Eq'] || filter.requestType == filterTypes['Like'] 
+        || filter.requestType == filterTypes['NotEq'] || filter.requestType == filterTypes['NotLike']) && filter.inputType == filterInputTypes['Phone']"
       >
         <div class="filterLabel">{{ filter.label }}</div>
         <v-text-field
@@ -230,7 +209,7 @@
       </template>
       <v-flex
         class="filter"
-        v-else-if="filter.requestType == filterTypes['Eq'] && filter.inputType == filterInputTypes['GroupSelect']"
+        v-else-if="(filter.requestType == filterTypes['Eq'] || filter.requestType == filterTypes['NotEq']) && filter.inputType == filterInputTypes['GroupSelect']"
       >
         <div class="filterLabel">{{ filter.label }}</div>
         <a-group-select
@@ -252,7 +231,7 @@
       </v-flex>
       <v-flex
         class="filter"
-        v-else-if="filter.requestType == filterTypes['In'] && filter.inputType == filterInputTypes['GroupSelect']"
+        v-else-if="(filter.requestType == filterTypes['In'] || filter.requestType == filterTypes['NotIn']) && filter.inputType == filterInputTypes['GroupSelect']"
       >
         <div class="filterLabel">{{ filter.label }}</div>
         <a-group-select
@@ -287,7 +266,7 @@
       </v-flex>
       <v-flex
         class="filter"
-        v-else-if="filter.requestType == filterTypes['Eq'] && filter.inputType == filterInputTypes['Select']"
+        v-else-if="(filter.requestType == filterTypes['Eq'] || filter.requestType == filterTypes['NotEq']) && filter.inputType == filterInputTypes['Select']"
       >
         <div class="filterLabel">{{ filter.label }}</div>
         <v-autocomplete
@@ -308,7 +287,7 @@
       </v-flex>
       <v-flex
         class="filter"
-        v-else-if="filter.requestType == filterTypes['In'] && filter.inputType == filterInputTypes['Select']"
+        v-else-if="(filter.requestType == filterTypes['In'] || filter.requestType == filterTypes['NotIn']) && filter.inputType == filterInputTypes['Select']"
       >
         <div class="filterLabel">{{ filter.label }}</div>
         <v-autocomplete
@@ -362,7 +341,7 @@
       <v-flex
         class="pb-2 filter"
         style="height: 48px"
-        v-else-if="filter.requestType == filterTypes['Eq'] && filter.inputType == filterInputTypes['Button']"
+        v-else-if="(filter.requestType == filterTypes['Eq'] || filter.requestType == filterTypes['NotEq']) && filter.inputType == filterInputTypes['Button']"
       >
         <template v-if="filter.label">
           <v-layout row class="filterLabel">{{filter.label}}</v-layout>
@@ -389,7 +368,8 @@
       <v-flex
         class="pb-2 filter"
         style="height: 48px"
-        v-else-if="(filter.requestType == filterTypes['In'] || filter.requestType == filterTypes['Eq']) && filter.inputType == filterInputTypes['ButtonToggle']"
+        v-else-if="(filter.requestType == filterTypes['In'] || filter.requestType == filterTypes['Eq']
+         || filter.requestType == filterTypes['NotIn'] || filter.requestType == filterTypes['NotEq']) && filter.inputType == filterInputTypes['ButtonToggle']"
       >
         <template v-if="filter.label">
           <v-layout row class="filterLabel">{{filter.label}}</v-layout>
@@ -397,7 +377,7 @@
             <v-btn-toggle
               v-model="filter.values"
               light
-              :multiple="filter.requestType == filterTypes['In']"
+              :multiple="filter.requestType == filterTypes['In'] || filter.requestType == filterTypes['NotIn']"
               class="filterBtnToggle"
             >
               <v-btn
@@ -416,7 +396,7 @@
           <v-btn-toggle
             v-model="filter.values"
             light
-            :multiple="filter.requestType == filterTypes['In']"
+            :multiple="filter.requestType == filterTypes['In'] || filter.requestType == filterTypes['NotIn']"
             class="filterBtnToggle"
             style="margin-top:5px"
           >
@@ -435,7 +415,7 @@
       <v-flex
         class="pb-2 filter"
         style="height: 46px"
-        v-else-if="filter.requestType == filterTypes['Eq'] && filter.inputType == filterInputTypes['ButtonDropdown']"
+        v-else-if="(filter.requestType == filterTypes['Eq'] || filter.requestType == filterTypes['NotEq']) && filter.inputType == filterInputTypes['ButtonDropdown']"
       >
         <template v-if="filter.label">
           <v-layout row class="filterLabel">{{filter.label}}</v-layout>
@@ -481,7 +461,7 @@
       <v-flex
         class="pr-2 pb-2 switcher"
         style="width: 180px; height: 48px; padding-top: 9px"
-        v-else-if="filter.requestType == filterTypes['Eq'] && filter.inputType == filterInputTypes['Checkbox']"
+        v-else-if="(filter.requestType == filterTypes['Eq'] || filter.requestType == filterTypes['NotEq']) && filter.inputType == filterInputTypes['Checkbox']"
       >
         <v-checkbox style="margin-top: 0px" :label="filter.label" v-model="filter.values[0]"></v-checkbox>
       </v-flex>
@@ -515,10 +495,7 @@
 <script lang="ts">
 import { SelectItem } from "ayax-common-types";
 import { Component, Emit, Prop, Vue, Watch } from "vue-property-decorator";
-import {
-  TableComponentHeader,
-  TableComponentHeaderType
-} from "../TableComponent/TableHeader";
+import { TableComponentHeader, TableComponentHeaderType } from "../TableComponent/TableHeader";
 import { TableFilterComponentItem } from "./TableFilterComponentItem";
 import { TableFilterComponentItemAppearance } from "./TableFilterComponentItemAppearance";
 import { TableFilterComponentItemInputType } from "./TableFilterComponentItemInputType";
@@ -530,14 +507,14 @@ import "a-vue-treeselect/dist/vue-treeselect.css";
 @Component({
   name: "a-table-filter",
   components: {
-    "a-tree-select": ATreeSelect
+    "a-tree-select": ATreeSelect,
   },
   directives: {
     "date-mask": {
       inserted: function(el) {
         const arrOfInputEl = el.querySelectorAll("input");
         const parentOfInput = el.querySelector(".el-range-editor");
-        arrOfInputEl.forEach(inputEl => {
+        arrOfInputEl.forEach((inputEl) => {
           inputEl.setAttribute("maxlength", "10");
 
           const input = inputEl;
@@ -569,7 +546,7 @@ import "a-vue-treeselect/dist/vue-treeselect.css";
           };
           dateInputMask(input);
         });
-      }
+      },
     },
     "digital-mask": {
       inserted: function(element, binding) {
@@ -585,10 +562,10 @@ import "a-vue-treeselect/dist/vue-treeselect.css";
           autoUnmask: true,
           rightAlign: false,
           digitsOptional: true,
-          digits: binding.value.numbersAfterComma
+          digits: binding.value.numbersAfterComma,
         });
         im.mask(inputEl);
-      }
+      },
     },
     "phone-mask": {
       inserted: function(element, binding) {
@@ -603,30 +580,32 @@ import "a-vue-treeselect/dist/vue-treeselect.css";
           autoUnmask: true,
           positionCaretOnClick: `select`,
           clearIncomplete: true,
-          onUnMask: function(
-            maskedValue: string,
-            unmaskedValue: string
-          ): string {
+          onUnMask: function(maskedValue: string, unmaskedValue: string): string {
             if (unmaskedValue.length === 10) {
               return "8" + unmaskedValue;
             } else if (unmaskedValue.length === 11) {
               return unmaskedValue;
             }
             return "";
-          }
+          },
         });
         im.mask(inputEl);
-      }
-    }
-  }
+      },
+    },
+  },
 })
 export default class TableFilterComponent extends Vue {
-  @Prop({ required: true }) filter: TableFilterComponentItem;
+  @Prop({ required: true })
+  filter: TableFilterComponentItem;
   @Prop() value: any;
-  @Prop({ default: 0 }) index: number;
-  @Prop({ default: true }) applyFilterButtonVisibility: boolean;
-  @Prop({ default: "grey lighten-1" }) color: string;
-  @Prop({ default: false }) appliedFromQuery: boolean;
+  @Prop({ default: 0 })
+  index: number;
+  @Prop({ default: true })
+  applyFilterButtonVisibility: boolean;
+  @Prop({ default: "grey lighten-1" })
+  color: string;
+  @Prop({ default: false })
+  appliedFromQuery: boolean;
 
   focus: false;
   filterTypes: { [name: string]: TableFilterComponentItemType } = {};
@@ -644,49 +623,41 @@ export default class TableFilterComponent extends Vue {
 
   dateFilterPickerOptions = {
     firstDayOfWeek: 1,
-    shortcuts: []
+    shortcuts: [],
   };
 
   created() {
-    Object.keys(TableFilterComponentItemType).forEach(item => {
+    Object.keys(TableFilterComponentItemType).forEach((item) => {
       this.filterTypes[item] = TableFilterComponentItemType[item];
     });
-    Object.keys(TableComponentHeaderType).forEach(item => {
+    Object.keys(TableComponentHeaderType).forEach((item) => {
       this.headerTypes[item] = TableComponentHeaderType[item];
     });
-    Object.keys(TableFilterComponentItemInputType).forEach(item => {
+    Object.keys(TableFilterComponentItemInputType).forEach((item) => {
       this.filterInputTypes[item] = TableFilterComponentItemInputType[item];
     });
-    Object.keys(TableFilterComponentItemAppearance).forEach(item => {
+    Object.keys(TableFilterComponentItemAppearance).forEach((item) => {
       this.filterAppearance[item] = TableFilterComponentItemAppearance[item];
     });
     if (this.filter.selectItems) {
-      this.initialSelectItems = JSON.parse(
-        JSON.stringify(this.filter.selectItems)
-      );
+      this.initialSelectItems = JSON.parse(JSON.stringify(this.filter.selectItems));
     }
     if (
       this.filter.inputType === this.filterInputTypes["Date"] &&
       this.filter.requestType === this.filterTypes["Range"]
     ) {
-      this.dateFilterPickerOptions.shortcuts = this.filter.quickDates.map(
-        x => ({
-          text: x[2],
-          onClick(picker) {
-            picker.$emit("pick", [x[0], x[1], x[2]]);
-          }
-        })
-      );
+      this.dateFilterPickerOptions.shortcuts = this.filter.quickDates.map((x) => ({
+        text: x[2],
+        onClick(picker) {
+          picker.$emit("pick", [x[0], x[1], x[2]]);
+        },
+      }));
     }
-    if (
-      this.filter.requestType == this.filterTypes["In"] &&
-      this.filter.inputType == this.filterInputTypes["Select"]
-    ) {
+    if (this.filter.requestType == this.filterTypes["In"] && this.filter.inputType == this.filterInputTypes["Select"]) {
       if (this.filter.values.length > 0) {
-        this.filter.selectItems.forEach(item =>
-          this.filter.values.find(x => x === item.value)
-            ? (item.selected = true)
-            : (item.selected = false)
+        this.filter.selectItems.forEach(
+          (item) =>
+            this.filter.values.find((x) => x === item.value) ? (item.selected = true) : (item.selected = false)
         );
       }
     }
@@ -710,9 +681,7 @@ export default class TableFilterComponent extends Vue {
     this.applyFilter();
   }
   get ButtonDropdownText() {
-    const search = this.filter.selectItems.find(
-      x => x.value == this.filter.values[0]
-    );
+    const search = this.filter.selectItems.find((x) => x.value == this.filter.values[0]);
     return search ? search.text : "Выберите";
   }
 
@@ -727,10 +696,8 @@ export default class TableFilterComponent extends Vue {
       this.filter.requestType === this.filterTypes["In"] &&
       this.filter.inputType === this.filterInputTypes["Select"]
     ) {
-      this.filter.selectItems.forEach(selectItem => {
-        const selectedValue = this.filter.values.find(
-          x => x === selectItem.value
-        );
+      this.filter.selectItems.forEach((selectItem) => {
+        const selectedValue = this.filter.values.find((x) => x === selectItem.value);
         if (selectedValue) {
           selectItem.selected = true;
         } else {
@@ -768,11 +735,17 @@ export default class TableFilterComponent extends Vue {
   getHint() {
     switch (this.filter.requestType) {
       case TableFilterComponentItemType.Eq:
-        return "Точное совпадение";
+        return "Равно";
       case TableFilterComponentItemType.Like:
-        return "Содержит";
+        return "Совпадает";
       case TableFilterComponentItemType.In:
-        return "Выбор нескольких";
+        return "Содержит";
+      case TableFilterComponentItemType.NotEq:
+        return "Не равно";
+      case TableFilterComponentItemType.NotLike:
+        return "Не совпадает";
+      case TableFilterComponentItemType.NotIn:
+        return "Не содержит";
       default:
         return null;
     }
@@ -893,8 +866,7 @@ export default class TableFilterComponent extends Vue {
   margin-top: 19px !important;
   border-radius: 2px !important;
   background-color: #fff !important;
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   border-bottom: none !important;
   height: 22px !important;
 }
@@ -1089,6 +1061,3 @@ export default class TableFilterComponent extends Vue {
   -webkit-text-fill-color: #ffff !important;
 }
 </style>
-
-
-

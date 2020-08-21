@@ -399,6 +399,17 @@ export default class TableTestLayout extends Vue {
         placeholder: "Введите",
         groupName: "Обращение",
         itemClassName: ["filter-item-column-4"]
+      }),
+      new TableFilterComponentItem({
+        name: "leadIdFilter",
+        requestName: "leadIdFilter",
+        appearance: TableFilterComponentItemAppearance.AllFilters,
+        requestType: TableFilterComponentItemType.NotEq,
+        label: "Ид обращения",
+        inputType: TableFilterComponentItemInputType.Number,
+        placeholder: "Введите",
+        groupName: "Обращение",
+        itemClassName: ["filter-item-column-4"]
       })
     ],
     quickFilters: true,
