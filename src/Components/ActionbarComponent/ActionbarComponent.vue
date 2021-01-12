@@ -69,157 +69,164 @@ import { Component, Emit, Prop, Vue, Watch } from "vue-property-decorator";
 import { ActionItem } from "./ActionItem";
 
 @Component({
-    name: "a-actionbar"
+  name: "a-actionbar",
 })
-export default class ActionbarComponent extends Vue{
-    @Prop({default: "primary"}) actionbarColor: string;
-    @Prop({default: true}) darkActionbar: boolean;
-    @Prop({required: true}) actions: ActionItem[];
-    @Prop({default: () => []}) selectedItems: any[];
-    @Prop({default: () => {}}) filteredRequest: {};
-    @Prop({default: 0}) updateActionbar: number;
-    actionbarContainer;
-    actionbar;
-    hideButtonText = false;
+export default class ActionbarComponent extends Vue {
+  @Prop({ default: "primary" })
+  actionbarColor: string;
+  @Prop({ default: true })
+  darkActionbar: boolean;
+  @Prop({ required: true })
+  actions: ActionItem[];
+  @Prop({ default: () => [] })
+  selectedItems: any[];
+  @Prop({ default: () => {} })
+  filteredRequest: {};
+  @Prop({ default: 0 })
+  updateActionbar: number;
+  actionbarContainer;
+  actionbar;
+  hideButtonText = false;
 
-    @Watch("updateActionbar")
-    onChange() {
-        [].forEach.call(this.actionbarContainer, elem => {
-            this.toggleActionbar(elem);
-        });
+  @Watch("updateActionbar")
+  onChange() {
+    [].forEach.call(this.actionbarContainer, (elem) => {
+      this.toggleActionbar(elem);
+    });
+  }
+
+  @Emit()
+  onBarAction(items: any[], name: string) {}
+
+  mounted() {
+    this.actionbarContainer = this.$el.getElementsByClassName("actionbarContainer");
+    this.actionbar = this.$el.getElementsByClassName("actionbar");
+    this.addWindowEvents();
+    this.actionbarSize();
+    [].forEach.call(this.actionbarContainer, (elem) => {
+      this.toggleActionbar(elem);
+    });
+
+    this.collapseButtons(this.actionbar[0]);
+  }
+
+  updated() {
+    this.actionbarSize();
+  }
+
+  addWindowEvents() {
+    window.onresize = () => {
+      this.actionbarSize();
+    };
+    window.onscroll = () => {
+      [].forEach.call(this.actionbarContainer, (elem) => {
+        this.toggleActionbar(elem);
+      });
+    };
+  }
+
+  isElementInViewPort(el) {
+    const rect = el.getBoundingClientRect();
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+  }
+
+  isPartOfElementInViewPort(el) {
+    let top = el.offsetTop;
+    let left = el.offsetLeft;
+    const width = el.offsetWidth;
+    const height = el.offsetHeight;
+    while (el.offsetParent) {
+      el = el.offsetParent;
+      top += el.offsetTop;
+      left += el.offsetLeft;
     }
+    return (
+      top < window.pageYOffset + window.innerHeight &&
+      left < window.pageXOffset + window.innerWidth &&
+      top + height > window.pageYOffset &&
+      left + width > window.pageXOffset
+    );
+  }
 
-    @Emit()
-    onBarAction(items: any[], name: string) {}
+  actionbarSize() {
+    [].forEach.call(this.actionbar, (el) => {
+      el.style.width = this.actionbarContainer[0].offsetWidth.toString() + "px";
+    });
+  }
 
-    mounted() {
-        this.actionbarContainer = document.getElementsByClassName("actionbarContainer");
-        this.actionbar = document.getElementsByClassName("actionbar");
-        this.addWindowEvents();
-        this.actionbarSize();
-        [].forEach.call(this.actionbarContainer, elem => {
-            this.toggleActionbar(elem);
-        });
-
-        this.collapseButtons(this.actionbar[0]);
+  collapseButtons(actionbar: HTMLElement) {
+    if (actionbar.scrollWidth - actionbar.offsetWidth !== 0) {
+      this.hideButtonText = true;
+    } else {
+      if (this.hideButtonText === true) {
+        this.hideButtonText = false;
+      }
     }
+  }
 
-    updated() {
-        this.actionbarSize();
+  toggleActionbar(elem) {
+    const actionBarElement = elem.querySelector(".actionbar");
+    if (!actionBarElement) {
+      return;
     }
+    if (
+      this.isPartOfElementInViewPort(elem.querySelector(".mainAnchor")) &&
+      !this.isElementInViewPort(elem.querySelector(".actionbarAnchor"))
+    ) {
+      actionBarElement.classList.add("actionbarFixed");
+    } else {
+      actionBarElement.classList.remove("actionbarFixed");
+    }
+  }
 
-    addWindowEvents() {
-        window.onresize = () => {         
-            this.actionbarSize();
-        };
-        window.onscroll = () => {
-            [].forEach.call(this.actionbarContainer, elem => {
-                this.toggleActionbar(elem);
-            });
-        };
+  executeAction(action: ActionItem) {
+    if (action.action) {
+      if (action.needSelectedItem) {
+        action.action(this.selectedItems, this.idFilter());
+      } else {
+        action.action(this.filteredRequest);
+      }
     }
+  }
 
-    isElementInViewPort(el) {
-        const rect = el.getBoundingClientRect();
-        return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document. documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document. documentElement.clientWidth)
-      );
-    }
-
-    isPartOfElementInViewPort(el) {
-        let top = el.offsetTop;
-        let left = el.offsetLeft;
-        const width = el.offsetWidth;
-        const height = el.offsetHeight;
-        while (el.offsetParent) {
-            el = el.offsetParent;
-            top += el.offsetTop;
-            left += el.offsetLeft;
-        }
-        return (
-            top < (window.pageYOffset + window.innerHeight) &&
-            left < (window.pageXOffset + window.innerWidth) &&
-            (top + height) > window.pageYOffset &&
-            (left + width) > window.pageXOffset
-        );
-    }
-
-    actionbarSize() {
-        [].forEach.call(this.actionbar, el => {
-            el.style.width = this.actionbarContainer[0].offsetWidth.toString() + "px";
-        });
-    }
-
-    collapseButtons(actionbar: HTMLElement) {
-        if (actionbar.scrollWidth - actionbar.offsetWidth !== 0) {
-            this.hideButtonText = true; 
-        } else {
-            if (this.hideButtonText === true) {
-                this.hideButtonText = false;
-            }
-        }
-    }
-
-    toggleActionbar(elem) {
-        const actionBarElement = elem.querySelector(".actionbar");
-        if (!actionBarElement) {
-            return;
-        }
-        if (this.isPartOfElementInViewPort(elem.querySelector(".mainAnchor")) && !this.isElementInViewPort(elem.querySelector(".actionbarAnchor"))) {
-            actionBarElement.classList.add("actionbarFixed");
-        } else {
-            actionBarElement.classList.remove("actionbarFixed");
-        }
-    }
-
-    executeAction(action: ActionItem) {
-        if (action.action) {
-            if (action.needSelectedItem) {
-                action.action(this.selectedItems, this.idFilter());
-            } else {
-                action.action(this.filteredRequest);
-            }
-        }
-    }
-
-    idFilter() {
-        const request = {
-            idsFilter: {
-                term: "in",
-                val: {
-                    values: []
-                }
-            }
-        };
-        request.idsFilter.val.values = this.selectedItems.map(el => el.id);
-        return request;
-    }
+  idFilter() {
+    const request = {
+      idsFilter: {
+        term: "in",
+        val: {
+          values: [],
+        },
+      },
+    };
+    request.idsFilter.val.values = this.selectedItems.map((el) => el.id);
+    return request;
+  }
 }
 </script>
 
 <style scoped>
 .actionbarFixed {
-    position: fixed;
-    bottom: 0;
+  position: fixed;
+  bottom: 0;
 }
 .actionbar {
-    overflow: hidden;
+  overflow: hidden;
 }
 .hiddenButtonText {
-    margin-right: 0px;
+  margin-right: 0px;
 }
 .iconButtonMinWidth {
-    min-width: 50px;
+  min-width: 50px;
 }
 </style>
 
 <style>
 .actionbar .v-toolbar__content {
-    padding: 0px;
+  padding: 0px;
 }
 </style>
-
-
