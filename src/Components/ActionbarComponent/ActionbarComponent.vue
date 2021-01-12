@@ -99,15 +99,15 @@ export default class ActionbarComponent extends Vue {
   onBarAction(items: any[], name: string) {}
 
   mounted() {
-    this.actionbarContainer = this.$el.getElementsByClassName("actionbarContainer");
-    this.actionbar = this.$el.getElementsByClassName("actionbar");
+    this.actionbarContainer = this.$el.parentElement.parentElement;
+    this.actionbar = this.$el;
     this.addWindowEvents();
     this.actionbarSize();
     [].forEach.call(this.actionbarContainer, (elem) => {
       this.toggleActionbar(elem);
     });
 
-    this.collapseButtons(this.actionbar[0]);
+    this.collapseButtons(this.actionbar);
   }
 
   updated() {
@@ -154,8 +154,8 @@ export default class ActionbarComponent extends Vue {
   }
 
   actionbarSize() {
-    [].forEach.call(this.actionbar, (el) => {
-      el.style.width = this.actionbarContainer[0].offsetWidth.toString() + "px";
+    [].forEach.call(this.actionbar, (el: HTMLElement) => {
+      el.style.width = this.actionbarContainer.offsetWidth.toString() + "px";
     });
   }
 
