@@ -40,7 +40,7 @@
             <div v-show="rightScrollPanelVisibility"
                  @click="horizontalScroll('right', 200)"
                  class="scroll-panel right-panel"
-                 style="right: 16px">
+                 style="right: 0px">
                 <v-icon class="scroll-arrow">mdi-arrow-right-thick</v-icon>
             </div>
             <v-data-table v-show="!loading"
