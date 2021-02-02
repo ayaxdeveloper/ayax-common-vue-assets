@@ -538,7 +538,8 @@ export default class TableComponent extends Vue {
     ) as HTMLElement;
     tableScroll.addEventListener("scroll", () =>
       this.onTableScroll(tableScroll.scrollTop)
-    );
+      );
+    window.addEventListener('resize', this.showSideScrollPanels);
   }
 
   @Watch("options.pagination.page")
@@ -972,14 +973,16 @@ leftScrollPanelVisibility = false;
 rightScrollPanelVisibility = true;
 
 showSideScrollPanels() {
-const wrapper = document.querySelector(".v-table__overflow") as HTMLElement;
-if (wrapper.scrollLeft > 0) {
+    const wrapper = document.querySelector(".v-table__overflow") as HTMLElement;   
+     if (wrapper.scrollLeft > 0) {
       this.leftScrollPanelVisibility = true;
-    } else {
+      }
+     else {
       this.leftScrollPanelVisibility = false;
     }
-    if (wrapper.scrollLeft === wrapper.scrollWidth - wrapper.offsetWidth + 17) {
-      this.rightScrollPanelVisibility = false;
+    var difference = Math.round(wrapper.scrollWidth - wrapper.scrollLeft + 0.4);
+    if (wrapper.clientWidth === difference) {
+        this.rightScrollPanelVisibility = false;
     } else {
       this.rightScrollPanelVisibility = true;
     }
