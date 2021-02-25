@@ -49,12 +49,7 @@
 
 <script lang="ts">
 import { IOperationService, OperationService } from "ayax-common-operation";
-import {
-  Pagination,
-  SearchResponse,
-  SelectItem,
-  IEntity
-} from "ayax-common-types";
+import { Pagination, SearchResponse, SelectItem, IEntity } from "ayax-common-types";
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Inject, Watch } from "vue-property-decorator";
@@ -63,7 +58,7 @@ import {
   TableFilterComponentItem,
   TableFilterComponentItemAppearance,
   TableFilterComponentItemInputType,
-  TableFilterComponentItemType
+  TableFilterComponentItemType,
 } from "../../src";
 import { ActionItem } from "../../src/Components/ActionbarComponent/ActionItem";
 import { TableOptions } from "../../src/Components/TableComponent/TableOptions";
@@ -86,52 +81,44 @@ export default class TableTestLayout extends Vue {
     autoRefreshEnable: true,
     title: "Тестовая таблица",
     pagination: new Pagination({ page: 1, perPage: 10 }),
-    searchData: request =>
-      this.operationService
-        .search<any>("/testentity/search", request)
-        .then(x => x.ensureSuccess()),
+    searchData: (request) =>
+      this.operationService.search<any>("/testentity/search", request).then((x) => x.ensureSuccess()),
     headers: [
       TableComponentHeader.String({
         value: "id",
         text: "Id",
-        hiddenable: false
+        hiddenable: false,
       }),
       TableComponentHeader.String({ value: "code", text: "Код" }),
       TableComponentHeader.String({
         value: "title",
         text: "Наименование",
-        sortable: true
+        sortable: true,
       }),
       TableComponentHeader.String({
         value: "dictionaryId",
         text: "Справочник",
-        dictionaryPromise: new Promise<CacheItem[]>(resolve =>
-          setTimeout(
-            () =>
-              resolve(
-                this.testDataService.getDictionary().map(x => new CacheItem(x))
-              ),
-            2000
-          )
-        )
+        dictionaryPromise: new Promise<CacheItem[]>((resolve) =>
+          setTimeout(() => resolve(this.testDataService.getDictionary().map((x) => new CacheItem(x))), 2000)
+        ),
       }),
       TableComponentHeader.String({
         value: "qq",
         text: "Статус обращений qq",
         custom: true,
 
-        wrap: true
+        wrap: true,
       }),
       TableComponentHeader.Date({
         value: "created",
         text: "Дата создания",
-        width: "100px"
+        width: "100px",
       }),
       TableComponentHeader.String({
         value: "ww",
         text: "Статус обращений ww",
-        custom: true
-      })
+        custom: true,
+      }),
     ],
     actions: [
       new ActionItem({
@@ -139,35 +126,35 @@ export default class TableTestLayout extends Vue {
         title: "Открыть",
         name: "show",
         single: true,
-        action: asd => this.showDialog(asd, "edit")
+        action: (asd) => this.showDialog(asd, "edit"),
       }),
       new ActionItem({
         icon: "mdi-plus",
         title: "Добавить",
         name: "add",
-        action: asd => this.showDialog(asd, "add")
+        action: (asd) => this.showDialog(asd, "add"),
       }),
       new ActionItem({
         icon: "mdi-delete",
         needSelectedItem: true,
         title: "Удалить",
         name: "delete",
-        condition: item => (item.id % 2 === 0 ? false : true),
-        action: asd => console.log(asd)
+        condition: (item) => (item.id % 2 === 0 ? false : true),
+        action: (asd) => console.log(asd),
       }),
       new ActionItem({
         icon: "mdi-delete",
         title: "Удалить",
         name: "deleteSingle",
         single: true,
-        condition: item => (item.id % 2 === 0 ? false : true),
-        action: asd => console.log(asd)
+        condition: (item) => (item.id % 2 === 0 ? false : true),
+        action: (asd) => console.log(asd),
       }),
       new ActionItem({
         name: "tab",
         single: true,
         active: false,
-        action: asd => console.log(asd)
+        action: (asd) => console.log(asd),
       }),
       new ActionItem({
         name: "export",
@@ -178,31 +165,31 @@ export default class TableTestLayout extends Vue {
             name: "Pdf",
             title: "Экспорт выбранного в PDF",
             icon: "mdi-upload",
-            action: (asd, qq) => console.log(qq)
+            action: (asd, qq) => console.log(qq),
           }),
           new ActionItem({
             name: "PdfAll",
             title: "Экспорт всего в PDF",
             icon: "mdi-upload",
             separator: true,
-            action: (asd, qq) => console.log(qq)
+            action: (asd, qq) => console.log(qq),
           }),
           new ActionItem({
             name: "Excel",
             title: "Экспорт выбранного в Excel",
             icon: "mdi-upload",
             needSelectedItem: true,
-            action: (asd, qq) => console.log(qq)
+            action: (asd, qq) => console.log(qq),
           }),
           new ActionItem({
             name: "ExcelAll",
             title: "Экспорт всего в Excel",
             icon: "mdi-upload",
             style: { color: "red" },
-            action: asd => console.log(asd)
-          })
-        ]
-      })
+            action: (asd) => console.log(asd),
+          }),
+        ],
+      }),
     ],
     filterGroups: ["Обращение", "Запрос клиента"],
     filters: [
@@ -215,7 +202,7 @@ export default class TableTestLayout extends Vue {
         label: "Название улицы",
         largeInput: true,
         groupName: "Запрос клиента",
-        itemClassName: ["column-1"]
+        itemClassName: ["column-1"],
       }),
       // new TableFilterComponentItem({
       //     requestName: "titlefilter",
@@ -271,7 +258,7 @@ export default class TableTestLayout extends Vue {
         requestType: TableFilterComponentItemType.Range,
         inputType: TableFilterComponentItemInputType.Date,
         label: "Дата создания",
-        itemClassName: ["column-1"]
+        itemClassName: ["column-1"],
       }),
       // new TableFilterComponentItem({
       //     name: "buttomFilter",
@@ -300,11 +287,11 @@ export default class TableTestLayout extends Vue {
           new SelectItem({ value: 2, text: "Район 2" }),
           new SelectItem({ value: 3, text: "Район 3" }),
           new SelectItem({ value: 4, text: "Район 4" }),
-          new SelectItem({ value: 5, text: "Район 5" })
+          new SelectItem({ value: 5, text: "Район 5" }),
         ],
         label: "Выбор района",
         placeholder: "Выберите",
-        itemClassName: ["column-1"]
+        itemClassName: ["column-1"],
       }),
       new TableFilterComponentItem({
         requestName: "wwfilter",
@@ -317,7 +304,7 @@ export default class TableTestLayout extends Vue {
           new SelectItem({
             value: 1,
             text: "Район 1",
-            className: ["deleted-item"]
+            className: ["deleted-item"],
           }),
           new SelectItem({ value: 2, text: "Район 2" }),
           new SelectItem({ value: 3, text: "Район 3" }),
@@ -337,11 +324,11 @@ export default class TableTestLayout extends Vue {
           new SelectItem({ value: 17, text: "Район 17" }),
           new SelectItem({ value: 18, text: "Район 18" }),
           new SelectItem({ value: 19, text: "Район 19" }),
-          new SelectItem({ value: 20, text: "Район 20" })
+          new SelectItem({ value: 20, text: "Район 20" }),
         ],
         label: "Выбор районов",
         placeholder: "Выберите",
-        itemClassName: ["column-1"]
+        itemClassName: ["column-1"],
       }),
 
       new TableFilterComponentItem({
@@ -355,7 +342,7 @@ export default class TableTestLayout extends Vue {
         label: "Выбор маршрута",
         placeholder: "Выберите",
         active: true,
-        itemClassName: ["column-1"]
+        itemClassName: ["column-1"],
       }),
       new TableFilterComponentItem({
         requestName: "routeIdFilter",
@@ -369,7 +356,7 @@ export default class TableTestLayout extends Vue {
         placeholder: "Выберите",
         active: true,
         itemClassName: ["column-1"],
-        width: 240
+        width: 240,
       }),
       new TableFilterComponentItem({
         requestName: "roomFilter",
@@ -378,7 +365,7 @@ export default class TableTestLayout extends Vue {
         requestType: TableFilterComponentItemType.Range,
         label: "Комнат в доме",
         groupName: "Запрос клиента",
-        itemClassName: ["column-1"]
+        itemClassName: ["column-1"],
       }),
       new TableFilterComponentItem({
         requestName: "roomFilter",
@@ -388,7 +375,7 @@ export default class TableTestLayout extends Vue {
         label: "Цена",
         groupName: "Запрос клиента",
         numbersAfterComma: 2,
-        itemClassName: ["column-1"]
+        itemClassName: ["column-1"],
       }),
       new TableFilterComponentItem({
         name: "leadContactPhone",
@@ -398,7 +385,7 @@ export default class TableTestLayout extends Vue {
         inputType: TableFilterComponentItemInputType.Phone,
         placeholder: "Введите",
         groupName: "Обращение",
-        itemClassName: ["filter-item-column-4"]
+        itemClassName: ["filter-item-column-4"],
       }),
       new TableFilterComponentItem({
         name: "leadIdFilter",
@@ -409,20 +396,20 @@ export default class TableTestLayout extends Vue {
         inputType: TableFilterComponentItemInputType.Number,
         placeholder: "Введите",
         groupName: "Обращение",
-        itemClassName: ["filter-item-column-4"]
-      })
+        itemClassName: ["filter-item-column-4"],
+      }),
     ],
     quickFilters: true,
-    quickFilterTooltipText: "Quick search\nTest help text"
+    quickFilterTooltipText: "Quick search\nTest help text",
   });
 
   created() {
     this.selectItems = this.testDataService.getDictionary().map(
-      x =>
+      (x) =>
         new SelectItem({
           text: x.title,
           value: x.id,
-          group: "group"
+          group: "group",
         })
     );
   }
@@ -435,9 +422,9 @@ export default class TableTestLayout extends Vue {
         ids: [12, 21],
         children: [
           { id: 12, label: "Главный", number: "89624033427" },
-          { id: 21, label: "Офис", number: "89624033428" }
-        ]
-      }
+          { id: 21, label: "Офис", number: "89624033428" },
+        ],
+      },
     ];
   }
 
@@ -445,7 +432,12 @@ export default class TableTestLayout extends Vue {
 
   fields = [
     FormComponentItem.Hidden({ title: "Id", name: "id" }),
-    FormComponentItem.Input({ title: "Имя", name: "title" })
+    FormComponentItem.Input({ title: "Имя", name: "title" }),
+    FormComponentItem.Select({
+      title: "Список",
+      name: "list",
+      items: [{ value: 1, text: "fff", selected: false, disabled: false, group: "fff", className: ["ff"] }],
+    }),
   ] as FormComponentItem[];
 
   slotToggle = null;
@@ -453,7 +445,7 @@ export default class TableTestLayout extends Vue {
   toggleLead(item) {
     this.slotToggle = {
       tableIndex: item.tableIndex,
-      toggleValue: !item.slotToggle
+      toggleValue: !item.slotToggle,
     };
   }
 
@@ -463,7 +455,7 @@ export default class TableTestLayout extends Vue {
         case "edit":
           this.currentModel = await this.operationService
             .get(`/testentity/get/${item.id}`)
-            .then(x => x.ensureSuccess());
+            .then((x) => x.ensureSuccess());
           this.editDialog = true;
           break;
         case "add":
@@ -480,15 +472,10 @@ export default class TableTestLayout extends Vue {
     try {
       if (+this.currentModel["id"] > 0) {
         await this.operationService
-          .put(
-            `/testentity/update/${+this.currentModel["id"]}`,
-            this.currentModel
-          )
-          .then(x => x.ensureSuccess());
+          .put(`/testentity/update/${+this.currentModel["id"]}`, this.currentModel)
+          .then((x) => x.ensureSuccess());
       } else {
-        await this.operationService
-          .post(`/testentity/add`, this.currentModel)
-          .then(x => x.ensureSuccess());
+        await this.operationService.post(`/testentity/add`, this.currentModel).then((x) => x.ensureSuccess());
       }
       this.options.reloadData++;
     } catch (e) {
@@ -513,4 +500,3 @@ export default class TableTestLayout extends Vue {
   cursor: pointer;
 }
 </style>
-
